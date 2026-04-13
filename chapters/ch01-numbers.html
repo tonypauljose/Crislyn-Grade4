@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 1: Numbers — Crislyn's Math Adventure</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+
+  <style>
+    /* Chapter-specific styles */
+    .interactive-area {
+      background: var(--color-bg);
+      border-radius: var(--radius-md);
+      padding: var(--space-6);
+      margin: var(--space-4) 0;
+      border: 2px solid var(--color-border-light);
+    }
+
+    .place-value-chart {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: var(--space-2);
+      margin: var(--space-4) 0;
+    }
+
+    .pv-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .pv-column .digit-box {
+      cursor: pointer;
+      position: relative;
+    }
+
+    .pv-column .digit-box:hover {
+      transform: scale(1.1);
+      border-color: var(--color-primary);
+    }
+
+    .pv-info {
+      text-align: center;
+      margin-top: var(--space-4);
+      padding: var(--space-4);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      border: 2px solid var(--color-border-light);
+    }
+
+    .pv-info .face-value {
+      font-size: var(--text-xl);
+      color: var(--color-coral);
+      font-weight: 700;
+    }
+
+    .pv-info .place-value {
+      font-size: var(--text-xl);
+      color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    .expanded-display {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4);
+      font-size: var(--text-xl);
+      font-weight: 700;
+    }
+
+    .expanded-part {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-sm);
+      background: var(--color-bg-alt);
+      border: 2px solid var(--color-border);
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+
+    .expanded-part.animate {
+      animation: popIn 0.4s var(--ease-bounce) both;
+    }
+
+    .plus-sign {
+      color: var(--color-primary);
+      font-size: var(--text-2xl);
+    }
+
+    .number-input-lg {
+      font-size: var(--text-2xl);
+      font-family: var(--font-heading);
+      text-align: center;
+      padding: var(--space-3) var(--space-4);
+      border: 3px solid var(--color-border);
+      border-radius: var(--radius-md);
+      width: 100%;
+      max-width: 350px;
+      outline: none;
+      transition: border-color var(--duration-normal);
+    }
+
+    .number-input-lg:focus {
+      border-color: var(--color-primary-light);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .roman-chart {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+
+    .roman-symbol {
+      text-align: center;
+      padding: var(--space-3);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      border: 2px solid var(--color-border);
+      transition: all var(--duration-normal) var(--ease-bounce);
+      cursor: pointer;
+    }
+
+    .roman-symbol:hover {
+      border-color: var(--color-primary);
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+
+    .roman-symbol .symbol {
+      font-size: var(--text-2xl);
+      font-family: var(--font-heading);
+      color: var(--color-primary-dark);
+    }
+
+    .roman-symbol .value {
+      font-size: var(--text-sm);
+      color: var(--color-text-light);
+      margin-top: var(--space-1);
+    }
+
+    .converter-box {
+      display: flex;
+      gap: var(--space-4);
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: var(--space-4) 0;
+    }
+
+    .converter-box input {
+      width: 200px;
+    }
+
+    .converter-result {
+      font-size: var(--text-2xl);
+      font-family: var(--font-heading);
+      color: var(--color-primary);
+      padding: var(--space-3) var(--space-6);
+      background: var(--color-bg-alt);
+      border-radius: var(--radius-md);
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .exercise-question {
+      padding: var(--space-4);
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+      border: 2px solid var(--color-border-light);
+      transition: border-color var(--duration-normal);
+    }
+
+    .exercise-question.answered-correct {
+      border-color: var(--color-success);
+      background: var(--color-success-light);
+    }
+
+    .exercise-question.answered-wrong {
+      border-color: var(--color-error);
+      background: var(--color-error-light);
+    }
+
+    .exercise-question .q-label {
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .exercise-input {
+      padding: var(--space-2) var(--space-3);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-base);
+      font-weight: 600;
+      outline: none;
+      transition: border-color var(--duration-normal);
+    }
+
+    .exercise-input:focus {
+      border-color: var(--color-primary-light);
+    }
+
+    .exercise-score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      color: white;
+      border-radius: var(--radius-md);
+      margin-top: var(--space-4);
+      font-size: var(--text-lg);
+      font-weight: 700;
+    }
+
+    .digit-card {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 64px;
+      background: var(--color-accent-light);
+      border: 3px solid var(--color-accent-dark);
+      border-radius: var(--radius-md);
+      font-size: var(--text-2xl);
+      font-family: var(--font-heading);
+      color: var(--color-primary-dark);
+      cursor: grab;
+      user-select: none;
+      transition: all var(--duration-fast);
+    }
+
+    .digit-card:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-md);
+    }
+
+    .odometer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      margin: var(--space-4) 0;
+    }
+
+    .odometer-digit {
+      width: 48px;
+      height: 64px;
+      background: #1E1B4B;
+      color: var(--color-accent);
+      font-family: var(--font-heading);
+      font-size: var(--text-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .odometer-comma {
+      font-size: var(--text-xl);
+      color: var(--color-text-light);
+      width: 16px;
+      text-align: center;
+    }
+
+    .nav-arrows {
+      display: flex;
+      gap: var(--space-3);
+      justify-content: center;
+      margin-top: var(--space-3);
+    }
+
+    .arrow-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary);
+      color: white;
+      font-size: var(--text-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-bounce);
+      border: none;
+    }
+
+    .arrow-btn:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 768px) {
+      .roman-chart {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .converter-box {
+        flex-direction: column;
+      }
+      .place-value-chart {
+        gap: var(--space-1);
+      }
+      .digit-box {
+        width: 40px;
+        height: 56px;
+        font-size: var(--text-xl);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="chapter-badge fade-in">📐 Chapter 1</div>
+    <h1 class="fade-in-up">Numbers</h1>
+    <p class="fade-in-up delay-1">Master numbers beyond 10,000 — place values, expanded form, comparisons, and Roman numerals!</p>
+    <a href="../index.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to Dashboard</a>
+  </div>
+</div>
+
+<!-- Tab Navigation -->
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="learn">📖 Learn</div>
+    <div class="tab" data-tab="practice">✏️ Practice</div>
+    <div class="tab" data-tab="quiz">🎯 Quiz</div>
+    <div class="tab" data-tab="worksheet">🖨️ Worksheet</div>
+  </div>
+
+  <!-- ==================== LEARN SECTION ==================== -->
+  <div class="tab-content active" id="learn">
+    <div class="section-header">
+      <h2>📖 Learn</h2>
+      <p>Explore each concept with interactive lessons. Click a card to expand it!</p>
+    </div>
+
+    <!-- Lesson 1: Place Value Explorer -->
+    <div class="lesson-card open fade-in-up">
+      <div class="lesson-card-header">
+        <span class="lesson-number">1</span>
+        <h3>Place Value Explorer</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Every digit in a number has a <strong>place value</strong> based on its position. Click on any digit below to see its face value and place value!</p>
+
+        <div class="interactive-area" id="pv-explorer">
+          <div class="flex-center gap-4 mb-4">
+            <label style="font-weight: 700;">Enter a number (up to 7 digits):</label>
+            <input type="text" class="number-input-lg" id="pv-input" value="4567890" maxlength="7"
+                   style="max-width: 250px;" oninput="updatePlaceValue()">
+          </div>
+
+          <div class="place-value-chart" id="pv-chart"></div>
+
+          <div class="pv-info hidden" id="pv-info">
+            <p>Digit <span id="pv-digit" style="font-size: var(--text-2xl); font-family: var(--font-heading);"></span> is in the <strong id="pv-position"></strong> place</p>
+            <div class="grid-2 gap-4 mt-4" style="max-width: 400px; margin: var(--space-4) auto 0;">
+              <div>
+                <div class="text-sm text-muted">Face Value</div>
+                <div class="face-value" id="pv-face"></div>
+              </div>
+              <div>
+                <div class="text-sm text-muted">Place Value</div>
+                <div class="place-value" id="pv-place"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex-center gap-4 mt-4">
+            <button class="btn btn-sm btn-outline" onclick="toggleNumberSystem()">
+              <span id="system-label">Show International System</span>
+            </button>
+          </div>
+          <p class="text-center text-sm text-muted mt-2" id="formatted-number"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 2: Standard & Expanded Form -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header">
+        <span class="lesson-number">2</span>
+        <h3>Standard Form ↔ Expanded Form</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Any number can be written in <strong>expanded form</strong> by showing the value of each digit separately.</p>
+
+        <div class="interactive-area">
+          <div class="flex-center gap-4 mb-4">
+            <label style="font-weight: 700;">Enter a number:</label>
+            <input type="text" class="number-input-lg" id="expand-input" value="356241" maxlength="7"
+                   style="max-width: 250px;">
+            <button class="btn btn-primary" onclick="showExpanded()">Expand! 💥</button>
+          </div>
+
+          <div class="text-center mb-2">
+            <span style="font-size: var(--text-2xl); font-family: var(--font-heading); color: var(--color-primary-dark);" id="expand-standard"></span>
+          </div>
+
+          <div class="expanded-display" id="expanded-result"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 3: Number Names -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header">
+        <span class="lesson-number">3</span>
+        <h3>Number Names</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Learn to read and write numbers in words using the <strong>Indian number naming system</strong> (lakh, crore).</p>
+
+        <div class="interactive-area">
+          <div class="flex-center gap-4 mb-4 flex-wrap">
+            <label style="font-weight: 700;">Enter a number:</label>
+            <input type="text" class="number-input-lg" id="name-input" value="7530486" maxlength="8"
+                   style="max-width: 250px;">
+            <button class="btn btn-accent" onclick="showNumberName()">Show Name ✨</button>
+          </div>
+
+          <div class="text-center p-4" style="background: var(--color-surface); border-radius: var(--radius-md); border: 2px solid var(--color-border-light);">
+            <div style="font-size: var(--text-2xl); font-family: var(--font-heading); color: var(--color-primary);" id="name-number"></div>
+            <div style="font-size: var(--text-xl); color: var(--color-teal); font-weight: 700; margin-top: var(--space-3);" id="name-result"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 4: Comparing & Ordering -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header">
+        <span class="lesson-number">4</span>
+        <h3>Comparing & Ordering Numbers</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Compare two numbers using <strong>&lt;</strong> (less than), <strong>&gt;</strong> (greater than), or <strong>=</strong> (equal to). Start from the <em>leftmost digit</em>!</p>
+
+        <div class="interactive-area" id="compare-area">
+          <div class="flex-center gap-4 flex-wrap">
+            <div class="digit-box" style="width: auto; padding: 8px 24px; font-size: var(--text-2xl);" id="compare-left"></div>
+            <div class="flex gap-2">
+              <button class="compare-btn" onclick="checkCompare('<')">&lt;</button>
+              <button class="compare-btn" onclick="checkCompare('>')">&gt;</button>
+              <button class="compare-btn" onclick="checkCompare('=')">=</button>
+            </div>
+            <div class="digit-box" style="width: auto; padding: 8px 24px; font-size: var(--text-2xl);" id="compare-right"></div>
+          </div>
+          <p class="text-center mt-4" id="compare-feedback"></p>
+          <div class="flex-center mt-4">
+            <button class="btn btn-outline btn-sm" onclick="newComparePair()">New Numbers 🔄</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 5: Predecessor & Successor -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header">
+        <span class="lesson-number">5</span>
+        <h3>Predecessor & Successor</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>The <strong>predecessor</strong> is the number that comes just <em>before</em> (subtract 1). The <strong>successor</strong> is the number that comes just <em>after</em> (add 1).</p>
+
+        <div class="interactive-area text-center">
+          <div class="odometer" id="odometer"></div>
+          <div class="nav-arrows">
+            <button class="arrow-btn" onclick="changeOdometer(-1)" title="Predecessor">← Predecessor</button>
+            <button class="arrow-btn" onclick="changeOdometer(1)" title="Successor">Successor →</button>
+          </div>
+          <div class="flex-center gap-4 mt-4">
+            <label style="font-weight: 700;">Jump to:</label>
+            <input type="text" class="exercise-input" id="odometer-input" value="500000" style="width: 180px; text-align: center;"
+                   onkeydown="if(event.key==='Enter') setOdometer()">
+            <button class="btn btn-sm btn-primary" onclick="setOdometer()">Go</button>
+          </div>
+          <p class="text-sm text-muted mt-2">Watch how digits roll — especially at numbers like 1,00,000 and 9,99,999!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 6: Roman Numerals -->
+    <div class="lesson-card fade-in-up delay-5">
+      <div class="lesson-card-header">
+        <span class="lesson-number">6</span>
+        <h3>Roman Numerals</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Romans used letters to write numbers! Here are the 7 basic symbols:</p>
+
+        <div class="roman-chart">
+          <div class="roman-symbol"><div class="symbol">I</div><div class="value">1</div></div>
+          <div class="roman-symbol"><div class="symbol">V</div><div class="value">5</div></div>
+          <div class="roman-symbol"><div class="symbol">X</div><div class="value">10</div></div>
+          <div class="roman-symbol"><div class="symbol">L</div><div class="value">50</div></div>
+          <div class="roman-symbol"><div class="symbol">C</div><div class="value">100</div></div>
+          <div class="roman-symbol"><div class="symbol">D</div><div class="value">500</div></div>
+          <div class="roman-symbol"><div class="symbol">M</div><div class="value">1000</div></div>
+        </div>
+
+        <div class="card mt-4 p-4" style="background: var(--color-bg-alt);">
+          <h4 style="margin-bottom: var(--space-2);">Rules:</h4>
+          <ul style="list-style: disc; padding-left: var(--space-6); line-height: 2;">
+            <li><strong>Additive:</strong> When a smaller or equal symbol comes after a larger one → ADD them. <code>VI = 5 + 1 = 6</code></li>
+            <li><strong>Subtractive:</strong> When a smaller symbol comes before a larger one → SUBTRACT. <code>IV = 5 - 1 = 4</code></li>
+            <li><strong>Repetition:</strong> A symbol can repeat up to 3 times. <code>III = 3</code>, but NOT IIII</li>
+            <li><strong>Never repeat:</strong> V, L, D are never repeated</li>
+          </ul>
+        </div>
+
+        <div class="interactive-area mt-4">
+          <h4 class="text-center mb-4">🔄 Roman Numeral Converter</h4>
+          <div class="converter-box">
+            <div>
+              <label class="text-sm text-muted">Hindu-Arabic Number</label>
+              <input type="number" class="number-input-lg" id="roman-num-input" value="42" min="1" max="3999"
+                     style="max-width: 160px;" oninput="convertToRoman()">
+            </div>
+            <span style="font-size: var(--text-2xl);">⇄</span>
+            <div>
+              <label class="text-sm text-muted">Roman Numeral</label>
+              <div class="converter-result" id="roman-result">XLII</div>
+            </div>
+          </div>
+          <div class="converter-box mt-4">
+            <div>
+              <label class="text-sm text-muted">Roman Numeral</label>
+              <input type="text" class="number-input-lg" id="roman-text-input" value="XXIV"
+                     style="max-width: 160px; text-transform: uppercase;" oninput="convertFromRoman()">
+            </div>
+            <span style="font-size: var(--text-2xl);">⇄</span>
+            <div>
+              <label class="text-sm text-muted">Hindu-Arabic Number</label>
+              <div class="converter-result" id="arabic-result">24</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 7 (Enrichment): Greatest & Smallest Numbers -->
+    <div class="lesson-card enrichment fade-in-up delay-6">
+      <div class="lesson-card-header">
+        <span class="lesson-number">7</span>
+        <h3>Greatest & Smallest Numbers</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>To form the <strong>greatest</strong> number, arrange digits in <em>descending order</em> (largest first). For the <strong>smallest</strong>, arrange in <em>ascending order</em> — but remember, a number can't start with 0!</p>
+
+        <div class="interactive-area text-center" id="greatest-smallest-area">
+          <p class="mb-4"><strong>Given digits:</strong></p>
+          <div class="flex-center gap-3 mb-4" id="gs-digits"></div>
+          <div class="grid-2 gap-4" style="max-width: 500px; margin: 0 auto;">
+            <div>
+              <div class="text-sm text-muted mb-2">Greatest Number</div>
+              <div class="digit-box" style="width: 100%; font-size: var(--text-2xl); padding: var(--space-3);" id="gs-greatest"></div>
+            </div>
+            <div>
+              <div class="text-sm text-muted mb-2">Smallest Number</div>
+              <div class="digit-box" style="width: 100%; font-size: var(--text-2xl); padding: var(--space-3);" id="gs-smallest"></div>
+            </div>
+          </div>
+          <button class="btn btn-teal btn-sm mt-4" onclick="newGreatestSmallest()">New Digits 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 8 (Enrichment): Rounding & Estimation -->
+    <div class="lesson-card enrichment fade-in-up delay-7">
+      <div class="lesson-card-header">
+        <span class="lesson-number">8</span>
+        <h3>Rounding & Estimation</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Rounding helps us estimate! Look at the digit to the <em>right</em> of the place you're rounding to. If it's <strong>5 or more</strong>, round up. If it's <strong>less than 5</strong>, round down.</p>
+
+        <div class="interactive-area text-center">
+          <div class="flex-center gap-4 mb-4 flex-wrap">
+            <label style="font-weight: 700;">Number:</label>
+            <input type="text" class="number-input-lg" id="round-input" value="4567" maxlength="7" style="max-width: 200px;">
+            <label style="font-weight: 700;">Round to:</label>
+            <select class="exercise-input" id="round-place" style="padding: 8px 16px; font-size: var(--text-base);">
+              <option value="10">Nearest 10</option>
+              <option value="100" selected>Nearest 100</option>
+              <option value="1000">Nearest 1,000</option>
+              <option value="10000">Nearest 10,000</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="showRounding()">Round!</button>
+          </div>
+          <div class="p-4" style="background: var(--color-surface); border-radius: var(--radius-md);">
+            <div id="round-result" style="font-size: var(--text-2xl); font-family: var(--font-heading); color: var(--color-teal);"></div>
+            <div id="round-explanation" class="text-muted mt-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 9 (Enrichment): Real-World Numbers -->
+    <div class="lesson-card enrichment fade-in-up delay-8">
+      <div class="lesson-card-header">
+        <span class="lesson-number">9</span>
+        <h3>Real-World Numbers</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Big numbers are everywhere! Let's see where we find them in the real world.</p>
+
+        <div class="grid-2 gap-4">
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">🌍</div>
+            <h4>India's Population</h4>
+            <p style="font-size: var(--text-xl); font-family: var(--font-heading); color: var(--color-primary);">1,44,17,19,000</p>
+            <p class="text-sm text-muted">One hundred forty-four crore, seventeen lakh, nineteen thousand</p>
+          </div>
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">🌙</div>
+            <h4>Earth to Moon</h4>
+            <p style="font-size: var(--text-xl); font-family: var(--font-heading); color: var(--color-teal);">3,84,400 km</p>
+            <p class="text-sm text-muted">Three lakh eighty-four thousand four hundred kilometres</p>
+          </div>
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">🏔️</div>
+            <h4>Mt. Everest Height</h4>
+            <p style="font-size: var(--text-xl); font-family: var(--font-heading); color: var(--color-coral);">8,849 metres</p>
+            <p class="text-sm text-muted">Eight thousand eight hundred and forty-nine metres</p>
+          </div>
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">🚗</div>
+            <h4>A Car Price</h4>
+            <p style="font-size: var(--text-xl); font-family: var(--font-heading); color: var(--color-accent-dark);">₹8,50,000</p>
+            <p class="text-sm text-muted">Eight lakh fifty thousand rupees</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRACTICE SECTION ==================== -->
+  <div class="tab-content" id="practice">
+    <div class="section-header">
+      <h2>✏️ Practice</h2>
+      <p>Test your understanding with interactive exercises!</p>
+    </div>
+
+    <!-- Exercise 1: Number Names -->
+    <div class="exercise-card fade-in-up" id="ex-names">
+      <h3><span class="exercise-number">1</span> Write the Number Name</h3>
+      <p class="text-muted mb-4">Write the name of each number in words.</p>
+      <div id="ex-names-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('names')">Check Answers ✓</button>
+      <div id="ex-names-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 2: Write in Figures -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-figures">
+      <h3><span class="exercise-number">2</span> Write in Figures</h3>
+      <p class="text-muted mb-4">Write the number for each name.</p>
+      <div id="ex-figures-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('figures')">Check Answers ✓</button>
+      <div id="ex-figures-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 3: Expanded Form -->
+    <div class="exercise-card fade-in-up delay-2" id="ex-expanded">
+      <h3><span class="exercise-number">3</span> Expanded Form</h3>
+      <p class="text-muted mb-4">Write the expanded form of each number.</p>
+      <div id="ex-expanded-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('expanded')">Check Answers ✓</button>
+      <div id="ex-expanded-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 4: Comparison -->
+    <div class="exercise-card fade-in-up delay-3" id="ex-compare">
+      <h3><span class="exercise-number">4</span> Compare Numbers</h3>
+      <p class="text-muted mb-4">Fill in &lt;, &gt;, or = for each pair.</p>
+      <div id="ex-compare-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('compare')">Check Answers ✓</button>
+      <div id="ex-compare-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 5: Ordering -->
+    <div class="exercise-card fade-in-up delay-4" id="ex-order">
+      <h3><span class="exercise-number">5</span> Order the Numbers</h3>
+      <p class="text-muted mb-4">Arrange the numbers in ascending (smallest to largest) order.</p>
+      <div id="ex-order-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('order')">Check Answers ✓</button>
+      <div id="ex-order-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 6: Predecessor & Successor -->
+    <div class="exercise-card fade-in-up delay-5" id="ex-predsuc">
+      <h3><span class="exercise-number">6</span> Predecessor & Successor</h3>
+      <p class="text-muted mb-4">Write the predecessor and successor of each number.</p>
+      <div id="ex-predsuc-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('predsuc')">Check Answers ✓</button>
+      <div id="ex-predsuc-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 7: Place Value & Face Value -->
+    <div class="exercise-card fade-in-up delay-6" id="ex-pv">
+      <h3><span class="exercise-number">7</span> Place Value & Face Value</h3>
+      <p class="text-muted mb-4">Find the place value and face value of the highlighted digit.</p>
+      <div id="ex-pv-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('pv')">Check Answers ✓</button>
+      <div id="ex-pv-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 8: Roman Numerals -->
+    <div class="exercise-card fade-in-up delay-7" id="ex-roman">
+      <h3><span class="exercise-number">8</span> Roman Numerals</h3>
+      <p class="text-muted mb-4">Convert between Roman and Hindu-Arabic numerals.</p>
+      <div id="ex-roman-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('roman')">Check Answers ✓</button>
+      <div id="ex-roman-score" class="hidden"></div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ SECTION ==================== -->
+  <div class="tab-content" id="quiz">
+    <div class="section-header">
+      <h2>🎯 Quiz</h2>
+      <p>Test your mastery! Start with Explorer, unlock higher tiers with great scores.</p>
+    </div>
+
+    <div class="tier-selector">
+      <button class="tier-btn explorer active" onclick="startQuiz('explorer')">🌿 Explorer</button>
+      <button class="tier-btn adventurer" onclick="startQuiz('adventurer')">⚔️ Adventurer</button>
+      <button class="tier-btn champion" onclick="startQuiz('champion')">👑 Champion</button>
+    </div>
+
+    <div id="quiz-area">
+      <div class="text-center p-8">
+        <p style="font-size: var(--text-xl);">Select a tier and click to begin!</p>
+        <button class="btn btn-primary btn-lg mt-4" onclick="startQuiz('explorer')">Start Explorer Quiz 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WORKSHEET SECTION ==================== -->
+  <div class="tab-content" id="worksheet">
+    <div class="section-header">
+      <h2>🖨️ Worksheet</h2>
+      <p>Print a worksheet to practise on paper! Each time you print, the questions will be different.</p>
+    </div>
+
+    <div class="text-center">
+      <div class="card p-8" style="max-width: 500px; margin: 0 auto;">
+        <div style="font-size: 4rem;">📝</div>
+        <h3 class="mt-4">Chapter 1: Numbers Worksheet</h3>
+        <p class="text-muted mt-2">A printable A4 exercise sheet with questions on number names, expanded form, comparisons, Roman numerals, and more!</p>
+        <a href="../worksheets/ch01-numbers-worksheet.html" target="_blank" class="btn btn-primary btn-lg mt-6">
+          Open Worksheet 🖨️
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end container -->
+
+<!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/quiz-engine.js"></script>
+
+<script>
+// ============================================
+// LESSON INTERACTIVES
+// ============================================
+
+// --- Place Value Explorer ---
+let currentSystem = 'indian';
+
+function updatePlaceValue() {
+  const input = document.getElementById('pv-input');
+  const num = input.value.replace(/\D/g, '').slice(0, 7);
+  input.value = num;
+  if (!num) return;
+
+  const chart = document.getElementById('pv-chart');
+  const digits = num.split('');
+  const colors = ['highlight-tl', 'highlight-l', 'highlight-tth', 'highlight-th', 'highlight-h', 'highlight-t', 'highlight-o'];
+  const positions = digits.length;
+
+  // Build chart
+  let html = '';
+  digits.forEach((d, i) => {
+    const pos = positions - 1 - i;
+    const colorClass = colors[6 - pos] || '';
+    html += `
+      <div class="pv-column">
+        <div class="place-label">${Utils.placeValueShort(pos)}</div>
+        <div class="digit-box ${colorClass}" onclick="showDigitInfo(${parseInt(d)}, ${pos})">${d}</div>
+        <div class="place-label text-xs">${Utils.placeValueName(pos)}</div>
+      </div>
+    `;
+    // Add comma separator for Indian system
+    if (currentSystem === 'indian') {
+      if (pos === 3 || pos === 5) html += '<div class="comma-separator">,</div>';
+    } else {
+      if (pos === 3 || pos === 6) html += '<div class="comma-separator">,</div>';
+    }
+  });
+  chart.innerHTML = html;
+  updateFormattedNumber(parseInt(num));
+}
+
+function showDigitInfo(digit, position) {
+  const info = document.getElementById('pv-info');
+  info.classList.remove('hidden');
+
+  const placeValues = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
+  const pv = digit * placeValues[position];
+
+  document.getElementById('pv-digit').textContent = digit;
+  document.getElementById('pv-position').textContent = Utils.placeValueName(position);
+  document.getElementById('pv-face').textContent = digit;
+  document.getElementById('pv-place').textContent = Utils.formatIndian(pv);
+
+  AudioManager.playTone('click');
+  info.classList.add('pop-in');
+}
+
+function toggleNumberSystem() {
+  currentSystem = currentSystem === 'indian' ? 'international' : 'indian';
+  document.getElementById('system-label').textContent =
+    currentSystem === 'indian' ? 'Show International System' : 'Show Indian System';
+  updatePlaceValue();
+}
+
+function updateFormattedNumber(num) {
+  const el = document.getElementById('formatted-number');
+  if (currentSystem === 'indian') {
+    el.textContent = `Indian: ${Utils.formatIndian(num)} | Name: ${Utils.numberToIndianName(num)}`;
+  } else {
+    el.textContent = `International: ${Utils.formatInternational(num)} | Name: ${Utils.numberToIndianName(num)}`;
+  }
+}
+
+// --- Expanded Form ---
+function showExpanded() {
+  const input = document.getElementById('expand-input');
+  const num = parseInt(input.value.replace(/\D/g, ''));
+  if (!num || isNaN(num)) return;
+
+  document.getElementById('expand-standard').textContent = Utils.formatIndian(num);
+
+  const digits = String(num).split('').reverse();
+  const placeValues = [1, 10, 100, 1000, 10000, 100000, 1000000];
+  const container = document.getElementById('expanded-result');
+  container.innerHTML = '';
+
+  let parts = [];
+  for (let i = digits.length - 1; i >= 0; i--) {
+    const d = parseInt(digits[i]);
+    if (d > 0) {
+      parts.push(Utils.formatIndian(d * placeValues[i]));
+    }
+  }
+
+  parts.forEach((part, idx) => {
+    if (idx > 0) {
+      const plus = document.createElement('span');
+      plus.className = 'plus-sign animate';
+      plus.style.animationDelay = `${idx * 0.15}s`;
+      plus.textContent = '+';
+      container.appendChild(plus);
+    }
+    const span = document.createElement('span');
+    span.className = 'expanded-part animate';
+    span.style.animationDelay = `${idx * 0.15}s`;
+    span.textContent = part;
+    container.appendChild(span);
+  });
+
+  AudioManager.playTone('correct');
+}
+
+// --- Number Names ---
+function showNumberName() {
+  const input = document.getElementById('name-input');
+  const num = parseInt(input.value.replace(/\D/g, ''));
+  if (isNaN(num)) return;
+
+  document.getElementById('name-number').textContent = Utils.formatIndian(num);
+  document.getElementById('name-result').textContent = Utils.numberToIndianName(num);
+  AudioManager.playTone('click');
+}
+
+// --- Comparing Numbers ---
+let compareAnswer = '';
+
+function newComparePair() {
+  const ranges = [
+    [10000, 99999],
+    [100000, 999999],
+    [1000000, 9999999]
+  ];
+  const range = ranges[Utils.randomInt(0, ranges.length - 1)];
+  const a = Utils.randomInt(range[0], range[1]);
+  // Sometimes make them equal, sometimes close
+  const roll = Math.random();
+  let b;
+  if (roll < 0.15) {
+    b = a; // equal
+  } else if (roll < 0.4) {
+    b = a + Utils.randomInt(-100, 100); // close
+  } else {
+    b = Utils.randomInt(range[0], range[1]);
+  }
+  if (b < 0) b = Utils.randomInt(range[0], range[1]);
+
+  document.getElementById('compare-left').textContent = Utils.formatIndian(a);
+  document.getElementById('compare-right').textContent = Utils.formatIndian(b);
+
+  compareAnswer = a < b ? '<' : (a > b ? '>' : '=');
+
+  // Reset buttons
+  document.querySelectorAll('#compare-area .compare-btn').forEach(btn => {
+    btn.className = 'compare-btn';
+    btn.disabled = false;
+  });
+  document.getElementById('compare-feedback').textContent = '';
+}
+
+function checkCompare(symbol) {
+  const btns = document.querySelectorAll('#compare-area .compare-btn');
+  btns.forEach(btn => btn.disabled = true);
+
+  const clicked = [...btns].find(b => b.textContent.includes(symbol === '<' ? '<' : symbol === '>' ? '>' : '='));
+
+  if (symbol === compareAnswer) {
+    if (clicked) clicked.classList.add('correct');
+    document.getElementById('compare-feedback').innerHTML =
+      '<span style="color: var(--color-success); font-weight: 700;">✅ Correct! Well done!</span>';
+    AudioManager.playTone('correct');
+  } else {
+    if (clicked) clicked.classList.add('wrong');
+    document.getElementById('compare-feedback').innerHTML =
+      `<span style="color: var(--color-error); font-weight: 700;">Not quite! The correct answer is: <strong>${compareAnswer}</strong></span>`;
+    AudioManager.playTone('wrong');
+  }
+}
+
+// --- Predecessor & Successor (Odometer) ---
+let odometerValue = 500000;
+
+function renderOdometer() {
+  const container = document.getElementById('odometer');
+  const str = String(odometerValue).padStart(7, '0');
+  const formatted = Utils.formatIndian(odometerValue);
+
+  let html = '';
+  const commaPositions = currentSystem === 'indian' ? [1, 3] : [0, 3]; // after index
+
+  for (let i = 0; i < str.length; i++) {
+    html += `<div class="odometer-digit counter-roll">${str[i]}</div>`;
+    // Indian comma: after positions 1 and 3 (TL,L then TTh,Th)
+    if (str.length === 7 && (i === 1 || i === 3)) {
+      html += `<div class="odometer-comma">,</div>`;
+    } else if (str.length === 6 && i === 0) {
+      html += `<div class="odometer-comma">,</div>`;
+    } else if (str.length === 6 && i === 2) {
+      html += `<div class="odometer-comma">,</div>`;
+    }
+  }
+  container.innerHTML = html;
+}
+
+function changeOdometer(delta) {
+  const newVal = odometerValue + delta;
+  if (newVal >= 0 && newVal <= 9999999) {
+    odometerValue = newVal;
+    renderOdometer();
+    AudioManager.playTone('click');
+  }
+}
+
+function setOdometer() {
+  const input = document.getElementById('odometer-input');
+  const num = parseInt(input.value.replace(/\D/g, ''));
+  if (!isNaN(num) && num >= 0 && num <= 9999999) {
+    odometerValue = num;
+    renderOdometer();
+  }
+}
+
+// --- Roman Numeral Converter ---
+function convertToRoman() {
+  const num = parseInt(document.getElementById('roman-num-input').value);
+  if (num >= 1 && num <= 3999) {
+    document.getElementById('roman-result').textContent = Utils.toRoman(num);
+  } else {
+    document.getElementById('roman-result').textContent = '—';
+  }
+}
+
+function convertFromRoman() {
+  const text = document.getElementById('roman-text-input').value.toUpperCase();
+  if (/^[IVXLCDM]+$/.test(text)) {
+    document.getElementById('arabic-result').textContent = Utils.fromRoman(text);
+  } else {
+    document.getElementById('arabic-result').textContent = '—';
+  }
+}
+
+// --- Greatest & Smallest ---
+function newGreatestSmallest() {
+  const digits = Utils.randomDigits(6, true);
+  const container = document.getElementById('gs-digits');
+
+  container.innerHTML = digits.map(d => `<div class="digit-card">${d}</div>`).join('');
+
+  const greatest = Utils.greatestNumber(digits);
+  const smallest = Utils.smallestNumber(digits);
+
+  document.getElementById('gs-greatest').textContent = Utils.formatIndian(greatest);
+  document.getElementById('gs-smallest').textContent = Utils.formatIndian(smallest);
+
+  AudioManager.playTone('click');
+}
+
+// --- Rounding ---
+function showRounding() {
+  const num = parseInt(document.getElementById('round-input').value.replace(/\D/g, ''));
+  const place = parseInt(document.getElementById('round-place').value);
+  if (isNaN(num)) return;
+
+  const rounded = Utils.roundTo(num, place);
+  const lower = Math.floor(num / place) * place;
+  const upper = lower + place;
+
+  document.getElementById('round-result').textContent =
+    `${Utils.formatIndian(num)} ≈ ${Utils.formatIndian(rounded)}`;
+  document.getElementById('round-explanation').textContent =
+    `${Utils.formatIndian(num)} is between ${Utils.formatIndian(lower)} and ${Utils.formatIndian(upper)}. ` +
+    `It is closer to ${Utils.formatIndian(rounded)}, so we round ${rounded >= num ? 'up' : 'down'}.`;
+
+  AudioManager.playTone('correct');
+}
+
+// ============================================
+// PRACTICE EXERCISES
+// ============================================
+
+const exerciseData = {};
+
+function generateExercises() {
+  generateNameExercise();
+  generateFigureExercise();
+  generateExpandedExercise();
+  generateCompareExercise();
+  generateOrderExercise();
+  generatePredSucExercise();
+  generatePVExercise();
+  generateRomanExercise();
+}
+
+function generateNameExercise() {
+  const numbers = [];
+  for (let i = 0; i < 8; i++) {
+    numbers.push(Utils.randomInt(10000, 9999999));
+  }
+  exerciseData.names = numbers;
+
+  const container = document.getElementById('ex-names-questions');
+  container.innerHTML = numbers.map((n, i) => `
+    <div class="exercise-question" id="names-q${i}">
+      <div class="q-label">Q${i + 1}. Write the number name for: <strong>${Utils.formatIndian(n)}</strong></div>
+      <input type="text" class="exercise-input" style="width: 100%;" id="names-a${i}"
+             placeholder="Type the number name..." autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generateFigureExercise() {
+  const numbers = [];
+  for (let i = 0; i < 8; i++) {
+    numbers.push(Utils.randomInt(10000, 9999999));
+  }
+  exerciseData.figures = numbers;
+
+  const container = document.getElementById('ex-figures-questions');
+  container.innerHTML = numbers.map((n, i) => `
+    <div class="exercise-question" id="figures-q${i}">
+      <div class="q-label">Q${i + 1}. Write in figures: <strong>${Utils.numberToIndianName(n)}</strong></div>
+      <input type="text" class="exercise-input" style="width: 200px;" id="figures-a${i}"
+             placeholder="Type the number..." autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generateExpandedExercise() {
+  const numbers = [];
+  for (let i = 0; i < 8; i++) {
+    numbers.push(Utils.randomInt(10000, 999999));
+  }
+  exerciseData.expanded = numbers;
+
+  const container = document.getElementById('ex-expanded-questions');
+  container.innerHTML = numbers.map((n, i) => `
+    <div class="exercise-question" id="expanded-q${i}">
+      <div class="q-label">Q${i + 1}. Write the expanded form of: <strong>${Utils.formatIndian(n)}</strong></div>
+      <input type="text" class="exercise-input" style="width: 100%;" id="expanded-a${i}"
+             placeholder="e.g. 50,000 + 6,000 + 300 + 20 + 1" autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generateCompareExercise() {
+  const pairs = [];
+  for (let i = 0; i < 10; i++) {
+    const range = [10000, 999999];
+    const a = Utils.randomInt(range[0], range[1]);
+    const roll = Math.random();
+    let b;
+    if (roll < 0.2) b = a;
+    else if (roll < 0.5) b = a + Utils.randomInt(-50, 50);
+    else b = Utils.randomInt(range[0], range[1]);
+    if (b < 0) b = Utils.randomInt(range[0], range[1]);
+    pairs.push([a, b]);
+  }
+  exerciseData.compare = pairs;
+
+  const container = document.getElementById('ex-compare-questions');
+  container.innerHTML = pairs.map((pair, i) => `
+    <div class="exercise-question" id="compare-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom: 0;">Q${i + 1}.</span>
+        <strong>${Utils.formatIndian(pair[0])}</strong>
+        <select class="exercise-input" id="compare-a${i}" style="width: 60px; text-align: center; font-size: var(--text-lg);">
+          <option value="">?</option>
+          <option value="<">&lt;</option>
+          <option value=">">&gt;</option>
+          <option value="=">=</option>
+        </select>
+        <strong>${Utils.formatIndian(pair[1])}</strong>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateOrderExercise() {
+  const sets = [];
+  for (let s = 0; s < 4; s++) {
+    const nums = [];
+    for (let i = 0; i < 5; i++) {
+      nums.push(Utils.randomInt(10000, 999999));
+    }
+    sets.push(nums);
+  }
+  exerciseData.order = sets;
+
+  const container = document.getElementById('ex-order-questions');
+  container.innerHTML = sets.map((nums, i) => `
+    <div class="exercise-question" id="order-q${i}">
+      <div class="q-label">Q${i + 1}. Arrange in ${i < 2 ? 'ascending' : 'descending'} order:</div>
+      <div class="mb-2">${nums.map(n => `<span class="badge badge-purple" style="margin: 2px; font-size: var(--text-sm);">${Utils.formatIndian(n)}</span>`).join(' ')}</div>
+      <input type="text" class="exercise-input" style="width: 100%;" id="order-a${i}"
+             placeholder="Type numbers separated by commas..." autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generatePredSucExercise() {
+  const numbers = [];
+  const special = [100000, 999999, 500000, 1000000, 10000];
+  for (let i = 0; i < 4; i++) {
+    numbers.push(special[i]);
+  }
+  for (let i = 0; i < 4; i++) {
+    numbers.push(Utils.randomInt(10000, 9999999));
+  }
+  exerciseData.predsuc = numbers;
+
+  const container = document.getElementById('ex-predsuc-questions');
+  container.innerHTML = numbers.map((n, i) => `
+    <div class="exercise-question" id="predsuc-q${i}">
+      <div class="q-label">Q${i + 1}. Number: <strong>${Utils.formatIndian(n)}</strong></div>
+      <div class="flex gap-4 flex-wrap" style="align-items: center;">
+        <div>
+          <label class="text-sm text-muted">Predecessor:</label>
+          <input type="text" class="exercise-input" style="width: 150px;" id="predsuc-pred${i}" autocomplete="off">
+        </div>
+        <div>
+          <label class="text-sm text-muted">Successor:</label>
+          <input type="text" class="exercise-input" style="width: 150px;" id="predsuc-suc${i}" autocomplete="off">
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generatePVExercise() {
+  const questions = [];
+  for (let i = 0; i < 8; i++) {
+    const num = Utils.randomInt(100000, 9999999);
+    const str = String(num);
+    const pos = Utils.randomInt(0, str.length - 1);
+    const digit = parseInt(str[pos]);
+    const actualPos = str.length - 1 - pos;
+    questions.push({ num, digit, position: actualPos, digitIndex: pos });
+  }
+  exerciseData.pv = questions;
+
+  const container = document.getElementById('ex-pv-questions');
+  container.innerHTML = questions.map((q, i) => {
+    const numStr = Utils.formatIndian(q.num);
+    // Highlight the digit
+    const rawStr = String(q.num);
+    let highlighted = '';
+    for (let c = 0; c < rawStr.length; c++) {
+      if (c === q.digitIndex) {
+        highlighted += `<span style="color: var(--color-coral); text-decoration: underline; font-weight: 800;">${rawStr[c]}</span>`;
+      } else {
+        highlighted += rawStr[c];
+      }
+    }
+    return `
+      <div class="exercise-question" id="pv-q${i}">
+        <div class="q-label">Q${i + 1}. In the number <strong style="font-size: var(--text-xl); letter-spacing: 2px;">${highlighted}</strong>, find:</div>
+        <div class="flex gap-4 flex-wrap" style="align-items: center;">
+          <div>
+            <label class="text-sm text-muted">Face Value of ${q.digit}:</label>
+            <input type="text" class="exercise-input" style="width: 120px;" id="pv-face${i}" autocomplete="off">
+          </div>
+          <div>
+            <label class="text-sm text-muted">Place Value of ${q.digit}:</label>
+            <input type="text" class="exercise-input" style="width: 150px;" id="pv-place${i}" autocomplete="off">
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function generateRomanExercise() {
+  const toRoman = [];
+  const fromRoman = [];
+  for (let i = 0; i < 5; i++) {
+    toRoman.push(Utils.randomInt(1, 100));
+  }
+  for (let i = 0; i < 5; i++) {
+    const n = Utils.randomInt(1, 100);
+    fromRoman.push({ roman: Utils.toRoman(n), value: n });
+  }
+  exerciseData.roman = { toRoman, fromRoman };
+
+  const container = document.getElementById('ex-roman-questions');
+  let html = '<p class="text-muted mb-2"><em>Convert to Roman Numerals:</em></p>';
+  toRoman.forEach((n, i) => {
+    html += `
+      <div class="exercise-question" id="roman-q${i}">
+        <div class="flex gap-3" style="align-items: center;">
+          <span class="q-label" style="margin-bottom: 0;">Q${i + 1}.</span>
+          <strong>${n}</strong> =
+          <input type="text" class="exercise-input" style="width: 120px; text-transform: uppercase;" id="roman-a${i}" autocomplete="off" placeholder="Roman">
+        </div>
+      </div>
+    `;
+  });
+
+  html += '<p class="text-muted mb-2 mt-4"><em>Convert to Hindu-Arabic Numerals:</em></p>';
+  fromRoman.forEach((q, i) => {
+    html += `
+      <div class="exercise-question" id="roman-q${i + 5}">
+        <div class="flex gap-3" style="align-items: center;">
+          <span class="q-label" style="margin-bottom: 0;">Q${i + 6}.</span>
+          <strong>${q.roman}</strong> =
+          <input type="text" class="exercise-input" style="width: 120px;" id="roman-a${i + 5}" autocomplete="off" placeholder="Number">
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// --- Check Exercises ---
+function checkExercise(type) {
+  let correct = 0;
+  let total = 0;
+
+  if (type === 'names') {
+    exerciseData.names.forEach((num, i) => {
+      total++;
+      const input = document.getElementById(`names-a${i}`);
+      const expected = Utils.numberToIndianName(num);
+      const el = document.getElementById(`names-q${i}`);
+      if (Utils.fuzzyMatchName(input.value, expected)) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${expected}</div>`;
+      }
+      input.disabled = true;
+    });
+  }
+
+  if (type === 'figures') {
+    exerciseData.figures.forEach((num, i) => {
+      total++;
+      const input = document.getElementById(`figures-a${i}`);
+      const userVal = parseInt(input.value.replace(/[\s,]+/g, ''));
+      const el = document.getElementById(`figures-q${i}`);
+      if (userVal === num) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${Utils.formatIndian(num)}</div>`;
+      }
+      input.disabled = true;
+    });
+  }
+
+  if (type === 'expanded') {
+    exerciseData.expanded.forEach((num, i) => {
+      total++;
+      const input = document.getElementById(`expanded-a${i}`);
+      const expected = Utils.expandedForm(num);
+      const userClean = input.value.replace(/[\s]+/g, '').replace(/,/g, '');
+      const expectedClean = expected.replace(/[\s]+/g, '').replace(/,/g, '');
+      const el = document.getElementById(`expanded-q${i}`);
+      if (userClean === expectedClean) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${expected}</div>`;
+      }
+      input.disabled = true;
+    });
+  }
+
+  if (type === 'compare') {
+    exerciseData.compare.forEach((pair, i) => {
+      total++;
+      const select = document.getElementById(`compare-a${i}`);
+      const expected = pair[0] < pair[1] ? '<' : (pair[0] > pair[1] ? '>' : '=');
+      const el = document.getElementById(`compare-q${i}`);
+      if (select.value === expected) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${expected}</div>`;
+      }
+      select.disabled = true;
+    });
+  }
+
+  if (type === 'order') {
+    exerciseData.order.forEach((nums, i) => {
+      total++;
+      const input = document.getElementById(`order-a${i}`);
+      const sorted = i < 2
+        ? [...nums].sort((a, b) => a - b)
+        : [...nums].sort((a, b) => b - a);
+      const userNums = input.value.split(',').map(s => parseInt(s.replace(/[\s]+/g, ''))).filter(n => !isNaN(n));
+      const el = document.getElementById(`order-q${i}`);
+      if (JSON.stringify(userNums) === JSON.stringify(sorted)) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${sorted.map(n => Utils.formatIndian(n)).join(', ')}</div>`;
+      }
+      input.disabled = true;
+    });
+  }
+
+  if (type === 'predsuc') {
+    exerciseData.predsuc.forEach((num, i) => {
+      total += 2;
+      const predInput = document.getElementById(`predsuc-pred${i}`);
+      const sucInput = document.getElementById(`predsuc-suc${i}`);
+      const el = document.getElementById(`predsuc-q${i}`);
+
+      const predCorrect = parseInt(predInput.value.replace(/[\s,]+/g, '')) === num - 1;
+      const sucCorrect = parseInt(sucInput.value.replace(/[\s,]+/g, '')) === num + 1;
+
+      if (predCorrect) correct++;
+      if (sucCorrect) correct++;
+
+      if (predCorrect && sucCorrect) {
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Predecessor: ${Utils.formatIndian(num - 1)}, Successor: ${Utils.formatIndian(num + 1)}</div>`;
+      }
+      predInput.disabled = true;
+      sucInput.disabled = true;
+    });
+  }
+
+  if (type === 'pv') {
+    exerciseData.pv.forEach((q, i) => {
+      total += 2;
+      const faceInput = document.getElementById(`pv-face${i}`);
+      const placeInput = document.getElementById(`pv-place${i}`);
+      const el = document.getElementById(`pv-q${i}`);
+
+      const placeValues = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
+      const expectedFace = q.digit;
+      const expectedPlace = q.digit * placeValues[q.position];
+
+      const faceCorrect = parseInt(faceInput.value) === expectedFace;
+      const placeCorrect = parseInt(placeInput.value.replace(/[\s,]+/g, '')) === expectedPlace;
+
+      if (faceCorrect) correct++;
+      if (placeCorrect) correct++;
+
+      if (faceCorrect && placeCorrect) {
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Face Value: ${expectedFace}, Place Value: ${Utils.formatIndian(expectedPlace)}</div>`;
+      }
+      faceInput.disabled = true;
+      placeInput.disabled = true;
+    });
+  }
+
+  if (type === 'roman') {
+    exerciseData.roman.toRoman.forEach((n, i) => {
+      total++;
+      const input = document.getElementById(`roman-a${i}`);
+      const expected = Utils.toRoman(n);
+      const el = document.getElementById(`roman-q${i}`);
+      if (input.value.toUpperCase().trim() === expected) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${expected}</div>`;
+      }
+      input.disabled = true;
+    });
+    exerciseData.roman.fromRoman.forEach((q, i) => {
+      total++;
+      const input = document.getElementById(`roman-a${i + 5}`);
+      const el = document.getElementById(`roman-q${i + 5}`);
+      if (parseInt(input.value) === q.value) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${q.value}</div>`;
+      }
+      input.disabled = true;
+    });
+  }
+
+  // Show score
+  const scoreEl = document.getElementById(`ex-${type}-score`);
+  const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+  scoreEl.className = 'exercise-score';
+  scoreEl.innerHTML = `Score: ${correct}/${total} (${pct}%) ${pct >= 80 ? '⭐ Excellent!' : pct >= 60 ? '👍 Good job!' : '💪 Keep practising!'}`;
+
+  if (pct >= 80) {
+    Confetti.launch(50);
+    AudioManager.playTone('correct');
+  } else {
+    AudioManager.playTone('click');
+  }
+}
+
+// ============================================
+// QUIZ DATA
+// ============================================
+
+function generateQuizQuestions() {
+  const questions = [];
+
+  // --- EXPLORER TIER ---
+  // Number names
+  for (let i = 0; i < 4; i++) {
+    const n = Utils.randomInt(1000, 99999);
+    const name = Utils.numberToIndianName(n);
+    questions.push({
+      id: `e_name_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `What is the number name for ${Utils.formatIndian(n)}?`,
+      options: [name, Utils.numberToIndianName(n + Utils.randomInt(100, 999)),
+                Utils.numberToIndianName(n - Utils.randomInt(100, 999)),
+                Utils.numberToIndianName(Utils.randomInt(1000, 99999))],
+      answer: name,
+      hint: 'Read each place value from left to right.',
+      explanation: `${Utils.formatIndian(n)} is read as "${name}".`
+    });
+  }
+
+  // Place value
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(10000, 999999);
+    const str = String(n);
+    const pos = Utils.randomInt(0, str.length - 1);
+    const digit = parseInt(str[pos]);
+    const actualPos = str.length - 1 - pos;
+    const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000];
+    const pv = digit * pvs[actualPos];
+    questions.push({
+      id: `e_pv_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `In ${Utils.formatIndian(n)}, what is the place value of ${digit} in the ${Utils.placeValueName(actualPos)} place?`,
+      options: [Utils.formatIndian(pv), String(digit),
+                Utils.formatIndian(pvs[actualPos]),
+                Utils.formatIndian(digit * pvs[Math.min(actualPos + 1, 6)])],
+      answer: Utils.formatIndian(pv),
+      hint: `Place value = face value × position value. The ${Utils.placeValueName(actualPos)} place has value ${Utils.formatIndian(pvs[actualPos])}.`,
+      explanation: `Face value is ${digit}. Place is ${Utils.placeValueName(actualPos)} (${Utils.formatIndian(pvs[actualPos])}). So place value = ${digit} × ${Utils.formatIndian(pvs[actualPos])} = ${Utils.formatIndian(pv)}.`
+    });
+  }
+
+  // Comparison
+  for (let i = 0; i < 4; i++) {
+    const a = Utils.randomInt(10000, 99999);
+    const b = Math.random() < 0.2 ? a : Utils.randomInt(10000, 99999);
+    const ans = a < b ? '<' : a > b ? '>' : '=';
+    questions.push({
+      id: `e_cmp_${i}`, tier: 'explorer', type: 'compare', points: 10,
+      question: `Compare the two numbers:`,
+      leftNum: a, rightNum: b, answer: ans,
+      hint: 'Compare digits from left to right. The first different digit decides!',
+      explanation: `${Utils.formatIndian(a)} ${ans} ${Utils.formatIndian(b)}`
+    });
+  }
+
+  // Roman (easy: 1-20)
+  for (let i = 0; i < 4; i++) {
+    const n = Utils.randomInt(1, 20);
+    const roman = Utils.toRoman(n);
+    questions.push({
+      id: `e_rom_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `What is ${n} in Roman numerals?`,
+      options: [roman, Utils.toRoman(n + 1), Utils.toRoman(Math.max(1, n - 1)), Utils.toRoman(n + Utils.randomInt(2, 5))],
+      answer: roman,
+      hint: 'I=1, V=5, X=10. IV=4, IX=9.',
+      explanation: `${n} in Roman numerals is ${roman}.`
+    });
+  }
+
+  // --- ADVENTURER TIER ---
+  // Expanded form
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(10000, 999999);
+    const expanded = Utils.expandedForm(n);
+    questions.push({
+      id: `a_exp_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+      question: `Write the expanded form of ${Utils.formatIndian(n)}:`,
+      answer: [expanded],
+      matchType: 'exact',
+      placeholder: 'e.g. 50,000 + 6,000 + 300 + 20 + 1',
+      hint: 'Break the number into the value of each digit.',
+      explanation: `${Utils.formatIndian(n)} = ${expanded}`
+    });
+  }
+
+  // Predecessor/successor
+  for (let i = 0; i < 3; i++) {
+    const special = [100000, 500000, 1000000, 999999, 100001][Utils.randomInt(0, 4)];
+    const askPred = Math.random() < 0.5;
+    questions.push({
+      id: `a_ps_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+      question: `What is the ${askPred ? 'predecessor' : 'successor'} of ${Utils.formatIndian(special)}?`,
+      answer: [String(askPred ? special - 1 : special + 1), Utils.formatIndian(askPred ? special - 1 : special + 1)],
+      placeholder: 'Type the number',
+      hint: askPred ? 'Predecessor = number - 1' : 'Successor = number + 1',
+      explanation: `The ${askPred ? 'predecessor' : 'successor'} of ${Utils.formatIndian(special)} is ${Utils.formatIndian(askPred ? special - 1 : special + 1)}.`
+    });
+  }
+
+  // Face value vs Place value
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(100000, 9999999);
+    const str = String(n);
+    const pos = Utils.randomInt(0, str.length - 1);
+    const digit = parseInt(str[pos]);
+    const actualPos = str.length - 1 - pos;
+    const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000];
+    const pv = digit * pvs[actualPos];
+    questions.push({
+      id: `a_fv_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
+      question: `In ${Utils.formatIndian(n)}, the face value of digit ${digit} is ${digit}. What is its place value?`,
+      options: [Utils.formatIndian(pv), String(digit), Utils.formatIndian(pvs[actualPos]), Utils.formatIndian(pv * 10)],
+      answer: Utils.formatIndian(pv),
+      hint: 'Place value = digit × value of its position.',
+      explanation: `Digit ${digit} is in the ${Utils.placeValueName(actualPos)} place. Place value = ${digit} × ${Utils.formatIndian(pvs[actualPos])} = ${Utils.formatIndian(pv)}.`
+    });
+  }
+
+  // Roman (up to 100)
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(20, 100);
+    const roman = Utils.toRoman(n);
+    if (Math.random() < 0.5) {
+      questions.push({
+        id: `a_rom_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+        question: `Convert to Roman numeral: ${n}`,
+        answer: [roman],
+        placeholder: 'Type Roman numeral',
+        hint: 'L=50, XL=40, XC=90',
+        explanation: `${n} = ${roman}`
+      });
+    } else {
+      questions.push({
+        id: `a_rom_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+        question: `Convert to Hindu-Arabic: ${roman}`,
+        answer: [String(n)],
+        placeholder: 'Type the number',
+        hint: 'Add values left to right. Subtract when a smaller symbol comes before a larger one.',
+        explanation: `${roman} = ${n}`
+      });
+    }
+  }
+
+  // Ordering
+  for (let i = 0; i < 3; i++) {
+    const nums = [];
+    for (let j = 0; j < 4; j++) nums.push(Utils.randomInt(10000, 999999));
+    const sorted = [...nums].sort((a, b) => a - b);
+    const ascending = i < 2;
+    const display = ascending ? sorted : sorted.reverse();
+    questions.push({
+      id: `a_ord_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
+      question: `Which shows these numbers in ${ascending ? 'ascending' : 'descending'} order?`,
+      options: [
+        display.map(n => Utils.formatIndian(n)).join(', '),
+        [...display].reverse().map(n => Utils.formatIndian(n)).join(', '),
+        Utils.shuffle(nums).map(n => Utils.formatIndian(n)).join(', '),
+        Utils.shuffle(nums).map(n => Utils.formatIndian(n)).join(', ')
+      ],
+      answer: display.map(n => Utils.formatIndian(n)).join(', '),
+      hint: ascending ? 'Ascending means smallest to largest.' : 'Descending means largest to smallest.',
+      explanation: `${ascending ? 'Ascending' : 'Descending'} order: ${display.map(n => Utils.formatIndian(n)).join(' → ')}`
+    });
+  }
+
+  // --- CHAMPION TIER ---
+  // 7-digit numbers
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(1000000, 9999999);
+    const name = Utils.numberToIndianName(n);
+    questions.push({
+      id: `c_name_${i}`, tier: 'champion', type: 'fill-blank', points: 20,
+      question: `Write in figures: "${name}"`,
+      answer: [String(n), Utils.formatIndian(n)],
+      placeholder: 'Type the number',
+      hint: 'Break it down: how many lakhs? How many thousands?',
+      explanation: `"${name}" = ${Utils.formatIndian(n)}`
+    });
+  }
+
+  // Greatest/smallest
+  for (let i = 0; i < 3; i++) {
+    const digits = Utils.randomDigits(6, true);
+    const greatest = Utils.greatestNumber(digits);
+    const smallest = Utils.smallestNumber(digits);
+    const askGreatest = Math.random() < 0.5;
+    questions.push({
+      id: `c_gs_${i}`, tier: 'champion', type: 'fill-blank', points: 20,
+      question: `Using digits ${digits.join(', ')}, form the ${askGreatest ? 'greatest' : 'smallest'} 6-digit number:`,
+      answer: [String(askGreatest ? greatest : smallest), Utils.formatIndian(askGreatest ? greatest : smallest)],
+      placeholder: 'Type the number',
+      hint: askGreatest ? 'Arrange digits in descending order.' : 'Arrange in ascending order. Remember: number can\'t start with 0!',
+      explanation: `${askGreatest ? 'Greatest' : 'Smallest'}: ${Utils.formatIndian(askGreatest ? greatest : smallest)}`
+    });
+  }
+
+  // Roman up to 1000
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(100, 999);
+    const roman = Utils.toRoman(n);
+    questions.push({
+      id: `c_rom_${i}`, tier: 'champion', type: 'fill-blank', points: 20,
+      question: `Convert ${n} to Roman numerals:`,
+      answer: [roman],
+      placeholder: 'Type Roman numeral',
+      hint: 'C=100, D=500, M=1000. CD=400, CM=900.',
+      explanation: `${n} = ${roman}`
+    });
+  }
+
+  // Indian vs International
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(100000, 9999999);
+    questions.push({
+      id: `c_sys_${i}`, tier: 'champion', type: 'mcq', points: 20,
+      question: `${Utils.formatIndian(n)} in the Indian system is how many lakhs?`,
+      options: [
+        String(Math.floor(n / 100000)),
+        String(Math.floor(n / 10000)),
+        String(Math.floor(n / 1000000)),
+        String(Math.floor(n / 1000))
+      ],
+      answer: String(Math.floor(n / 100000)),
+      hint: '1 lakh = 1,00,000',
+      explanation: `${Utils.formatIndian(n)} = ${Math.floor(n / 100000)} lakhs and ${Utils.formatIndian(n % 100000)}`
+    });
+  }
+
+  // Estimation
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(1000, 99999);
+    const place = [10, 100, 1000][Utils.randomInt(0, 2)];
+    const rounded = Utils.roundTo(n, place);
+    questions.push({
+      id: `c_est_${i}`, tier: 'champion', type: 'mcq', points: 20,
+      question: `Round ${Utils.formatIndian(n)} to the nearest ${Utils.formatIndian(place)}:`,
+      options: [
+        Utils.formatIndian(rounded),
+        Utils.formatIndian(rounded + place),
+        Utils.formatIndian(rounded - place),
+        Utils.formatIndian(Math.floor(n / place) * place)
+      ],
+      answer: Utils.formatIndian(rounded),
+      hint: 'Look at the digit to the right. 5 or more → round up. Less than 5 → round down.',
+      explanation: `${Utils.formatIndian(n)} rounded to nearest ${Utils.formatIndian(place)} = ${Utils.formatIndian(rounded)}`
+    });
+  }
+
+  return questions;
+}
+
+// --- Quiz Starter ---
+function startQuiz(tier) {
+  // Update tier selector UI
+  document.querySelectorAll('.tier-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.tier-btn.${tier}`).classList.add('active');
+
+  const questions = generateQuizQuestions();
+
+  const quiz = new QuizEngine({
+    containerId: 'quiz-area',
+    questions: questions,
+    tier: tier,
+    questionCount: 15,
+    onComplete: (results) => {
+      if (results.percentage >= 70 && tier === 'explorer') {
+        Toast.show('Adventurer tier unlocked! ⚔️', 'badge', 4000);
+      }
+      if (results.percentage >= 80 && tier === 'adventurer') {
+        Toast.show('Champion tier unlocked! 👑', 'badge', 4000);
+      }
+    }
+  });
+
+  quiz.start();
+}
+
+// ============================================
+// INITIALIZE
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initLessonCards();
+
+  // Initialize interactives
+  updatePlaceValue();
+  newComparePair();
+  renderOdometer();
+  newGreatestSmallest();
+
+  // Generate practice exercises
+  generateExercises();
+});
+</script>
+
+</body>
+</html>

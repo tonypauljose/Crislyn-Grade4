@@ -1,0 +1,287 @@
+/* ============================================
+   CRISLYN'S MATH ADVENTURE — Print Stylesheet
+   ============================================ */
+
+@media print {
+  /* --- Page Setup --- */
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm 2cm;
+  }
+
+  /* --- Reset for print --- */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  body {
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+    line-height: 1.5;
+  }
+
+  /* --- Hide non-print elements --- */
+  nav,
+  .tabs,
+  .btn,
+  button,
+  .toast-container,
+  .modal-overlay,
+  #confetti-canvas,
+  .no-print,
+  .quiz-container,
+  .canvas-wrapper,
+  audio,
+  video,
+  .score-card {
+    display: none !important;
+  }
+
+  /* --- Show print-only elements --- */
+  .print-only {
+    display: block !important;
+  }
+
+  /* --- Worksheet Header --- */
+  .worksheet-header {
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 8pt;
+    margin-bottom: 16pt;
+  }
+
+  .worksheet-header h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18pt;
+    color: #000;
+    margin-bottom: 4pt;
+  }
+
+  .worksheet-header .subtitle {
+    font-size: 11pt;
+    color: #555;
+  }
+
+  /* --- Student Info Fields --- */
+  .student-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16pt;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8pt;
+  }
+
+  .student-info .field {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+  }
+
+  .student-info .field label {
+    font-weight: 700;
+    font-size: 10pt;
+  }
+
+  .student-info .field .line {
+    display: inline-block;
+    width: 150pt;
+    border-bottom: 1px solid #000;
+  }
+
+  /* --- Section Headings --- */
+  .worksheet-section {
+    margin-bottom: 14pt;
+    page-break-inside: avoid;
+  }
+
+  .worksheet-section h2 {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8pt;
+    padding: 4pt 8pt;
+    background: #f0f0f0;
+    border-left: 4pt solid #6B21A8;
+  }
+
+  /* --- Question Blocks --- */
+  .question-block {
+    page-break-inside: avoid;
+    margin-bottom: 10pt;
+    padding-left: 8pt;
+  }
+
+  .question-block .q-number {
+    font-weight: 700;
+    margin-right: 4pt;
+  }
+
+  /* --- Answer Lines --- */
+  .answer-line {
+    display: block;
+    width: 100%;
+    height: 24pt;
+    border-bottom: 1px dotted #999;
+    margin-top: 6pt;
+    margin-bottom: 6pt;
+  }
+
+  .answer-line-short {
+    display: inline-block;
+    width: 100pt;
+    height: 20pt;
+    border-bottom: 1px dotted #999;
+    margin: 0 8pt;
+    vertical-align: bottom;
+  }
+
+  /* --- Comparison Layout --- */
+  .compare-row {
+    display: flex;
+    align-items: center;
+    gap: 8pt;
+    margin-bottom: 8pt;
+  }
+
+  .compare-row .number-box {
+    font-size: 13pt;
+    font-weight: 700;
+    padding: 4pt 12pt;
+    border: 1px solid #ccc;
+    border-radius: 4pt;
+    min-width: 80pt;
+    text-align: center;
+  }
+
+  .compare-row .symbol-box {
+    width: 36pt;
+    height: 28pt;
+    border: 1.5pt solid #000;
+    border-radius: 4pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* --- Number Ordering Layout --- */
+  .ordering-row {
+    display: flex;
+    gap: 6pt;
+    flex-wrap: wrap;
+    margin-bottom: 6pt;
+  }
+
+  .ordering-row .order-box {
+    width: 60pt;
+    height: 24pt;
+    border: 1px solid #000;
+    border-radius: 3pt;
+    text-align: center;
+  }
+
+  /* --- Grid for MCQ options --- */
+  .print-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4pt 16pt;
+    margin-top: 4pt;
+  }
+
+  .print-options .option {
+    padding: 3pt 0;
+  }
+
+  .print-options .option::before {
+    content: attr(data-label) ") ";
+    font-weight: 700;
+  }
+
+  /* --- Roman Numeral Table --- */
+  .roman-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0;
+  }
+
+  .roman-table th,
+  .roman-table td {
+    border: 1px solid #999;
+    padding: 4pt 8pt;
+    text-align: center;
+    font-size: 11pt;
+  }
+
+  .roman-table th {
+    background: #f0f0f0;
+    font-weight: 700;
+  }
+
+  /* --- Answer Key --- */
+  .answer-key {
+    page-break-before: always;
+  }
+
+  .answer-key h2 {
+    text-align: center;
+    font-size: 14pt;
+    margin-bottom: 12pt;
+    background: none;
+    border-left: none;
+  }
+
+  .answer-key .answers-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4pt 16pt;
+  }
+
+  .answer-key .answer-item {
+    font-size: 10pt;
+    padding: 2pt 0;
+    border-bottom: 1px dotted #ddd;
+  }
+
+  .answer-key .answer-item .q-num {
+    font-weight: 700;
+    color: #6B21A8;
+  }
+
+  /* --- Footer --- */
+  .worksheet-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8pt;
+    color: #999;
+    padding: 4pt 0;
+    border-top: 1px solid #eee;
+  }
+
+  /* --- Page breaks --- */
+  .page-break {
+    page-break-before: always;
+  }
+
+  .no-break {
+    page-break-inside: avoid;
+  }
+
+  /* --- Links: show URL --- */
+  a[href]::after {
+    content: none;
+  }
+}
+
+/* --- Screen-only: hide print elements --- */
+@media screen {
+  .print-only {
+    display: none !important;
+  }
+}

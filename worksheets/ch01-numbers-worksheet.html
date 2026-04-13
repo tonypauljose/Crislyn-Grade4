@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worksheet — Chapter 1: Numbers</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/print.css">
+
+  <style>
+    /* Screen-only styles */
+    @media screen {
+      body { background: var(--color-bg); }
+      .worksheet-page {
+        max-width: 800px;
+        margin: var(--space-8) auto;
+        background: white;
+        padding: var(--space-8);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+      }
+      .screen-controls {
+        max-width: 800px;
+        margin: var(--space-4) auto var(--space-8);
+        text-align: center;
+      }
+    }
+
+    /* Print styles for this worksheet */
+    @media print {
+      .screen-controls { display: none !important; }
+      .worksheet-page {
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+
+    .ws-question {
+      margin-bottom: 12pt;
+      page-break-inside: avoid;
+    }
+
+    .ws-question .q-num {
+      font-weight: 700;
+      color: #6B21A8;
+      margin-right: 4px;
+    }
+
+    .ws-answer-line {
+      display: block;
+      width: 100%;
+      height: 28pt;
+      border-bottom: 1px dotted #999;
+      margin-top: 4pt;
+    }
+
+    .ws-answer-short {
+      display: inline-block;
+      width: 120pt;
+      border-bottom: 1px dotted #999;
+      margin: 0 6pt;
+      text-align: center;
+    }
+
+    .ws-section {
+      margin-bottom: 18pt;
+      page-break-inside: avoid;
+    }
+
+    .ws-section h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      padding: 4pt 8pt;
+      background: #f0f0f0;
+      border-left: 4pt solid #6B21A8;
+      margin-bottom: 10pt;
+      color: #000;
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .ws-header {
+      text-align: center;
+      border-bottom: 2px solid #6B21A8;
+      padding-bottom: 8pt;
+      margin-bottom: 12pt;
+    }
+
+    .ws-header h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18pt;
+      color: #6B21A8;
+      margin-bottom: 2pt;
+    }
+
+    .ws-header .subtitle {
+      font-size: 11pt;
+      color: #666;
+    }
+
+    .ws-student-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14pt;
+      font-size: 10pt;
+    }
+
+    .ws-student-info .field {
+      display: flex;
+      align-items: baseline;
+      gap: 6pt;
+    }
+
+    .ws-student-info .line {
+      display: inline-block;
+      width: 140pt;
+      border-bottom: 1px solid #000;
+    }
+
+    .ws-compare-row {
+      display: flex;
+      align-items: center;
+      gap: 8pt;
+      margin-bottom: 8pt;
+    }
+
+    .ws-compare-box {
+      padding: 4pt 14pt;
+      border: 1px solid #ccc;
+      border-radius: 4pt;
+      font-weight: 700;
+      font-size: 12pt;
+      min-width: 90pt;
+      text-align: center;
+    }
+
+    .ws-symbol-box {
+      width: 32pt;
+      height: 24pt;
+      border: 1.5pt solid #000;
+      border-radius: 3pt;
+    }
+
+    .ws-number-boxes {
+      display: flex;
+      gap: 4pt;
+      margin-top: 4pt;
+    }
+
+    .ws-num-box {
+      width: 70pt;
+      height: 22pt;
+      border: 1px solid #000;
+      border-radius: 2pt;
+      text-align: center;
+      font-size: 10pt;
+    }
+
+    .ws-roman-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6pt;
+    }
+
+    .ws-roman-table th, .ws-roman-table td {
+      border: 1px solid #999;
+      padding: 4pt 8pt;
+      text-align: center;
+    }
+
+    .ws-roman-table th {
+      background: #f0f0f0;
+      font-weight: 700;
+    }
+
+    .ws-answer-key {
+      page-break-before: always;
+    }
+
+    .ws-answer-key h2 {
+      text-align: center;
+      font-size: 14pt;
+      margin-bottom: 12pt;
+      font-family: 'Fredoka One', cursive;
+      color: #6B21A8;
+    }
+
+    .ws-answers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3pt 16pt;
+      font-size: 10pt;
+    }
+
+    .ws-answers-grid .ans-item {
+      padding: 2pt 0;
+      border-bottom: 1px dotted #ddd;
+    }
+
+    .ws-answers-grid .ans-num {
+      font-weight: 700;
+      color: #6B21A8;
+    }
+
+    .ws-footer {
+      text-align: center;
+      font-size: 8pt;
+      color: #999;
+      margin-top: 20pt;
+      padding-top: 6pt;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+<div class="screen-controls no-print">
+  <a href="../chapters/ch01-numbers.html" class="btn btn-outline btn-sm">← Back to Chapter 1</a>
+  <button class="btn btn-primary btn-lg" onclick="window.print()" style="margin-left: 16px;">
+    🖨️ Print Worksheet
+  </button>
+  <button class="btn btn-accent btn-sm" onclick="location.reload()" style="margin-left: 16px;">
+    🔄 New Questions
+  </button>
+  <p style="margin-top: 8px; color: var(--color-text-light); font-size: var(--text-sm);">
+    Each reload generates different questions. Use Ctrl+P or the button above to print/save as PDF.
+  </p>
+</div>
+
+<div class="worksheet-page" id="worksheet">
+  <!-- Filled by JavaScript -->
+</div>
+
+<script>
+// Utility functions (inline — worksheet is standalone)
+const U = {
+  formatIndian(num) {
+    const str = String(num);
+    if (str.length <= 3) return str;
+    let result = str.slice(-3);
+    let rest = str.slice(0, -3);
+    while (rest.length > 2) {
+      result = rest.slice(-2) + ',' + result;
+      rest = rest.slice(0, -2);
+    }
+    if (rest.length > 0) result = rest + ',' + result;
+    return result;
+  },
+  randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  },
+  numberToIndianName(num) {
+    if (num === 0) return 'zero';
+    const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+      'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+    const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+    function twoDigit(n) { if (n < 20) return ones[n]; return tens[Math.floor(n / 10)] + (n % 10 ? '-' + ones[n % 10] : ''); }
+    function threeDigit(n) { if (n < 100) return twoDigit(n); return ones[Math.floor(n / 100)] + ' hundred' + (n % 100 ? ' ' + twoDigit(n % 100) : ''); }
+    let result = '';
+    if (num >= 10000000) { result += threeDigit(Math.floor(num / 10000000)) + ' crore '; num %= 10000000; }
+    if (num >= 100000) { result += twoDigit(Math.floor(num / 100000)) + ' lakh '; num %= 100000; }
+    if (num >= 1000) { result += twoDigit(Math.floor(num / 1000)) + ' thousand '; num %= 1000; }
+    if (num >= 100) { result += ones[Math.floor(num / 100)] + ' hundred '; num %= 100; }
+    if (num > 0) { if (result) result += 'and '; result += twoDigit(num); }
+    return result.trim();
+  },
+  expandedForm(num) {
+    const digits = String(num).split('').reverse();
+    const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
+    const parts = [];
+    for (let i = digits.length - 1; i >= 0; i--) {
+      const d = parseInt(digits[i]);
+      if (d > 0) parts.push(U.formatIndian(d * pvs[i]));
+    }
+    return parts.join(' + ');
+  },
+  toRoman(num) {
+    const vals = [1000,900,500,400,100,90,50,40,10,9,5,4,1];
+    const syms = ['M','CM','D','CD','C','XC','L','XL','X','IX','V','IV','I'];
+    let r = '';
+    for (let i = 0; i < vals.length; i++) { while (num >= vals[i]) { r += syms[i]; num -= vals[i]; } }
+    return r;
+  },
+  shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  },
+  randomDigits(count) {
+    const pool = [0,1,2,3,4,5,6,7,8,9];
+    return U.shuffle(pool).slice(0, count);
+  },
+  greatestNumber(digits) { return parseInt([...digits].sort((a,b) => b-a).join('')); },
+  smallestNumber(digits) {
+    const s = [...digits].sort((a,b) => a-b);
+    if (s[0] === 0) { const idx = s.findIndex(d => d > 0); if (idx > 0) [s[0], s[idx]] = [s[idx], s[0]]; }
+    return parseInt(s.join(''));
+  },
+  placeValueName(pos) { return ['Ones','Tens','Hundreds','Thousands','Ten Thousands','Lakhs','Ten Lakhs'][pos] || ''; }
+};
+
+function generateWorksheet() {
+  const answers = {};
+  let qNum = 0;
+
+  // --- Section A: Number Names ---
+  const nameNums = [];
+  for (let i = 0; i < 5; i++) nameNums.push(U.randomInt(10000, 9999999));
+
+  let secA = nameNums.map((n, i) => {
+    qNum++;
+    answers[`A${i+1}`] = U.numberToIndianName(n);
+    return `<div class="ws-question"><span class="q-num">${qNum}.</span> ${U.formatIndian(n)}<span class="ws-answer-line"></span></div>`;
+  }).join('');
+
+  // --- Section B: Write in Figures ---
+  const figNums = [];
+  for (let i = 0; i < 5; i++) figNums.push(U.randomInt(10000, 9999999));
+
+  let secB = figNums.map((n, i) => {
+    qNum++;
+    answers[`B${i+1}`] = U.formatIndian(n);
+    return `<div class="ws-question"><span class="q-num">${qNum}.</span> ${U.numberToIndianName(n)}<span class="ws-answer-line"></span></div>`;
+  }).join('');
+
+  // --- Section C: Expanded Form ---
+  const expNums = [];
+  for (let i = 0; i < 5; i++) expNums.push(U.randomInt(10000, 999999));
+
+  let secC = expNums.map((n, i) => {
+    qNum++;
+    answers[`C${i+1}`] = U.expandedForm(n);
+    return `<div class="ws-question"><span class="q-num">${qNum}.</span> ${U.formatIndian(n)} = <span class="ws-answer-line"></span></div>`;
+  }).join('');
+
+  // --- Section D: Compare ---
+  const comparePairs = [];
+  for (let i = 0; i < 5; i++) {
+    const a = U.randomInt(10000, 999999);
+    const b = Math.random() < 0.2 ? a : U.randomInt(10000, 999999);
+    comparePairs.push([a, b]);
+  }
+
+  let secD = comparePairs.map((p, i) => {
+    qNum++;
+    const ans = p[0] < p[1] ? '<' : p[0] > p[1] ? '>' : '=';
+    answers[`D${i+1}`] = ans;
+    return `<div class="ws-question ws-compare-row"><span class="q-num">${qNum}.</span>
+      <span class="ws-compare-box">${U.formatIndian(p[0])}</span>
+      <span class="ws-symbol-box"></span>
+      <span class="ws-compare-box">${U.formatIndian(p[1])}</span></div>`;
+  }).join('');
+
+  // --- Section E: Ordering ---
+  const orderSets = [];
+  for (let s = 0; s < 2; s++) {
+    const nums = [];
+    for (let i = 0; i < 5; i++) nums.push(U.randomInt(10000, 999999));
+    orderSets.push(nums);
+  }
+
+  let secE = '';
+  orderSets.forEach((nums, s) => {
+    qNum++;
+    const asc = s === 0;
+    const sorted = [...nums].sort((a, b) => asc ? a - b : b - a);
+    answers[`E${s+1}`] = sorted.map(n => U.formatIndian(n)).join(', ');
+    secE += `<div class="ws-question">
+      <span class="q-num">${qNum}.</span> Arrange in ${asc ? 'ascending' : 'descending'} order:
+      <div style="margin: 4pt 0;">${nums.map(n => `<strong>${U.formatIndian(n)}</strong>`).join(', ')}</div>
+      <span class="ws-answer-line"></span></div>`;
+  });
+
+  // --- Section F: Predecessor & Successor ---
+  const psNums = [100000, 999999, U.randomInt(10000, 999999), U.randomInt(100000, 9999999), 500000];
+
+  let secF = psNums.map((n, i) => {
+    qNum++;
+    answers[`F${i+1}_pred`] = U.formatIndian(n - 1);
+    answers[`F${i+1}_suc`] = U.formatIndian(n + 1);
+    return `<div class="ws-question"><span class="q-num">${qNum}.</span> Number: <strong>${U.formatIndian(n)}</strong>
+      &nbsp;&nbsp; Predecessor: <span class="ws-answer-short"></span> &nbsp; Successor: <span class="ws-answer-short"></span></div>`;
+  }).join('');
+
+  // --- Section G: Greatest & Smallest ---
+  const gsSets = [];
+  for (let i = 0; i < 3; i++) gsSets.push(U.randomDigits(6));
+
+  let secG = gsSets.map((digits, i) => {
+    qNum++;
+    const g = U.greatestNumber(digits);
+    const s = U.smallestNumber(digits);
+    answers[`G${i+1}_greatest`] = U.formatIndian(g);
+    answers[`G${i+1}_smallest`] = U.formatIndian(s);
+    return `<div class="ws-question"><span class="q-num">${qNum}.</span> Digits: <strong>${digits.join(', ')}</strong>
+      <div style="margin-top: 4pt;">Greatest: <span class="ws-answer-short"></span> &nbsp; Smallest: <span class="ws-answer-short"></span></div></div>`;
+  }).join('');
+
+  // --- Section H: Place Value & Face Value ---
+  const pvQuestions = [];
+  for (let i = 0; i < 4; i++) {
+    const num = U.randomInt(100000, 9999999);
+    const str = String(num);
+    const pos = U.randomInt(0, str.length - 1);
+    const digit = parseInt(str[pos]);
+    const actualPos = str.length - 1 - pos;
+    pvQuestions.push({ num, digit, actualPos });
+  }
+
+  let secH = pvQuestions.map((q, i) => {
+    qNum++;
+    const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000];
+    const pv = q.digit * pvs[q.actualPos];
+    answers[`H${i+1}_face`] = String(q.digit);
+    answers[`H${i+1}_place`] = U.formatIndian(pv);
+    return `<div class="ws-question"><span class="q-num">${qNum}.</span> In <strong>${U.formatIndian(q.num)}</strong>, the digit <strong style="color: #6B21A8; text-decoration: underline;">${q.digit}</strong> (in the ${U.placeValueName(q.actualPos)} place):
+      <div style="margin-top: 4pt;">Face Value: <span class="ws-answer-short"></span> &nbsp; Place Value: <span class="ws-answer-short"></span></div></div>`;
+  }).join('');
+
+  // --- Section I: Roman Numerals ---
+  const romanToConvert = [];
+  for (let i = 0; i < 5; i++) romanToConvert.push(U.randomInt(1, 100));
+  const romanFromConvert = [];
+  for (let i = 0; i < 3; i++) {
+    const n = U.randomInt(1, 100);
+    romanFromConvert.push({ roman: U.toRoman(n), value: n });
+  }
+
+  let secI = '<p style="margin-bottom: 6pt;"><em>Convert to Roman Numerals:</em></p>';
+  romanToConvert.forEach((n, i) => {
+    qNum++;
+    answers[`I${i+1}`] = U.toRoman(n);
+    secI += `<div class="ws-question"><span class="q-num">${qNum}.</span> ${n} = <span class="ws-answer-short"></span></div>`;
+  });
+
+  secI += '<p style="margin-bottom: 6pt; margin-top: 8pt;"><em>Convert to Hindu-Arabic Numerals:</em></p>';
+  romanFromConvert.forEach((q, i) => {
+    qNum++;
+    answers[`I${i+6}`] = String(q.value);
+    secI += `<div class="ws-question"><span class="q-num">${qNum}.</span> ${q.roman} = <span class="ws-answer-short"></span></div>`;
+  });
+
+  // --- Build Answer Key ---
+  let answerKeyHTML = '<div class="ws-answers-grid">';
+  const ansEntries = Object.entries(answers);
+  ansEntries.forEach(([key, val]) => {
+    answerKeyHTML += `<div class="ans-item"><span class="ans-num">${key}:</span> ${val}</div>`;
+  });
+  answerKeyHTML += '</div>';
+
+  // --- Assemble Worksheet ---
+  document.getElementById('worksheet').innerHTML = `
+    <div class="ws-header">
+      <h1>Crislyn's Math Adventure</h1>
+      <div class="subtitle">Chapter 1: Numbers — Practice Worksheet</div>
+    </div>
+
+    <div class="ws-student-info">
+      <div class="field"><strong>Name:</strong> <span class="line"></span></div>
+      <div class="field"><strong>Date:</strong> <span class="line" style="width: 100pt;"></span></div>
+      <div class="field"><strong>Score:</strong> <span class="line" style="width: 60pt;"></span></div>
+    </div>
+
+    <div class="ws-section"><h3>Section A: Write the Number Name</h3>${secA}</div>
+    <div class="ws-section"><h3>Section B: Write in Figures</h3>${secB}</div>
+    <div class="ws-section"><h3>Section C: Write the Expanded Form</h3>${secC}</div>
+    <div class="ws-section"><h3>Section D: Compare using &lt;, &gt;, or =</h3>${secD}</div>
+    <div class="ws-section"><h3>Section E: Arrange in Order</h3>${secE}</div>
+    <div class="ws-section"><h3>Section F: Predecessor and Successor</h3>${secF}</div>
+    <div class="ws-section"><h3>Section G: Greatest and Smallest Number</h3>${secG}</div>
+    <div class="ws-section"><h3>Section H: Place Value and Face Value</h3>${secH}</div>
+    <div class="ws-section"><h3>Section I: Roman Numerals</h3>${secI}</div>
+
+    <div class="ws-footer">Crislyn's Math Adventure — Generated on ${new Date().toLocaleDateString()}</div>
+
+    <div class="ws-answer-key">
+      <h2>Answer Key</h2>
+      ${answerKeyHTML}
+    </div>
+  `;
+}
+
+document.addEventListener('DOMContentLoaded', generateWorksheet);
+</script>
+
+</body>
+</html>
