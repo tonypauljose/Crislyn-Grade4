@@ -5,74 +5,333 @@
 // --- Audio Manager ---
 const AudioManager = {
   context: null,
-  enabled: true,
-  sounds: {},
+  sfxEnabled: false,    // SFX off by default
+  musicEnabled: false,  // Music off by default
+  musicGain: null,
+  musicOscillators: [],
+  musicPlaying: false,
+  PREF_KEY: 'crislyn_audio_prefs',
 
   init() {
+    // Load saved preferences
+    this.loadPrefs();
+
+    // Create audio context on first user interaction
     document.addEventListener('click', () => {
       if (!this.context) {
         this.context = new (window.AudioContext || window.webkitAudioContext)();
+        this.musicGain = this.context.createGain();
+        this.musicGain.gain.setValueAtTime(0.06, this.context.currentTime); // Very soft
+        this.musicGain.connect(this.context.destination);
       }
       if (this.context.state === 'suspended') {
         this.context.resume();
       }
+      // Start music if enabled
+      if (this.musicEnabled && !this.musicPlaying) {
+        this.startMusic();
+      }
     }, { once: true });
+
+    // Render the sound control panel
+    this.renderSoundPanel();
+  },
+
+  loadPrefs() {
+    try {
+      const saved = localStorage.getItem(this.PREF_KEY);
+      if (saved) {
+        const prefs = JSON.parse(saved);
+        this.sfxEnabled = prefs.sfx === true;
+        this.musicEnabled = prefs.music === true;
+      }
+    } catch {}
+  },
+
+  savePrefs() {
+    try {
+      localStorage.setItem(this.PREF_KEY, JSON.stringify({
+        sfx: this.sfxEnabled,
+        music: this.musicEnabled
+      }));
+    } catch {}
   },
 
   // Play a simple tone for correct/wrong feedback
   playTone(type) {
-    if (!this.enabled || !this.context) return;
-
-    const osc = this.context.createOscillator();
-    const gain = this.context.createGain();
-    osc.connect(gain);
-    gain.connect(this.context.destination);
+    if (!this.sfxEnabled || !this.context) return;
 
     if (type === 'correct') {
       // Happy ascending chime
-      osc.frequency.setValueAtTime(523, this.context.currentTime); // C5
-      osc.frequency.setValueAtTime(659, this.context.currentTime + 0.1); // E5
-      osc.frequency.setValueAtTime(784, this.context.currentTime + 0.2); // G5
-      gain.gain.setValueAtTime(0.3, this.context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.5);
-      osc.start(this.context.currentTime);
-      osc.stop(this.context.currentTime + 0.5);
+      this._playNotes([
+        { freq: 523, time: 0, dur: 0.3, vol: 0.25 },
+        { freq: 659, time: 0.1, dur: 0.3, vol: 0.25 },
+        { freq: 784, time: 0.2, dur: 0.4, vol: 0.3 },
+      ]);
     } else if (type === 'wrong') {
       // Soft descending boing
-      osc.frequency.setValueAtTime(330, this.context.currentTime);
-      osc.frequency.setValueAtTime(220, this.context.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.2, this.context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.3);
-      osc.start(this.context.currentTime);
-      osc.stop(this.context.currentTime + 0.3);
+      this._playNotes([
+        { freq: 330, time: 0, dur: 0.2, vol: 0.15 },
+        { freq: 220, time: 0.12, dur: 0.25, vol: 0.12 },
+      ]);
     } else if (type === 'click') {
-      osc.frequency.setValueAtTime(800, this.context.currentTime);
-      gain.gain.setValueAtTime(0.1, this.context.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + 0.05);
-      osc.start(this.context.currentTime);
-      osc.stop(this.context.currentTime + 0.05);
+      this._playNotes([
+        { freq: 800, time: 0, dur: 0.05, vol: 0.08 },
+      ]);
     } else if (type === 'levelup') {
       // Triumphant fanfare
-      const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
-      notes.forEach((freq, i) => {
-        const o = this.context.createOscillator();
-        const g = this.context.createGain();
-        o.connect(g);
-        g.connect(this.context.destination);
-        o.frequency.setValueAtTime(freq, this.context.currentTime + i * 0.15);
-        g.gain.setValueAtTime(0.25, this.context.currentTime + i * 0.15);
-        g.gain.exponentialRampToValueAtTime(0.01, this.context.currentTime + i * 0.15 + 0.4);
-        o.start(this.context.currentTime + i * 0.15);
-        o.stop(this.context.currentTime + i * 0.15 + 0.4);
-      });
+      this._playNotes([
+        { freq: 523, time: 0, dur: 0.4, vol: 0.2 },
+        { freq: 659, time: 0.15, dur: 0.4, vol: 0.22 },
+        { freq: 784, time: 0.3, dur: 0.4, vol: 0.25 },
+        { freq: 1047, time: 0.45, dur: 0.5, vol: 0.3 },
+      ]);
+    } else if (type === 'badge') {
+      // Magical sparkle
+      this._playNotes([
+        { freq: 880, time: 0, dur: 0.15, vol: 0.15 },
+        { freq: 1109, time: 0.08, dur: 0.15, vol: 0.15 },
+        { freq: 1319, time: 0.16, dur: 0.15, vol: 0.18 },
+        { freq: 1760, time: 0.24, dur: 0.3, vol: 0.2 },
+      ]);
     }
   },
 
-  toggle() {
-    this.enabled = !this.enabled;
-    return this.enabled;
+  _playNotes(notes) {
+    if (!this.context) return;
+    notes.forEach(n => {
+      const osc = this.context.createOscillator();
+      const gain = this.context.createGain();
+      osc.connect(gain);
+      gain.connect(this.context.destination);
+      osc.frequency.setValueAtTime(n.freq, this.context.currentTime + n.time);
+      gain.gain.setValueAtTime(n.vol, this.context.currentTime + n.time);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.context.currentTime + n.time + n.dur);
+      osc.start(this.context.currentTime + n.time);
+      osc.stop(this.context.currentTime + n.time + n.dur);
+    });
+  },
+
+  // --- Background Music (procedural, soft ambient) ---
+  startMusic() {
+    if (!this.context || this.musicPlaying) return;
+    this.musicPlaying = true;
+
+    // Soft ambient pad — two detuned oscillators for warmth
+    const playChord = (freqs, startTime, duration) => {
+      freqs.forEach(freq => {
+        const osc = this.context.createOscillator();
+        const g = this.context.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, startTime);
+        g.gain.setValueAtTime(0, startTime);
+        g.gain.linearRampToValueAtTime(1, startTime + 1.5);
+        g.gain.linearRampToValueAtTime(0, startTime + duration - 0.5);
+        osc.connect(g);
+        g.connect(this.musicGain);
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+        this.musicOscillators.push(osc);
+      });
+    };
+
+    // Gentle chord progression: C major → A minor → F major → G major (loop)
+    const chords = [
+      [261.6, 329.6, 392.0],   // C major
+      [220.0, 261.6, 329.6],   // A minor
+      [174.6, 220.0, 261.6],   // F major
+      [196.0, 246.9, 293.7],   // G major
+    ];
+    const chordDuration = 6; // seconds per chord
+
+    const scheduleLoop = () => {
+      if (!this.musicEnabled || !this.musicPlaying) return;
+      const now = this.context.currentTime;
+      chords.forEach((chord, i) => {
+        playChord(chord, now + i * chordDuration, chordDuration + 0.5);
+      });
+      // Schedule next loop
+      this._musicTimer = setTimeout(scheduleLoop, chords.length * chordDuration * 1000 - 500);
+    };
+
+    scheduleLoop();
+  },
+
+  stopMusic() {
+    this.musicPlaying = false;
+    if (this._musicTimer) clearTimeout(this._musicTimer);
+    this.musicOscillators.forEach(osc => {
+      try { osc.stop(); } catch {}
+    });
+    this.musicOscillators = [];
+  },
+
+  toggleSFX() {
+    this.sfxEnabled = !this.sfxEnabled;
+    this.savePrefs();
+    this.updateSoundPanel();
+    if (this.sfxEnabled) this.playTone('click');
+  },
+
+  toggleMusic() {
+    this.musicEnabled = !this.musicEnabled;
+    this.savePrefs();
+    this.updateSoundPanel();
+    if (this.musicEnabled) {
+      if (this.context) this.startMusic();
+    } else {
+      this.stopMusic();
+    }
+  },
+
+  // --- Sound Control Panel UI ---
+  renderSoundPanel() {
+    const panel = document.createElement('div');
+    panel.id = 'sound-panel';
+    panel.innerHTML = `
+      <button class="sound-toggle-btn" id="sound-main-btn" onclick="AudioManager.toggleSoundMenu()" title="Sound Settings">
+        <span id="sound-main-icon">${this.sfxEnabled ? '🔊' : '🔇'}</span>
+      </button>
+      <div class="sound-menu hidden" id="sound-menu">
+        <div class="sound-menu-item" onclick="AudioManager.toggleSFX()">
+          <span id="sfx-icon">${this.sfxEnabled ? '🔊' : '🔇'}</span>
+          <span>Sound Effects</span>
+          <span class="sound-status" id="sfx-status">${this.sfxEnabled ? 'ON' : 'OFF'}</span>
+        </div>
+        <div class="sound-menu-item" onclick="AudioManager.toggleMusic()">
+          <span id="music-icon">${this.musicEnabled ? '🎵' : '🎵'}</span>
+          <span>Background Music</span>
+          <span class="sound-status" id="music-status">${this.musicEnabled ? 'ON' : 'OFF'}</span>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(panel);
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('sound-menu');
+      const btn = document.getElementById('sound-main-btn');
+      if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+  },
+
+  toggleSoundMenu() {
+    const menu = document.getElementById('sound-menu');
+    if (menu) menu.classList.toggle('hidden');
+  },
+
+  updateSoundPanel() {
+    const mainIcon = document.getElementById('sound-main-icon');
+    const sfxIcon = document.getElementById('sfx-icon');
+    const sfxStatus = document.getElementById('sfx-status');
+    const musicStatus = document.getElementById('music-status');
+
+    if (mainIcon) mainIcon.textContent = this.sfxEnabled || this.musicEnabled ? '🔊' : '🔇';
+    if (sfxIcon) sfxIcon.textContent = this.sfxEnabled ? '🔊' : '🔇';
+    if (sfxStatus) {
+      sfxStatus.textContent = this.sfxEnabled ? 'ON' : 'OFF';
+      sfxStatus.className = `sound-status ${this.sfxEnabled ? 'on' : ''}`;
+    }
+    if (musicStatus) {
+      musicStatus.textContent = this.musicEnabled ? 'ON' : 'OFF';
+      musicStatus.className = `sound-status ${this.musicEnabled ? 'on' : ''}`;
+    }
   }
 };
+
+// --- Sound Panel Styles ---
+const soundStyles = document.createElement('style');
+soundStyles.textContent = `
+  #sound-panel {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 4000;
+  }
+
+  .sound-toggle-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4C1D95, #7C3AED);
+    border: 3px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(107, 33, 168, 0.4);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .sound-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(107, 33, 168, 0.5);
+  }
+
+  .sound-menu {
+    position: absolute;
+    bottom: 62px;
+    right: 0;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    padding: 8px;
+    min-width: 220px;
+    animation: fadeInUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .sound-menu.hidden {
+    display: none;
+  }
+
+  .sound-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1E1B4B;
+    transition: background 0.2s;
+  }
+
+  .sound-menu-item:hover {
+    background: #F3E8FF;
+  }
+
+  .sound-status {
+    margin-left: auto;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    background: #F3F4F6;
+    color: #6B7280;
+  }
+
+  .sound-status.on {
+    background: #DCFCE7;
+    color: #166534;
+  }
+
+  @media (max-width: 768px) {
+    #sound-panel {
+      bottom: 16px;
+      right: 16px;
+    }
+    .sound-toggle-btn {
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+    }
+  }
+`;
+document.head.appendChild(soundStyles);
 
 // --- Confetti System ---
 const Confetti = {
