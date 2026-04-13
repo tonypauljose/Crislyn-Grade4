@@ -650,6 +650,13 @@ const Utils = {
     return normalize(input) === normalize(expected);
   },
 
+  // Format date as DD MMMM YYYY
+  formatDate(date) {
+    const d = date || new Date();
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return `${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  },
+
   // Debounce
   debounce(fn, ms) {
     let timer;

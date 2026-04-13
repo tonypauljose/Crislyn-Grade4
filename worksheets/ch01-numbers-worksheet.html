@@ -302,7 +302,12 @@ const U = {
     if (s[0] === 0) { const idx = s.findIndex(d => d > 0); if (idx > 0) [s[0], s[idx]] = [s[idx], s[0]]; }
     return parseInt(s.join(''));
   },
-  placeValueName(pos) { return ['Ones','Tens','Hundreds','Thousands','Ten Thousands','Lakhs','Ten Lakhs'][pos] || ''; }
+  placeValueName(pos) { return ['Ones','Tens','Hundreds','Thousands','Ten Thousands','Lakhs','Ten Lakhs'][pos] || ''; },
+  formatDate() {
+    const d = new Date();
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return `${String(d.getDate()).padStart(2,'0')} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
 };
 
 function generateWorksheet() {
@@ -477,7 +482,7 @@ function generateWorksheet() {
     <div class="ws-section"><h3>Section H: Place Value and Face Value</h3>${secH}</div>
     <div class="ws-section"><h3>Section I: Roman Numerals</h3>${secI}</div>
 
-    <div class="ws-footer">Crislyn's Math Adventure — Generated on ${new Date().toLocaleDateString()}</div>
+    <div class="ws-footer">Crislyn's Math Adventure — Generated on ${U.formatDate()}</div>
 
     <div class="ws-answer-key">
       <h2>Answer Key</h2>
