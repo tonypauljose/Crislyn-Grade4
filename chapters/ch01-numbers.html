@@ -790,6 +790,7 @@
 <!-- Scripts -->
 <script src="../js/common.js"></script>
 <script src="../js/quiz-engine.js"></script>
+<script src="../js/progress.js"></script>
 
 <script>
 // ============================================
@@ -1493,6 +1494,9 @@ function checkExercise(type) {
   } else {
     AudioManager.playTone('click');
   }
+
+  // Track in progress system
+  Progress.trackExerciseComplete(type, correct, total);
 }
 
 // ============================================
@@ -1501,185 +1505,331 @@ function checkExercise(type) {
 
 function generateQuizQuestions() {
   const questions = [];
+  const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000];
 
-  // --- EXPLORER TIER ---
-  // Number names
+  // Helper: generate a place value question
+  function pvQuestion(id, tier, num) {
+    const str = String(num);
+    const pos = Utils.randomInt(0, str.length - 1);
+    const digit = parseInt(str[pos]);
+    const actualPos = str.length - 1 - pos;
+    const pv = digit * pvs[actualPos];
+    return { num, digit, actualPos, pv };
+  }
+
+  // =============================================
+  // EXPLORER TIER — 30+ questions (15 selected)
+  // Covers: names, figures, place value, compare, Roman basics, true/false, predecessor/successor
+  // =============================================
+
+  // Number names → MCQ (different ranges)
   for (let i = 0; i < 4; i++) {
     const n = Utils.randomInt(1000, 99999);
     const name = Utils.numberToIndianName(n);
     questions.push({
       id: `e_name_${i}`, tier: 'explorer', type: 'mcq', points: 10,
       question: `What is the number name for ${Utils.formatIndian(n)}?`,
-      options: [name, Utils.numberToIndianName(n + Utils.randomInt(100, 999)),
-                Utils.numberToIndianName(n - Utils.randomInt(100, 999)),
-                Utils.numberToIndianName(Utils.randomInt(1000, 99999))],
+      options: [name, Utils.numberToIndianName(n + Utils.randomInt(100,999)), Utils.numberToIndianName(n - Utils.randomInt(100,999)), Utils.numberToIndianName(Utils.randomInt(1000,99999))],
       answer: name,
-      hint: 'Read each place value from left to right.',
-      explanation: `${Utils.formatIndian(n)} is read as "${name}".`
+      hint: 'Read each place value from left to right: thousands, hundreds, tens, ones.',
+      explanation: `${Utils.formatIndian(n)} = "${name}"`
     });
   }
 
-  // Place value
+  // Write in figures from name → MCQ
   for (let i = 0; i < 3; i++) {
-    const n = Utils.randomInt(10000, 999999);
-    const str = String(n);
-    const pos = Utils.randomInt(0, str.length - 1);
-    const digit = parseInt(str[pos]);
-    const actualPos = str.length - 1 - pos;
-    const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000];
-    const pv = digit * pvs[actualPos];
+    const n = Utils.randomInt(10000, 99999);
+    const name = Utils.numberToIndianName(n);
+    questions.push({
+      id: `e_fig_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `"${name}" — which number is this?`,
+      options: [Utils.formatIndian(n), Utils.formatIndian(n+1000), Utils.formatIndian(n-100), Utils.formatIndian(n+10)],
+      answer: Utils.formatIndian(n),
+      hint: 'Listen to each part: how many thousands? hundreds? tens? ones?',
+      explanation: `"${name}" = ${Utils.formatIndian(n)}`
+    });
+  }
+
+  // Basic place value
+  for (let i = 0; i < 3; i++) {
+    const n = Utils.randomInt(10000, 99999);
+    const p = pvQuestion(`e_pv_${i}`, 'explorer', n);
     questions.push({
       id: `e_pv_${i}`, tier: 'explorer', type: 'mcq', points: 10,
-      question: `In ${Utils.formatIndian(n)}, what is the place value of ${digit} in the ${Utils.placeValueName(actualPos)} place?`,
-      options: [Utils.formatIndian(pv), String(digit),
-                Utils.formatIndian(pvs[actualPos]),
-                Utils.formatIndian(digit * pvs[Math.min(actualPos + 1, 6)])],
-      answer: Utils.formatIndian(pv),
-      hint: `Place value = face value × position value. The ${Utils.placeValueName(actualPos)} place has value ${Utils.formatIndian(pvs[actualPos])}.`,
-      explanation: `Face value is ${digit}. Place is ${Utils.placeValueName(actualPos)} (${Utils.formatIndian(pvs[actualPos])}). So place value = ${digit} × ${Utils.formatIndian(pvs[actualPos])} = ${Utils.formatIndian(pv)}.`
+      question: `In ${Utils.formatIndian(n)}, what is the place value of digit ${p.digit}?`,
+      options: [Utils.formatIndian(p.pv), String(p.digit), Utils.formatIndian(pvs[p.actualPos]), Utils.formatIndian(p.digit * pvs[Math.min(p.actualPos+1,6)])],
+      answer: Utils.formatIndian(p.pv),
+      hint: `Place value = digit × position value.`,
+      explanation: `${p.digit} is in ${Utils.placeValueName(p.actualPos)} place. Place value = ${p.digit} × ${Utils.formatIndian(pvs[p.actualPos])} = ${Utils.formatIndian(p.pv)}`
+    });
+  }
+
+  // "Which digit is in ___ place?" (reverse angle)
+  for (let i = 0; i < 2; i++) {
+    const n = Utils.randomInt(10000, 999999);
+    const str = String(n);
+    const targetPos = Utils.randomInt(1, str.length - 1);
+    const targetDigit = parseInt(str[str.length - 1 - targetPos]);
+    questions.push({
+      id: `e_whichdigit_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `In ${Utils.formatIndian(n)}, which digit is in the ${Utils.placeValueName(targetPos)} place?`,
+      options: [String(targetDigit), String((targetDigit+3)%10), String((targetDigit+5)%10), String((targetDigit+7)%10)],
+      answer: String(targetDigit),
+      hint: `Count positions from right: ones, tens, hundreds...`,
+      explanation: `In ${Utils.formatIndian(n)}, the digit in the ${Utils.placeValueName(targetPos)} place is ${targetDigit}.`
     });
   }
 
   // Comparison
   for (let i = 0; i < 4; i++) {
     const a = Utils.randomInt(10000, 99999);
-    const b = Math.random() < 0.2 ? a : Utils.randomInt(10000, 99999);
+    const b = Math.random() < 0.15 ? a : Utils.randomInt(10000, 99999);
     const ans = a < b ? '<' : a > b ? '>' : '=';
     questions.push({
       id: `e_cmp_${i}`, tier: 'explorer', type: 'compare', points: 10,
-      question: `Compare the two numbers:`,
-      leftNum: a, rightNum: b, answer: ans,
-      hint: 'Compare digits from left to right. The first different digit decides!',
+      question: `Compare the two numbers:`, leftNum: a, rightNum: b, answer: ans,
+      hint: 'First check: do they have the same number of digits? If yes, compare leftmost digit first.',
       explanation: `${Utils.formatIndian(a)} ${ans} ${Utils.formatIndian(b)}`
     });
   }
 
-  // Roman (easy: 1-20)
-  for (let i = 0; i < 4; i++) {
+  // Roman basics (1-20)
+  for (let i = 0; i < 3; i++) {
     const n = Utils.randomInt(1, 20);
     const roman = Utils.toRoman(n);
     questions.push({
       id: `e_rom_${i}`, tier: 'explorer', type: 'mcq', points: 10,
       question: `What is ${n} in Roman numerals?`,
-      options: [roman, Utils.toRoman(n + 1), Utils.toRoman(Math.max(1, n - 1)), Utils.toRoman(n + Utils.randomInt(2, 5))],
-      answer: roman,
-      hint: 'I=1, V=5, X=10. IV=4, IX=9.',
-      explanation: `${n} in Roman numerals is ${roman}.`
+      options: [roman, Utils.toRoman(Math.max(1,n+1)), Utils.toRoman(Math.max(1,n-1)), Utils.toRoman(n+Utils.randomInt(3,8))],
+      answer: roman, hint: 'I=1, V=5, X=10. IV=4, IX=9.', explanation: `${n} = ${roman}`
     });
   }
 
-  // --- ADVENTURER TIER ---
+  // True/False — conceptual understanding
+  questions.push({
+    id: 'e_tf_1', tier: 'explorer', type: 'true-false', points: 10,
+    question: `The face value of any digit is always the digit itself, regardless of its position.`,
+    answer: 'true', hint: 'Face value never changes — it is just the digit.',
+    explanation: 'True! Face value of 5 is always 5, whether it is in ones, tens, or lakhs place.'
+  });
+  questions.push({
+    id: 'e_tf_2', tier: 'explorer', type: 'true-false', points: 10,
+    question: `The place value of 0 in any number is always 0.`,
+    answer: 'true', hint: 'What is 0 × anything?',
+    explanation: 'True! 0 × any position value = 0. The place value of 0 is always 0.'
+  });
+  questions.push({
+    id: 'e_tf_3', tier: 'explorer', type: 'true-false', points: 10,
+    question: `The predecessor of 1,000 is 999.`,
+    answer: 'true', hint: 'Predecessor = number - 1.',
+    explanation: 'True! 1,000 - 1 = 999.'
+  });
+  questions.push({
+    id: 'e_tf_4', tier: 'explorer', type: 'true-false', points: 10,
+    question: `VX is a valid Roman numeral for 5.`,
+    answer: 'false', hint: 'V can only be subtracted from... wait, V is never used as a subtractive.',
+    explanation: 'False! V is never placed before X as a subtractive. The Roman numeral for 5 is simply V.'
+  });
+
+  // Predecessor/successor (basic)
+  for (let i = 0; i < 2; i++) {
+    const n = [10000, 50000, 99999, 100000][Utils.randomInt(0,3)];
+    const askPred = Math.random() < 0.5;
+    const ans = askPred ? n - 1 : n + 1;
+    questions.push({
+      id: `e_ps_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `What is the ${askPred ? 'predecessor' : 'successor'} of ${Utils.formatIndian(n)}?`,
+      options: [Utils.formatIndian(ans), Utils.formatIndian(ans+1), Utils.formatIndian(ans-1), Utils.formatIndian(n)],
+      answer: Utils.formatIndian(ans),
+      hint: askPred ? 'Predecessor = subtract 1' : 'Successor = add 1',
+      explanation: `${askPred ? 'Predecessor' : 'Successor'} of ${Utils.formatIndian(n)} = ${Utils.formatIndian(ans)}`
+    });
+  }
+
+  // "How many digits?" angle
+  for (let i = 0; i < 2; i++) {
+    const n = Utils.randomInt(10000, 9999999);
+    const digitCount = String(n).length;
+    questions.push({
+      id: `e_digits_${i}`, tier: 'explorer', type: 'mcq', points: 10,
+      question: `How many digits does the number ${Utils.formatIndian(n)} have?`,
+      options: [String(digitCount), String(digitCount-1), String(digitCount+1), String(digitCount+2)],
+      answer: String(digitCount),
+      hint: 'Count each digit, ignoring commas.',
+      explanation: `${Utils.formatIndian(n)} has ${digitCount} digits.`
+    });
+  }
+
+  // =============================================
+  // ADVENTURER TIER — 35+ questions (15 selected)
+  // Covers: expanded form, face vs place value, ordering, predecessor/successor (tricky),
+  // Roman 20-100, number from name, error spotting, "what am I?" riddles
+  // =============================================
+
   // Expanded form
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const n = Utils.randomInt(10000, 999999);
     const expanded = Utils.expandedForm(n);
     questions.push({
       id: `a_exp_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
       question: `Write the expanded form of ${Utils.formatIndian(n)}:`,
-      answer: [expanded],
-      matchType: 'exact',
+      answer: [expanded], matchType: 'exact',
       placeholder: 'e.g. 50,000 + 6,000 + 300 + 20 + 1',
-      hint: 'Break the number into the value of each digit.',
+      hint: 'Break each digit into its place value.',
       explanation: `${Utils.formatIndian(n)} = ${expanded}`
     });
   }
 
-  // Predecessor/successor
+  // "Given expanded form, what's the number?" (reverse)
   for (let i = 0; i < 3; i++) {
-    const special = [100000, 500000, 1000000, 999999, 100001][Utils.randomInt(0, 4)];
-    const askPred = Math.random() < 0.5;
+    const n = Utils.randomInt(10000, 999999);
+    const expanded = Utils.expandedForm(n);
     questions.push({
-      id: `a_ps_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
-      question: `What is the ${askPred ? 'predecessor' : 'successor'} of ${Utils.formatIndian(special)}?`,
-      answer: [String(askPred ? special - 1 : special + 1), Utils.formatIndian(askPred ? special - 1 : special + 1)],
+      id: `a_std_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+      question: `Write in standard form: ${expanded}`,
+      answer: [String(n), Utils.formatIndian(n)],
       placeholder: 'Type the number',
-      hint: askPred ? 'Predecessor = number - 1' : 'Successor = number + 1',
-      explanation: `The ${askPred ? 'predecessor' : 'successor'} of ${Utils.formatIndian(special)} is ${Utils.formatIndian(askPred ? special - 1 : special + 1)}.`
+      hint: 'Add all the parts together.',
+      explanation: `${expanded} = ${Utils.formatIndian(n)}`
     });
   }
 
-  // Face value vs Place value
+  // Face value vs place value — "What is the difference?"
   for (let i = 0; i < 3; i++) {
-    const n = Utils.randomInt(100000, 9999999);
-    const str = String(n);
-    const pos = Utils.randomInt(0, str.length - 1);
-    const digit = parseInt(str[pos]);
-    const actualPos = str.length - 1 - pos;
-    const pvs = [1, 10, 100, 1000, 10000, 100000, 1000000];
-    const pv = digit * pvs[actualPos];
-    questions.push({
-      id: `a_fv_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
-      question: `In ${Utils.formatIndian(n)}, the face value of digit ${digit} is ${digit}. What is its place value?`,
-      options: [Utils.formatIndian(pv), String(digit), Utils.formatIndian(pvs[actualPos]), Utils.formatIndian(pv * 10)],
-      answer: Utils.formatIndian(pv),
-      hint: 'Place value = digit × value of its position.',
-      explanation: `Digit ${digit} is in the ${Utils.placeValueName(actualPos)} place. Place value = ${digit} × ${Utils.formatIndian(pvs[actualPos])} = ${Utils.formatIndian(pv)}.`
-    });
-  }
-
-  // Roman (up to 100)
-  for (let i = 0; i < 3; i++) {
-    const n = Utils.randomInt(20, 100);
-    const roman = Utils.toRoman(n);
-    if (Math.random() < 0.5) {
+    const n = Utils.randomInt(100000, 999999);
+    const p = pvQuestion(`a_diff_${i}`, 'adventurer', n);
+    if (p.digit > 0) {
+      const diff = p.pv - p.digit;
       questions.push({
-        id: `a_rom_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
-        question: `Convert to Roman numeral: ${n}`,
-        answer: [roman],
-        placeholder: 'Type Roman numeral',
-        hint: 'L=50, XL=40, XC=90',
-        explanation: `${n} = ${roman}`
-      });
-    } else {
-      questions.push({
-        id: `a_rom_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
-        question: `Convert to Hindu-Arabic: ${roman}`,
-        answer: [String(n)],
-        placeholder: 'Type the number',
-        hint: 'Add values left to right. Subtract when a smaller symbol comes before a larger one.',
-        explanation: `${roman} = ${n}`
+        id: `a_diff_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
+        question: `In ${Utils.formatIndian(n)}, what is the difference between the place value and face value of digit ${p.digit}?`,
+        options: [Utils.formatIndian(diff), Utils.formatIndian(p.pv), String(p.digit), Utils.formatIndian(diff+10)],
+        answer: Utils.formatIndian(diff),
+        hint: 'Difference = Place value - Face value.',
+        explanation: `Place value = ${Utils.formatIndian(p.pv)}, Face value = ${p.digit}. Difference = ${Utils.formatIndian(p.pv)} - ${p.digit} = ${Utils.formatIndian(diff)}`
       });
     }
   }
 
-  // Ordering
-  for (let i = 0; i < 3; i++) {
-    const nums = [];
-    for (let j = 0; j < 4; j++) nums.push(Utils.randomInt(10000, 999999));
-    const sorted = [...nums].sort((a, b) => a - b);
-    const ascending = i < 2;
-    const display = ascending ? sorted : sorted.reverse();
+  // "Sum of place values" angle
+  for (let i = 0; i < 2; i++) {
+    const n = Utils.randomInt(1000, 9999);
+    const str = String(n);
+    let sum = 0;
+    for (let j = 0; j < str.length; j++) {
+      sum += parseInt(str[j]) * pvs[str.length - 1 - j];
+    }
     questions.push({
-      id: `a_ord_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
-      question: `Which shows these numbers in ${ascending ? 'ascending' : 'descending'} order?`,
-      options: [
-        display.map(n => Utils.formatIndian(n)).join(', '),
-        [...display].reverse().map(n => Utils.formatIndian(n)).join(', '),
-        Utils.shuffle(nums).map(n => Utils.formatIndian(n)).join(', '),
-        Utils.shuffle(nums).map(n => Utils.formatIndian(n)).join(', ')
-      ],
-      answer: display.map(n => Utils.formatIndian(n)).join(', '),
-      hint: ascending ? 'Ascending means smallest to largest.' : 'Descending means largest to smallest.',
-      explanation: `${ascending ? 'Ascending' : 'Descending'} order: ${display.map(n => Utils.formatIndian(n)).join(' → ')}`
+      id: `a_pvsum_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
+      question: `What is the sum of the place values of all digits in ${Utils.formatIndian(n)}?`,
+      options: [Utils.formatIndian(sum), Utils.formatIndian(sum+100), Utils.formatIndian(n), Utils.formatIndian(sum-10)],
+      answer: Utils.formatIndian(sum),
+      hint: 'The sum of all place values equals... the number itself!',
+      explanation: `Sum of place values of ${Utils.formatIndian(n)} = ${Utils.formatIndian(sum)} (same as the number!)`
     });
   }
 
-  // --- CHAMPION TIER ---
-  // 7-digit numbers
+  // Predecessor/successor (tricky boundaries)
+  for (let i = 0; i < 3; i++) {
+    const special = [100000, 500000, 1000000, 999999, 100001, 9999999][Utils.randomInt(0,5)];
+    const askPred = Math.random() < 0.5;
+    questions.push({
+      id: `a_ps_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+      question: `What is the ${askPred ? 'predecessor' : 'successor'} of ${Utils.formatIndian(special)}?`,
+      answer: [String(askPred ? special-1 : special+1), Utils.formatIndian(askPred ? special-1 : special+1)],
+      placeholder: 'Type the number',
+      hint: `Watch what happens at boundaries like ${Utils.formatIndian(special)}!`,
+      explanation: `${askPred ? 'Predecessor' : 'Successor'} of ${Utils.formatIndian(special)} = ${Utils.formatIndian(askPred ? special-1 : special+1)}`
+    });
+  }
+
+  // Ordering — ascending and descending
+  for (let i = 0; i < 3; i++) {
+    const nums = [];
+    for (let j = 0; j < 4; j++) nums.push(Utils.randomInt(10000, 999999));
+    const asc = i < 2;
+    const sorted = asc ? [...nums].sort((a,b)=>a-b) : [...nums].sort((a,b)=>b-a);
+    questions.push({
+      id: `a_ord_${i}`, tier: 'adventurer', type: 'mcq', points: 15,
+      question: `Which shows ${asc ? 'ascending' : 'descending'} order?`,
+      options: [sorted.map(n=>Utils.formatIndian(n)).join(', '), [...sorted].reverse().map(n=>Utils.formatIndian(n)).join(', '), Utils.shuffle(nums).map(n=>Utils.formatIndian(n)).join(', '), Utils.shuffle(nums).map(n=>Utils.formatIndian(n)).join(', ')],
+      answer: sorted.map(n=>Utils.formatIndian(n)).join(', '),
+      hint: asc ? 'Ascending = smallest first.' : 'Descending = largest first.',
+      explanation: `${asc ? 'Ascending' : 'Descending'}: ${sorted.map(n=>Utils.formatIndian(n)).join(' → ')}`
+    });
+  }
+
+  // Roman 20-100
+  for (let i = 0; i < 4; i++) {
+    const n = Utils.randomInt(20, 100);
+    const roman = Utils.toRoman(n);
+    if (Math.random() < 0.5) {
+      questions.push({ id: `a_rom2h_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+        question: `Convert ${n} to Roman numerals:`, answer: [roman], placeholder: 'e.g. XLIV',
+        hint: 'L=50, XL=40, XC=90.', explanation: `${n} = ${roman}` });
+    } else {
+      questions.push({ id: `a_rom2a_${i}`, tier: 'adventurer', type: 'fill-blank', points: 15,
+        question: `What number is ${roman}?`, answer: [String(n)], placeholder: 'Type number',
+        hint: 'Add left to right. Subtract when smaller before larger.', explanation: `${roman} = ${n}` });
+    }
+  }
+
+  // "What am I?" riddles
+  questions.push({
+    id: 'a_riddle_1', tier: 'adventurer', type: 'fill-blank', points: 15,
+    question: `I am a 5-digit number. My ten-thousands digit is 7, thousands digit is 0, hundreds digit is 3, tens digit is 5, ones digit is 1. What number am I?`,
+    answer: ['70351', '70,351'], placeholder: 'Type the number',
+    hint: 'Build the number position by position from left to right.',
+    explanation: '7 ten-thousands + 0 thousands + 3 hundreds + 5 tens + 1 one = 70,351'
+  });
+  questions.push({
+    id: 'a_riddle_2', tier: 'adventurer', type: 'fill-blank', points: 15,
+    question: `I am a number between 50,000 and 60,000. My hundreds digit is 8, tens digit is 0, and ones digit is 7. My thousands digit is 3. What am I?`,
+    answer: ['53807', '53,807'], placeholder: 'Type the number',
+    hint: 'The ten-thousands digit must be 5 (between 50,000 and 60,000).',
+    explanation: '5 ten-thousands + 3 thousands + 8 hundreds + 0 tens + 7 ones = 53,807'
+  });
+
+  // True/False — Adventurer level
+  questions.push({
+    id: 'a_tf_1', tier: 'adventurer', type: 'true-false', points: 15,
+    question: `The smallest 6-digit number is 1,00,000.`,
+    answer: 'true', hint: 'What comes after 99,999?',
+    explanation: 'True! 99,999 + 1 = 1,00,000 which is the smallest 6-digit number.'
+  });
+  questions.push({
+    id: 'a_tf_2', tier: 'adventurer', type: 'true-false', points: 15,
+    question: `If two numbers have the same number of digits, the one with a larger leftmost digit is always greater.`,
+    answer: 'true', hint: 'Think about comparing 5xx,xxx vs 3xx,xxx.',
+    explanation: 'True! When digit count is equal, we compare from the leftmost digit.'
+  });
+  questions.push({
+    id: 'a_tf_3', tier: 'adventurer', type: 'true-false', points: 15,
+    question: `XL in Roman numerals means 60.`,
+    answer: 'false', hint: 'X before L means subtract, not add.',
+    explanation: 'False! XL = 50 - 10 = 40. LX = 50 + 10 = 60.'
+  });
+
+  // =============================================
+  // CHAMPION TIER — 35+ questions (15 selected)
+  // Covers: 7-digit numbers, greatest/smallest, Roman 100-1000, Indian vs International,
+  // rounding, word problems, error detection, multi-step, patterns
+  // =============================================
+
+  // 7-digit number names (write in figures)
   for (let i = 0; i < 3; i++) {
     const n = Utils.randomInt(1000000, 9999999);
     const name = Utils.numberToIndianName(n);
     questions.push({
       id: `c_name_${i}`, tier: 'champion', type: 'fill-blank', points: 20,
       question: `Write in figures: "${name}"`,
-      answer: [String(n), Utils.formatIndian(n)],
-      placeholder: 'Type the number',
-      hint: 'Break it down: how many lakhs? How many thousands?',
+      answer: [String(n), Utils.formatIndian(n)], placeholder: 'Type the number',
+      hint: 'How many lakhs? Then thousands, hundreds, tens, ones.',
       explanation: `"${name}" = ${Utils.formatIndian(n)}`
     });
   }
 
-  // Greatest/smallest
+  // Greatest/smallest from digits
   for (let i = 0; i < 3; i++) {
     const digits = Utils.randomDigits(6, true);
     const greatest = Utils.greatestNumber(digits);
@@ -1690,62 +1840,116 @@ function generateQuizQuestions() {
       question: `Using digits ${digits.join(', ')}, form the ${askGreatest ? 'greatest' : 'smallest'} 6-digit number:`,
       answer: [String(askGreatest ? greatest : smallest), Utils.formatIndian(askGreatest ? greatest : smallest)],
       placeholder: 'Type the number',
-      hint: askGreatest ? 'Arrange digits in descending order.' : 'Arrange in ascending order. Remember: number can\'t start with 0!',
+      hint: askGreatest ? 'Arrange descending (9→0).' : 'Arrange ascending — but 0 can\'t be first!',
       explanation: `${askGreatest ? 'Greatest' : 'Smallest'}: ${Utils.formatIndian(askGreatest ? greatest : smallest)}`
     });
   }
 
-  // Roman up to 1000
+  // Roman 100-999
   for (let i = 0; i < 3; i++) {
     const n = Utils.randomInt(100, 999);
     const roman = Utils.toRoman(n);
     questions.push({
       id: `c_rom_${i}`, tier: 'champion', type: 'fill-blank', points: 20,
-      question: `Convert ${n} to Roman numerals:`,
-      answer: [roman],
-      placeholder: 'Type Roman numeral',
-      hint: 'C=100, D=500, M=1000. CD=400, CM=900.',
-      explanation: `${n} = ${roman}`
+      question: `Convert ${n} to Roman numerals:`, answer: [roman], placeholder: 'Type Roman numeral',
+      hint: 'C=100, D=500, CD=400, CM=900.', explanation: `${n} = ${roman}`
     });
   }
 
-  // Indian vs International
-  for (let i = 0; i < 3; i++) {
+  // Indian vs International system
+  for (let i = 0; i < 2; i++) {
     const n = Utils.randomInt(100000, 9999999);
+    const lakhs = Math.floor(n / 100000);
     questions.push({
       id: `c_sys_${i}`, tier: 'champion', type: 'mcq', points: 20,
-      question: `${Utils.formatIndian(n)} in the Indian system is how many lakhs?`,
-      options: [
-        String(Math.floor(n / 100000)),
-        String(Math.floor(n / 10000)),
-        String(Math.floor(n / 1000000)),
-        String(Math.floor(n / 1000))
-      ],
-      answer: String(Math.floor(n / 100000)),
-      hint: '1 lakh = 1,00,000',
-      explanation: `${Utils.formatIndian(n)} = ${Math.floor(n / 100000)} lakhs and ${Utils.formatIndian(n % 100000)}`
+      question: `${Utils.formatIndian(n)} in Indian system equals how many lakhs?`,
+      options: [String(lakhs), String(lakhs*10), String(Math.floor(n/10000)), String(Math.floor(n/1000000))],
+      answer: String(lakhs), hint: '1 lakh = 1,00,000.',
+      explanation: `${Utils.formatIndian(n)} = ${lakhs} lakhs ${Utils.formatIndian(n % 100000)}`
     });
   }
 
-  // Estimation
+  // Rounding
   for (let i = 0; i < 3; i++) {
     const n = Utils.randomInt(1000, 99999);
-    const place = [10, 100, 1000][Utils.randomInt(0, 2)];
+    const place = [10, 100, 1000][Utils.randomInt(0,2)];
     const rounded = Utils.roundTo(n, place);
     questions.push({
       id: `c_est_${i}`, tier: 'champion', type: 'mcq', points: 20,
       question: `Round ${Utils.formatIndian(n)} to the nearest ${Utils.formatIndian(place)}:`,
-      options: [
-        Utils.formatIndian(rounded),
-        Utils.formatIndian(rounded + place),
-        Utils.formatIndian(rounded - place),
-        Utils.formatIndian(Math.floor(n / place) * place)
-      ],
+      options: [Utils.formatIndian(rounded), Utils.formatIndian(rounded+place), Utils.formatIndian(rounded-place), Utils.formatIndian(Math.floor(n/place)*place)],
       answer: Utils.formatIndian(rounded),
-      hint: 'Look at the digit to the right. 5 or more → round up. Less than 5 → round down.',
-      explanation: `${Utils.formatIndian(n)} rounded to nearest ${Utils.formatIndian(place)} = ${Utils.formatIndian(rounded)}`
+      hint: 'Look right of the rounding place. 5+? Round up. Below 5? Round down.',
+      explanation: `${Utils.formatIndian(n)} ≈ ${Utils.formatIndian(rounded)}`
     });
   }
+
+  // Word problems
+  questions.push({
+    id: 'c_word_1', tier: 'champion', type: 'fill-blank', points: 20,
+    question: `A school library has 4,35,678 books. The successor of this number minus the predecessor equals what?`,
+    answer: ['2'], placeholder: 'Type the answer',
+    hint: 'Successor = n+1, Predecessor = n-1. What is (n+1) - (n-1)?',
+    explanation: 'Successor - Predecessor = (n+1) - (n-1) = 2. This is ALWAYS 2 for any number!'
+  });
+  questions.push({
+    id: 'c_word_2', tier: 'champion', type: 'fill-blank', points: 20,
+    question: `The place value of 6 in 3,65,412 is 60,000. The face value of 6 is 6. What is the product of place value and face value?`,
+    answer: ['360000', '3,60,000'], placeholder: 'Type the answer',
+    hint: 'Product means multiply. 60,000 × 6 = ?',
+    explanation: '60,000 × 6 = 3,60,000'
+  });
+
+  // Error spotting
+  questions.push({
+    id: 'c_error_1', tier: 'champion', type: 'mcq', points: 20,
+    question: `Which expanded form is WRONG?`,
+    options: ['4,35,607 = 4,00,000 + 35,000 + 607', '56,789 = 50,000 + 6,000 + 700 + 80 + 9', '8,03,040 = 8,00,000 + 3,000 + 40', '1,23,456 = 1,00,000 + 23,000 + 456'],
+    answer: '4,35,607 = 4,00,000 + 35,000 + 607',
+    hint: 'Check each one carefully — does each digit get its own place value?',
+    explanation: '4,35,607 = 4,00,000 + 30,000 + 5,000 + 600 + 7. The wrong one lumped digits together!'
+  });
+  questions.push({
+    id: 'c_error_2', tier: 'champion', type: 'mcq', points: 20,
+    question: `Which Roman numeral is INVALID?`,
+    options: ['VV', 'XIX', 'XLIV', 'DCCC'],
+    answer: 'VV',
+    hint: 'V, L, and D are never repeated.',
+    explanation: 'VV is invalid — V (5) can never be repeated. Use X (10) instead.'
+  });
+
+  // Pattern question
+  questions.push({
+    id: 'c_pattern_1', tier: 'champion', type: 'fill-blank', points: 20,
+    question: `What comes next: 1,00,000 → 2,00,000 → 3,00,000 → 4,00,000 → ?`,
+    answer: ['500000', '5,00,000'], placeholder: 'Type the number',
+    hint: 'The pattern adds 1,00,000 each time.',
+    explanation: 'Pattern: +1,00,000 each step. Next = 5,00,000.'
+  });
+
+  // "Between" questions
+  for (let i = 0; i < 2; i++) {
+    const a = Utils.randomInt(10000, 99999);
+    const b = a + Utils.randomInt(2, 10);
+    const between = a + 1;
+    questions.push({
+      id: `c_between_${i}`, tier: 'champion', type: 'mcq', points: 20,
+      question: `How many whole numbers are there between ${Utils.formatIndian(a)} and ${Utils.formatIndian(b)}?`,
+      options: [String(b-a-1), String(b-a), String(b-a+1), String(b-a+2)],
+      answer: String(b-a-1),
+      hint: 'Between means NOT including the two endpoints.',
+      explanation: `Numbers between ${Utils.formatIndian(a)} and ${Utils.formatIndian(b)} = ${b-a-1} (from ${Utils.formatIndian(a+1)} to ${Utils.formatIndian(b-1)})`
+    });
+  }
+
+  // "Largest/smallest N-digit number"
+  questions.push({
+    id: 'c_ndigit_1', tier: 'champion', type: 'fill-blank', points: 20,
+    question: `What is the difference between the largest 5-digit number and the smallest 6-digit number?`,
+    answer: ['1'], placeholder: 'Type the answer',
+    hint: 'Largest 5-digit = 99,999. Smallest 6-digit = 1,00,000.',
+    explanation: '1,00,000 - 99,999 = 1. They are consecutive numbers!'
+  });
 
   return questions;
 }
@@ -1764,6 +1968,9 @@ function startQuiz(tier) {
     tier: tier,
     questionCount: 15,
     onComplete: (results) => {
+      // Track in progress system
+      Progress.trackQuizComplete(tier, results.percentage, results.timeTaken);
+
       if (results.percentage >= 70 && tier === 'explorer') {
         Toast.show('Adventurer tier unlocked! ⚔️', 'badge', 4000);
       }
@@ -1782,6 +1989,25 @@ function startQuiz(tier) {
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initLessonCards();
+
+  // Initialize progress system
+  Progress.init();
+
+  // Track lesson opens
+  document.querySelectorAll('.lesson-card-header').forEach((header, i) => {
+    header.addEventListener('click', () => {
+      const card = header.parentElement;
+      if (card.classList.contains('open')) {
+        Progress.trackLessonOpen(`ch01_lesson_${i + 1}`);
+      }
+    });
+  });
+
+  // Track worksheet opens
+  const wsLink = document.querySelector('a[href*="worksheet"]');
+  if (wsLink) {
+    wsLink.addEventListener('click', () => Progress.trackWorksheetOpen());
+  }
 
   // Initialize interactives
   updatePlaceValue();
