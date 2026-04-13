@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    .navbar {
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-heading);
+      font-size: var(--text-lg);
+      color: var(--color-primary-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .nav-link {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: var(--color-bg-alt);
+      color: var(--color-primary);
+    }
+
+    .page-hero {
+      background: linear-gradient(135deg, #4C1D95, #7C3AED);
+      color: white;
+      padding: var(--space-10) 0;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      color: white;
+      margin-bottom: var(--space-2);
+    }
+
+    .page-hero p {
+      opacity: 0.9;
+      font-size: var(--text-lg);
+      margin-bottom: 0;
+    }
+
+    .subjects-section {
+      padding: var(--space-12) 0;
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-8);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .subject-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all var(--duration-normal) var(--ease-bounce);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .subject-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .subject-card.locked {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .subject-card.locked:hover {
+      transform: none;
+    }
+
+    .subject-banner {
+      padding: var(--space-8) var(--space-6);
+      text-align: center;
+    }
+
+    .subject-banner .subject-icon {
+      font-size: 4.5rem;
+      display: block;
+      margin-bottom: var(--space-3);
+    }
+
+    .subject-banner h3 {
+      color: white;
+      font-size: var(--text-2xl);
+      margin-bottom: var(--space-1);
+    }
+
+    .subject-banner .subject-book {
+      font-size: var(--text-sm);
+      opacity: 0.9;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .subject-card.maths .subject-banner {
+      background: linear-gradient(135deg, #6B21A8, #A855F7);
+    }
+
+    .subject-card.english .subject-banner {
+      background: linear-gradient(135deg, #0369A1, #38BDF8);
+    }
+
+    .subject-card.science .subject-banner {
+      background: linear-gradient(135deg, #047857, #34D399);
+    }
+
+    .subject-card.hindi .subject-banner {
+      background: linear-gradient(135deg, #B45309, #FBBF24);
+    }
+
+    .subject-body {
+      padding: var(--space-5) var(--space-6);
+    }
+
+    .subject-body p {
+      color: var(--color-text-light);
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-4);
+    }
+
+    .subject-stats {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .subject-stat {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--color-text-light);
+    }
+
+    .subject-stat strong {
+      color: var(--color-primary);
+    }
+
+    .subject-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .subject-action .status {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+    }
+
+    .status.active {
+      color: var(--color-success);
+    }
+
+    .status.coming {
+      color: var(--color-text-light);
+    }
+
+    .subject-action .go-btn {
+      padding: var(--space-2) var(--space-5);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: white;
+      background: var(--color-primary);
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+
+    .subject-action .go-btn:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+
+    .footer {
+      text-align: center;
+      padding: var(--space-6) 0;
+      color: var(--color-text-light);
+      font-size: var(--text-sm);
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    @media (max-width: 768px) {
+      .subjects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">
+      <span>✨</span> Crislyn's Portal
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link active">Learning</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <h1 class="fade-in-up">📚 My Subjects</h1>
+    <p class="fade-in-up delay-1">Pick a subject to start exploring, Crislyn!</p>
+  </div>
+</div>
+
+<!-- Subjects -->
+<div class="subjects-section">
+  <div class="container">
+    <div class="subjects-grid">
+
+      <!-- Maths -->
+      <a href="maths.html" class="subject-card maths fade-in-up delay-1">
+        <div class="subject-banner">
+          <span class="subject-icon">🔢</span>
+          <h3>Mathematics</h3>
+          <div class="subject-book">Workbook 2026-27</div>
+        </div>
+        <div class="subject-body">
+          <p>12 chapters covering Numbers, Operations, Fractions, Geometry, Data Handling and more. Interactive lessons with quizzes and printable worksheets!</p>
+          <div class="subject-stats">
+            <span class="subject-stat"><strong>12</strong> chapters</span>
+            <span class="subject-stat"><strong>1</strong> ready</span>
+            <span class="subject-stat"><strong>60+</strong> questions</span>
+          </div>
+          <div class="subject-action">
+            <span class="status active">● Active</span>
+            <span class="go-btn">Open →</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- English -->
+      <div class="subject-card english locked fade-in-up delay-2">
+        <div class="subject-banner">
+          <span class="subject-icon">📝</span>
+          <h3>English</h3>
+          <div class="subject-book">Coming Soon</div>
+        </div>
+        <div class="subject-body">
+          <p>Reading comprehension, grammar, vocabulary, creative writing — stories and poems that make language fun!</p>
+          <div class="subject-stats">
+            <span class="subject-stat">Chapters coming soon</span>
+          </div>
+          <div class="subject-action">
+            <span class="status coming">🔒 Coming Soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVS / Science -->
+      <div class="subject-card science locked fade-in-up delay-3">
+        <div class="subject-banner">
+          <span class="subject-icon">🌍</span>
+          <h3>EVS / Science</h3>
+          <div class="subject-book">Coming Soon</div>
+        </div>
+        <div class="subject-body">
+          <p>Explore the world around you — plants, animals, weather, environment, and how things work!</p>
+          <div class="subject-stats">
+            <span class="subject-stat">Chapters coming soon</span>
+          </div>
+          <div class="subject-action">
+            <span class="status coming">🔒 Coming Soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hindi / Arabic -->
+      <div class="subject-card hindi locked fade-in-up delay-4">
+        <div class="subject-banner">
+          <span class="subject-icon">📖</span>
+          <h3>Second Language</h3>
+          <div class="subject-book">Coming Soon</div>
+        </div>
+        <div class="subject-body">
+          <p>Hindi, Arabic, or other second language practice — reading, writing, and comprehension.</p>
+          <div class="subject-stats">
+            <span class="subject-stat">Chapters coming soon</span>
+          </div>
+          <div class="subject-action">
+            <span class="status coming">🔒 Coming Soon</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
+  </div>
+</div>
+
+</body>
+</html>

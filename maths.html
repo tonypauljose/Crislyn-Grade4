@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathematics — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    .navbar {
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-heading);
+      font-size: var(--text-lg);
+      color: var(--color-primary-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .nav-link {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: var(--color-bg-alt);
+      color: var(--color-primary);
+    }
+
+    .page-hero {
+      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 40%, #A855F7 100%);
+      color: white;
+      padding: var(--space-10) 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .page-hero > .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-hero h1 {
+      color: white;
+      margin-bottom: var(--space-2);
+    }
+
+    .page-hero p {
+      opacity: 0.9;
+      font-size: var(--text-lg);
+      margin-bottom: 0;
+    }
+
+    .page-hero .breadcrumb {
+      font-size: var(--text-sm);
+      opacity: 0.8;
+      margin-bottom: var(--space-3);
+    }
+
+    .page-hero .breadcrumb a {
+      color: rgba(255,255,255,0.9);
+    }
+
+    .page-hero .breadcrumb a:hover {
+      color: white;
+    }
+
+    .chapters-section {
+      padding: var(--space-10) 0;
+    }
+
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .chapter-card {
+      padding: var(--space-6);
+      text-align: center;
+      position: relative;
+    }
+
+    .chapter-card .chapter-emoji {
+      font-size: 3rem;
+      margin-bottom: var(--space-3);
+      display: block;
+    }
+
+    .chapter-card .chapter-title {
+      font-family: var(--font-heading);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-2);
+    }
+
+    .chapter-card .chapter-desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-light);
+      margin-bottom: var(--space-4);
+    }
+
+    .chapter-card.available {
+      border: 2px solid var(--color-primary-lighter);
+    }
+
+    .chapter-card.available:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .chapter-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .chapter-card.locked .chapter-emoji {
+      filter: grayscale(0.8);
+    }
+
+    .chapter-card .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 700;
+    }
+
+    .status-badge.ready {
+      background: var(--color-success-light);
+      color: #166534;
+    }
+
+    .status-badge.coming {
+      background: var(--color-bg-alt);
+      color: var(--color-text-light);
+    }
+
+    .tip-section {
+      padding: var(--space-6) 0 var(--space-10);
+    }
+
+    .tip-card {
+      background: linear-gradient(135deg, var(--color-accent-light), var(--color-accent));
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--color-primary-dark);
+    }
+
+    .tip-card h3 { color: var(--color-primary-dark); margin-bottom: var(--space-2); }
+    .tip-card .tip-text { font-size: var(--text-lg); font-weight: 600; }
+
+    .footer {
+      text-align: center;
+      padding: var(--space-6) 0;
+      color: var(--color-text-light);
+      font-size: var(--text-sm);
+      border-top: 1px solid var(--color-border-light);
+    }
+
+    @media (max-width: 768px) {
+      .chapters-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .chapters-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand">
+      <span>✨</span> Crislyn's Portal
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link active">Learning</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb fade-in">
+      <a href="index.html">Home</a> → <a href="learning.html">Learning</a> → Mathematics
+    </div>
+    <h1 class="fade-in-up">🔢 Mathematics</h1>
+    <p class="fade-in-up delay-1">Workbook 2026-27 · 12 Chapters · Interactive Lessons & Quizzes</p>
+  </div>
+</div>
+
+<!-- Chapters -->
+<div class="chapters-section">
+  <div class="container">
+    <div class="section-header mb-8">
+      <h2>Chapters</h2>
+      <p>Click on an available chapter to start learning!</p>
+    </div>
+
+    <div class="chapters-grid" id="chapters-grid"></div>
+  </div>
+</div>
+
+<!-- Daily Tip -->
+<div class="tip-section">
+  <div class="container">
+    <div class="tip-card fade-in-up">
+      <h3>💡 Daily Maths Tip</h3>
+      <div class="tip-text" id="daily-tip"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
+  </div>
+</div>
+
+<script>
+const chapters = [
+  { num: 1, title: 'Numbers', emoji: '🔢', desc: 'Place value, expanded form, number names, comparing, Roman numerals', status: 'available', link: 'chapters/ch01-numbers.html' },
+  { num: 2, title: 'Addition & Subtraction', emoji: '➕', desc: 'Adding and subtracting large numbers with regrouping', status: 'coming' },
+  { num: 3, title: 'Multiplication', emoji: '✖️', desc: 'Multiply multi-digit numbers, tables, word problems', status: 'coming' },
+  { num: 4, title: 'Division', emoji: '➗', desc: 'Divide numbers, long division, remainders', status: 'coming' },
+  { num: 5, title: 'Factors & Multiples', emoji: '🌳', desc: 'Find factors, multiples, HCF, LCM', status: 'coming' },
+  { num: 6, title: 'Time', emoji: '🕐', desc: 'Read clocks, elapsed time, calendars', status: 'coming' },
+  { num: 7, title: 'Perimeter & Area', emoji: '📏', desc: 'Measure around and inside shapes', status: 'coming' },
+  { num: 8, title: 'Money', emoji: '💰', desc: 'Bills, coins, making change, budgets', status: 'coming' },
+  { num: 9, title: 'Fractions', emoji: '🍕', desc: 'Halves, quarters, comparing and ordering fractions', status: 'coming' },
+  { num: 10, title: 'Measurement', emoji: '📐', desc: 'Length, weight, capacity — units and conversions', status: 'coming' },
+  { num: 11, title: 'Data Handling', emoji: '📊', desc: 'Tally marks, pictographs, bar graphs', status: 'coming' },
+  { num: 12, title: 'Geometry', emoji: '🔷', desc: '2D and 3D shapes, symmetry, patterns', status: 'coming' },
+];
+
+function renderChapters() {
+  const grid = document.getElementById('chapters-grid');
+  grid.innerHTML = chapters.map((ch, i) => {
+    const isAvailable = ch.status === 'available';
+    const cardClass = isAvailable ? 'card chapter-card available card-interactive fade-in-up' : 'card chapter-card locked fade-in-up';
+    const delay = `delay-${Math.min(i + 1, 8)}`;
+    const statusBadge = isAvailable
+      ? '<span class="status-badge ready">✅ Ready</span>'
+      : '<span class="status-badge coming">🔒 Coming Soon</span>';
+    const onclick = isAvailable ? `onclick="window.location.href='${ch.link}'"` : '';
+
+    return `
+      <div class="${cardClass} ${delay}" ${onclick}>
+        <div class="chapter-number">${ch.num}</div>
+        <span class="chapter-emoji">${ch.emoji}</span>
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-desc">${ch.desc}</div>
+        ${statusBadge}
+      </div>
+    `;
+  }).join('');
+}
+
+const tips = [
+  "Did you know? Zero was invented in India! The Sanskrit word 'shunya' means empty.",
+  "Trick: To multiply any number by 10, just add a zero at the end! 45 × 10 = 450",
+  "The Roman numeral system has no symbol for zero!",
+  "Quick check: An even number always ends in 0, 2, 4, 6, or 8.",
+  "The predecessor of 1,00,000 is 99,999 — watch all the digits change!",
+  "Place value tip: Each position is 10 times the position to its right.",
+  "The largest 7-digit number is 99,99,999!",
+  "Roman trick: Smaller before larger means subtract. IV = 4, IX = 9.",
+  "To form the smallest number with 0, swap 0 with the smallest non-zero digit!",
+  "Rounding: Look at the digit to the right. 5 or more? Round up!"
+];
+
+function showDailyTip() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  document.getElementById('daily-tip').textContent = tips[dayOfYear % tips.length];
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderChapters();
+  showDailyTip();
+});
+</script>
+
+</body>
+</html>

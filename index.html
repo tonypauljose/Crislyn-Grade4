@@ -3,221 +3,641 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crislyn's Math Adventure</title>
+  <title>Crislyn's Learning Portal</title>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
 
   <style>
-    .hero {
-      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 40%, #A855F7 100%);
+    body {
+      background: var(--color-bg);
+      min-height: 100vh;
+    }
+
+    /* --- Navbar --- */
+    .navbar {
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-heading);
+      font-size: var(--text-lg);
+      color: var(--color-primary-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .nav-link {
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: var(--color-bg-alt);
+      color: var(--color-primary);
+    }
+
+    /* --- Hero Welcome --- */
+    .welcome-hero {
+      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 30%, #7C3AED 60%, #A855F7 100%);
       color: white;
       padding: var(--space-12) 0 var(--space-16);
-      text-align: center;
       position: relative;
       overflow: hidden;
     }
 
-    .hero::before {
+    .welcome-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background:
+        radial-gradient(circle at 20% 80%, rgba(250,204,21,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(13,148,136,0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03) 0%, transparent 70%);
     }
 
-    .hero > * {
+    /* Floating shapes background */
+    .floating-shapes {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.12;
+      font-size: 2rem;
+      animation: floatAround 20s linear infinite;
+    }
+
+    .shape:nth-child(1) { left: 5%; top: 20%; animation-delay: 0s; animation-duration: 25s; font-size: 2.5rem; }
+    .shape:nth-child(2) { left: 15%; top: 60%; animation-delay: -3s; animation-duration: 20s; font-size: 1.8rem; }
+    .shape:nth-child(3) { left: 30%; top: 10%; animation-delay: -7s; animation-duration: 28s; font-size: 2.2rem; }
+    .shape:nth-child(4) { left: 50%; top: 70%; animation-delay: -5s; animation-duration: 22s; font-size: 1.5rem; }
+    .shape:nth-child(5) { left: 70%; top: 15%; animation-delay: -10s; animation-duration: 30s; font-size: 2rem; }
+    .shape:nth-child(6) { left: 85%; top: 50%; animation-delay: -2s; animation-duration: 18s; font-size: 2.3rem; }
+    .shape:nth-child(7) { left: 40%; top: 40%; animation-delay: -8s; animation-duration: 24s; font-size: 1.6rem; }
+    .shape:nth-child(8) { left: 60%; top: 80%; animation-delay: -12s; animation-duration: 26s; font-size: 2.1rem; }
+
+    @keyframes floatAround {
+      0% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-30px) rotate(90deg); }
+      50% { transform: translateY(-10px) rotate(180deg); }
+      75% { transform: translateY(-40px) rotate(270deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+
+    .welcome-hero > .container {
       position: relative;
       z-index: 1;
     }
 
-    .hero h1 {
+    .welcome-content {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+    }
+
+    .welcome-text {
+      flex: 1;
+    }
+
+    .greeting {
+      font-size: var(--text-lg);
+      opacity: 0.9;
+      margin-bottom: var(--space-2);
+      font-weight: 600;
+    }
+
+    .welcome-text h1 {
       color: white;
       font-size: 3.5rem;
-      margin-bottom: var(--space-2);
-      letter-spacing: -0.02em;
-    }
-
-    .hero .subtitle {
-      font-size: var(--text-xl);
-      opacity: 0.9;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
-    .hero-stars {
-      font-size: 3rem;
-      margin-bottom: var(--space-4);
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(8px);
-      padding: var(--space-2) var(--space-5);
-      border-radius: var(--radius-full);
-      font-weight: 700;
-      font-size: var(--text-sm);
-      margin-top: var(--space-4);
-    }
-
-    .chapters-section {
-      padding: var(--space-12) 0;
-      margin-top: -var(--space-8);
-    }
-
-    .chapters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: var(--space-6);
-    }
-
-    .chapter-card {
-      padding: var(--space-6);
-      text-align: center;
-      position: relative;
-    }
-
-    .chapter-card .chapter-emoji {
-      font-size: 3rem;
       margin-bottom: var(--space-3);
+      line-height: 1.1;
+    }
+
+    .welcome-text h1 .name-highlight {
+      color: var(--color-accent);
       display: block;
     }
 
-    .chapter-card .chapter-title {
+    .welcome-text .tagline {
+      font-size: var(--text-xl);
+      opacity: 0.9;
+      margin-bottom: var(--space-6);
+      line-height: 1.5;
+    }
+
+    .welcome-cta {
+      display: flex;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+
+    .welcome-cta .btn {
+      font-size: var(--text-lg);
+      padding: var(--space-4) var(--space-8);
+    }
+
+    /* Avatar Section */
+    .avatar-section {
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .avatar-circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7rem;
+      box-shadow: 0 8px 40px rgba(250, 204, 21, 0.3);
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      animation: float 3s ease-in-out infinite;
+      margin: 0 auto var(--space-4);
+    }
+
+    .avatar-label {
       font-family: var(--font-heading);
       font-size: var(--text-lg);
+      color: var(--color-accent);
+    }
+
+    .avatar-school {
+      font-size: var(--text-sm);
+      opacity: 0.8;
+      margin-top: var(--space-1);
+    }
+
+    /* --- Stats Strip --- */
+    .stats-strip {
+      margin-top: calc(-1 * var(--space-8));
+      position: relative;
+      z-index: 2;
+      padding: 0 0 var(--space-8);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+    }
+
+    .stat-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+      font-size: 2rem;
       margin-bottom: var(--space-2);
     }
 
-    .chapter-card .chapter-desc {
+    .stat-value {
+      font-family: var(--font-heading);
+      font-size: var(--text-2xl);
+      color: var(--color-primary);
+    }
+
+    .stat-label {
       font-size: var(--text-sm);
+      color: var(--color-text-light);
+      margin-top: var(--space-1);
+    }
+
+    /* --- Quick Actions --- */
+    .actions-section {
+      padding: var(--space-8) 0;
+    }
+
+    .action-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .action-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      transition: all var(--duration-normal) var(--ease-bounce);
+      cursor: pointer;
+      border: 3px solid transparent;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .action-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .action-card.learning {
+      border-color: var(--color-primary-lighter);
+      background: linear-gradient(to bottom, white, #FAF5FF);
+    }
+
+    .action-card.learning:hover {
+      border-color: var(--color-primary);
+    }
+
+    .action-card.fun {
+      border-color: var(--color-accent-light);
+      background: linear-gradient(to bottom, white, #FFFBEB);
+    }
+
+    .action-card.fun:hover {
+      border-color: var(--color-accent-dark);
+    }
+
+    .action-card.progress {
+      border-color: var(--color-teal-light);
+      background: linear-gradient(to bottom, white, #F0FDFA);
+    }
+
+    .action-card.progress:hover {
+      border-color: var(--color-teal);
+    }
+
+    .action-icon {
+      font-size: 4rem;
+      margin-bottom: var(--space-4);
+      display: block;
+    }
+
+    .action-card h3 {
+      font-size: var(--text-xl);
+      margin-bottom: var(--space-2);
+    }
+
+    .action-card p {
       color: var(--color-text-light);
       margin-bottom: var(--space-4);
     }
 
-    .chapter-card.available {
-      border: 2px solid var(--color-primary-lighter);
-    }
-
-    .chapter-card.available:hover {
-      border-color: var(--color-primary);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .chapter-card.locked {
-      opacity: 0.55;
-      pointer-events: none;
-    }
-
-    .chapter-card.locked .chapter-emoji {
-      filter: grayscale(0.8);
-    }
-
-    .chapter-card .status-badge {
+    .action-card .action-btn {
       display: inline-flex;
       align-items: center;
-      gap: var(--space-1);
+      gap: var(--space-2);
+      font-weight: 700;
+      font-size: var(--text-base);
+      padding: var(--space-2) var(--space-5);
+      border-radius: var(--radius-full);
+    }
+
+    .action-card.learning .action-btn {
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .action-card.fun .action-btn {
+      background: var(--color-accent);
+      color: var(--color-primary-dark);
+    }
+
+    .action-card.progress .action-btn {
+      background: var(--color-teal);
+      color: white;
+    }
+
+    /* --- Daily Challenge --- */
+    .challenge-section {
+      padding: var(--space-6) 0 var(--space-12);
+    }
+
+    .challenge-card {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A, #FACC15);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(234, 179, 8, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .challenge-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -30%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .challenge-card > * {
+      position: relative;
+    }
+
+    .challenge-card h3 {
+      color: #92400E;
+      margin-bottom: var(--space-3);
+      font-size: var(--text-xl);
+    }
+
+    .challenge-text {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: #78350F;
+      margin-bottom: var(--space-4);
+      line-height: 1.6;
+    }
+
+    .challenge-answer {
+      display: inline-block;
+      background: white;
+      padding: var(--space-2) var(--space-6);
+      border-radius: var(--radius-md);
+      font-family: var(--font-heading);
+      font-size: var(--text-xl);
+      color: var(--color-primary);
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+
+    .challenge-answer:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* --- About Section --- */
+    .about-section {
+      padding: var(--space-8) 0;
+      background: var(--color-surface);
+    }
+
+    .about-card {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .about-emoji {
+      font-size: 5rem;
+      flex-shrink: 0;
+    }
+
+    .about-text h3 {
+      margin-bottom: var(--space-3);
+    }
+
+    .about-text p {
+      color: var(--color-text-light);
+      line-height: 1.8;
+    }
+
+    .about-tags {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      margin-top: var(--space-4);
+    }
+
+    .about-tag {
       padding: var(--space-1) var(--space-3);
       border-radius: var(--radius-full);
       font-size: var(--text-xs);
       font-weight: 700;
-    }
-
-    .status-badge.ready {
-      background: var(--color-success-light);
-      color: #166534;
-    }
-
-    .status-badge.coming {
       background: var(--color-bg-alt);
-      color: var(--color-text-light);
+      color: var(--color-primary);
     }
 
-    .tip-section {
-      padding: var(--space-8) 0 var(--space-12);
-    }
-
-    .tip-card {
-      background: linear-gradient(135deg, var(--color-accent-light), var(--color-accent));
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto;
-      color: var(--color-primary-dark);
-    }
-
-    .tip-card h3 {
-      color: var(--color-primary-dark);
-      margin-bottom: var(--space-3);
-    }
-
-    .tip-card .tip-text {
-      font-size: var(--text-lg);
-      font-weight: 600;
-    }
-
+    /* --- Footer --- */
     .footer {
       text-align: center;
-      padding: var(--space-8) 0;
+      padding: var(--space-6) 0;
       color: var(--color-text-light);
       font-size: var(--text-sm);
       border-top: 1px solid var(--color-border-light);
     }
 
+    /* --- Responsive --- */
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.5rem; }
-      .chapters-grid { grid-template-columns: 1fr 1fr; }
-    }
+      .welcome-content {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
 
-    @media (max-width: 480px) {
-      .chapters-grid { grid-template-columns: 1fr; }
+      .welcome-text h1 {
+        font-size: 2.5rem;
+      }
+
+      .welcome-cta {
+        justify-content: center;
+      }
+
+      .avatar-circle {
+        width: 160px;
+        height: 160px;
+        font-size: 5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .about-card {
+        flex-direction: column;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- Hero Section -->
-<div class="hero">
+<!-- Navbar -->
+<nav class="navbar">
   <div class="container">
-    <div class="hero-stars pop-in">✨📐🌟</div>
-    <h1 class="fade-in-up">Crislyn's Math Adventure</h1>
-    <p class="subtitle fade-in-up delay-1">Master Grade 4 Mathematics with interactive lessons, fun quizzes, exciting games, and printable worksheets!</p>
-    <div class="hero-badge fade-in-up delay-2">
-      📚 Mathematics Workbook 2026-27 · Grade 4
+    <div class="nav-brand">
+      <span>✨</span> Crislyn's Portal
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Welcome Hero -->
+<div class="welcome-hero">
+  <div class="floating-shapes">
+    <span class="shape">📐</span>
+    <span class="shape">✏️</span>
+    <span class="shape">📖</span>
+    <span class="shape">🌟</span>
+    <span class="shape">🔢</span>
+    <span class="shape">🎯</span>
+    <span class="shape">💡</span>
+    <span class="shape">🏆</span>
+  </div>
+
+  <div class="container">
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <div class="greeting fade-in" id="greeting"></div>
+        <h1 class="fade-in-up">
+          Welcome,
+          <span class="name-highlight">Crislyn!</span>
+        </h1>
+        <p class="tagline fade-in-up delay-1">Your very own learning adventure awaits. Explore, practise, and have fun while mastering Grade 4!</p>
+        <div class="welcome-cta fade-in-up delay-2">
+          <a href="learning.html" class="btn btn-accent btn-lg">Start Learning 📚</a>
+          <a href="maths.html" class="btn btn-lg" style="background: rgba(255,255,255,0.2); color: white;">Maths Chapter 1 →</a>
+        </div>
+      </div>
+
+      <div class="avatar-section fade-in-up delay-1">
+        <div class="avatar-circle pop-in">👩‍🎓</div>
+        <div class="avatar-label">Crislyn Tony</div>
+        <div class="avatar-school">Grade 4 · Asian School Bahrain</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Chapters Section -->
-<div class="chapters-section">
+<!-- Stats Strip -->
+<div class="stats-strip">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card fade-in-up delay-1">
+        <div class="stat-icon">📖</div>
+        <div class="stat-value">1</div>
+        <div class="stat-label">Chapter Ready</div>
+      </div>
+      <div class="stat-card fade-in-up delay-2">
+        <div class="stat-icon">✏️</div>
+        <div class="stat-value">9</div>
+        <div class="stat-label">Lessons</div>
+      </div>
+      <div class="stat-card fade-in-up delay-3">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value">60+</div>
+        <div class="stat-label">Quiz Questions</div>
+      </div>
+      <div class="stat-card fade-in-up delay-4">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Quiz Tiers</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="actions-section">
   <div class="container">
     <div class="section-header mb-8">
-      <h2>📖 Chapters</h2>
-      <p>Click on an available chapter to start learning!</p>
+      <h2>What would you like to do?</h2>
+      <p>Pick your adventure, Crislyn!</p>
     </div>
 
-    <div class="chapters-grid" id="chapters-grid">
-      <!-- Filled by JS -->
+    <div class="action-cards">
+      <a href="learning.html" class="action-card learning fade-in-up delay-1">
+        <span class="action-icon">📚</span>
+        <h3>Learning</h3>
+        <p>Jump into your subjects — interactive lessons, practice exercises, and quizzes!</p>
+        <span class="action-btn">Explore Subjects →</span>
+      </a>
+
+      <a href="maths.html" class="action-card fun fade-in-up delay-2">
+        <span class="action-icon">🔢</span>
+        <h3>Maths Practice</h3>
+        <p>Go directly to your Maths chapters — Numbers, Addition, Multiplication and more!</p>
+        <span class="action-btn">Open Maths →</span>
+      </a>
+
+      <div class="action-card progress fade-in-up delay-3" style="cursor: default; opacity: 0.6;">
+        <span class="action-icon">📊</span>
+        <h3>My Progress</h3>
+        <p>Track your scores, streaks, and achievements across all subjects.</p>
+        <span class="action-btn" style="opacity: 0.6;">Coming Soon</span>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Daily Tip -->
-<div class="tip-section">
+<!-- Daily Challenge -->
+<div class="challenge-section">
   <div class="container">
-    <div class="tip-card fade-in-up">
-      <h3>💡 Daily Math Tip</h3>
-      <div class="tip-text" id="daily-tip"></div>
+    <div class="challenge-card fade-in-up">
+      <h3>🧩 Daily Brain Teaser</h3>
+      <div class="challenge-text" id="challenge-question"></div>
+      <div class="challenge-answer" id="challenge-answer" onclick="revealAnswer()">Tap to reveal answer!</div>
+    </div>
+  </div>
+</div>
+
+<!-- About Crislyn -->
+<div class="about-section">
+  <div class="container">
+    <div class="about-card fade-in-up">
+      <div class="about-emoji">🌟</div>
+      <div class="about-text">
+        <h3>About This Portal</h3>
+        <p>
+          This is <strong>Crislyn's</strong> personal learning space — built just for her!
+          Every lesson is interactive, every quiz gives instant feedback, and worksheets can be
+          printed for pen-and-paper practice. The portal follows the
+          <strong>Mathematics Workbook 2026-27</strong> from Asian School Bahrain, plus extra
+          enrichment topics to build real-world number sense.
+        </p>
+        <div class="about-tags">
+          <span class="about-tag">Grade 4</span>
+          <span class="about-tag">Asian School Bahrain</span>
+          <span class="about-tag">Interactive</span>
+          <span class="about-tag">Quizzes</span>
+          <span class="about-tag">Worksheets</span>
+          <span class="about-tag">Fun Learning</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -225,73 +645,78 @@
 <!-- Footer -->
 <div class="footer">
   <div class="container">
-    <p>Made with ❤️ for Crislyn · Asian School Bahrain · Grade 4</p>
+    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
   </div>
 </div>
 
 <script>
-const chapters = [
-  { num: 1, title: 'Numbers', emoji: '🔢', desc: 'Place value, expanded form, number names, comparing, Roman numerals', status: 'available', link: 'chapters/ch01-numbers.html' },
-  { num: 2, title: 'Addition & Subtraction', emoji: '➕', desc: 'Adding and subtracting large numbers with regrouping', status: 'coming' },
-  { num: 3, title: 'Multiplication', emoji: '✖️', desc: 'Multiply multi-digit numbers, tables, word problems', status: 'coming' },
-  { num: 4, title: 'Division', emoji: '➗', desc: 'Divide numbers, long division, remainders', status: 'coming' },
-  { num: 5, title: 'Factors & Multiples', emoji: '🌳', desc: 'Find factors, multiples, HCF, LCM', status: 'coming' },
-  { num: 6, title: 'Time', emoji: '🕐', desc: 'Read clocks, elapsed time, calendars', status: 'coming' },
-  { num: 7, title: 'Perimeter & Area', emoji: '📏', desc: 'Measure around and inside shapes', status: 'coming' },
-  { num: 8, title: 'Money', emoji: '💰', desc: 'Bills, coins, making change, budgets', status: 'coming' },
-  { num: 9, title: 'Fractions', emoji: '🍕', desc: 'Halves, quarters, comparing and ordering fractions', status: 'coming' },
-  { num: 10, title: 'Measurement', emoji: '📐', desc: 'Length, weight, capacity — units and conversions', status: 'coming' },
-  { num: 11, title: 'Data Handling', emoji: '📊', desc: 'Tally marks, pictographs, bar graphs', status: 'coming' },
-  { num: 12, title: 'Geometry', emoji: '🔷', desc: '2D and 3D shapes, symmetry, patterns', status: 'coming' },
-];
+// --- Time-based Greeting ---
+function setGreeting() {
+  const hour = new Date().getHours();
+  let greeting, emoji;
 
-function renderChapters() {
-  const grid = document.getElementById('chapters-grid');
-  grid.innerHTML = chapters.map((ch, i) => {
-    const isAvailable = ch.status === 'available';
-    const cardClass = isAvailable ? 'card chapter-card available card-interactive fade-in-up' : 'card chapter-card locked fade-in-up';
-    const delay = `delay-${Math.min(i + 1, 8)}`;
-    const statusBadge = isAvailable
-      ? '<span class="status-badge ready">✅ Ready</span>'
-      : '<span class="status-badge coming">🔒 Coming Soon</span>';
+  if (hour < 12) {
+    greeting = 'Good Morning';
+    emoji = '🌅';
+  } else if (hour < 17) {
+    greeting = 'Good Afternoon';
+    emoji = '☀️';
+  } else {
+    greeting = 'Good Evening';
+    emoji = '🌙';
+  }
 
-    const onclick = isAvailable ? `onclick="window.location.href='${ch.link}'"` : '';
-
-    return `
-      <div class="${cardClass} ${delay}" ${onclick}>
-        <div class="chapter-number">${ch.num}</div>
-        <span class="chapter-emoji">${ch.emoji}</span>
-        <div class="chapter-title">${ch.title}</div>
-        <div class="chapter-desc">${ch.desc}</div>
-        ${statusBadge}
-      </div>
-    `;
-  }).join('');
+  document.getElementById('greeting').textContent = `${emoji} ${greeting}!`;
 }
 
-// Daily tips
-const tips = [
-  "Did you know? Zero was invented in India! The word 'zero' comes from the Sanskrit word 'shunya' meaning empty.",
-  "Trick: To multiply any number by 10, just add a zero at the end! 45 × 10 = 450",
-  "The Roman numeral system has no symbol for zero!",
-  "Quick check: An even number always ends in 0, 2, 4, 6, or 8.",
-  "To find the predecessor of a number, just subtract 1. The predecessor of 1,00,000 is 99,999!",
-  "Place value tip: Each position is 10 times the position to its right. That's why we call it base-10!",
-  "Fun fact: The largest 7-digit number is 99,99,999 (ninety-nine lakh ninety-nine thousand nine hundred ninety-nine)!",
-  "Roman numeral trick: If a smaller value appears BEFORE a larger one, subtract it. IV = 4, IX = 9.",
-  "To form the smallest number from digits that include 0, swap 0 with the smallest non-zero digit!",
-  "Estimation tip: Look at the digit to the right of where you're rounding. 5 or more? Round up!"
+// --- Daily Brain Teaser ---
+const challenges = [
+  { q: "I am an odd number. Take away one letter and I become even. What number am I?", a: "SEVEN (remove the 'S' and it becomes EVEN!)" },
+  { q: "What is the smallest 6-digit number you can make using the digits 3, 0, 8, 1, 5, 2?", a: "1,02,358" },
+  { q: "If you write all numbers from 1 to 100, how many times do you write the digit 5?", a: "20 times!" },
+  { q: "I am a Roman numeral. I am also a word that means 'to look at'. What am I?", a: "C (See = C = 100)" },
+  { q: "What number do you get if you multiply all the digits on a telephone keypad?", a: "Zero! (because one of the digits is 0, and anything × 0 = 0)" },
+  { q: "The predecessor of the smallest 7-digit number is the largest ___ digit number. Fill in the blank!", a: "6-digit number (9,99,999)" },
+  { q: "Using only the digit 8 four times, can you make the number 1000? (Hint: use + signs)", a: "888 + 8 + 8 + 88 + 8 = 1000" },
+  { q: "How many seconds are there in one day?", a: "86,400 seconds (24 × 60 × 60)" },
+  { q: "What is XLIV + XVI in Hindu-Arabic numerals?", a: "44 + 16 = 60 (which is LX in Roman!)" },
+  { q: "If you arrange the digits 1, 2, 3, 4, 5 to make the largest number, then subtract the smallest number, what do you get?", a: "54,321 - 12,345 = 41,976" },
+  { q: "I have 6 faces, 12 edges, and 8 corners. What shape am I?", a: "A cube (or cuboid)!" },
+  { q: "If today is Tuesday, what day will it be after 100 days?", a: "Thursday! (100 ÷ 7 = 14 remainder 2, so 2 days after Tuesday)" },
+  { q: "Which is greater: the largest 5-digit number or ten times the largest 4-digit number?", a: "They're equal! 99,999 vs 10 × 9,999 = 99,990. So 99,999 is slightly greater!" },
+  { q: "A number has 5 in its tens place and 3 in its ten-thousands place. The face value of 5 is ___ and place value of 3 is ___.", a: "Face value of 5 = 5, Place value of 3 = 30,000" },
 ];
 
-function showDailyTip() {
+let answerRevealed = false;
+
+function showDailyChallenge() {
   const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-  const tip = tips[dayOfYear % tips.length];
-  document.getElementById('daily-tip').textContent = tip;
+  const challenge = challenges[dayOfYear % challenges.length];
+
+  document.getElementById('challenge-question').textContent = challenge.q;
+  document.getElementById('challenge-answer').textContent = 'Tap to reveal answer!';
+  document.getElementById('challenge-answer').dataset.answer = challenge.a;
+  answerRevealed = false;
+}
+
+function revealAnswer() {
+  const el = document.getElementById('challenge-answer');
+  if (!answerRevealed) {
+    el.textContent = el.dataset.answer;
+    el.style.background = '#DCFCE7';
+    el.style.color = '#166534';
+    answerRevealed = true;
+  } else {
+    el.textContent = 'Tap to reveal answer!';
+    el.style.background = 'white';
+    el.style.color = 'var(--color-primary)';
+    answerRevealed = false;
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderChapters();
-  showDailyTip();
+  setGreeting();
+  showDailyChallenge();
 });
 </script>
 
