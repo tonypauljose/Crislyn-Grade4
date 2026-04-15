@@ -355,8 +355,134 @@
       <p>Explore each concept with interactive lessons. Click a card to expand it!</p>
     </div>
 
+    <!-- ⭐ Foundation Lesson A: Reading Big Numbers -->
+    <div class="lesson-card open fade-in-up" style="border: 3px solid var(--color-accent);">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #F59E0B, #FACC15);">
+        <span class="lesson-number">⭐</span>
+        <h3>Reading Big Numbers — Right to Left!</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg); font-weight: 600; color: var(--color-primary-dark);">🎯 The Secret Trick: Always start counting from the <strong>RIGHT side</strong> of the number!</p>
+
+        <div class="card p-6" style="background: linear-gradient(135deg, #FEF3C7, #FFFBEB); border: 2px solid var(--color-accent); margin: var(--space-4) 0;">
+          <h4 style="color: #92400E; margin-bottom: var(--space-3);">📋 The Place Value Cheat Sheet</h4>
+          <p style="margin-bottom: var(--space-3);">Memorise this list. Always count from the <strong>right (Ones)</strong> upwards:</p>
+          <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden;">
+            <thead>
+              <tr style="background: var(--color-primary); color: white;">
+                <th style="padding: 8px;">Position from Right</th>
+                <th style="padding: 8px;">Place Name</th>
+                <th style="padding: 8px;">Value</th>
+              </tr>
+            </thead>
+            <tbody style="text-align: center; font-weight: 600;">
+              <tr><td style="padding: 8px; border-bottom: 1px solid #eee;">1st</td><td>Ones</td><td>1</td></tr>
+              <tr style="background: #F9FAFB;"><td style="padding: 8px; border-bottom: 1px solid #eee;">2nd</td><td>Tens</td><td>10</td></tr>
+              <tr><td style="padding: 8px; border-bottom: 1px solid #eee;">3rd</td><td>Hundreds</td><td>100</td></tr>
+              <tr style="background: #F9FAFB;"><td style="padding: 8px; border-bottom: 1px solid #eee;">4th</td><td>Thousands</td><td>1,000</td></tr>
+              <tr><td style="padding: 8px; border-bottom: 1px solid #eee;">5th</td><td>Ten Thousands</td><td>10,000</td></tr>
+              <tr style="background: #F9FAFB;"><td style="padding: 8px; border-bottom: 1px solid #eee;">6th</td><td>Lakhs</td><td>1,00,000</td></tr>
+              <tr><td style="padding: 8px;">7th</td><td>Ten Lakhs</td><td>10,00,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="interactive-area">
+          <h4 class="text-center mb-4">🔍 Try It! Find the Place of the First Digit</h4>
+          <div class="text-center mb-4">
+            <label style="font-weight: 700;">Type any number:</label>
+            <input type="text" class="number-input-lg" id="rbn-input" value="456789" maxlength="7"
+                   style="max-width: 220px; margin-left: var(--space-2);" oninput="readBigNumber()">
+          </div>
+
+          <div id="rbn-walkthrough" style="background: white; padding: var(--space-5); border-radius: var(--radius-md); border: 2px solid var(--color-border-light);"></div>
+
+          <div class="flex-center gap-3 mt-4 flex-wrap">
+            <button class="btn btn-sm btn-outline" onclick="loadRbnExample(1234)">Try 1,234</button>
+            <button class="btn btn-sm btn-outline" onclick="loadRbnExample(56789)">Try 56,789</button>
+            <button class="btn btn-sm btn-outline" onclick="loadRbnExample(345678)">Try 3,45,678</button>
+            <button class="btn btn-sm btn-outline" onclick="loadRbnExample(7890123)">Try 78,90,123</button>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #DCFCE7; border-left: 4px solid var(--color-success);">
+          <h4 style="color: #166534; margin-bottom: var(--space-2);">💡 Remember:</h4>
+          <ul style="list-style: disc; padding-left: var(--space-6); line-height: 1.8;">
+            <li><strong>Count digits from the right</strong> to figure out the place of the leftmost digit.</li>
+            <li>A 3-digit number's first digit is in the <strong>Hundreds</strong> place.</li>
+            <li>A 4-digit number's first digit is in the <strong>Thousands</strong> place.</li>
+            <li>A 5-digit number's first digit is in the <strong>Ten Thousands</strong> place.</li>
+            <li>A 6-digit number's first digit is in the <strong>Lakhs</strong> place.</li>
+            <li>A 7-digit number's first digit is in the <strong>Ten Lakhs</strong> place.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⭐ Foundation Lesson B: Numbers Are a Sum of Parts -->
+    <div class="lesson-card open fade-in-up delay-1" style="border: 3px solid var(--color-success);">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">⭐</span>
+        <h3>A Number is a SUM of Parts!</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg); font-weight: 600; color: var(--color-primary-dark);">🧩 Big idea: Every number is just <strong>several smaller numbers added together</strong>!</p>
+
+        <div class="card p-5" style="background: linear-gradient(135deg, #F0FDF4, #DCFCE7); border: 2px solid var(--color-success); margin: var(--space-4) 0;">
+          <p style="margin-bottom: var(--space-3); font-size: var(--text-lg);">For example, the number <strong style="color: var(--color-primary);">4,567</strong> is really:</p>
+          <div style="text-align: center; padding: var(--space-4); background: white; border-radius: var(--radius-md);">
+            <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 8px; font-size: var(--text-xl); font-weight: 700;">
+              <span style="background: #FCE7F3; color: #BE185D; padding: 8px 14px; border-radius: 8px;">4,000</span>
+              <span style="color: var(--color-primary);">+</span>
+              <span style="background: #DBEAFE; color: #1D4ED8; padding: 8px 14px; border-radius: 8px;">500</span>
+              <span style="color: var(--color-primary);">+</span>
+              <span style="background: #FEF3C7; color: #B45309; padding: 8px 14px; border-radius: 8px;">60</span>
+              <span style="color: var(--color-primary);">+</span>
+              <span style="background: #DCFCE7; color: #166534; padding: 8px 14px; border-radius: 8px;">7</span>
+              <span style="color: var(--color-primary);">=</span>
+              <span style="background: var(--color-primary); color: white; padding: 8px 14px; border-radius: 8px;">4,567</span>
+            </div>
+          </div>
+          <p style="margin-top: var(--space-3); font-size: var(--text-base);">
+            👉 The <strong>4</strong> isn't just 4 — it's <strong>4 thousand</strong> (because it's in the thousands place).<br>
+            👉 The <strong>5</strong> isn't just 5 — it's <strong>5 hundred</strong>.<br>
+            👉 The <strong>6</strong> isn't just 6 — it's <strong>6 tens</strong> (60).<br>
+            👉 The <strong>7</strong> is just 7 (it's in the ones place).
+          </p>
+        </div>
+
+        <div class="interactive-area">
+          <h4 class="text-center mb-4">🔨 Build a Number — Watch It Come Together!</h4>
+          <div class="text-center mb-4">
+            <label style="font-weight: 700;">Type a number to take it apart:</label>
+            <input type="text" class="number-input-lg" id="sum-input" value="3725" maxlength="7"
+                   style="max-width: 220px; margin-left: var(--space-2);" oninput="showSumOfParts()">
+          </div>
+
+          <div id="sum-blocks" style="background: white; padding: var(--space-5); border-radius: var(--radius-md); border: 2px solid var(--color-border-light); min-height: 150px;"></div>
+
+          <div class="flex-center gap-3 mt-4 flex-wrap">
+            <button class="btn btn-sm btn-outline" onclick="loadSumExample(456)">Try 456</button>
+            <button class="btn btn-sm btn-outline" onclick="loadSumExample(8042)">Try 8,042</button>
+            <button class="btn btn-sm btn-outline" onclick="loadSumExample(67903)">Try 67,903</button>
+            <button class="btn btn-sm btn-outline" onclick="loadSumExample(523178)">Try 5,23,178</button>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #FEF3C7; border-left: 4px solid var(--color-accent-dark);">
+          <h4 style="color: #92400E; margin-bottom: var(--space-2);">🌟 The Magic Rule:</h4>
+          <p style="font-size: var(--text-base); margin: 0;">
+            For any digit in a number, its <strong>real value</strong> = <em>digit</em> × <em>place value</em>.
+            So the number itself is just the SUM of all those real values!
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- Lesson 1: Place Value Explorer -->
-    <div class="lesson-card open fade-in-up">
+    <div class="lesson-card fade-in-up delay-2">
       <div class="lesson-card-header">
         <span class="lesson-number">1</span>
         <h3>Place Value Explorer</h3>
@@ -672,8 +798,26 @@
       <p>Test your understanding with interactive exercises!</p>
     </div>
 
+    <!-- ⭐ Foundation Exercise A: Place of the Leftmost Digit -->
+    <div class="exercise-card fade-in-up" id="ex-leftmost" style="border: 3px solid var(--color-accent);">
+      <h3><span class="exercise-number" style="background: var(--color-accent-dark);">⭐A</span> Place of the Leftmost Digit</h3>
+      <p class="text-muted mb-4">For each number, identify which place the <strong>first (leftmost) digit</strong> is in. <em>Tip: count the total digits!</em></p>
+      <div id="ex-leftmost-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('leftmost')">Check Answers ✓</button>
+      <div id="ex-leftmost-score" class="hidden"></div>
+    </div>
+
+    <!-- ⭐ Foundation Exercise B: Number = Sum of Parts -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-sum" style="border: 3px solid var(--color-success);">
+      <h3><span class="exercise-number" style="background: var(--color-success);">⭐B</span> Number = Sum of Parts</h3>
+      <p class="text-muted mb-4">Add up the parts to find the number, OR break the number into its parts.</p>
+      <div id="ex-sum-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('sum')">Check Answers ✓</button>
+      <div id="ex-sum-score" class="hidden"></div>
+    </div>
+
     <!-- Exercise 1: Number Names -->
-    <div class="exercise-card fade-in-up" id="ex-names">
+    <div class="exercise-card fade-in-up delay-2" id="ex-names">
       <h3><span class="exercise-number">1</span> Write the Number Name</h3>
       <p class="text-muted mb-4">Write the name of each number in words.</p>
       <div id="ex-names-questions"></div>
@@ -796,6 +940,153 @@
 // ============================================
 // LESSON INTERACTIVES
 // ============================================
+
+// --- Reading Big Numbers (Foundation Lesson A) ---
+function readBigNumber() {
+  const input = document.getElementById('rbn-input');
+  const num = input.value.replace(/\D/g, '').slice(0, 7);
+  input.value = num;
+  if (!num) {
+    document.getElementById('rbn-walkthrough').innerHTML = '<p class="text-center text-muted">Type a number above to start!</p>';
+    return;
+  }
+
+  const placeNames = ['Ones', 'Tens', 'Hundreds', 'Thousands', 'Ten Thousands', 'Lakhs', 'Ten Lakhs'];
+  const placeValues = [1, 10, 100, 1000, 10000, 100000, 1000000];
+  const colors = ['#22C55E', '#3B82F6', '#EAB308', '#0D9488', '#A855F7', '#EC4899', '#F97316'];
+  const digits = num.split('');
+  const len = digits.length;
+
+  // Build right-to-left walkthrough
+  let walkthroughHTML = `
+    <div style="text-align: center; margin-bottom: 16px;">
+      <div style="font-size: 0.9rem; color: var(--color-text-light); margin-bottom: 8px;">Step 1: Count digits from the RIGHT →</div>
+      <div style="font-family: var(--font-heading); font-size: 1.8rem; color: var(--color-primary-dark); letter-spacing: 4px;">${Utils.formatIndian(parseInt(num))}</div>
+    </div>
+
+    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 4px; margin-bottom: 20px; flex-wrap: wrap;">
+  `;
+
+  for (let i = 0; i < len; i++) {
+    const posFromRight = len - 1 - i;
+    const color = colors[posFromRight];
+    walkthroughHTML += `
+      <div style="text-align: center;">
+        <div style="background: ${color}; color: white; width: 44px; height: 56px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">${digits[i]}</div>
+        <div style="font-size: 0.65rem; font-weight: 700; color: ${color}; margin-top: 4px; line-height: 1.1;">${placeNames[posFromRight]}</div>
+      </div>
+    `;
+  }
+  walkthroughHTML += '</div>';
+
+  // The leftmost digit's place
+  const leftmostPlace = placeNames[len - 1];
+  const leftmostDigit = digits[0];
+  walkthroughHTML += `
+    <div style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); padding: 16px; border-radius: 12px; border-left: 4px solid var(--color-accent-dark); margin-bottom: 12px;">
+      <div style="font-weight: 700; color: #92400E; margin-bottom: 6px;">✨ The leftmost digit is <span style="font-size: 1.4rem; color: ${colors[len-1]};">${leftmostDigit}</span></div>
+      <div style="font-size: 1.1rem; color: #78350F;">It is in the <strong>${leftmostPlace}</strong> place.</div>
+      <div style="font-size: 0.95rem; margin-top: 6px; color: #78350F;">Why? Because the number has <strong>${len} digits</strong>, so counting from right: ${placeNames.slice(0, len).join(' → ')}.</div>
+    </div>
+  `;
+
+  // Reading aloud
+  walkthroughHTML += `
+    <div style="text-align: center; padding: 12px; background: #F3E8FF; border-radius: 8px;">
+      <div style="font-size: 0.85rem; color: var(--color-text-light); margin-bottom: 4px;">Read this number as:</div>
+      <div style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--color-primary);">${Utils.numberToIndianName(parseInt(num))}</div>
+    </div>
+  `;
+
+  document.getElementById('rbn-walkthrough').innerHTML = walkthroughHTML;
+}
+
+function loadRbnExample(n) {
+  document.getElementById('rbn-input').value = n;
+  readBigNumber();
+  AudioManager.playTone('click');
+}
+
+// --- A Number is a Sum of Parts (Foundation Lesson B) ---
+function showSumOfParts() {
+  const input = document.getElementById('sum-input');
+  const num = input.value.replace(/\D/g, '').slice(0, 7);
+  input.value = num;
+  if (!num || num === '0') {
+    document.getElementById('sum-blocks').innerHTML = '<p class="text-center text-muted">Type a number to see it broken into its parts!</p>';
+    return;
+  }
+
+  const placeValues = [1, 10, 100, 1000, 10000, 100000, 1000000];
+  const placeNames = ['Ones', 'Tens', 'Hundreds', 'Thousands', 'Ten Thousands', 'Lakhs', 'Ten Lakhs'];
+  const colors = [
+    { bg: '#DCFCE7', text: '#166534' },     // Ones - green
+    { bg: '#FEF3C7', text: '#B45309' },     // Tens - yellow
+    { bg: '#DBEAFE', text: '#1D4ED8' },     // Hundreds - blue
+    { bg: '#FCE7F3', text: '#BE185D' },     // Thousands - pink
+    { bg: '#F3E8FF', text: '#7C3AED' },     // Ten Thousands - purple
+    { bg: '#FFE4E6', text: '#9F1239' },     // Lakhs - rose
+    { bg: '#FED7AA', text: '#9A3412' },     // Ten Lakhs - orange
+  ];
+
+  const digits = num.split('').reverse(); // index 0 = ones, etc.
+  const parts = [];
+
+  for (let i = digits.length - 1; i >= 0; i--) {
+    const d = parseInt(digits[i]);
+    if (d > 0) {
+      parts.push({
+        digit: d,
+        placeValue: d * placeValues[i],
+        placeName: placeNames[i],
+        color: colors[i],
+        position: i
+      });
+    }
+  }
+
+  // Build the visual breakdown
+  let html = `
+    <div style="text-align: center; margin-bottom: 12px;">
+      <div style="font-family: var(--font-heading); font-size: 2.2rem; color: var(--color-primary-dark);">${Utils.formatIndian(parseInt(num))}</div>
+      <div style="font-size: 0.9rem; color: var(--color-text-light);">↓ is made of these parts ↓</div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; padding: 16px;">
+  `;
+
+  parts.forEach((p, idx) => {
+    if (idx > 0) {
+      html += `<span style="font-size: 1.6rem; color: var(--color-primary); font-weight: 700;">+</span>`;
+    }
+    html += `
+      <div style="background: ${p.color.bg}; color: ${p.color.text}; padding: 10px 16px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.06); animation: popIn 0.3s ease-out ${idx * 0.1}s both;">
+        <div style="font-family: var(--font-heading); font-size: 1.3rem;">${Utils.formatIndian(p.placeValue)}</div>
+        <div style="font-size: 0.7rem; opacity: 0.8; margin-top: 2px;">${p.digit} × ${Utils.formatIndian(placeValues[p.position])}</div>
+      </div>
+    `;
+  });
+
+  html += `<span style="font-size: 1.6rem; color: var(--color-primary); font-weight: 700;">=</span>`;
+  html += `<div style="background: var(--color-primary); color: white; padding: 10px 18px; border-radius: 10px; font-family: var(--font-heading); font-size: 1.4rem;">${Utils.formatIndian(parseInt(num))}</div>`;
+  html += '</div>';
+
+  // Verification line
+  const partsStr = parts.map(p => Utils.formatIndian(p.placeValue)).join(' + ');
+  html += `
+    <div style="text-align: center; margin-top: 12px; padding: 10px; background: #F9F5FF; border-radius: 8px; font-size: 0.95rem;">
+      <strong>Check:</strong> ${partsStr} = <strong style="color: var(--color-primary);">${Utils.formatIndian(parseInt(num))}</strong> ✓
+    </div>
+  `;
+
+  document.getElementById('sum-blocks').innerHTML = html;
+}
+
+function loadSumExample(n) {
+  document.getElementById('sum-input').value = n;
+  showSumOfParts();
+  AudioManager.playTone('click');
+}
 
 // --- Place Value Explorer ---
 let currentSystem = 'indian';
@@ -1075,6 +1366,8 @@ function showRounding() {
 const exerciseData = {};
 
 function generateExercises() {
+  generateLeftmostExercise();
+  generateSumExercise();
   generateNameExercise();
   generateFigureExercise();
   generateExpandedExercise();
@@ -1083,6 +1376,81 @@ function generateExercises() {
   generatePredSucExercise();
   generatePVExercise();
   generateRomanExercise();
+}
+
+function generateLeftmostExercise() {
+  // Progressive: start with 3-digit, build to 7-digit
+  const ranges = [
+    [100, 999],         // 3-digit (Hundreds)
+    [1000, 9999],       // 4-digit (Thousands)
+    [10000, 99999],     // 5-digit (Ten Thousands)
+    [100000, 999999],   // 6-digit (Lakhs)
+    [1000000, 9999999], // 7-digit (Ten Lakhs)
+    [100, 999],
+    [10000, 99999],
+    [100000, 999999],
+    [1000000, 9999999],
+    [1000, 9999],
+  ];
+  const placeNames = ['Ones', 'Tens', 'Hundreds', 'Thousands', 'Ten Thousands', 'Lakhs', 'Ten Lakhs'];
+  const numbers = ranges.map(r => Utils.randomInt(r[0], r[1]));
+  exerciseData.leftmost = numbers;
+
+  const container = document.getElementById('ex-leftmost-questions');
+  container.innerHTML = numbers.map((n, i) => {
+    const len = String(n).length;
+    return `
+      <div class="exercise-question" id="leftmost-q${i}">
+        <div class="q-label">Q${i + 1}. The leftmost digit of <strong style="font-size: var(--text-xl);">${Utils.formatIndian(n)}</strong> is in which place?</div>
+        <select class="exercise-input" id="leftmost-a${i}" style="width: 200px;">
+          <option value="">Choose...</option>
+          <option value="Hundreds">Hundreds</option>
+          <option value="Thousands">Thousands</option>
+          <option value="Ten Thousands">Ten Thousands</option>
+          <option value="Lakhs">Lakhs</option>
+          <option value="Ten Lakhs">Ten Lakhs</option>
+        </select>
+        <div class="text-sm text-muted mt-1">Hint: This number has <strong>${len} digits</strong>.</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function generateSumExercise() {
+  // Mix of two types: "add the parts" and "break apart"
+  const questions = [];
+  for (let i = 0; i < 4; i++) {
+    // Type A: Given parts, find the number
+    const n = Utils.randomInt(1000, 999999);
+    questions.push({ type: 'add', num: n });
+  }
+  for (let i = 0; i < 4; i++) {
+    // Type B: Given the number, break into parts
+    const n = Utils.randomInt(1000, 999999);
+    questions.push({ type: 'break', num: n });
+  }
+  exerciseData.sum = questions;
+
+  const container = document.getElementById('ex-sum-questions');
+  container.innerHTML = questions.map((q, i) => {
+    if (q.type === 'add') {
+      const expanded = Utils.expandedForm(q.num);
+      return `
+        <div class="exercise-question" id="sum-q${i}">
+          <div class="q-label">Q${i + 1}. Add up these parts to find the number:</div>
+          <div style="font-size: var(--text-lg); font-weight: 700; color: var(--color-primary); margin-bottom: 6px;">${expanded} = ?</div>
+          <input type="text" class="exercise-input" style="width: 200px;" id="sum-a${i}" placeholder="Type the number" autocomplete="off">
+        </div>
+      `;
+    } else {
+      return `
+        <div class="exercise-question" id="sum-q${i}">
+          <div class="q-label">Q${i + 1}. Break <strong>${Utils.formatIndian(q.num)}</strong> into its parts (expanded form):</div>
+          <input type="text" class="exercise-input" style="width: 100%;" id="sum-a${i}" placeholder="e.g. 5,000 + 600 + 70 + 2" autocomplete="off">
+        </div>
+      `;
+    }
+  }).join('');
 }
 
 function generateNameExercise() {
@@ -1309,6 +1677,57 @@ function generateRomanExercise() {
 function checkExercise(type) {
   let correct = 0;
   let total = 0;
+
+  const placeNames = ['Ones', 'Tens', 'Hundreds', 'Thousands', 'Ten Thousands', 'Lakhs', 'Ten Lakhs'];
+
+  if (type === 'leftmost') {
+    exerciseData.leftmost.forEach((num, i) => {
+      total++;
+      const select = document.getElementById(`leftmost-a${i}`);
+      const len = String(num).length;
+      const correctPlace = placeNames[len - 1];
+      const el = document.getElementById(`leftmost-q${i}`);
+      if (select.value === correctPlace) {
+        correct++;
+        el.className = 'exercise-question answered-correct';
+      } else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${correctPlace} (${len} digits → leftmost is in ${correctPlace} place)</div>`;
+      }
+      select.disabled = true;
+    });
+  }
+
+  if (type === 'sum') {
+    exerciseData.sum.forEach((q, i) => {
+      total++;
+      const input = document.getElementById(`sum-a${i}`);
+      const el = document.getElementById(`sum-q${i}`);
+
+      if (q.type === 'add') {
+        const userVal = parseInt(input.value.replace(/[\s,]+/g, ''));
+        if (userVal === q.num) {
+          correct++;
+          el.className = 'exercise-question answered-correct';
+        } else {
+          el.className = 'exercise-question answered-wrong';
+          el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${Utils.formatIndian(q.num)}</div>`;
+        }
+      } else {
+        const expected = Utils.expandedForm(q.num);
+        const userClean = input.value.replace(/[\s,]+/g, '');
+        const expectedClean = expected.replace(/[\s,]+/g, '');
+        if (userClean === expectedClean) {
+          correct++;
+          el.className = 'exercise-question answered-correct';
+        } else {
+          el.className = 'exercise-question answered-wrong';
+          el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${expected}</div>`;
+        }
+      }
+      input.disabled = true;
+    });
+  }
 
   if (type === 'names') {
     exerciseData.names.forEach((num, i) => {
@@ -2010,6 +2429,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Initialize interactives
+  readBigNumber();
+  showSumOfParts();
   updatePlaceValue();
   newComparePair();
   renderOdometer();
