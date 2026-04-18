@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chapter 1: Nouns — Crislyn's English</title>
+  <title>Chapter 2: Nouns — Crislyn's English</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,7 +90,7 @@
 <!-- Page Header -->
 <div class="page-header" style="background: linear-gradient(135deg, #0369A1, #0284C7, #38BDF8);">
   <div class="container">
-    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">📝 Chapter 1</div>
+    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">📝 Chapter 2</div>
     <h1 class="fade-in-up">Nouns</h1>
     <p class="fade-in-up delay-1">Naming words — people, places, things, animals, feelings, and groups!</p>
     <a href="../english.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to English</a>
@@ -371,7 +371,7 @@
         <div style="font-size: 4rem;">📝</div>
         <h3 class="mt-4">Chapter 1: Nouns Worksheet</h3>
         <p class="text-muted mt-2">Classify nouns, write plurals, possessives, collective nouns, and more!</p>
-        <a href="../worksheets/en01-nouns-worksheet.html" target="_blank" class="btn btn-lg mt-6" style="background: linear-gradient(135deg, #0369A1, #38BDF8); color: white;">
+        <a href="../worksheets/en02-nouns-worksheet.html" target="_blank" class="btn btn-lg mt-6" style="background: linear-gradient(135deg, #0369A1, #38BDF8); color: white;">
           Open Worksheet 🖨️
         </a>
       </div>
@@ -706,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof Progress !== 'undefined') {
     Progress.init();
     document.querySelectorAll('.lesson-card-header').forEach((h, i) => {
-      h.addEventListener('click', () => { if (h.parentElement.classList.contains('open')) Progress.trackLessonOpen(`en01_lesson_${i+1}`); });
+      h.addEventListener('click', () => { if (h.parentElement.classList.contains('open')) Progress.trackLessonOpen(`en02_lesson_${i+1}`); });
     });
     const wsLink = document.querySelector('a[href*="worksheet"]');
     if (wsLink) wsLink.addEventListener('click', () => Progress.trackWorksheetOpen());
