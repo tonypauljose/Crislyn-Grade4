@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worksheet — Chapter 1: Kinds of Sentences</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <style>
+    @media screen {
+      body { background: var(--color-bg); }
+      .worksheet-page { max-width: 800px; margin: var(--space-8) auto; background: white; padding: var(--space-8); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+      .screen-controls { max-width: 800px; margin: var(--space-4) auto var(--space-8); text-align: center; }
+    }
+    @media print { .screen-controls { display: none !important; } .worksheet-page { margin:0; padding:0; box-shadow:none; } }
+    .ws-question { margin-bottom: 12pt; page-break-inside: avoid; }
+    .ws-question .q-num { font-weight: 700; color: #0369A1; margin-right: 4pt; }
+    .ws-answer-line { display: block; width: 100%; height: 28pt; border-bottom: 1px dotted #999; margin-top: 4pt; }
+    .ws-answer-short { display: inline-block; width: 140pt; border-bottom: 1px dotted #999; margin: 0 6pt; text-align: center; }
+    .ws-section { margin-bottom: 18pt; page-break-inside: avoid; }
+    .ws-section h3 { font-size: 12pt; font-weight: 700; padding: 4pt 8pt; background: #f0f0f0; border-left: 4pt solid #0369A1; margin-bottom: 10pt; color: #000; font-family: 'Nunito', sans-serif; }
+    .ws-header { text-align: center; border-bottom: 2px solid #0369A1; padding-bottom: 8pt; margin-bottom: 12pt; }
+    .ws-header h1 { font-family: 'Fredoka One', cursive; font-size: 18pt; color: #0369A1; margin-bottom: 2pt; }
+    .ws-header .subtitle { font-size: 11pt; color: #666; }
+    .ws-student-info { display: flex; justify-content: space-between; margin-bottom: 14pt; font-size: 10pt; }
+    .ws-student-info .field { display: flex; align-items: baseline; gap: 6pt; }
+    .ws-student-info .line { display: inline-block; width: 140pt; border-bottom: 1px solid #000; }
+    .ws-answer-key { page-break-before: always; }
+    .ws-answer-key h2 { text-align: center; font-size: 14pt; margin-bottom: 12pt; font-family: 'Fredoka One', cursive; color: #0369A1; }
+    .ws-answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3pt 16pt; font-size: 10pt; }
+    .ws-answers-grid .ans-item { padding: 2pt 0; border-bottom: 1px dotted #ddd; }
+    .ws-answers-grid .ans-num { font-weight: 700; color: #0369A1; }
+    .ws-footer { text-align: center; font-size: 8pt; color: #999; margin-top: 20pt; padding-top: 6pt; border-top: 1px solid #eee; }
+    .ws-punct-box { display: inline-block; width: 24pt; height: 22pt; border: 1.5pt solid #000; border-radius: 3pt; text-align: center; margin: 0 4pt; vertical-align: middle; }
+  </style>
+</head>
+<body>
+<div class="screen-controls no-print">
+  <a href="../chapters/en01-sentences.html" class="btn btn-outline btn-sm">← Back to Chapter 1</a>
+  <button class="btn btn-lg" style="background: linear-gradient(135deg, #0369A1, #38BDF8); color: white; margin-left: 16px;" onclick="window.print()">🖨️ Print Worksheet</button>
+  <button class="btn btn-sm" style="background: var(--color-accent); color: var(--color-primary-dark); margin-left: 16px;" onclick="location.reload()">🔄 New Questions</button>
+  <p style="margin-top: 8px; color: var(--color-text-light); font-size: var(--text-sm);">Each reload generates different questions.</p>
+</div>
+<div class="worksheet-page" id="worksheet"></div>
+<script>
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function formatDate(){const d=new Date();const m=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${String(d.getDate()).padStart(2,'0')} ${m[d.getMonth()]} ${d.getFullYear()}`;}
+
+function generate(){
+  const answers={};
+  let qn=0;
+
+  // A: Identify sentence type
+  const identifyItems=shuffle([
+    {s:'The sun rises in the east.',t:'Declarative'},{s:'Where do you live?',t:'Interrogative'},
+    {s:'What a beautiful day!',t:'Exclamatory'},{s:'Please close the door.',t:'Imperative'},
+    {s:'She loves reading books.',t:'Declarative'},{s:'Have you eaten lunch?',t:'Interrogative'},
+    {s:'How amazing this show is!',t:'Exclamatory'},{s:'Open your books to page 5.',t:'Imperative'},
+    {s:'Bahrain is an island country.',t:'Declarative'},{s:'Can I borrow your pen?',t:'Interrogative'},
+    {s:'What a wonderful surprise!',t:'Exclamatory'},{s:'Don\'t run in the corridor.',t:'Imperative'},
+    {s:'Birds fly south in winter.',t:'Declarative'},{s:'Why are you crying?',t:'Interrogative'},
+    {s:'Sit down immediately.',t:'Imperative'},{s:'Hurray! We won!',t:'Exclamatory'},
+  ]).slice(0,8);
+  let secA=identifyItems.map((item,i)=>{qn++;answers[`A${i+1}`]=item.t;return`<div class="ws-question"><span class="q-num">${qn}.</span> "${item.s}" → <span class="ws-answer-short"></span></div>`;}).join('');
+
+  // B: Add punctuation
+  const punctItems=shuffle([
+    {s:'The cat is sleeping on the sofa',p:'.',t:'Declarative'},
+    {s:'Where is your school bag',p:'?',t:'Interrogative'},
+    {s:'What a lovely garden this is',p:'!',t:'Exclamatory'},
+    {s:'Please switch off the lights',p:'.',t:'Imperative'},
+    {s:'How old are you',p:'?',t:'Interrogative'},
+    {s:'She dances very gracefully',p:'.',t:'Declarative'},
+    {s:'How tall that tree is',p:'!',t:'Exclamatory'},
+    {s:'Write your name on the paper',p:'.',t:'Imperative'},
+    {s:'Did you complete your homework',p:'?',t:'Interrogative'},
+    {s:'What an incredible story',p:'!',t:'Exclamatory'},
+  ]).slice(0,8);
+  let secB=punctItems.map((item,i)=>{qn++;answers[`B${i+1}`]=item.p;return`<div class="ws-question"><span class="q-num">${qn}.</span> "${item.s}" <span class="ws-punct-box"></span></div>`;}).join('');
+
+  // C: Find the subject
+  const subjItems=shuffle([
+    {s:'Crislyn rides her bicycle every evening.',subj:'Crislyn'},
+    {s:'The tall girl won the prize.',subj:'The tall girl'},
+    {s:'My favourite colour is purple.',subj:'My favourite colour'},
+    {s:'The big brown dog chased the squirrel.',subj:'The big brown dog'},
+    {s:'Our teacher gave us homework.',subj:'Our teacher'},
+    {s:'A beautiful rainbow appeared after the rain.',subj:'A beautiful rainbow'},
+  ]).slice(0,5);
+  let secC=subjItems.map((item,i)=>{qn++;answers[`C${i+1}`]=item.subj;return`<div class="ws-question"><span class="q-num">${qn}.</span> "${item.s}"<br>Subject: <span class="ws-answer-short" style="width: 200pt;"></span></div>`;}).join('');
+
+  // D: Convert sentences
+  const convertItems=[
+    {s:'She is a good swimmer.',target:'Interrogative',a:'Is she a good swimmer?'},
+    {s:'This painting is very beautiful.',target:'Exclamatory',a:'What a beautiful painting this is!'},
+    {s:'You should eat your vegetables.',target:'Imperative',a:'Eat your vegetables.'},
+    {s:'He is running very fast.',target:'Exclamatory',a:'How fast he is running!'},
+  ];
+  let secD=convertItems.map((item,i)=>{qn++;answers[`D${i+1}`]=item.a;return`<div class="ws-question"><span class="q-num">${qn}.</span> Change to <strong>${item.target}</strong>: "${item.s}"<span class="ws-answer-line"></span></div>`;}).join('');
+
+  // E: True/False
+  const tfItems=shuffle([
+    {s:'A declarative sentence makes a statement.',a:'True'},
+    {s:'An interrogative sentence gives a command.',a:'False'},
+    {s:'Exclamatory sentences always start with "What" or "How".',a:'False'},
+    {s:'The hidden subject of "Sit down." is "you".',a:'True'},
+    {s:'Every sentence needs a subject and a predicate.',a:'True'},
+    {s:'An imperative sentence can only end with a full stop.',a:'False'},
+  ]).slice(0,5);
+  let secE=tfItems.map((item,i)=>{qn++;answers[`E${i+1}`]=item.a;return`<div class="ws-question"><span class="q-num">${qn}.</span> "${item.s}" → <span class="ws-answer-short" style="width:60pt;"></span></div>`;}).join('');
+
+  // F: Write your own
+  const topics=['Your School','A Rainy Day','Your Best Friend','The Park'];
+  const topic=topics[Math.floor(Math.random()*topics.length)];
+  let secF=`<p style="margin-bottom:8pt;">Topic: <strong>${topic}</strong></p>`;
+  const types=['Declarative','Interrogative','Exclamatory','Imperative'];
+  types.forEach((t,i)=>{qn++;answers[`F${i+1}`]=`(Student's own ${t} sentence)`;secF+=`<div class="ws-question"><span class="q-num">${qn}.</span> Write a <strong>${t}</strong> sentence:<span class="ws-answer-line"></span></div>`;});
+
+  // Answer key
+  let ansHTML='<div class="ws-answers-grid">';
+  Object.entries(answers).forEach(([k,v])=>{ansHTML+=`<div class="ans-item"><span class="ans-num">${k}:</span> ${v}</div>`;});
+  ansHTML+='</div>';
+
+  document.getElementById('worksheet').innerHTML=`
+    <div class="ws-header">
+      <h1>Crislyn's English Adventure</h1>
+      <div class="subtitle">Chapter 1: Kinds of Sentences — Practice Worksheet</div>
+    </div>
+    <div class="ws-student-info">
+      <div class="field"><strong>Name:</strong> <span class="line"></span></div>
+      <div class="field"><strong>Date:</strong> <span class="line" style="width:100pt;"></span></div>
+      <div class="field"><strong>Score:</strong> <span class="line" style="width:60pt;"></span></div>
+    </div>
+    <div class="ws-section"><h3>Section A: Identify the Sentence Type (Declarative / Interrogative / Exclamatory / Imperative)</h3>${secA}</div>
+    <div class="ws-section"><h3>Section B: Add the Correct Punctuation (. or ? or !)</h3>${secB}</div>
+    <div class="ws-section"><h3>Section C: Find the Subject</h3>${secC}</div>
+    <div class="ws-section"><h3>Section D: Convert the Sentence</h3>${secD}</div>
+    <div class="ws-section"><h3>Section E: True or False</h3>${secE}</div>
+    <div class="ws-section"><h3>Section F: Write Your Own Sentences about "${topic}"</h3>${secF}</div>
+    <div class="ws-footer">Crislyn's English Adventure — Generated on ${formatDate()}</div>
+    <div class="ws-answer-key"><h2>Answer Key</h2>${ansHTML}</div>
+  `;
+}
+document.addEventListener('DOMContentLoaded',generate);
+</script>
+</body>
+</html>

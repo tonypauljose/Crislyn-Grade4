@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 1: Kinds of Sentences — Crislyn's English</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+
+  <style>
+    .interactive-area {
+      background: var(--color-bg); border-radius: var(--radius-md);
+      padding: var(--space-6); margin: var(--space-4) 0; border: 2px solid var(--color-border-light);
+    }
+
+    .sentence-type-card {
+      padding: var(--space-5); border-radius: var(--radius-lg); text-align: center;
+      transition: all var(--duration-normal) var(--ease-bounce); cursor: default;
+    }
+    .sentence-type-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .sentence-type-card .type-icon { font-size: 3rem; margin-bottom: var(--space-2); display: block; }
+    .sentence-type-card h4 { margin-bottom: var(--space-1); }
+    .sentence-type-card .punctuation { font-size: var(--text-3xl); font-family: var(--font-heading); margin: var(--space-2) 0; }
+    .sentence-type-card p { font-size: var(--text-sm); color: var(--color-text-light); margin-bottom: var(--space-2); }
+    .sentence-type-card .examples { font-size: var(--text-sm); font-weight: 600; font-style: italic; }
+
+    .type-declarative { background: #DBEAFE; border: 3px solid #93C5FD; }
+    .type-declarative h4 { color: #1D4ED8; }
+    .type-declarative .punctuation { color: #1D4ED8; }
+
+    .type-interrogative { background: #FCE7F3; border: 3px solid #F9A8D4; }
+    .type-interrogative h4 { color: #BE185D; }
+    .type-interrogative .punctuation { color: #BE185D; }
+
+    .type-exclamatory { background: #FEF3C7; border: 3px solid #FCD34D; }
+    .type-exclamatory h4 { color: #B45309; }
+    .type-exclamatory .punctuation { color: #B45309; }
+
+    .type-imperative { background: #CCFBF1; border: 3px solid #5EEAD4; }
+    .type-imperative h4 { color: #0F766E; }
+    .type-imperative .punctuation { color: #0F766E; }
+
+    .sentence-example {
+      padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md);
+      margin-bottom: var(--space-3); border-left: 4px solid var(--color-border);
+      font-size: var(--text-lg); font-style: italic; line-height: 1.6;
+    }
+
+    .sentence-example .type-label {
+      display: inline-block; font-size: var(--text-xs); font-weight: 700; font-style: normal;
+      padding: 2px 10px; border-radius: var(--radius-full); margin-left: var(--space-2);
+    }
+
+    .label-declarative { background: #DBEAFE; color: #1D4ED8; }
+    .label-interrogative { background: #FCE7F3; color: #BE185D; }
+    .label-exclamatory { background: #FEF3C7; color: #B45309; }
+    .label-imperative { background: #CCFBF1; color: #0F766E; }
+
+    .convert-box {
+      background: var(--color-surface); border-radius: var(--radius-md); padding: var(--space-5);
+      border: 2px solid var(--color-border-light); margin-bottom: var(--space-4);
+    }
+
+    .convert-arrow { font-size: var(--text-2xl); color: var(--color-primary); text-align: center; margin: var(--space-2) 0; }
+
+    .exercise-question {
+      padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md);
+      margin-bottom: var(--space-3); border: 2px solid var(--color-border-light);
+      transition: border-color var(--duration-normal);
+    }
+    .exercise-question.answered-correct { border-color: var(--color-success); background: var(--color-success-light); }
+    .exercise-question.answered-wrong { border-color: var(--color-error); background: var(--color-error-light); }
+    .exercise-question .q-label { font-weight: 700; color: #0369A1; margin-bottom: var(--space-2); }
+
+    .exercise-input {
+      padding: var(--space-2) var(--space-3); border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+      font-size: var(--text-base); font-weight: 600; outline: none;
+      transition: border-color var(--duration-normal);
+    }
+    .exercise-input:focus { border-color: var(--color-primary-light); }
+
+    .exercise-score {
+      display: flex; align-items: center; justify-content: center; gap: var(--space-4); padding: var(--space-4);
+      background: linear-gradient(135deg, #0369A1, #38BDF8); color: white; border-radius: var(--radius-md);
+      margin-top: var(--space-4); font-size: var(--text-lg); font-weight: 700;
+    }
+
+    .subject-predicate-highlight .subject { color: #1D4ED8; text-decoration: underline; text-decoration-color: #93C5FD; text-underline-offset: 4px; }
+    .subject-predicate-highlight .predicate { color: #BE185D; text-decoration: underline; text-decoration-color: #F9A8D4; text-underline-offset: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header" style="background: linear-gradient(135deg, #0369A1, #0284C7, #38BDF8);">
+  <div class="container">
+    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">📝 Chapter 1</div>
+    <h1 class="fade-in-up">Kinds of Sentences</h1>
+    <p class="fade-in-up delay-1">Learn the four types of sentences and how to use them correctly!</p>
+    <a href="../english.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to English</a>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="learn">📖 Learn</div>
+    <div class="tab" data-tab="practice">✏️ Practice</div>
+    <div class="tab" data-tab="quiz">🎯 Quiz</div>
+    <div class="tab" data-tab="worksheet">🖨️ Worksheet</div>
+  </div>
+
+  <!-- ==================== LEARN ==================== -->
+  <div class="tab-content active" id="learn">
+    <div class="section-header">
+      <h2>📖 Learn</h2>
+      <p>Every sentence has a purpose — discover the four types!</p>
+    </div>
+
+    <!-- Lesson 1: What is a Sentence? -->
+    <div class="lesson-card open fade-in-up">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">1</span>
+        <h3>What is a Sentence?</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">A <strong>sentence</strong> is a group of words that makes <strong>complete sense</strong>. Every sentence has two parts:</p>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-5" style="background: #DBEAFE; border: 2px solid #93C5FD;">
+            <h4 style="color: #1D4ED8;">Subject</h4>
+            <p>Who or what the sentence is about.</p>
+            <p class="text-sm text-muted">The <strong>doer</strong> of the action.</p>
+          </div>
+          <div class="card p-5" style="background: #FCE7F3; border: 2px solid #F9A8D4;">
+            <h4 style="color: #BE185D;">Predicate</h4>
+            <p>What the subject does or is.</p>
+            <p class="text-sm text-muted">The <strong>action</strong> or description.</p>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4 subject-predicate-highlight" style="background: var(--color-bg); font-size: var(--text-lg); line-height: 2;">
+          <p><span class="subject">Crislyn</span> <span class="predicate">rides her bicycle every evening.</span></p>
+          <p><span class="subject">The big brown dog</span> <span class="predicate">chased the ball across the garden.</span></p>
+          <p><span class="subject">My favourite book</span> <span class="predicate">is about a magical world.</span></p>
+        </div>
+        <p class="text-sm text-muted mt-2"><span style="color: #1D4ED8;">Blue underline</span> = Subject, <span style="color: #BE185D;">Pink underline</span> = Predicate</p>
+
+        <div class="card p-4 mt-4" style="background: #FEE2E2; border-left: 4px solid var(--color-error);">
+          <strong style="color: #991B1B;">Not a sentence:</strong> "Running in the park." (No subject — WHO is running?) &nbsp;|&nbsp; "The tall girl." (No predicate — what about her?)
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 2: The Four Types -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">2</span>
+        <h3>The Four Types of Sentences</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Every sentence does one of four things. Let's learn each type!</p>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="sentence-type-card type-declarative">
+            <span class="type-icon">📢</span>
+            <h4>Declarative</h4>
+            <p>Makes a <strong>statement</strong> or tells a fact.</p>
+            <div class="punctuation">.</div>
+            <div class="examples">"Crislyn goes to school in Bahrain."</div>
+          </div>
+
+          <div class="sentence-type-card type-interrogative">
+            <span class="type-icon">❓</span>
+            <h4>Interrogative</h4>
+            <p>Asks a <strong>question</strong>.</p>
+            <div class="punctuation">?</div>
+            <div class="examples">"Where is your school?"</div>
+          </div>
+
+          <div class="sentence-type-card type-exclamatory">
+            <span class="type-icon">😲</span>
+            <h4>Exclamatory</h4>
+            <p>Shows strong <strong>feeling or emotion</strong>.</p>
+            <div class="punctuation">!</div>
+            <div class="examples">"What a beautiful day it is!"</div>
+          </div>
+
+          <div class="sentence-type-card type-imperative">
+            <span class="type-icon">👉</span>
+            <h4>Imperative</h4>
+            <p>Gives a <strong>command or request</strong>.</p>
+            <div class="punctuation">. or !</div>
+            <div class="examples">"Please close the door."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 3: Declarative Deep Dive -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #1D4ED8, #60A5FA);">
+        <span class="lesson-number">3</span>
+        <h3>Declarative Sentences (Statements)</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>A declarative sentence <strong>tells something</strong>. It shares a fact, opinion, or piece of information. It always ends with a <strong>full stop (.)</strong></p>
+
+        <div class="mt-4">
+          <div class="sentence-example" style="border-left-color: #3B82F6;">
+            "The Earth revolves around the Sun." <span class="type-label label-declarative">Fact</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #3B82F6;">
+            "I like playing with Legos." <span class="type-label label-declarative">Opinion</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #3B82F6;">
+            "Bahrain is an island country in the Middle East." <span class="type-label label-declarative">Information</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #3B82F6;">
+            "She does not like rainy days." <span class="type-label label-declarative">Negative statement</span>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #DBEAFE; border-left: 4px solid #3B82F6;">
+          <strong style="color: #1D4ED8;">Key Signs:</strong> Tells you something. Ends with a full stop (.). Can be positive or negative.
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 4: Interrogative Deep Dive -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #BE185D, #F472B6);">
+        <span class="lesson-number">4</span>
+        <h3>Interrogative Sentences (Questions)</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>An interrogative sentence <strong>asks a question</strong>. It always ends with a <strong>question mark (?)</strong></p>
+
+        <div class="mt-4">
+          <div class="sentence-example" style="border-left-color: #EC4899;">
+            "What is your name?" <span class="type-label label-interrogative">Wh- question</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #EC4899;">
+            "Did you finish your homework?" <span class="type-label label-interrogative">Yes/No question</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #EC4899;">
+            "Where are you going after school?" <span class="type-label label-interrogative">Wh- question</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #EC4899;">
+            "Can I borrow your pencil?" <span class="type-label label-interrogative">Yes/No question</span>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #FCE7F3; border-left: 4px solid #EC4899;">
+          <strong style="color: #BE185D;">Key Signs:</strong> Asks something. Ends with a question mark (?). Often starts with: Who, What, Where, When, Why, How, Is, Are, Do, Did, Can, Will.
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 5: Exclamatory Deep Dive -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #B45309, #FBBF24);">
+        <span class="lesson-number">5</span>
+        <h3>Exclamatory Sentences (Strong Feelings)</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>An exclamatory sentence shows <strong>strong emotion</strong> — surprise, joy, anger, excitement, or fear. It ends with an <strong>exclamation mark (!)</strong></p>
+
+        <div class="mt-4">
+          <div class="sentence-example" style="border-left-color: #F59E0B;">
+            "What a wonderful surprise!" <span class="type-label label-exclamatory">Surprise</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #F59E0B;">
+            "How beautiful this garden is!" <span class="type-label label-exclamatory">Admiration</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #F59E0B;">
+            "I can't believe we won the match!" <span class="type-label label-exclamatory">Excitement</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #F59E0B;">
+            "Ouch! That really hurts!" <span class="type-label label-exclamatory">Pain</span>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #FEF3C7; border-left: 4px solid #F59E0B;">
+          <strong style="color: #B45309;">Key Signs:</strong> Shows strong feeling. Ends with an exclamation mark (!). Often starts with: What, How, or an interjection (Wow, Ouch, Hurray).
+        </div>
+
+        <div class="card p-4 mt-3" style="background: #FEE2E2; border-left: 4px solid var(--color-error);">
+          <strong style="color: #991B1B;">Tricky!</strong> Not every sentence with "!" is exclamatory. "Stop right there!" is <strong>imperative</strong> (a command), not exclamatory. The difference? Exclamatory expresses <em>emotion</em>, imperative gives an <em>order</em>.
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 6: Imperative Deep Dive -->
+    <div class="lesson-card fade-in-up delay-5">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0F766E, #2DD4BF);">
+        <span class="lesson-number">6</span>
+        <h3>Imperative Sentences (Commands & Requests)</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>An imperative sentence gives a <strong>command, order, instruction, or request</strong>. It usually ends with a <strong>full stop (.)</strong> but can end with <strong>!</strong> for strong commands.</p>
+
+        <div class="mt-4">
+          <div class="sentence-example" style="border-left-color: #14B8A6;">
+            "Please open your books to page 42." <span class="type-label label-imperative">Polite request</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #14B8A6;">
+            "Sit down and be quiet." <span class="type-label label-imperative">Command</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #14B8A6;">
+            "Mix the flour and sugar together." <span class="type-label label-imperative">Instruction</span>
+          </div>
+          <div class="sentence-example" style="border-left-color: #14B8A6;">
+            "Don't touch the hot stove!" <span class="type-label label-imperative">Warning</span>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #CCFBF1; border-left: 4px solid #14B8A6;">
+          <strong style="color: #0F766E;">Key Signs:</strong> Tells someone to DO something. The subject is usually hidden ("you" is understood). Often starts with a verb (Open, Close, Write, Don't...) or "Please".
+        </div>
+
+        <div class="card p-4 mt-3" style="background: #F3E8FF; border-left: 4px solid var(--color-primary);">
+          <strong style="color: var(--color-primary);">Hidden Subject:</strong> "Close the door." → Who should close it? <strong>You</strong> (understood). The full sentence is "(You) close the door." but we don't say "you" in imperative sentences!
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 7: Quick Comparison Chart -->
+    <div class="lesson-card enrichment fade-in-up delay-6">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">7</span>
+        <h3>Quick Comparison & Conversion</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Use this chart to quickly identify and convert between sentence types!</p>
+
+        <div style="overflow-x: auto; margin-top: var(--space-4);">
+          <table style="width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius-md); overflow: hidden;">
+            <thead>
+              <tr style="background: #0369A1; color: white;">
+                <th style="padding: 10px;">Type</th>
+                <th style="padding: 10px;">Purpose</th>
+                <th style="padding: 10px;">Ends with</th>
+                <th style="padding: 10px;">Often starts with</th>
+              </tr>
+            </thead>
+            <tbody style="text-align: center;">
+              <tr style="background: #DBEAFE;">
+                <td style="padding: 8px; font-weight: 700; color: #1D4ED8;">Declarative</td>
+                <td>States / tells</td><td><strong>.</strong></td><td>Subject (noun/pronoun)</td>
+              </tr>
+              <tr style="background: #FCE7F3;">
+                <td style="padding: 8px; font-weight: 700; color: #BE185D;">Interrogative</td>
+                <td>Asks</td><td><strong>?</strong></td><td>Who, What, Where, Is, Do, Can</td>
+              </tr>
+              <tr style="background: #FEF3C7;">
+                <td style="padding: 8px; font-weight: 700; color: #B45309;">Exclamatory</td>
+                <td>Expresses emotion</td><td><strong>!</strong></td><td>What a, How, Wow, Hurray</td>
+              </tr>
+              <tr style="background: #CCFBF1;">
+                <td style="padding: 8px; font-weight: 700; color: #0F766E;">Imperative</td>
+                <td>Commands / requests</td><td><strong>. or !</strong></td><td>Verb or "Please"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="mt-6 mb-4">Converting Between Types</h4>
+        <div class="convert-box">
+          <div><span class="type-label label-declarative">Declarative</span> "She closes the window."</div>
+          <div class="convert-arrow">↓ convert to ↓</div>
+          <div><span class="type-label label-interrogative">Interrogative</span> "Does she close the window?"</div>
+          <div class="convert-arrow">↓ convert to ↓</div>
+          <div><span class="type-label label-imperative">Imperative</span> "Close the window."</div>
+          <div class="convert-arrow">↓ convert to ↓</div>
+          <div><span class="type-label label-exclamatory">Exclamatory</span> "What a cold room this is!"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRACTICE ==================== -->
+  <div class="tab-content" id="practice">
+    <div class="section-header">
+      <h2>✏️ Practice</h2>
+      <p>Test your understanding of sentence types!</p>
+    </div>
+
+    <!-- Exercise 1: Identify the Type -->
+    <div class="exercise-card fade-in-up" id="ex-identify">
+      <h3><span class="exercise-number">1</span> Identify the Sentence Type</h3>
+      <p class="text-muted mb-4">Choose the correct type for each sentence.</p>
+      <div id="ex-identify-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('identify')">Check Answers ✓</button>
+      <div id="ex-identify-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 2: Add the Punctuation -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-punctuation">
+      <h3><span class="exercise-number">2</span> Add the Correct Punctuation</h3>
+      <p class="text-muted mb-4">Each sentence is missing its ending punctuation. Add . or ? or !</p>
+      <div id="ex-punctuation-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('punctuation')">Check Answers ✓</button>
+      <div id="ex-punctuation-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 3: Convert the Sentence -->
+    <div class="exercise-card fade-in-up delay-2" id="ex-convert">
+      <h3><span class="exercise-number">3</span> Convert the Sentence</h3>
+      <p class="text-muted mb-4">Change each sentence to the type shown in brackets.</p>
+      <div id="ex-convert-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('convert')">Check Answers ✓</button>
+      <div id="ex-convert-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 4: True or False -->
+    <div class="exercise-card fade-in-up delay-3" id="ex-tf">
+      <h3><span class="exercise-number">4</span> True or False</h3>
+      <p class="text-muted mb-4">Decide if each statement about sentences is true or false.</p>
+      <div id="ex-tf-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('tf')">Check Answers ✓</button>
+      <div id="ex-tf-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 5: Subject & Predicate -->
+    <div class="exercise-card fade-in-up delay-4" id="ex-sp">
+      <h3><span class="exercise-number">5</span> Find the Subject</h3>
+      <p class="text-muted mb-4">Write the subject of each sentence.</p>
+      <div id="ex-sp-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('sp')">Check Answers ✓</button>
+      <div id="ex-sp-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 6: Write Your Own -->
+    <div class="exercise-card fade-in-up delay-5" id="ex-write">
+      <h3><span class="exercise-number">6</span> Write Your Own Sentences</h3>
+      <p class="text-muted mb-4">Write one sentence of each type about the given topic.</p>
+      <div id="ex-write-area">
+        <div class="card p-4 mb-4" style="background: var(--color-bg-alt); text-align: center;">
+          <strong>Topic:</strong> <span style="font-size: var(--text-xl); color: var(--color-primary);" id="write-topic">Your School</span>
+          <button class="btn btn-sm btn-outline" style="margin-left: 12px;" onclick="newWriteTopic()">New Topic 🔄</button>
+        </div>
+        <div class="exercise-question">
+          <div class="q-label">1. Write a <span class="type-label label-declarative">Declarative</span> sentence:</div>
+          <input type="text" class="exercise-input" style="width: 100%;" id="write-dec" placeholder="A statement about the topic..." autocomplete="off">
+        </div>
+        <div class="exercise-question">
+          <div class="q-label">2. Write an <span class="type-label label-interrogative">Interrogative</span> sentence:</div>
+          <input type="text" class="exercise-input" style="width: 100%;" id="write-int" placeholder="A question about the topic..." autocomplete="off">
+        </div>
+        <div class="exercise-question">
+          <div class="q-label">3. Write an <span class="type-label label-exclamatory">Exclamatory</span> sentence:</div>
+          <input type="text" class="exercise-input" style="width: 100%;" id="write-exc" placeholder="Show strong feeling about the topic..." autocomplete="off">
+        </div>
+        <div class="exercise-question">
+          <div class="q-label">4. Write an <span class="type-label label-imperative">Imperative</span> sentence:</div>
+          <input type="text" class="exercise-input" style="width: 100%;" id="write-imp" placeholder="Give a command or request about the topic..." autocomplete="off">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-4" onclick="checkWriteExercise()">Check My Sentences ✓</button>
+      <div id="ex-write-score" class="hidden"></div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ ==================== -->
+  <div class="tab-content" id="quiz">
+    <div class="section-header">
+      <h2>🎯 Quiz</h2>
+      <p>Test your mastery of sentence types!</p>
+    </div>
+    <div class="tier-selector">
+      <button class="tier-btn explorer active" onclick="startQuiz('explorer')">🌿 Explorer</button>
+      <button class="tier-btn adventurer" onclick="startQuiz('adventurer')">⚔️ Adventurer</button>
+      <button class="tier-btn champion" onclick="startQuiz('champion')">👑 Champion</button>
+    </div>
+    <div id="quiz-area">
+      <div class="text-center p-8">
+        <p style="font-size: var(--text-xl);">Select a tier and click to begin!</p>
+        <button class="btn btn-primary btn-lg mt-4" onclick="startQuiz('explorer')">Start Explorer Quiz 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WORKSHEET ==================== -->
+  <div class="tab-content" id="worksheet">
+    <div class="section-header">
+      <h2>🖨️ Worksheet</h2>
+      <p>Print a worksheet to practise on paper!</p>
+    </div>
+    <div class="text-center">
+      <div class="card p-8" style="max-width: 500px; margin: 0 auto;">
+        <div style="font-size: 4rem;">📝</div>
+        <h3 class="mt-4">Chapter 1: Kinds of Sentences</h3>
+        <p class="text-muted mt-2">Identify types, add punctuation, convert sentences, find subjects, and more!</p>
+        <a href="../worksheets/en01-sentences-worksheet.html" target="_blank" class="btn btn-lg mt-6" style="background: linear-gradient(135deg, #0369A1, #38BDF8); color: white;">
+          Open Worksheet 🖨️
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/quiz-engine.js"></script>
+<script src="../js/progress.js"></script>
+
+<script>
+// ============================================
+// PRACTICE EXERCISES
+// ============================================
+const exerciseData = {};
+
+function shuffle(arr) { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function generateExercises() {
+  generateIdentifyExercise();
+  generatePunctuationExercise();
+  generateConvertExercise();
+  generateTFExercise();
+  generateSPExercise();
+}
+
+function generateIdentifyExercise() {
+  const items = shuffle([
+    { s: 'The sun rises in the east.', t: 'Declarative' },
+    { s: 'Where do you live?', t: 'Interrogative' },
+    { s: 'What a beautiful painting!', t: 'Exclamatory' },
+    { s: 'Please pass the salt.', t: 'Imperative' },
+    { s: 'Crislyn loves playing with Legos.', t: 'Declarative' },
+    { s: 'Have you finished your homework?', t: 'Interrogative' },
+    { s: 'How amazing this show is!', t: 'Exclamatory' },
+    { s: 'Close the door quietly.', t: 'Imperative' },
+    { s: 'Bahrain is an island country.', t: 'Declarative' },
+    { s: 'Can I borrow your eraser?', t: 'Interrogative' },
+    { s: 'What a goal that was!', t: 'Exclamatory' },
+    { s: 'Don\'t run in the corridor.', t: 'Imperative' },
+    { s: 'She does not like cold weather.', t: 'Declarative' },
+    { s: 'Why are you crying?', t: 'Interrogative' },
+    { s: 'Sit down immediately.', t: 'Imperative' },
+    { s: 'Hurray! We won the match!', t: 'Exclamatory' },
+  ]).slice(0, 12);
+  exerciseData.identify = items;
+
+  document.getElementById('ex-identify-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="identify-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <em>"${item.s}"</em>
+        <select class="exercise-input" id="identify-a${i}" style="width: 160px;">
+          <option value="">Choose...</option>
+          <option value="Declarative">Declarative</option>
+          <option value="Interrogative">Interrogative</option>
+          <option value="Exclamatory">Exclamatory</option>
+          <option value="Imperative">Imperative</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generatePunctuationExercise() {
+  const items = shuffle([
+    { s: 'The cat sat on the mat', p: '.', t: 'Declarative' },
+    { s: 'Where is my pencil box', p: '?', t: 'Interrogative' },
+    { s: 'What a lovely day it is', p: '!', t: 'Exclamatory' },
+    { s: 'Please bring your books tomorrow', p: '.', t: 'Imperative' },
+    { s: 'How old are you', p: '?', t: 'Interrogative' },
+    { s: 'She sings very well', p: '.', t: 'Declarative' },
+    { s: 'How tall that building is', p: '!', t: 'Exclamatory' },
+    { s: 'Open your textbook to page ten', p: '.', t: 'Imperative' },
+    { s: 'Did you eat your lunch', p: '?', t: 'Interrogative' },
+    { s: 'What an incredible goal', p: '!', t: 'Exclamatory' },
+  ]).slice(0, 8);
+  exerciseData.punctuation = items;
+
+  document.getElementById('ex-punctuation-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="punctuation-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        "${item.s}
+        <select class="exercise-input" id="punctuation-a${i}" style="width: 60px; text-align: center; font-size: var(--text-xl);">
+          <option value="">?</option>
+          <option value=".">.</option>
+          <option value="?">?</option>
+          <option value="!">!</option>
+        </select>
+        "
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateConvertExercise() {
+  const items = [
+    { s: 'She is a good singer.', target: 'Interrogative', answer: 'Is she a good singer?' },
+    { s: 'You are coming to the party.', target: 'Interrogative', answer: 'Are you coming to the party?' },
+    { s: 'Close the window.', target: 'Interrogative', answer: 'Will you close the window?' },
+    { s: 'This is a beautiful garden.', target: 'Exclamatory', answer: 'What a beautiful garden this is!' },
+    { s: 'He runs very fast.', target: 'Exclamatory', answer: 'How fast he runs!' },
+    { s: 'You should drink water.', target: 'Imperative', answer: 'Drink water.' },
+  ];
+  exerciseData.convert = items;
+
+  document.getElementById('ex-convert-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="convert-q${i}">
+      <div class="q-label">Q${i+1}. Change to <strong>${item.target}</strong>:</div>
+      <div style="font-style: italic; margin-bottom: 6px;">"${item.s}"</div>
+      <input type="text" class="exercise-input" style="width: 100%;" id="convert-a${i}" placeholder="Rewrite as ${item.target.toLowerCase()}..." autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generateTFExercise() {
+  const items = shuffle([
+    { s: 'A declarative sentence always ends with a full stop.', a: true },
+    { s: 'An interrogative sentence gives a command.', a: false },
+    { s: 'Exclamatory sentences show strong emotions.', a: true },
+    { s: 'Imperative sentences always end with an exclamation mark.', a: false },
+    { s: 'The subject of an imperative sentence is usually "you" (understood).', a: true },
+    { s: '"What a beautiful sunset!" is a declarative sentence.', a: false },
+    { s: 'A sentence must have both a subject and a predicate.', a: true },
+    { s: '"Please sit down." is an interrogative sentence.', a: false },
+    { s: 'Questions always start with question words like Who, What, Where.', a: false },
+    { s: '"Don\'t touch that!" is an imperative sentence.', a: true },
+  ]).slice(0, 8);
+  exerciseData.tf = items;
+
+  document.getElementById('ex-tf-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="tf-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        "${item.s}"
+        <select class="exercise-input" id="tf-a${i}" style="width: 100px;">
+          <option value="">Choose...</option>
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateSPExercise() {
+  const items = shuffle([
+    { s: 'Crislyn rides her bicycle.', subj: 'Crislyn' },
+    { s: 'The tall girl won the race.', subj: 'The tall girl' },
+    { s: 'My favourite book is about dragons.', subj: 'My favourite book' },
+    { s: 'The big brown dog chased the cat.', subj: 'The big brown dog' },
+    { s: 'Birds fly south in winter.', subj: 'Birds' },
+    { s: 'Her mother cooks delicious food.', subj: 'Her mother' },
+    { s: 'The students finished the test early.', subj: 'The students' },
+    { s: 'A beautiful rainbow appeared in the sky.', subj: 'A beautiful rainbow' },
+  ]).slice(0, 6);
+  exerciseData.sp = items;
+
+  document.getElementById('ex-sp-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="sp-q${i}">
+      <div class="q-label">Q${i+1}. "${item.s}"</div>
+      <div class="flex gap-2" style="align-items: center;">
+        <label class="text-sm" style="font-weight: 700;">Subject:</label>
+        <input type="text" class="exercise-input" style="width: 250px;" id="sp-a${i}" placeholder="Who or what..." autocomplete="off">
+      </div>
+    </div>
+  `).join('');
+}
+
+// Write topics
+const writeTopics = ['Your School', 'Rainy Days', 'Your Best Friend', 'Your Favourite Food', 'The Park', 'A Birthday Party', 'Morning Time', 'Your Pet', 'Bahrain', 'Playing Games'];
+function newWriteTopic() { document.getElementById('write-topic').textContent = writeTopics[Math.floor(Math.random()*writeTopics.length)]; }
+
+function checkWriteExercise() {
+  const dec = document.getElementById('write-dec').value.trim();
+  const int = document.getElementById('write-int').value.trim();
+  const exc = document.getElementById('write-exc').value.trim();
+  const imp = document.getElementById('write-imp').value.trim();
+
+  let correct = 0, total = 4;
+  if (dec && dec.endsWith('.')) correct++;
+  if (int && int.endsWith('?')) correct++;
+  if (exc && exc.endsWith('!')) correct++;
+  if (imp && (imp.endsWith('.') || imp.endsWith('!'))) correct++;
+
+  const pct = Math.round((correct/total)*100);
+  const scoreEl = document.getElementById('ex-write-score');
+  scoreEl.className = 'exercise-score';
+  scoreEl.innerHTML = `Punctuation check: ${correct}/${total} correct endings. ${pct>=75?'⭐ Great punctuation!':'💡 Check: statements end with ., questions with ?, exclamations with !, commands with . or !'}`;
+  if (pct >= 75) { Confetti.launch(30); AudioManager.playTone('correct'); }
+  if (typeof Progress !== 'undefined') Progress.trackExerciseComplete('write', correct, total);
+}
+
+// --- Check Exercises ---
+function checkExercise(type) {
+  let correct = 0, total = 0;
+
+  if (type === 'identify') {
+    exerciseData.identify.forEach((item, i) => {
+      total++; const el = document.getElementById(`identify-q${i}`);
+      const val = document.getElementById(`identify-a${i}`).value;
+      if (val === item.t) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.t}</div>`; }
+      document.getElementById(`identify-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'punctuation') {
+    exerciseData.punctuation.forEach((item, i) => {
+      total++; const el = document.getElementById(`punctuation-q${i}`);
+      const val = document.getElementById(`punctuation-a${i}`).value;
+      if (val === item.p) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.p} (${item.t})</div>`; }
+      document.getElementById(`punctuation-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'convert') {
+    exerciseData.convert.forEach((item, i) => {
+      total++; const el = document.getElementById(`convert-q${i}`);
+      const val = document.getElementById(`convert-a${i}`).value.trim();
+      const userClean = val.toLowerCase().replace(/\s+/g,' ');
+      const expectedClean = item.answer.toLowerCase().replace(/\s+/g,' ');
+      if (userClean === expectedClean) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Suggested answer: ${item.answer}</div>`; }
+      document.getElementById(`convert-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'tf') {
+    exerciseData.tf.forEach((item, i) => {
+      total++; const el = document.getElementById(`tf-q${i}`);
+      const val = document.getElementById(`tf-a${i}`).value;
+      if (val === String(item.a)) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.a ? 'True' : 'False'}</div>`; }
+      document.getElementById(`tf-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'sp') {
+    exerciseData.sp.forEach((item, i) => {
+      total++; const el = document.getElementById(`sp-q${i}`);
+      const val = document.getElementById(`sp-a${i}`).value.trim().toLowerCase();
+      if (val === item.subj.toLowerCase()) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.subj}</div>`; }
+      document.getElementById(`sp-a${i}`).disabled = true;
+    });
+  }
+
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+  const scoreEl = document.getElementById(`ex-${type}-score`);
+  scoreEl.className = 'exercise-score';
+  scoreEl.innerHTML = `Score: ${correct}/${total} (${pct}%) ${pct>=80?'⭐ Excellent!':pct>=60?'👍 Good job!':'💪 Keep practising!'}`;
+  if (pct >= 80) { Confetti.launch(50); AudioManager.playTone('correct'); } else { AudioManager.playTone('click'); }
+  if (typeof Progress !== 'undefined') Progress.trackExerciseComplete(type, correct, total);
+}
+
+// ============================================
+// QUIZ DATA
+// ============================================
+function generateQuizQuestions() {
+  const q = [];
+
+  // --- EXPLORER ---
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"The sky is blue." — What type of sentence?',options:['Declarative','Interrogative','Exclamatory','Imperative'],answer:'Declarative',hint:'It tells us a fact. Ends with a full stop.',explanation:'This is a declarative sentence — it makes a statement.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"Where do you live?" — What type?',options:['Interrogative','Declarative','Imperative','Exclamatory'],answer:'Interrogative',hint:'It asks something. What punctuation does it end with?',explanation:'This is an interrogative sentence — it asks a question.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"What a wonderful surprise!" — What type?',options:['Exclamatory','Interrogative','Declarative','Imperative'],answer:'Exclamatory',hint:'Strong feeling of surprise. Ends with !',explanation:'This is exclamatory — it expresses strong emotion (surprise).'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"Close the door." — What type?',options:['Imperative','Declarative','Exclamatory','Interrogative'],answer:'Imperative',hint:'It tells someone to DO something.',explanation:'This is imperative — it gives a command.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which punctuation ends a declarative sentence?',options:['.','?','!',','],answer:'.',hint:'Declarative = statement = full stop.',explanation:'Declarative sentences end with a full stop (.)'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which punctuation ends an interrogative sentence?',options:['?','.','!',':'],answer:'?',hint:'You\'re asking a question...',explanation:'Interrogative sentences end with a question mark (?)'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'An imperative sentence gives a command or request.',answer:'true',hint:'Think: "Please sit down." or "Open your books."',explanation:'True! Imperative sentences give commands, orders, or requests.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Every exclamatory sentence starts with "What" or "How".',answer:'false',hint:'What about "Hurray! We won!" or "I can\'t believe it!"?',explanation:'False! Many exclamatory sentences start with What/How, but not all. "Hurray!", "Ouch!", "I love it!" are also exclamatory.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"Please help me carry this bag." — What type?',options:['Imperative','Declarative','Interrogative','Exclamatory'],answer:'Imperative',hint:'"Please" is a polite way to give a request/command.',explanation:'This is imperative — it makes a polite request.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'What are the two parts of every sentence?',options:['Subject and Predicate','Noun and Verb','Question and Answer','Beginning and End'],answer:'Subject and Predicate',hint:'One part tells WHO, the other tells WHAT THEY DO.',explanation:'Every sentence has a Subject (who/what) and Predicate (what they do/are).'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"Did you see the rainbow?" — What type?',options:['Interrogative','Declarative','Exclamatory','Imperative'],answer:'Interrogative',hint:'It\'s asking something. Check the punctuation.',explanation:'This is interrogative — it asks a question.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"Crislyn enjoys reading books." — What type?',options:['Declarative','Imperative','Interrogative','Exclamatory'],answer:'Declarative',hint:'It tells us something about Crislyn. Ends with a full stop.',explanation:'Declarative — it states a fact about Crislyn.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'"Running in the park." is a complete sentence.',answer:'false',hint:'Who is running? There\'s no subject!',explanation:'False! It has no subject. A sentence needs both a subject and a predicate.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'"Don\'t touch the hot pan!" — What type?',options:['Imperative','Exclamatory','Declarative','Interrogative'],answer:'Imperative',hint:'It\'s telling someone NOT to do something — a warning/command.',explanation:'Imperative — it gives a strong command/warning. Even though it ends with !, it\'s giving an order.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which sentence is imperative?',options:['Read the first chapter.','She reads every day.','What are you reading?','What an amazing book!'],answer:'Read the first chapter.',hint:'Which one tells you to DO something?',explanation:'"Read the first chapter." is imperative — it gives an instruction.'});
+
+  // --- ADVENTURER ---
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'"How fast he runs!" — This is:',options:['Exclamatory','Interrogative','Declarative','Imperative'],answer:'Exclamatory',hint:'Despite starting with "How", it\'s not asking anything — it\'s expressing amazement!',explanation:'Exclamatory — "How fast he runs!" expresses strong admiration. It\'s NOT a question (no question mark).'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which is the subject in: "The little grey kitten drank the milk."?',options:['The little grey kitten','drank','the milk','little grey'],answer:'The little grey kitten',hint:'WHO drank the milk?',explanation:'The subject is "The little grey kitten" — it\'s who performs the action.'});
+  q.push({tier:'adventurer',type:'fill-blank',points:15,question:'Change to interrogative: "She is a good dancer."',answer:['Is she a good dancer?'],placeholder:'Type the question...',hint:'Move "is" to the beginning.',explanation:'"Is she a good dancer?"'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'"Stop!" — This short sentence is:',options:['Imperative','Exclamatory','Declarative','Interrogative'],answer:'Imperative',hint:'It\'s telling someone to STOP — that\'s a command.',explanation:'Imperative — "Stop!" is a command, even though it ends with ! and shows urgency.'});
+  q.push({tier:'adventurer',type:'true-false',points:15,question:'The subject of "Sit down." is "you" (understood).',answer:'true',hint:'Who should sit down? YOU! But we don\'t say it.',explanation:'True! In imperative sentences, the subject "you" is understood but not stated.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which sentence has WRONG punctuation?',options:['"Where are you going."','"I love ice cream.",'"What a lovely day!",'"Please close the window."'],answer:'"Where are you going."',hint:'A question should end with what punctuation?',explanation:'"Where are you going." should end with ? not . — it\'s a question!'});
+  q.push({tier:'adventurer',type:'fill-blank',points:15,question:'Change to exclamatory: "This garden is very beautiful."',answer:['What a beautiful garden this is!','How beautiful this garden is!'],placeholder:'Type the exclamation...',hint:'Start with "What a" or "How" and end with !',explanation:'"What a beautiful garden this is!" or "How beautiful this garden is!"'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'"Could you please pass the water?" — This is:',options:['Interrogative','Imperative','Declarative','Exclamatory'],answer:'Interrogative',hint:'Look at the punctuation — it ends with ?',explanation:'Even though it\'s a polite request, it\'s formed as a question (ends with ?), so it\'s interrogative.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'How many sentence types are there?',options:['4','3','5','2'],answer:'4',hint:'Declarative, Interrogative, Exclamatory, and...',explanation:'Four types: Declarative, Interrogative, Exclamatory, and Imperative.'});
+  q.push({tier:'adventurer',type:'true-false',points:15,question:'"She doesn\'t like coffee." is an interrogative sentence.',answer:'false',hint:'Is it asking a question? What does it end with?',explanation:'False! It\'s declarative — it makes a statement (a negative one). It ends with a full stop, not a question mark.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which word BEST describes what an exclamatory sentence does?',options:['Expresses strong feeling','Gives information','Asks for something','Commands action'],answer:'Expresses strong feeling',hint:'Joy, surprise, anger, excitement...',explanation:'Exclamatory sentences express strong feelings or emotions.'});
+  q.push({tier:'adventurer',type:'fill-blank',points:15,question:'Change to imperative: "You should close your books."',answer:['Close your books.'],placeholder:'Type the command...',hint:'Remove the subject and helper verb. Just give the order.',explanation:'"Close your books." — direct command.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'"What time does the train arrive?" — The subject is:',options:['the train','What time','does','arrive'],answer:'the train',hint:'WHO or WHAT arrives?',explanation:'The subject is "the train" — it\'s what performs the action of arriving.'});
+  q.push({tier:'adventurer',type:'true-false',points:15,question:'An imperative sentence can end with either a full stop or an exclamation mark.',answer:'true',hint:'"Please sit down." vs "Stop right there!"',explanation:'True! Polite requests end with . and strong commands can end with !'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'"Hurray! We won the match!" — This is:',options:['Exclamatory','Imperative','Interrogative','Declarative'],answer:'Exclamatory',hint:'Is this expressing strong emotion (joy)?',explanation:'Exclamatory — it expresses strong joy/excitement about winning.'});
+
+  // --- CHAMPION ---
+  q.push({tier:'champion',type:'mcq',points:20,question:'"Never give up on your dreams." — What type?',options:['Imperative','Declarative','Exclamatory','Interrogative'],answer:'Imperative',hint:'Is this giving advice/instruction? The subject "you" is hidden.',explanation:'Imperative — it gives advice/instruction. "(You) never give up on your dreams."'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Which is BOTH a correct AND an exclamatory version of "The sunset is beautiful"?',options:['What a beautiful sunset!','Is the sunset beautiful?','The sunset is beautiful.','Look at the sunset.'],answer:'What a beautiful sunset!',hint:'Start with "What a" and add emotion.',explanation:'"What a beautiful sunset!" correctly converts the declarative to exclamatory.'});
+  q.push({tier:'champion',type:'fill-blank',points:20,question:'Identify ALL four types in order:\n"Close the window. It is cold. How freezing it is! Can you feel the wind?"',answer:['Imperative, Declarative, Exclamatory, Interrogative','imperative declarative exclamatory interrogative'],matchType:'fuzzy',placeholder:'Type all four types...',hint:'Command, statement, emotion, question.',explanation:'Close the window (Imperative). It is cold (Declarative). How freezing it is (Exclamatory)! Can you feel the wind (Interrogative)?'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'"Let\'s go to the park." — This is BEST classified as:',options:['Imperative (suggestion)','Declarative','Interrogative','Exclamatory'],answer:'Imperative (suggestion)',hint:'"Let\'s" = Let us = a suggestion for action.',explanation:'Imperative — "Let\'s" is a form of suggestion/command, inviting action.'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'"What is your name?" is exclamatory because it starts with "What".',answer:'false',hint:'Does it express emotion or ask a question? Check the punctuation.',explanation:'False! It ends with ? and asks for information — it\'s interrogative. Starting with "What" doesn\'t automatically make it exclamatory.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Which sentence is INCORRECTLY classified?',options:['"Please sit down." — Declarative','"Bahrain is beautiful." — Declarative','"Where is she?" — Interrogative','"What a mess!" — Exclamatory'],answer:'"Please sit down." — Declarative',hint:'Is "Please sit down" telling a fact or giving a request?',explanation:'"Please sit down." is IMPERATIVE (a request), not declarative!'});
+  q.push({tier:'champion',type:'fill-blank',points:20,question:'Change to declarative: "Is she coming to the party?"',answer:['She is coming to the party.'],placeholder:'Type the statement...',hint:'Swap the order of "Is" and "she", remove the question mark.',explanation:'"She is coming to the party." — rearranged into a statement.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'A negative imperative sentence starts with:',options:["Don't / Do not","Isn't","Won't","Hasn't"],answer:"Don't / Do not",hint:'"Don\'t run!" "Do not touch that!"',explanation:'Negative imperative sentences start with "Don\'t" or "Do not" — they tell someone NOT to do something.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'How many sentences are in this passage?\n"Wow! What a game that was. Did you see the final goal? The crowd went wild!"',options:['4','3','5','2'],answer:'4',hint:'Count the ending punctuation marks: each . ? or ! ends a sentence.',explanation:'4 sentences: "Wow!" (exclamatory), "What a game that was." (declarative — despite starting with "What"), "Did you see the final goal?" (interrogative), "The crowd went wild!" (exclamatory).'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'"What a game that was." is exclamatory because it starts with "What a".',answer:'false',hint:'Look at the punctuation at the end very carefully.',explanation:'False! It ends with a full stop (.), making it declarative. If it were "What a game that was!" with an exclamation mark, THEN it would be exclamatory. Punctuation matters!'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'"May I use your phone?" — Despite being polite, this is:',options:['Interrogative','Imperative','Declarative','Exclamatory'],answer:'Interrogative',hint:'It ends with ? — the form of the sentence determines its type.',explanation:'Interrogative — it\'s structured as a question and ends with ?. Even though it\'s a request, the sentence FORM is a question.'});
+  q.push({tier:'champion',type:'fill-blank',points:20,question:'Write an imperative sentence about homework:',answer:['finish your homework','do your homework','complete your homework'],matchType:'fuzzy',placeholder:'Write a command...',hint:'Give a command about homework. Start with a verb.',explanation:'Examples: "Finish your homework." / "Do your homework now." / "Complete your homework before dinner."'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Which pair shows the SAME sentence changed from declarative to interrogative?',options:['"She is kind." → "Is she kind?"','"Run fast." → "Can you run fast?"','"What a day!" → "What kind of day?"','"Close it." → "It is closed."'],answer:'"She is kind." → "Is she kind?"',hint:'The simplest conversion: swap subject and verb.',explanation:'Correct conversion: "She is kind." (declarative) → "Is she kind?" (interrogative) — subject and verb swapped.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'The predicate of "My grandmother makes the best cookies in the world." is:',options:['makes the best cookies in the world','My grandmother','the best cookies','in the world'],answer:'makes the best cookies in the world',hint:'The predicate is everything AFTER the subject.',explanation:'Subject = "My grandmother". Predicate = "makes the best cookies in the world" (everything the subject does).'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'A sentence can be both exclamatory and interrogative at the same time.',answer:'false',hint:'Each sentence has ONE type based on its structure and punctuation.',explanation:'False! A sentence is classified as one type. It either asks (?) or exclaims (!), not both. Some grammarians debate edge cases, but for Grade 4, each sentence has one type.'});
+
+  return q;
+}
+
+function startQuiz(tier) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tier-btn.${tier}`).classList.add('active');
+  const quiz = new QuizEngine({
+    containerId: 'quiz-area', questions: generateQuizQuestions(), tier, questionCount: 15,
+    onComplete: (results) => {
+      if (typeof Progress !== 'undefined') Progress.trackQuizComplete(tier, results.percentage, results.timeTaken);
+      if (results.percentage >= 70 && tier === 'explorer') Toast.show('Adventurer unlocked! ⚔️', 'badge', 4000);
+      if (results.percentage >= 80 && tier === 'adventurer') Toast.show('Champion unlocked! 👑', 'badge', 4000);
+    }
+  });
+  quiz.start();
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initLessonCards();
+  generateExercises();
+  if (typeof Progress !== 'undefined') {
+    Progress.init();
+    document.querySelectorAll('.lesson-card-header').forEach((h, i) => {
+      h.addEventListener('click', () => { if (h.parentElement.classList.contains('open')) Progress.trackLessonOpen(`en01_lesson_${i+1}`); });
+    });
+    const wsLink = document.querySelector('a[href*="worksheet"]');
+    if (wsLink) wsLink.addEventListener('click', () => Progress.trackWorksheetOpen());
+  }
+});
+</script>
+
+</body>
+</html>
