@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 1: Nouns — Crislyn's English</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+
+  <style>
+    .interactive-area {
+      background: var(--color-bg); border-radius: var(--radius-md);
+      padding: var(--space-6); margin: var(--space-4) 0; border: 2px solid var(--color-border-light);
+    }
+
+    .noun-type-card {
+      padding: var(--space-5); border-radius: var(--radius-md); text-align: center;
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .noun-type-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .noun-type-card .type-icon { font-size: 2.5rem; margin-bottom: var(--space-2); }
+    .noun-type-card h4 { margin-bottom: var(--space-2); }
+    .noun-type-card p { font-size: var(--text-sm); color: var(--color-text-light); margin-bottom: 0; }
+    .noun-type-card .examples { font-weight: 700; color: var(--color-primary); font-size: var(--text-sm); margin-top: var(--space-2); }
+
+    .type-common { background: #DBEAFE; border: 2px solid #93C5FD; }
+    .type-common h4 { color: #1D4ED8; }
+    .type-proper { background: #FCE7F3; border: 2px solid #F9A8D4; }
+    .type-proper h4 { color: #BE185D; }
+    .type-collective { background: #FEF3C7; border: 2px solid #FCD34D; }
+    .type-collective h4 { color: #B45309; }
+    .type-abstract { background: #EDE9FE; border: 2px solid #C4B5FD; }
+    .type-abstract h4 { color: #6D28D9; }
+    .type-material { background: #CCFBF1; border: 2px solid #5EEAD4; }
+    .type-material h4 { color: #0F766E; }
+
+    .plural-rule { padding: var(--space-3); background: var(--color-surface); border-radius: var(--radius-sm); margin-bottom: var(--space-2); border-left: 4px solid var(--color-primary-light); }
+    .plural-rule .rule { font-weight: 700; color: var(--color-primary); }
+    .plural-rule .example { font-size: var(--text-sm); color: var(--color-text-light); }
+
+    .word-bank { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; margin: var(--space-4) 0; }
+    .word-chip {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); font-weight: 700;
+      font-size: var(--text-sm); cursor: pointer; border: 2px solid var(--color-border);
+      background: var(--color-surface); transition: all var(--duration-normal) var(--ease-bounce);
+      user-select: none;
+    }
+    .word-chip:hover { transform: scale(1.05); box-shadow: var(--shadow-sm); }
+    .word-chip.selected { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+    .word-chip.correct { background: var(--color-success); color: white; border-color: var(--color-success); }
+    .word-chip.wrong { background: var(--color-error); color: white; border-color: var(--color-error); }
+
+    .sort-bucket {
+      min-height: 80px; border: 3px dashed var(--color-border); border-radius: var(--radius-md);
+      padding: var(--space-3); text-align: center;
+    }
+    .sort-bucket h4 { margin-bottom: var(--space-2); font-size: var(--text-sm); }
+
+    .exercise-question { padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md); margin-bottom: var(--space-3); border: 2px solid var(--color-border-light); transition: border-color var(--duration-normal); }
+    .exercise-question.answered-correct { border-color: var(--color-success); background: var(--color-success-light); }
+    .exercise-question.answered-wrong { border-color: var(--color-error); background: var(--color-error-light); }
+    .exercise-question .q-label { font-weight: 700; color: var(--color-primary); margin-bottom: var(--space-2); }
+
+    .exercise-input {
+      padding: var(--space-2) var(--space-3); border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+      font-size: var(--text-base); font-weight: 600; outline: none; transition: border-color var(--duration-normal);
+    }
+    .exercise-input:focus { border-color: var(--color-primary-light); }
+
+    .exercise-score {
+      display: flex; align-items: center; justify-content: center; gap: var(--space-4); padding: var(--space-4);
+      background: linear-gradient(135deg, #0369A1, #38BDF8); color: white; border-radius: var(--radius-md);
+      margin-top: var(--space-4); font-size: var(--text-lg); font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header" style="background: linear-gradient(135deg, #0369A1, #0284C7, #38BDF8);">
+  <div class="container">
+    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">📝 Chapter 1</div>
+    <h1 class="fade-in-up">Nouns</h1>
+    <p class="fade-in-up delay-1">Naming words — people, places, things, animals, feelings, and groups!</p>
+    <a href="../english.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to English</a>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="learn">📖 Learn</div>
+    <div class="tab" data-tab="practice">✏️ Practice</div>
+    <div class="tab" data-tab="quiz">🎯 Quiz</div>
+    <div class="tab" data-tab="worksheet">🖨️ Worksheet</div>
+  </div>
+
+  <!-- ==================== LEARN ==================== -->
+  <div class="tab-content active" id="learn">
+    <div class="section-header">
+      <h2>📖 Learn</h2>
+      <p>Discover the different types of nouns and how they work!</p>
+    </div>
+
+    <!-- Lesson 1: What is a Noun? -->
+    <div class="lesson-card open fade-in-up">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">1</span>
+        <h3>What is a Noun?</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg); font-weight: 600;">A <strong>noun</strong> is a <em>naming word</em>. It names a person, place, animal, thing, or idea.</p>
+        <div class="card p-5 mt-4" style="background: #EFF6FF; border: 2px solid #93C5FD;">
+          <p style="font-size: var(--text-lg); line-height: 2;">
+            <strong style="color: #BE185D;">Crislyn</strong> went to the <strong style="color: #1D4ED8;">park</strong> with her <strong style="color: #0F766E;">dog</strong>. She felt <strong style="color: #6D28D9;">happiness</strong> as she played with a <strong style="color: #B45309;">bunch</strong> of friends. The <strong style="color: #0F766E;">swings</strong> were made of <strong style="color: #059669;">iron</strong>.
+          </p>
+          <p class="text-sm text-muted mt-2">Every coloured word above is a noun! Can you spot why?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 2: Types of Nouns -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">2</span>
+        <h3>5 Types of Nouns</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <div class="grid-3 gap-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="noun-type-card type-common">
+            <div class="type-icon">📦</div>
+            <h4>Common Noun</h4>
+            <p>General names for people, places, things</p>
+            <div class="examples">girl, city, table, river</div>
+          </div>
+          <div class="noun-type-card type-proper">
+            <div class="type-icon">⭐</div>
+            <h4>Proper Noun</h4>
+            <p>Specific names — always CAPITALISED</p>
+            <div class="examples">Crislyn, Bahrain, Monday</div>
+          </div>
+          <div class="noun-type-card type-collective">
+            <div class="type-icon">👥</div>
+            <h4>Collective Noun</h4>
+            <p>Names for a GROUP of things</p>
+            <div class="examples">flock, team, bunch, swarm</div>
+          </div>
+          <div class="noun-type-card type-abstract">
+            <div class="type-icon">💭</div>
+            <h4>Abstract Noun</h4>
+            <p>Things you CANNOT see or touch</p>
+            <div class="examples">happiness, courage, freedom</div>
+          </div>
+          <div class="noun-type-card type-material">
+            <div class="type-icon">🪨</div>
+            <h4>Material Noun</h4>
+            <p>Substances things are made FROM</p>
+            <div class="examples">gold, wood, cotton, glass</div>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #FEF3C7; border-left: 4px solid var(--color-accent-dark);">
+          <h4 style="color: #92400E;">💡 Quick Test: Can you see it? Can you touch it?</h4>
+          <ul style="list-style: disc; padding-left: var(--space-6); line-height: 1.8; margin-top: var(--space-2);">
+            <li>If YES → it might be a <strong>common</strong>, <strong>proper</strong>, or <strong>material</strong> noun</li>
+            <li>If NO (it's a feeling/quality/idea) → it's an <strong>abstract</strong> noun</li>
+            <li>If it names a GROUP → it's a <strong>collective</strong> noun</li>
+            <li>If it starts with a CAPITAL letter (and isn't at the start of a sentence) → it's a <strong>proper</strong> noun</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 3: Singular & Plural -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">3</span>
+        <h3>Singular & Plural Nouns</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p><strong>Singular</strong> = one. <strong>Plural</strong> = more than one. Here are the rules:</p>
+        <div class="mt-4">
+          <div class="plural-rule"><div class="rule">Rule 1: Most nouns → add -s</div><div class="example">cat → cats, book → books, pen → pens</div></div>
+          <div class="plural-rule"><div class="rule">Rule 2: Ends in s, sh, ch, x, o → add -es</div><div class="example">bus → buses, dish → dishes, box → boxes, tomato → tomatoes</div></div>
+          <div class="plural-rule"><div class="rule">Rule 3: Consonant + y → change y to i, add -es</div><div class="example">baby → babies, city → cities, story → stories</div></div>
+          <div class="plural-rule"><div class="rule">Rule 4: Vowel + y → just add -s</div><div class="example">boy → boys, key → keys, toy → toys</div></div>
+          <div class="plural-rule"><div class="rule">Rule 5: Ends in f or fe → change to -ves</div><div class="example">leaf → leaves, knife → knives, wolf → wolves</div></div>
+          <div class="plural-rule" style="border-left-color: var(--color-coral);"><div class="rule" style="color: var(--color-coral);">Irregular! No rule — memorise these:</div><div class="example">child → children, man → men, woman → women, mouse → mice, tooth → teeth, foot → feet, goose → geese, ox → oxen</div></div>
+          <div class="plural-rule" style="border-left-color: var(--color-teal);"><div class="rule" style="color: var(--color-teal);">Same singular & plural:</div><div class="example">sheep → sheep, deer → deer, fish → fish</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 4: Countable & Uncountable -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">4</span>
+        <h3>Countable & Uncountable Nouns</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <div class="grid-2 gap-6">
+          <div class="card p-5" style="background: #DCFCE7; border: 2px solid var(--color-success);">
+            <h4 style="color: #166534;">✅ Countable</h4>
+            <p>Can be counted: one apple, two apples, three apples</p>
+            <p class="text-sm"><strong>Use:</strong> many, few, a few, several, a number of</p>
+            <p class="text-sm text-muted">Examples: books, chairs, eggs, pencils, dogs</p>
+          </div>
+          <div class="card p-5" style="background: #FEF3C7; border: 2px solid var(--color-accent-dark);">
+            <h4 style="color: #92400E;">⚠️ Uncountable</h4>
+            <p>Cannot be counted individually: water, rice, sugar</p>
+            <p class="text-sm"><strong>Use:</strong> much, little, a little, a lot of, some</p>
+            <p class="text-sm text-muted">Examples: water, milk, bread, furniture, information, homework</p>
+          </div>
+        </div>
+        <div class="card p-4 mt-4" style="background: #FEE2E2; border-left: 4px solid var(--color-error);">
+          <strong style="color: #991B1B;">Common Mistake:</strong> Never say "many furnitures" or "two homeworks" or "three informations"!
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 5: Possessive Nouns -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #0369A1, #38BDF8);">
+        <span class="lesson-number">5</span>
+        <h3>Possessive Nouns</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Possessive nouns show <strong>ownership</strong> — who something belongs to. We use an <strong>apostrophe (')</strong>.</p>
+        <div class="mt-4">
+          <div class="plural-rule"><div class="rule">Singular noun → add 's</div><div class="example">the girl's book, the dog's bone, Crislyn's pencil</div></div>
+          <div class="plural-rule"><div class="rule">Plural ending in -s → add just '</div><div class="example">the boys' team, the teachers' room, the students' bags</div></div>
+          <div class="plural-rule"><div class="rule">Plural NOT ending in -s → add 's</div><div class="example">the children's toys, the men's shoes, the women's club</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 6: Collective Nouns Gallery -->
+    <div class="lesson-card enrichment fade-in-up delay-5">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">6</span>
+        <h3>Collective Nouns Gallery</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Every group has a special name! Can you learn them all?</p>
+        <div class="grid-3 gap-3 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🐦</span><br><strong>a flock</strong> of birds</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🐺</span><br><strong>a pack</strong> of wolves</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🐝</span><br><strong>a swarm</strong> of bees</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🐟</span><br><strong>a school</strong> of fish</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🌸</span><br><strong>a bouquet</strong> of flowers</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🍇</span><br><strong>a bunch</strong> of grapes</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">⚽</span><br><strong>a team</strong> of players</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🐘</span><br><strong>a herd</strong> of elephants</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🦁</span><br><strong>a pride</strong> of lions</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">⭐</span><br><strong>a constellation</strong> of stars</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">📚</span><br><strong>a library</strong> of books</div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🎵</span><br><strong>a choir</strong> of singers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRACTICE ==================== -->
+  <div class="tab-content" id="practice">
+    <div class="section-header">
+      <h2>✏️ Practice</h2>
+      <p>Test your understanding with these exercises!</p>
+    </div>
+
+    <!-- Exercise 1: Classify Nouns -->
+    <div class="exercise-card fade-in-up" id="ex-classify">
+      <h3><span class="exercise-number">1</span> Classify the Noun</h3>
+      <p class="text-muted mb-4">Choose the correct type for each noun.</p>
+      <div id="ex-classify-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('classify')">Check Answers ✓</button>
+      <div id="ex-classify-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 2: Singular to Plural -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-plural">
+      <h3><span class="exercise-number">2</span> Write the Plural</h3>
+      <p class="text-muted mb-4">Write the plural form of each noun.</p>
+      <div id="ex-plural-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('plural')">Check Answers ✓</button>
+      <div id="ex-plural-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 3: Countable or Uncountable -->
+    <div class="exercise-card fade-in-up delay-2" id="ex-countable">
+      <h3><span class="exercise-number">3</span> Countable or Uncountable?</h3>
+      <p class="text-muted mb-4">Decide if each noun is countable or uncountable.</p>
+      <div id="ex-countable-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('countable')">Check Answers ✓</button>
+      <div id="ex-countable-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 4: Possessive Nouns -->
+    <div class="exercise-card fade-in-up delay-3" id="ex-possessive">
+      <h3><span class="exercise-number">4</span> Possessive Nouns</h3>
+      <p class="text-muted mb-4">Rewrite using the possessive form (with apostrophe).</p>
+      <div id="ex-possessive-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('possessive')">Check Answers ✓</button>
+      <div id="ex-possessive-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 5: Collective Nouns -->
+    <div class="exercise-card fade-in-up delay-4" id="ex-collective">
+      <h3><span class="exercise-number">5</span> Collective Noun Match</h3>
+      <p class="text-muted mb-4">Fill in the correct collective noun.</p>
+      <div id="ex-collective-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('collective')">Check Answers ✓</button>
+      <div id="ex-collective-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 6: Spot the Noun -->
+    <div class="exercise-card fade-in-up delay-5" id="ex-spot">
+      <h3><span class="exercise-number">6</span> Spot the Abstract Noun</h3>
+      <p class="text-muted mb-4">Find the abstract noun in each sentence.</p>
+      <div id="ex-spot-questions"></div>
+      <button class="btn btn-primary mt-4" onclick="checkExercise('spot')">Check Answers ✓</button>
+      <div id="ex-spot-score" class="hidden"></div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ ==================== -->
+  <div class="tab-content" id="quiz">
+    <div class="section-header">
+      <h2>🎯 Quiz</h2>
+      <p>Test your mastery of nouns!</p>
+    </div>
+
+    <div class="tier-selector">
+      <button class="tier-btn explorer active" onclick="startQuiz('explorer')">🌿 Explorer</button>
+      <button class="tier-btn adventurer" onclick="startQuiz('adventurer')">⚔️ Adventurer</button>
+      <button class="tier-btn champion" onclick="startQuiz('champion')">👑 Champion</button>
+    </div>
+
+    <div id="quiz-area">
+      <div class="text-center p-8">
+        <p style="font-size: var(--text-xl);">Select a tier and click to begin!</p>
+        <button class="btn btn-primary btn-lg mt-4" onclick="startQuiz('explorer')">Start Explorer Quiz 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WORKSHEET ==================== -->
+  <div class="tab-content" id="worksheet">
+    <div class="section-header">
+      <h2>🖨️ Worksheet</h2>
+      <p>Print a worksheet to practise on paper!</p>
+    </div>
+    <div class="text-center">
+      <div class="card p-8" style="max-width: 500px; margin: 0 auto;">
+        <div style="font-size: 4rem;">📝</div>
+        <h3 class="mt-4">Chapter 1: Nouns Worksheet</h3>
+        <p class="text-muted mt-2">Classify nouns, write plurals, possessives, collective nouns, and more!</p>
+        <a href="../worksheets/en01-nouns-worksheet.html" target="_blank" class="btn btn-lg mt-6" style="background: linear-gradient(135deg, #0369A1, #38BDF8); color: white;">
+          Open Worksheet 🖨️
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/quiz-engine.js"></script>
+<script src="../js/progress.js"></script>
+
+<script>
+// ============================================
+// PRACTICE EXERCISES
+// ============================================
+const exerciseData = {};
+
+function generateExercises() {
+  generateClassifyExercise();
+  generatePluralExercise();
+  generateCountableExercise();
+  generatePossessiveExercise();
+  generateCollectiveExercise();
+  generateSpotExercise();
+}
+
+function generateClassifyExercise() {
+  const nouns = [
+    { word: 'Bahrain', type: 'Proper' }, { word: 'happiness', type: 'Abstract' },
+    { word: 'cotton', type: 'Material' }, { word: 'team', type: 'Collective' },
+    { word: 'river', type: 'Common' }, { word: 'Monday', type: 'Proper' },
+    { word: 'courage', type: 'Abstract' }, { word: 'gold', type: 'Material' },
+    { word: 'flock', type: 'Collective' }, { word: 'teacher', type: 'Common' },
+    { word: 'freedom', type: 'Abstract' }, { word: 'Crislyn', type: 'Proper' },
+    { word: 'iron', type: 'Material' }, { word: 'army', type: 'Collective' },
+    { word: 'mountain', type: 'Common' }, { word: 'honesty', type: 'Abstract' },
+  ];
+  const selected = Utils.shuffle(nouns).slice(0, 10);
+  exerciseData.classify = selected;
+
+  document.getElementById('ex-classify-questions').innerHTML = selected.map((n, i) => `
+    <div class="exercise-question" id="classify-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong style="font-size: var(--text-lg);">${n.word}</strong> →
+        <select class="exercise-input" id="classify-a${i}" style="width: 160px;">
+          <option value="">Choose...</option>
+          <option value="Common">Common</option>
+          <option value="Proper">Proper</option>
+          <option value="Collective">Collective</option>
+          <option value="Abstract">Abstract</option>
+          <option value="Material">Material</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generatePluralExercise() {
+  const words = [
+    { s: 'cat', p: 'cats' }, { s: 'bus', p: 'buses' }, { s: 'baby', p: 'babies' },
+    { s: 'leaf', p: 'leaves' }, { s: 'child', p: 'children' }, { s: 'box', p: 'boxes' },
+    { s: 'city', p: 'cities' }, { s: 'wolf', p: 'wolves' }, { s: 'mouse', p: 'mice' },
+    { s: 'boy', p: 'boys' }, { s: 'tooth', p: 'teeth' }, { s: 'dish', p: 'dishes' },
+    { s: 'tomato', p: 'tomatoes' }, { s: 'knife', p: 'knives' }, { s: 'sheep', p: 'sheep' },
+    { s: 'man', p: 'men' }, { s: 'story', p: 'stories' }, { s: 'key', p: 'keys' },
+  ];
+  const selected = Utils.shuffle(words).slice(0, 10);
+  exerciseData.plural = selected;
+
+  document.getElementById('ex-plural-questions').innerHTML = selected.map((w, i) => `
+    <div class="exercise-question" id="plural-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong>${w.s}</strong> →
+        <input type="text" class="exercise-input" style="width: 150px;" id="plural-a${i}" placeholder="plural..." autocomplete="off">
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateCountableExercise() {
+  const nouns = [
+    { word: 'apple', type: 'Countable' }, { word: 'water', type: 'Uncountable' },
+    { word: 'chair', type: 'Countable' }, { word: 'rice', type: 'Uncountable' },
+    { word: 'book', type: 'Countable' }, { word: 'milk', type: 'Uncountable' },
+    { word: 'sugar', type: 'Uncountable' }, { word: 'pencil', type: 'Countable' },
+    { word: 'furniture', type: 'Uncountable' }, { word: 'egg', type: 'Countable' },
+    { word: 'bread', type: 'Uncountable' }, { word: 'information', type: 'Uncountable' },
+    { word: 'dog', type: 'Countable' }, { word: 'homework', type: 'Uncountable' },
+  ];
+  const selected = Utils.shuffle(nouns).slice(0, 10);
+  exerciseData.countable = selected;
+
+  document.getElementById('ex-countable-questions').innerHTML = selected.map((n, i) => `
+    <div class="exercise-question" id="countable-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong>${n.word}</strong> →
+        <select class="exercise-input" id="countable-a${i}" style="width: 160px;">
+          <option value="">Choose...</option>
+          <option value="Countable">Countable</option>
+          <option value="Uncountable">Uncountable</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generatePossessiveExercise() {
+  const items = [
+    { phrase: 'the book of the girl', answer: "the girl's book" },
+    { phrase: 'the toys of the children', answer: "the children's toys" },
+    { phrase: 'the car of the teacher', answer: "the teacher's car" },
+    { phrase: 'the room of the boys', answer: "the boys' room" },
+    { phrase: 'the tail of the dog', answer: "the dog's tail" },
+    { phrase: 'the shoes of the men', answer: "the men's shoes" },
+    { phrase: 'the garden of my mother', answer: "my mother's garden" },
+    { phrase: 'the bags of the students', answer: "the students' bags" },
+  ];
+  exerciseData.possessive = items;
+
+  document.getElementById('ex-possessive-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="possessive-q${i}">
+      <div class="q-label">Q${i+1}. Rewrite: <em>"${item.phrase}"</em></div>
+      <input type="text" class="exercise-input" style="width: 100%;" id="possessive-a${i}" placeholder="e.g. the girl's book" autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generateCollectiveExercise() {
+  const items = [
+    { group: 'birds', answer: 'flock' }, { group: 'wolves', answer: 'pack' },
+    { group: 'bees', answer: 'swarm' }, { group: 'fish', answer: 'school' },
+    { group: 'flowers', answer: 'bouquet' }, { group: 'grapes', answer: 'bunch' },
+    { group: 'players', answer: 'team' }, { group: 'elephants', answer: 'herd' },
+    { group: 'lions', answer: 'pride' }, { group: 'singers', answer: 'choir' },
+  ];
+  const selected = Utils.shuffle(items).slice(0, 8);
+  exerciseData.collective = selected;
+
+  document.getElementById('ex-collective-questions').innerHTML = selected.map((item, i) => `
+    <div class="exercise-question" id="collective-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        a <input type="text" class="exercise-input" style="width: 120px;" id="collective-a${i}" placeholder="..." autocomplete="off">
+        of <strong>${item.group}</strong>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateSpotExercise() {
+  const sentences = [
+    { sentence: 'Her kindness made everyone smile.', answer: 'kindness' },
+    { sentence: 'Honesty is the best policy.', answer: 'honesty' },
+    { sentence: 'The children showed great courage.', answer: 'courage' },
+    { sentence: 'Freedom is precious to every nation.', answer: 'freedom' },
+    { sentence: 'His anger surprised us all.', answer: 'anger' },
+    { sentence: 'She felt a wave of happiness.', answer: 'happiness' },
+    { sentence: 'Truth always wins in the end.', answer: 'truth' },
+    { sentence: 'The beauty of the sunset was amazing.', answer: 'beauty' },
+  ];
+  const selected = Utils.shuffle(sentences).slice(0, 6);
+  exerciseData.spot = selected;
+
+  document.getElementById('ex-spot-questions').innerHTML = selected.map((s, i) => `
+    <div class="exercise-question" id="spot-q${i}">
+      <div class="q-label">Q${i+1}. "${s.sentence}"</div>
+      <input type="text" class="exercise-input" style="width: 200px;" id="spot-a${i}" placeholder="abstract noun..." autocomplete="off">
+    </div>
+  `).join('');
+}
+
+// --- Check Exercises ---
+function checkExercise(type) {
+  let correct = 0, total = 0;
+
+  if (type === 'classify') {
+    exerciseData.classify.forEach((n, i) => {
+      total++; const el = document.getElementById(`classify-q${i}`);
+      const val = document.getElementById(`classify-a${i}`).value;
+      if (val === n.type) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${n.type}</div>`; }
+      document.getElementById(`classify-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'plural') {
+    exerciseData.plural.forEach((w, i) => {
+      total++; const el = document.getElementById(`plural-q${i}`);
+      const val = document.getElementById(`plural-a${i}`).value.trim().toLowerCase();
+      if (val === w.p) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${w.p}</div>`; }
+      document.getElementById(`plural-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'countable') {
+    exerciseData.countable.forEach((n, i) => {
+      total++; const el = document.getElementById(`countable-q${i}`);
+      const val = document.getElementById(`countable-a${i}`).value;
+      if (val === n.type) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${n.type}</div>`; }
+      document.getElementById(`countable-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'possessive') {
+    exerciseData.possessive.forEach((item, i) => {
+      total++; const el = document.getElementById(`possessive-q${i}`);
+      const val = document.getElementById(`possessive-a${i}`).value.trim().toLowerCase();
+      const expected = item.answer.toLowerCase();
+      if (val === expected) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.answer}</div>`; }
+      document.getElementById(`possessive-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'collective') {
+    exerciseData.collective.forEach((item, i) => {
+      total++; const el = document.getElementById(`collective-q${i}`);
+      const val = document.getElementById(`collective-a${i}`).value.trim().toLowerCase();
+      if (val === item.answer) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.answer}</div>`; }
+      document.getElementById(`collective-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'spot') {
+    exerciseData.spot.forEach((s, i) => {
+      total++; const el = document.getElementById(`spot-q${i}`);
+      const val = document.getElementById(`spot-a${i}`).value.trim().toLowerCase();
+      if (val === s.answer.toLowerCase()) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${s.answer}</div>`; }
+      document.getElementById(`spot-a${i}`).disabled = true;
+    });
+  }
+
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+  const scoreEl = document.getElementById(`ex-${type}-score`);
+  scoreEl.className = 'exercise-score';
+  scoreEl.innerHTML = `Score: ${correct}/${total} (${pct}%) ${pct>=80?'⭐ Excellent!':pct>=60?'👍 Good job!':'💪 Keep practising!'}`;
+  if (pct >= 80) { Confetti.launch(50); AudioManager.playTone('correct'); } else { AudioManager.playTone('click'); }
+  if (typeof Progress !== 'undefined') Progress.trackExerciseComplete(type, correct, total);
+}
+
+// ============================================
+// QUIZ DATA
+// ============================================
+function generateQuizQuestions() {
+  const q = [];
+
+  // --- EXPLORER ---
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'Which of these is a PROPER noun?', options:['table','Bahrain','river','happiness'], answer:'Bahrain', hint:'Proper nouns are specific names — always capitalised.', explanation:'Bahrain is a proper noun (name of a country). The others are common/abstract.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'Which is a COLLECTIVE noun?', options:['flock','gold','freedom','Crislyn'], answer:'flock', hint:'A collective noun names a GROUP.', explanation:'A flock (of birds) is a collective noun — it names a group.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'"Happiness" is what type of noun?', options:['Abstract','Common','Material','Proper'], answer:'Abstract', hint:'Can you see or touch happiness?', explanation:'Happiness is something you feel but cannot see or touch — it is an abstract noun.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'What is the plural of "child"?', options:['children','childs','childes','childrens'], answer:'children', hint:'This is an irregular plural — no rule, just memorise!', explanation:'child → children (irregular plural).' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'Which noun is UNCOUNTABLE?', options:['water','apple','book','pencil'], answer:'water', hint:'Can you say "two waters"? Not really!', explanation:'Water is uncountable. We say "a glass of water", not "two waters".' });
+  q.push({ tier:'explorer', type:'true-false', points:10, question:'Proper nouns always start with a capital letter.', answer:'true', hint:'Think: Crislyn, Monday, Bahrain...', explanation:'True! Proper nouns are always capitalised.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'Which is a MATERIAL noun?', options:['cotton','team','city','anger'], answer:'cotton', hint:'Material nouns are substances things are made from.', explanation:'Cotton is a material noun — it\'s a substance used to make things.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'What is the plural of "leaf"?', options:['leaves','leafs','leafes','leavs'], answer:'leaves', hint:'f/fe → ves', explanation:'leaf → leaves (change f to ves).' });
+  q.push({ tier:'explorer', type:'true-false', points:10, question:'"Furniture" is a countable noun.', answer:'false', hint:'Can you say "two furnitures"?', explanation:'False! Furniture is uncountable. We say "a piece of furniture".' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'In "The dog\'s bone", what does \'s show?', options:['Ownership','Plural','A type of noun','Nothing'], answer:'Ownership', hint:'The apostrophe + s shows something belongs to someone.', explanation:'The dog\'s bone = the bone belonging to the dog. It shows ownership (possessive).' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'What is the plural of "box"?', options:['boxes','boxs','boxies','boxen'], answer:'boxes', hint:'Nouns ending in x add -es.', explanation:'box → boxes (add -es after x).' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'"A swarm of bees" — "swarm" is what type?', options:['Collective','Common','Abstract','Material'], answer:'Collective', hint:'It names a GROUP of bees.', explanation:'Swarm is a collective noun — it names a group of bees.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'Which word is NOT a noun: "The brave girl showed courage."', options:['brave','girl','courage','The is not a noun either, but brave describes — it\'s an adjective'], answer:'brave', hint:'Which word describes a noun instead of naming something?', explanation:'Brave is an adjective (describing word), not a noun. Girl and courage are nouns.' });
+  q.push({ tier:'explorer', type:'mcq', points:10, question:'What is the plural of "baby"?', options:['babies','babys','babyes','babis'], answer:'babies', hint:'Consonant + y → change y to i, add -es.', explanation:'baby → babies (y changes to i, add -es).' });
+  q.push({ tier:'explorer', type:'true-false', points:10, question:'"Sheep" has the same singular and plural form.', answer:'true', hint:'One sheep, two sheep, three sheep...', explanation:'True! Sheep is the same in both singular and plural.' });
+
+  // --- ADVENTURER ---
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'Which sentence has a POSSESSIVE noun error?', options:["The boy's bag is heavy.","The childrens' toys are broken.","The teacher's desk is clean.","My mother's cooking is great."], answer:"The childrens' toys are broken.", hint:'Children is already plural and doesn\'t end in s...', explanation:'It should be "children\'s" (add \'s to irregular plurals), not "childrens\'".' });
+  q.push({ tier:'adventurer', type:'fill-blank', points:15, question:'Write the plural of "knife":', answer:['knives'], placeholder:'Type plural...', hint:'f/fe → ves.', explanation:'knife → knives' });
+  q.push({ tier:'adventurer', type:'fill-blank', points:15, question:'A _____ of lions.', answer:['pride'], placeholder:'collective noun...', hint:'Think royalty — lions are the kings of the jungle!', explanation:'A pride of lions.' });
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'How many nouns are in: "The team of brave soldiers marched with courage to the fort."?', options:['4','3','5','2'], answer:'4', hint:'team, soldiers, courage, fort — find them all!', explanation:'team (collective), soldiers (common), courage (abstract), fort (common) = 4 nouns.' });
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'Which uses "much" correctly?', options:['much water','much books','much apples','much chairs'], answer:'much water', hint:'"Much" goes with uncountable nouns.', explanation:'"Much" is used with uncountable nouns. Water is uncountable, so "much water" is correct.' });
+  q.push({ tier:'adventurer', type:'fill-blank', points:15, question:'Write the plural of "woman":', answer:['women'], placeholder:'Type plural...', hint:'This is an irregular plural.', explanation:'woman → women (irregular).' });
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'"Iron" can be a common noun OR a material noun. When is it a material noun?', options:['When talking about the substance/metal','When talking about the appliance for ironing clothes','Both','Neither'], answer:'When talking about the substance/metal', hint:'Material nouns name raw substances.', explanation:'Iron as a substance (the metal) is a material noun. The ironing appliance is a common noun.' });
+  q.push({ tier:'adventurer', type:'true-false', points:15, question:'"Many informations" is correct English.', answer:'false', hint:'Is "information" countable?', explanation:'False! "Information" is uncountable. Say "much information" or "a lot of information".' });
+  q.push({ tier:'adventurer', type:'fill-blank', points:15, question:'Write the possessive: the toys of the boys →', answer:["the boys' toys"], placeholder:'e.g. the boys\' toys', hint:'Boys already ends in s, so just add apostrophe after the s.', explanation:'the boys\' toys (plural ending in s → add just \').' });
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'In "The Amazon River flows through South America", how many proper nouns are there?', options:['2','1','3','4'], answer:'2', hint:'Which words are capitalised AND are specific names?', explanation:'Amazon River and South America are proper nouns = 2. (River could be argued as part of the name).' });
+  q.push({ tier:'adventurer', type:'fill-blank', points:15, question:'Write the plural of "tooth":', answer:['teeth'], placeholder:'Type plural...', hint:'Irregular! Think about your mouth.', explanation:'tooth → teeth (irregular plural).' });
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'Which is the abstract noun in: "The beauty of the garden filled her with joy"?', options:['Both beauty and joy','beauty only','joy only','garden'], answer:'Both beauty and joy', hint:'Can you touch beauty? Can you touch joy?', explanation:'Beauty and joy are both abstract nouns — feelings/qualities you cannot touch.' });
+  q.push({ tier:'adventurer', type:'fill-blank', points:15, question:'A _____ of bees.', answer:['swarm'], placeholder:'collective noun...', hint:'These buzzing insects fly together in a...', explanation:'A swarm of bees.' });
+  q.push({ tier:'adventurer', type:'mcq', points:15, question:'What is the plural of "deer"?', options:['deer','deers','deeres','deeren'], answer:'deer', hint:'Some animals have the same singular and plural.', explanation:'deer → deer (unchanged — same singular and plural).' });
+  q.push({ tier:'adventurer', type:'true-false', points:15, question:'"The men\'s shoes" is correct possessive form.', answer:'true', hint:'Men is already plural but doesn\'t end in s.', explanation:'True! Men doesn\'t end in s, so we add \'s → men\'s shoes.' });
+
+  // --- CHAMPION ---
+  q.push({ tier:'champion', type:'fill-blank', points:20, question:'Classify: "Crislyn showed great bravery at the cycling race in Bahrain." List ALL nouns and their types:', answer:['Crislyn-proper, bravery-abstract, race-common, Bahrain-proper','Crislyn proper bravery abstract race common Bahrain proper'], matchType:'fuzzy', placeholder:'noun-type, noun-type...', hint:'There are 4 nouns. Find each one and name its type.', explanation:'Crislyn (proper), bravery (abstract), race (common), Bahrain (proper) = 4 nouns.' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'Which sentence uses ALL five noun types?', options:['"Crislyn\'s team celebrated with joy after winning the gold medal in Bahrain."','"The dog ran quickly to the park."','"She is a beautiful girl."','"They played and laughed."'], answer:'"Crislyn\'s team celebrated with joy after winning the gold medal in Bahrain."', hint:'Look for: common, proper, collective, abstract, material', explanation:'Crislyn (proper), team (collective), joy (abstract), gold (material), medal (common), Bahrain (proper). All 5 types!' });
+  q.push({ tier:'champion', type:'fill-blank', points:20, question:'Write the plural of "goose":', answer:['geese'], placeholder:'Type plural...', hint:'Very irregular! Think of the sound...', explanation:'goose → geese (irregular).' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'"The students\' books were on the teachers\' desks." How many possessives are there and are they correct?', options:['2 possessives, both correct','2 possessives, one is wrong','1 possessive','No possessives'], answer:'2 possessives, both correct', hint:'Students (plural, ends in s) → students\'. Teachers (plural, ends in s) → teachers\'.', explanation:'Both are correct. Students\' (plural possessive) and teachers\' (plural possessive).' });
+  q.push({ tier:'champion', type:'fill-blank', points:20, question:'A _____ of singers.', answer:['choir'], placeholder:'collective noun...', hint:'A musical group that sings together.', explanation:'A choir of singers.' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'Which word can be BOTH a common noun and a material noun depending on context?', options:['glass','team','happiness','Monday'], answer:'glass', hint:'Think: a drinking glass vs. the material glass.', explanation:'Glass can be common (a glass = drinking vessel) or material (made of glass = the substance).' });
+  q.push({ tier:'champion', type:'true-false', points:20, question:'"Rice" can be made plural by saying "rices".', answer:'false', hint:'Is rice countable?', explanation:'False! Rice is uncountable. You can say "grains of rice" or "bowls of rice", but never "rices".' });
+  q.push({ tier:'champion', type:'fill-blank', points:20, question:'Write the plural of "ox":', answer:['oxen'], placeholder:'Type plural...', hint:'Very old English irregular form.', explanation:'ox → oxen (one of the oldest irregular plurals in English).' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'Find the error: "The womens\' club held a meeting about childrens\' education."', options:['Both "womens\'" and "childrens\'" are wrong','Only "womens\'" is wrong','Only "childrens\'" is wrong','No errors'], answer:'Both "womens\'" and "childrens\'" are wrong', hint:'Women and children don\'t end in s...', explanation:'Correct: women\'s and children\'s (both are irregular plurals not ending in s, so add \'s).' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'How many uncountable nouns: "She needs some information about the furniture, luggage, and equipment."', options:['4','3','2','1'], answer:'4', hint:'Test each: can you say "two informations"? "Two furnitures"?', explanation:'Information, furniture, luggage, and equipment are all uncountable = 4.' });
+  q.push({ tier:'champion', type:'fill-blank', points:20, question:'Write the plural of "foot":', answer:['feet'], placeholder:'Type plural...', hint:'Irregular! Like tooth → teeth.', explanation:'foot → feet (irregular).' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'What type of noun is "bunch" in "She bought a bunch of bananas"?', options:['Collective','Common','Abstract','Material'], answer:'Collective', hint:'It names a GROUP of bananas.', explanation:'Bunch is a collective noun here — it names a group of bananas tied together.' });
+  q.push({ tier:'champion', type:'true-false', points:20, question:'In "The army marched bravely", both "army" and "bravely" are nouns.', answer:'false', hint:'Is "bravely" naming something or describing how they marched?', explanation:'False! Army is a collective noun, but bravely is an ADVERB (describes how they marched).' });
+  q.push({ tier:'champion', type:'fill-blank', points:20, question:'The possessive of "children" is:', answer:["children's"], placeholder:'Type possessive...', hint:'Children doesn\'t end in s, so add...', explanation:'children → children\'s (add \'s because it doesn\'t end in s).' });
+  q.push({ tier:'champion', type:'mcq', points:20, question:'Which pair is correct? (many/much)', options:['many books, much water','much books, many water','many water, much books','many furniture, much chair'], answer:'many books, much water', hint:'Many = countable, Much = uncountable.', explanation:'Books are countable (many). Water is uncountable (much).' });
+
+  return q;
+}
+
+function startQuiz(tier) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tier-btn.${tier}`).classList.add('active');
+
+  const quiz = new QuizEngine({
+    containerId: 'quiz-area', questions: generateQuizQuestions(), tier, questionCount: 15,
+    onComplete: (results) => {
+      if (typeof Progress !== 'undefined') Progress.trackQuizComplete(tier, results.percentage, results.timeTaken);
+      if (results.percentage >= 70 && tier === 'explorer') Toast.show('Adventurer unlocked! ⚔️', 'badge', 4000);
+      if (results.percentage >= 80 && tier === 'adventurer') Toast.show('Champion unlocked! 👑', 'badge', 4000);
+    }
+  });
+  quiz.start();
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initLessonCards();
+  generateExercises();
+  if (typeof Progress !== 'undefined') {
+    Progress.init();
+    document.querySelectorAll('.lesson-card-header').forEach((h, i) => {
+      h.addEventListener('click', () => { if (h.parentElement.classList.contains('open')) Progress.trackLessonOpen(`en01_lesson_${i+1}`); });
+    });
+    const wsLink = document.querySelector('a[href*="worksheet"]');
+    if (wsLink) wsLink.addEventListener('click', () => Progress.trackWorksheetOpen());
+  }
+});
+</script>
+
+</body>
+</html>
