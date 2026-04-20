@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>पाठ 1: संज्ञा — Crislyn's Hindi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+
+  <style>
+    /* Hindi typography */
+    .hi { font-family: 'Tiro Devanagari Hindi', 'Hind', 'Nunito', sans-serif; }
+    .hi-big { font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700; }
+
+    /* Word card — the HEART of Hindi learning */
+    .word-card {
+      background: white; border-radius: var(--radius-lg);
+      padding: var(--space-4); text-align: center;
+      border: 3px solid #FCD34D; transition: all 0.3s var(--ease-bounce);
+      position: relative; display: flex; flex-direction: column;
+      align-items: center; gap: var(--space-2);
+    }
+    .word-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25); }
+
+    .word-card .word-emoji { font-size: 3rem; }
+    .word-card .word-hindi {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: 2.2rem; color: #92400E; line-height: 1; font-weight: 700;
+    }
+    .word-card .word-roman {
+      font-size: var(--text-sm); color: #A16207;
+      font-style: italic; font-weight: 600;
+    }
+    .word-card .word-english {
+      font-size: var(--text-base); color: #78350F; font-weight: 700;
+    }
+    .word-card .speak-btn {
+      background: #F59E0B; color: white; border: none;
+      width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+      font-size: 1.2rem; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .word-card .speak-btn:hover { background: #D97706; transform: scale(1.15); }
+    .word-card .speak-btn:active { transform: scale(0.95); }
+    .word-card .speak-btn.speaking { background: #10B981; animation: pulse 1s infinite; }
+
+    .word-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--space-4); margin: var(--space-4) 0;
+    }
+
+    /* Type category cards */
+    .type-card {
+      border-radius: var(--radius-lg); padding: var(--space-5);
+      text-align: center; transition: all 0.3s var(--ease-bounce);
+    }
+    .type-card:hover { transform: translateY(-4px); }
+    .type-card .type-hindi {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: 2.5rem; font-weight: 700; line-height: 1;
+      margin-bottom: var(--space-1);
+    }
+    .type-card .type-roman {
+      font-size: var(--text-sm); font-weight: 600; font-style: italic;
+      margin-bottom: var(--space-1);
+    }
+    .type-card .type-english {
+      font-family: var(--font-heading); font-size: var(--text-xl); margin-bottom: var(--space-2);
+    }
+    .type-card .type-desc { font-size: var(--text-sm); }
+    .type-card .type-examples { font-size: var(--text-sm); font-weight: 600; margin-top: var(--space-2); }
+
+    .type-vyakti { background: #FCE7F3; border: 3px solid #F9A8D4; color: #831843; }
+    .type-vyakti .type-hindi, .type-vyakti .type-english { color: #BE185D; }
+
+    .type-praani { background: #DCFCE7; border: 3px solid #86EFAC; color: #14532D; }
+    .type-praani .type-hindi, .type-praani .type-english { color: #15803D; }
+
+    .type-sthaan { background: #DBEAFE; border: 3px solid #93C5FD; color: #1E3A8A; }
+    .type-sthaan .type-hindi, .type-sthaan .type-english { color: #1D4ED8; }
+
+    .type-vastu { background: #FED7AA; border: 3px solid #FDBA74; color: #7C2D12; }
+    .type-vastu .type-hindi, .type-vastu .type-english { color: #C2410C; }
+
+    /* Definition box */
+    .definition-box {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border: 3px solid #F59E0B; border-radius: var(--radius-lg);
+      padding: var(--space-6); margin: var(--space-4) 0;
+      text-align: center;
+    }
+    .definition-box .hi-sentence {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: var(--text-2xl); color: #78350F; line-height: 1.6;
+      font-weight: 700; margin-bottom: var(--space-3);
+    }
+    .definition-box .en-sentence {
+      font-size: var(--text-lg); color: #92400E; font-weight: 600;
+    }
+    .definition-box .speak-inline {
+      background: #F59E0B; color: white; border: none; padding: 4px 10px;
+      border-radius: var(--radius-full); cursor: pointer; font-size: 0.9rem;
+      margin-left: 8px; font-weight: 700;
+    }
+    .definition-box .speak-inline:hover { background: #D97706; }
+
+    /* Flashcard flipper */
+    .flashcard-area {
+      background: var(--color-bg); padding: var(--space-6);
+      border-radius: var(--radius-md); margin: var(--space-4) 0;
+      border: 2px solid var(--color-border-light);
+    }
+    .flashcard-stage {
+      perspective: 1000px; max-width: 400px; margin: 0 auto;
+      height: 260px;
+    }
+    .flashcard {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d; transition: transform 0.6s;
+      cursor: pointer;
+    }
+    .flashcard.flipped { transform: rotateY(180deg); }
+    .flashcard-face {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      border-radius: var(--radius-lg); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 12px;
+      padding: var(--space-4);
+    }
+    .flashcard-front {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border: 3px solid #F59E0B;
+    }
+    .flashcard-back {
+      background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+      border: 3px solid #3B82F6; transform: rotateY(180deg);
+    }
+    .flashcard .card-emoji { font-size: 4rem; }
+    .flashcard .card-hindi {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: 3rem; color: #92400E; font-weight: 700; line-height: 1;
+    }
+    .flashcard .card-roman { font-size: 1rem; color: #A16207; font-style: italic; font-weight: 600; }
+    .flashcard .card-english { font-size: 1.5rem; color: #1E3A8A; font-weight: 700; }
+    .flashcard .hint { font-size: 0.85rem; color: #6B7280; margin-top: 8px; }
+
+    .flashcard-controls {
+      display: flex; justify-content: center; gap: var(--space-3);
+      margin-top: var(--space-4); flex-wrap: wrap;
+    }
+    .fc-btn {
+      padding: 10px 18px; border-radius: var(--radius-full); border: none;
+      background: #D97706; color: white; font-weight: 700; cursor: pointer;
+      font-size: var(--text-sm); transition: all 0.2s;
+    }
+    .fc-btn:hover { background: #B45309; transform: scale(1.05); }
+    .fc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .fc-counter {
+      font-weight: 700; color: #78350F; padding: 10px 16px;
+      background: #FEF3C7; border-radius: var(--radius-full);
+    }
+
+    /* Exercise styles */
+    .exercise-question {
+      padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md);
+      margin-bottom: var(--space-3); border: 2px solid var(--color-border-light);
+      transition: border-color 0.3s;
+    }
+    .exercise-question.answered-correct { border-color: var(--color-success); background: var(--color-success-light); }
+    .exercise-question.answered-wrong { border-color: var(--color-error); background: var(--color-error-light); }
+    .exercise-question .q-label { font-weight: 700; color: #D97706; margin-bottom: var(--space-2); }
+
+    .exercise-input {
+      padding: 8px 12px; border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+      font-size: var(--text-base); font-weight: 600; outline: none;
+      transition: border-color 0.2s;
+    }
+    .exercise-input:focus { border-color: #F59E0B; }
+
+    .exercise-score {
+      display: flex; align-items: center; justify-content: center; gap: var(--space-4);
+      padding: var(--space-4); background: linear-gradient(135deg, #D97706, #FBBF24);
+      color: white; border-radius: var(--radius-md); margin-top: var(--space-4);
+      font-size: var(--text-lg); font-weight: 700;
+    }
+
+    /* MCQ option with both scripts */
+    .hi-option {
+      padding: 14px 16px; border: 3px solid var(--color-border); border-radius: var(--radius-md);
+      cursor: pointer; transition: all 0.2s var(--ease-bounce);
+      background: var(--color-surface); text-align: center;
+    }
+    .hi-option:hover { border-color: #F59E0B; transform: scale(1.02); }
+    .hi-option.selected { border-color: #D97706; background: #FEF3C7; }
+    .hi-option.correct { border-color: var(--color-success); background: var(--color-success-light); }
+    .hi-option.wrong { border-color: var(--color-error); background: var(--color-error-light); }
+
+    .hi-option .opt-hindi { font-family: 'Tiro Devanagari Hindi', serif; font-size: 1.5rem; color: #92400E; font-weight: 700; }
+    .hi-option .opt-roman { font-size: 0.8rem; color: #6B7280; font-style: italic; }
+
+    /* Sentence with blank */
+    .hi-sentence-line {
+      font-family: 'Tiro Devanagari Hindi', serif; font-size: 1.3rem;
+      color: #78350F; line-height: 2; text-align: center;
+      padding: var(--space-3); background: #FFFBEB; border-radius: var(--radius-md);
+      margin-bottom: var(--space-3);
+    }
+    .blank-fill {
+      display: inline-block; min-width: 100px; padding: 2px 10px;
+      border-bottom: 3px solid #D97706; font-weight: 700; color: #B45309;
+    }
+
+    .sentence-translation {
+      font-size: var(--text-sm); color: var(--color-text-light);
+      font-style: italic; text-align: center; margin-top: var(--space-1);
+    }
+
+    /* Tier buttons override */
+    .tier-btn.explorer {
+      border-color: var(--color-success); color: var(--color-success); background: var(--color-success-light);
+    }
+    .tier-btn.explorer.active, .tier-btn.explorer:hover { background: var(--color-success); color: white; }
+
+    /* Tips */
+    .tip-callout {
+      background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+      border-left: 4px solid #3B82F6; padding: var(--space-4);
+      border-radius: var(--radius-md); margin: var(--space-4) 0;
+    }
+    .tip-callout h4 { color: #1D4ED8; margin-bottom: var(--space-2); }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header" style="background: linear-gradient(135deg, #B45309, #D97706, #FBBF24);">
+  <div class="container">
+    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">📖 पाठ 1 · Chapter 1</div>
+    <h1 class="fade-in-up hi-big" style="font-size: 3rem;">संज्ञा</h1>
+    <p class="fade-in-up delay-1"><em>Sangya</em> · Noun · Names for people, animals, places, and things</p>
+    <a href="../hindi.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to Hindi</a>
+  </div>
+</div>
+
+<!-- Welcome tip -->
+<div class="container" style="margin-top: var(--space-4);">
+  <div class="card fade-in-up" style="background: #FFFBEB; border-left: 4px solid #F59E0B; padding: var(--space-4);">
+    <p style="margin: 0; font-size: var(--text-base); color: #78350F;">
+      <strong>👋 Hi Crislyn!</strong> This is your first Hindi chapter. Don't worry — every Hindi word has its <strong>sound button 🔊</strong>, <strong>Roman reading</strong>, and <strong>English meaning</strong>. Just tap the speaker to hear how words sound. You've got this! 🌟
+    </p>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="learn">📖 Learn</div>
+    <div class="tab" data-tab="practice">✏️ Practice</div>
+    <div class="tab" data-tab="quiz">🎯 Quiz</div>
+    <div class="tab" data-tab="worksheet">🖨️ Worksheet</div>
+  </div>
+
+  <!-- ==================== LEARN ==================== -->
+  <div class="tab-content active" id="learn">
+    <div class="section-header">
+      <h2>📖 Let's Learn संज्ञा (Sangya)</h2>
+      <p>Take it slowly — tap the speaker 🔊 to hear every Hindi word!</p>
+    </div>
+
+    <!-- Lesson 1: What is संज्ञा? -->
+    <div class="lesson-card open fade-in-up">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #B45309, #D97706);">
+        <span class="lesson-number">1</span>
+        <h3>What is <span class="hi-big">संज्ञा</span>? (Sangya / Noun)</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">In English, a <strong>noun</strong> is the name of a person, place, or thing. In Hindi, we call a noun <strong class="hi-big" style="color: #B45309;">संज्ञा</strong> (<em>sangya</em>).</p>
+
+        <div class="definition-box">
+          <div class="hi-sentence">
+            किसी व्यक्ति, वस्तु, स्थान या प्राणी के नाम को संज्ञा कहते हैं।
+            <button class="speak-inline" onclick="speak('किसी व्यक्ति, वस्तु, स्थान या प्राणी के नाम को संज्ञा कहते हैं', this)">🔊</button>
+          </div>
+          <div class="en-sentence">
+            "The name of a person, thing, place, or animal is called a <strong>noun</strong>."
+          </div>
+        </div>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">👧</div>
+            <div class="hi-big" style="font-size: 1.8rem; color: #BE185D;">क्रिसलिन</div>
+            <div style="font-size: 0.85rem; color: #6B7280; font-style: italic;">krislyn</div>
+            <div style="font-weight: 700; margin-top: 4px;">(a person's name) — is a संज्ञा!</div>
+          </div>
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">🏠</div>
+            <div class="hi-big" style="font-size: 1.8rem; color: #1D4ED8;">घर</div>
+            <div style="font-size: 0.85rem; color: #6B7280; font-style: italic;">ghar</div>
+            <div style="font-weight: 700; margin-top: 4px;">(a place — "home") — is a संज्ञा!</div>
+          </div>
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">🐘</div>
+            <div class="hi-big" style="font-size: 1.8rem; color: #15803D;">हाथी</div>
+            <div style="font-size: 0.85rem; color: #6B7280; font-style: italic;">haathi</div>
+            <div style="font-weight: 700; margin-top: 4px;">(an animal — "elephant") — is a संज्ञा!</div>
+          </div>
+          <div class="card p-4 text-center">
+            <div style="font-size: 2.5rem;">📖</div>
+            <div class="hi-big" style="font-size: 1.8rem; color: #C2410C;">किताब</div>
+            <div style="font-size: 0.85rem; color: #6B7280; font-style: italic;">kitaab</div>
+            <div style="font-weight: 700; margin-top: 4px;">(a thing — "book") — is a संज्ञा!</div>
+          </div>
+        </div>
+
+        <div class="tip-callout">
+          <h4>💡 Remember</h4>
+          <p style="margin: 0;">If you can point to it or name it — it's a <strong class="hi-big">संज्ञा</strong>! People, animals, places, and things all have names. Those names are nouns.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 2: The Four Types -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #B45309, #D97706);">
+        <span class="lesson-number">2</span>
+        <h3>The 4 Types of <span class="hi-big">संज्ञा</span></h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Every noun in Hindi belongs to one of <strong>four families</strong>:</p>
+
+        <div class="grid-2 gap-4 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+          <div class="type-card type-vyakti">
+            <div style="font-size: 3rem;">👨‍👩‍👧</div>
+            <div class="type-hindi">व्यक्ति</div>
+            <div class="type-roman">vyakti</div>
+            <div class="type-english">Person</div>
+            <div class="type-desc">Names of people</div>
+            <div class="type-examples">राम, माँ, भाई, क्रिसलिन</div>
+          </div>
+
+          <div class="type-card type-praani">
+            <div style="font-size: 3rem;">🐘</div>
+            <div class="type-hindi">प्राणी</div>
+            <div class="type-roman">praani</div>
+            <div class="type-english">Animal / Living being</div>
+            <div class="type-desc">Names of animals & birds</div>
+            <div class="type-examples">हाथी, कुत्ता, तोता, मछली</div>
+          </div>
+
+          <div class="type-card type-sthaan">
+            <div style="font-size: 3rem;">🏙️</div>
+            <div class="type-hindi">स्थान</div>
+            <div class="type-roman">sthaan</div>
+            <div class="type-english">Place</div>
+            <div class="type-desc">Names of places</div>
+            <div class="type-examples">दिल्ली, भारत, स्कूल, घर</div>
+          </div>
+
+          <div class="type-card type-vastu">
+            <div style="font-size: 3rem;">📦</div>
+            <div class="type-hindi">वस्तु</div>
+            <div class="type-roman">vastu</div>
+            <div class="type-english">Thing / Object</div>
+            <div class="type-desc">Names of objects</div>
+            <div class="type-examples">किताब, कुर्सी, गेंद, कार</div>
+          </div>
+        </div>
+
+        <div class="tip-callout mt-4">
+          <h4>🧠 Memory Trick!</h4>
+          <p style="margin: 0;"><strong>Four words to remember:</strong> <span class="hi-big" style="color: #BE185D;">व्यक्ति</span> (people) · <span class="hi-big" style="color: #15803D;">प्राणी</span> (animals) · <span class="hi-big" style="color: #1D4ED8;">स्थान</span> (places) · <span class="hi-big" style="color: #C2410C;">वस्तु</span> (things).<br>Tap the speaker on each card below to hear the names!</p>
+        </div>
+
+        <div class="flex-center gap-2 mt-4 flex-wrap">
+          <button class="speak-btn" style="width:auto; padding: 8px 20px; border-radius: 99px; gap: 8px; font-size: 0.95rem;" onclick="speak('व्यक्ति vyakti person', this)">🔊 व्यक्ति</button>
+          <button class="speak-btn" style="width:auto; padding: 8px 20px; border-radius: 99px; gap: 8px; font-size: 0.95rem;" onclick="speak('प्राणी praani animal', this)">🔊 प्राणी</button>
+          <button class="speak-btn" style="width:auto; padding: 8px 20px; border-radius: 99px; gap: 8px; font-size: 0.95rem;" onclick="speak('स्थान sthaan place', this)">🔊 स्थान</button>
+          <button class="speak-btn" style="width:auto; padding: 8px 20px; border-radius: 99px; gap: 8px; font-size: 0.95rem;" onclick="speak('वस्तु vastu thing', this)">🔊 वस्तु</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 3: व्यक्ति (Person) Words -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #BE185D, #EC4899);">
+        <span class="lesson-number">3</span>
+        <h3><span class="hi-big">व्यक्ति</span> — People Words</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Let's learn names of <strong>people</strong> in Hindi! Tap 🔊 to hear each word.</p>
+
+        <div class="word-grid" id="vyakti-words"></div>
+
+        <div class="tip-callout">
+          <h4>👨‍👩‍👧 Family Words Together!</h4>
+          <p style="margin:0;">These are the most important people words. Try saying them out loud with each speaker button — say them once a day until they stick!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 4: प्राणी (Animals) Words -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #15803D, #22C55E);">
+        <span class="lesson-number">4</span>
+        <h3><span class="hi-big">प्राणी</span> — Animal Words</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Now let's meet some <strong>animals</strong> in Hindi! You probably know some of these already from stories!</p>
+
+        <div class="word-grid" id="praani-words"></div>
+
+        <div class="tip-callout">
+          <h4>🐾 Fun to Know!</h4>
+          <p style="margin:0;">Did you notice <strong class="hi-big">मछली</strong> (<em>machli</em>) means fish? Many Hindi animal names sound fun once you learn them!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 5: स्थान (Places) Words -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #1D4ED8, #3B82F6);">
+        <span class="lesson-number">5</span>
+        <h3><span class="hi-big">स्थान</span> — Place Words</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>These are names of <strong>places</strong> — your home, school, country, city!</p>
+
+        <div class="word-grid" id="sthaan-words"></div>
+
+        <div class="tip-callout">
+          <h4>🌍 Real Places You Know!</h4>
+          <p style="margin:0;"><strong class="hi-big">बहरीन</strong> is Bahrain — where you live! <strong class="hi-big">भारत</strong> is India. <strong class="hi-big">ताजमहल</strong> is the famous Taj Mahal — a beautiful building in India!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 6: वस्तु (Things) Words -->
+    <div class="lesson-card fade-in-up delay-5">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #C2410C, #F97316);">
+        <span class="lesson-number">6</span>
+        <h3><span class="hi-big">वस्तु</span> — Thing Words</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Everyday <strong>things and objects</strong> you can see at home, school, or outside!</p>
+
+        <div class="word-grid" id="vastu-words"></div>
+
+        <div class="tip-callout">
+          <h4>🎒 Your Day in Hindi</h4>
+          <p style="margin:0;">You use a <strong class="hi-big">किताब</strong> (<em>kitaab</em>/book) and <strong class="hi-big">पेंसिल</strong> (<em>pencil</em>) at school. You might ride a <strong class="hi-big">साईकिल</strong> (<em>saaikil</em>/cycle) at home!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 7: Flashcard Review -->
+    <div class="lesson-card enrichment fade-in-up delay-6">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">7</span>
+        <h3>🎴 Flashcard Review — Let's See How Much You Know!</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Tap the card to flip it! See the Hindi word first, then tap to reveal the English meaning.</p>
+
+        <div class="flashcard-area">
+          <div class="flashcard-stage">
+            <div class="flashcard" id="flashcard" onclick="flipCard()">
+              <div class="flashcard-face flashcard-front">
+                <div class="card-emoji" id="fc-emoji">👩‍👧</div>
+                <div class="card-hindi" id="fc-hindi">माँ</div>
+                <div class="card-roman" id="fc-roman">maa</div>
+                <button class="speak-btn" onclick="event.stopPropagation(); speak(document.getElementById('fc-hindi').textContent, this)">🔊</button>
+                <div class="hint">Tap the card to see the meaning!</div>
+              </div>
+              <div class="flashcard-face flashcard-back">
+                <div class="card-emoji" id="fc-emoji-back">👩‍👧</div>
+                <div class="card-english" id="fc-english">Mother</div>
+                <div class="card-hindi" style="font-size: 1.5rem; color: #1E3A8A;" id="fc-hindi-back">माँ</div>
+                <div class="hint">Great! Tap again to flip back.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flashcard-controls">
+            <button class="fc-btn" id="fc-prev" onclick="prevCard()">← Previous</button>
+            <span class="fc-counter" id="fc-counter">1 / 24</span>
+            <button class="fc-btn" id="fc-next" onclick="nextCard()">Next →</button>
+          </div>
+          <div class="text-center mt-4">
+            <button class="fc-btn" onclick="shuffleCards()" style="background: #16A34A;">🎲 Shuffle Cards</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRACTICE ==================== -->
+  <div class="tab-content" id="practice">
+    <div class="section-header">
+      <h2>✏️ Practice</h2>
+      <p>Let's practise what we learned! Every question has hints — don't worry!</p>
+    </div>
+
+    <!-- Ex 1: Classify -->
+    <div class="exercise-card fade-in-up" id="ex-classify">
+      <h3><span class="exercise-number">1</span> Which type of संज्ञा is it?</h3>
+      <p class="text-muted mb-4">Choose व्यक्ति (person), प्राणी (animal), स्थान (place), or वस्तु (thing).</p>
+      <div id="ex-classify-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('classify')">Check Answers ✓</button>
+      <div id="ex-classify-score" class="hidden"></div>
+    </div>
+
+    <!-- Ex 2: Hindi to English -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-h2e">
+      <h3><span class="exercise-number">2</span> Hindi → English</h3>
+      <p class="text-muted mb-4">What does each Hindi word mean in English? Tap 🔊 to hear it!</p>
+      <div id="ex-h2e-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('h2e')">Check Answers ✓</button>
+      <div id="ex-h2e-score" class="hidden"></div>
+    </div>
+
+    <!-- Ex 3: English to Hindi -->
+    <div class="exercise-card fade-in-up delay-2" id="ex-e2h">
+      <h3><span class="exercise-number">3</span> English → Hindi</h3>
+      <p class="text-muted mb-4">Which Hindi word means this in English?</p>
+      <div id="ex-e2h-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('e2h')">Check Answers ✓</button>
+      <div id="ex-e2h-score" class="hidden"></div>
+    </div>
+
+    <!-- Ex 4: Match the picture -->
+    <div class="exercise-card fade-in-up delay-3" id="ex-pic">
+      <h3><span class="exercise-number">4</span> Match the Picture</h3>
+      <p class="text-muted mb-4">Which Hindi word describes this picture?</p>
+      <div id="ex-pic-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('pic')">Check Answers ✓</button>
+      <div id="ex-pic-score" class="hidden"></div>
+    </div>
+
+    <!-- Ex 5: Fill in the blank (like workbook) -->
+    <div class="exercise-card fade-in-up delay-4" id="ex-fill">
+      <h3><span class="exercise-number">5</span> खाली स्थान भरो · Fill in the Blank</h3>
+      <p class="text-muted mb-4">Pick the correct word from the options to complete the sentence. (Just like your workbook!)</p>
+      <div id="ex-fill-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('fill')">Check Answers ✓</button>
+      <div id="ex-fill-score" class="hidden"></div>
+    </div>
+
+    <!-- Ex 6: Find the noun in the sentence -->
+    <div class="exercise-card fade-in-up delay-5" id="ex-find">
+      <h3><span class="exercise-number">6</span> Find the संज्ञा in the sentence</h3>
+      <p class="text-muted mb-4">Which word in the sentence is the noun (the name of something)?</p>
+      <div id="ex-find-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('find')">Check Answers ✓</button>
+      <div id="ex-find-score" class="hidden"></div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ ==================== -->
+  <div class="tab-content" id="quiz">
+    <div class="section-header">
+      <h2>🎯 Quiz</h2>
+      <p>Show how much you know about संज्ञा!</p>
+    </div>
+    <div class="tier-selector">
+      <button class="tier-btn explorer active" onclick="startQuiz('explorer')">🌿 Explorer</button>
+      <button class="tier-btn adventurer" onclick="startQuiz('adventurer')">⚔️ Adventurer</button>
+      <button class="tier-btn champion" onclick="startQuiz('champion')">👑 Champion</button>
+    </div>
+    <div id="quiz-area">
+      <div class="text-center p-8">
+        <p style="font-size: var(--text-xl);">Select a tier and click to begin!</p>
+        <p style="color: var(--color-text-light);">Tip: Start with <strong>Explorer</strong> — all questions are picture-based and easy to recognise!</p>
+        <button class="btn btn-lg mt-4" style="background: #D97706; color: white;" onclick="startQuiz('explorer')">Start Explorer Quiz 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WORKSHEET ==================== -->
+  <div class="tab-content" id="worksheet">
+    <div class="section-header">
+      <h2>🖨️ Worksheet</h2>
+      <p>Print a worksheet to practise on paper!</p>
+    </div>
+    <div class="text-center">
+      <div class="card p-8" style="max-width: 500px; margin: 0 auto;">
+        <div style="font-size: 4rem;">📖</div>
+        <h3 class="mt-4">Chapter 1: संज्ञा Worksheet</h3>
+        <p class="text-muted mt-2">Classify nouns, fill in blanks, and practise just like in your workbook!</p>
+        <a href="../worksheets/hi01-sangya-worksheet.html" target="_blank" class="btn btn-lg mt-6" style="background: linear-gradient(135deg, #B45309, #FBBF24); color: white;">
+          Open Worksheet 🖨️
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/quiz-engine.js"></script>
+<script src="../js/progress.js"></script>
+
+<script>
+// ============================================
+// HINDI WORD BANK — All words with emoji, Hindi, transliteration, English
+// ============================================
+const WORDS = {
+  vyakti: [
+    { hi: 'माँ', roman: 'maa', en: 'Mother', emoji: '👩‍👧', type: 'vyakti' },
+    { hi: 'पिता', roman: 'pita', en: 'Father', emoji: '👨', type: 'vyakti' },
+    { hi: 'भाई', roman: 'bhai', en: 'Brother', emoji: '👦', type: 'vyakti' },
+    { hi: 'बहन', roman: 'bahan', en: 'Sister', emoji: '👧', type: 'vyakti' },
+    { hi: 'लड़का', roman: 'ladka', en: 'Boy', emoji: '🧒', type: 'vyakti' },
+    { hi: 'लड़की', roman: 'ladki', en: 'Girl', emoji: '👧🏻', type: 'vyakti' },
+    { hi: 'राजा', roman: 'raja', en: 'King', emoji: '🤴', type: 'vyakti' },
+    { hi: 'रानी', roman: 'rani', en: 'Queen', emoji: '👸', type: 'vyakti' },
+  ],
+  praani: [
+    { hi: 'हाथी', roman: 'haathi', en: 'Elephant', emoji: '🐘', type: 'praani' },
+    { hi: 'कुत्ता', roman: 'kutta', en: 'Dog', emoji: '🐕', type: 'praani' },
+    { hi: 'बिल्ली', roman: 'billi', en: 'Cat', emoji: '🐈', type: 'praani' },
+    { hi: 'बंदर', roman: 'bandar', en: 'Monkey', emoji: '🐒', type: 'praani' },
+    { hi: 'कौआ', roman: 'kauaa', en: 'Crow', emoji: '🐦‍⬛', type: 'praani' },
+    { hi: 'तोता', roman: 'tota', en: 'Parrot', emoji: '🦜', type: 'praani' },
+    { hi: 'मछली', roman: 'machli', en: 'Fish', emoji: '🐟', type: 'praani' },
+    { hi: 'तितली', roman: 'titli', en: 'Butterfly', emoji: '🦋', type: 'praani' },
+  ],
+  sthaan: [
+    { hi: 'भारत', roman: 'Bharat', en: 'India', emoji: '🇮🇳', type: 'sthaan' },
+    { hi: 'बहरीन', roman: 'Bahrain', en: 'Bahrain', emoji: '🇧🇭', type: 'sthaan' },
+    { hi: 'दिल्ली', roman: 'Dilli', en: 'Delhi', emoji: '🏛️', type: 'sthaan' },
+    { hi: 'घर', roman: 'ghar', en: 'Home', emoji: '🏠', type: 'sthaan' },
+    { hi: 'स्कूल', roman: 'school', en: 'School', emoji: '🏫', type: 'sthaan' },
+    { hi: 'बाज़ार', roman: 'bazaar', en: 'Market', emoji: '🏪', type: 'sthaan' },
+    { hi: 'ताजमहल', roman: 'Taj Mahal', en: 'Taj Mahal', emoji: '🕌', type: 'sthaan' },
+    { hi: 'खेत', roman: 'khet', en: 'Farm', emoji: '🌾', type: 'sthaan' },
+  ],
+  vastu: [
+    { hi: 'किताब', roman: 'kitaab', en: 'Book', emoji: '📖', type: 'vastu' },
+    { hi: 'कुर्सी', roman: 'kursi', en: 'Chair', emoji: '🪑', type: 'vastu' },
+    { hi: 'मेज़', roman: 'mez', en: 'Table', emoji: '🪑', type: 'vastu' },
+    { hi: 'गेंद', roman: 'gend', en: 'Ball', emoji: '⚽', type: 'vastu' },
+    { hi: 'पेंसिल', roman: 'pencil', en: 'Pencil', emoji: '✏️', type: 'vastu' },
+    { hi: 'साईकिल', roman: 'saaikil', en: 'Bicycle', emoji: '🚲', type: 'vastu' },
+    { hi: 'दूध', roman: 'doodh', en: 'Milk', emoji: '🥛', type: 'vastu' },
+    { hi: 'आम', roman: 'aam', en: 'Mango', emoji: '🥭', type: 'vastu' },
+    { hi: 'पतंग', roman: 'patang', en: 'Kite', emoji: '🪁', type: 'vastu' },
+    { hi: 'गुड़िया', roman: 'gudiya', en: 'Doll', emoji: '🪆', type: 'vastu' },
+  ]
+};
+
+const ALL_WORDS = [...WORDS.vyakti, ...WORDS.praani, ...WORDS.sthaan, ...WORDS.vastu];
+
+// ============================================
+// SPEAK (Web Speech API)
+// ============================================
+function speak(text, btn) {
+  if (!('speechSynthesis' in window)) {
+    alert('Sorry! Your browser does not support audio pronunciation.');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'hi-IN';
+  utterance.rate = 0.85;
+  utterance.pitch = 1;
+
+  if (btn) {
+    btn.classList.add('speaking');
+    utterance.onend = () => btn.classList.remove('speaking');
+    utterance.onerror = () => btn.classList.remove('speaking');
+  }
+  window.speechSynthesis.speak(utterance);
+}
+
+// ============================================
+// RENDER WORD GRIDS
+// ============================================
+function wordCardHTML(w) {
+  return `
+    <div class="word-card">
+      <div class="word-emoji">${w.emoji}</div>
+      <div class="word-hindi">${w.hi}</div>
+      <div class="word-roman">${w.roman}</div>
+      <div class="word-english">${w.en}</div>
+      <button class="speak-btn" onclick="speak('${w.hi}', this)" title="Listen to pronunciation">🔊</button>
+    </div>
+  `;
+}
+
+function renderWordGrids() {
+  document.getElementById('vyakti-words').innerHTML = WORDS.vyakti.map(wordCardHTML).join('');
+  document.getElementById('praani-words').innerHTML = WORDS.praani.map(wordCardHTML).join('');
+  document.getElementById('sthaan-words').innerHTML = WORDS.sthaan.map(wordCardHTML).join('');
+  document.getElementById('vastu-words').innerHTML = WORDS.vastu.map(wordCardHTML).join('');
+}
+
+// ============================================
+// FLASHCARDS
+// ============================================
+let flashcards = [...ALL_WORDS];
+let fcIndex = 0;
+let fcFlipped = false;
+
+function renderFlashcard() {
+  const w = flashcards[fcIndex];
+  document.getElementById('fc-emoji').textContent = w.emoji;
+  document.getElementById('fc-emoji-back').textContent = w.emoji;
+  document.getElementById('fc-hindi').textContent = w.hi;
+  document.getElementById('fc-hindi-back').textContent = w.hi;
+  document.getElementById('fc-roman').textContent = w.roman;
+  document.getElementById('fc-english').textContent = w.en;
+  document.getElementById('fc-counter').textContent = `${fcIndex + 1} / ${flashcards.length}`;
+
+  // Reset flip
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcFlipped = false;
+
+  // Update button states
+  document.getElementById('fc-prev').disabled = fcIndex === 0;
+  document.getElementById('fc-next').disabled = fcIndex === flashcards.length - 1;
+}
+
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped');
+  if (fcFlipped) {
+    setTimeout(() => speak(flashcards[fcIndex].hi), 300);
+  }
+}
+
+function nextCard() {
+  if (fcIndex < flashcards.length - 1) { fcIndex++; renderFlashcard(); }
+}
+function prevCard() {
+  if (fcIndex > 0) { fcIndex--; renderFlashcard(); }
+}
+function shuffleCards() {
+  for (let i = flashcards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [flashcards[i], flashcards[j]] = [flashcards[j], flashcards[i]];
+  }
+  fcIndex = 0;
+  renderFlashcard();
+  Toast.show('Cards shuffled! 🎲', 'info', 2000);
+}
+
+// ============================================
+// EXERCISES
+// ============================================
+const exerciseData = {};
+
+function shuffle(arr) { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function generateExercises() {
+  generateClassifyExercise();
+  generateH2EExercise();
+  generateE2HExercise();
+  generatePicExercise();
+  generateFillExercise();
+  generateFindExercise();
+}
+
+function generateClassifyExercise() {
+  const items = shuffle(ALL_WORDS).slice(0, 8);
+  exerciseData.classify = items;
+  const typeLabels = {
+    vyakti: 'व्यक्ति (Person)', praani: 'प्राणी (Animal)',
+    sthaan: 'स्थान (Place)', vastu: 'वस्तु (Thing)'
+  };
+  document.getElementById('ex-classify-questions').innerHTML = items.map((w, i) => `
+    <div class="exercise-question" id="classify-q${i}">
+      <div class="q-label">Q${i+1}. ${w.emoji} <span class="hi-big" style="font-size: 1.6rem; color: #92400E;">${w.hi}</span>
+        <span style="font-size: 0.85rem; color: #6B7280; font-style: italic;">(${w.roman})</span>
+        — <strong>${w.en}</strong>
+        <button class="speak-btn" style="width:32px; height:32px; font-size:0.9rem; display:inline-flex; vertical-align:middle; margin-left:8px;" onclick="speak('${w.hi}', this)">🔊</button>
+      </div>
+      <select class="exercise-input" id="classify-a${i}" style="width: 220px;">
+        <option value="">Choose...</option>
+        <option value="vyakti">${typeLabels.vyakti}</option>
+        <option value="praani">${typeLabels.praani}</option>
+        <option value="sthaan">${typeLabels.sthaan}</option>
+        <option value="vastu">${typeLabels.vastu}</option>
+      </select>
+    </div>
+  `).join('');
+}
+
+function generateH2EExercise() {
+  const items = shuffle(ALL_WORDS).slice(0, 8);
+  exerciseData.h2e = items.map(w => {
+    const wrong = shuffle(ALL_WORDS.filter(x => x.en !== w.en)).slice(0, 3);
+    const options = shuffle([w.en, ...wrong.map(x => x.en)]);
+    return { word: w, options };
+  });
+  document.getElementById('ex-h2e-questions').innerHTML = exerciseData.h2e.map((q, i) => `
+    <div class="exercise-question" id="h2e-q${i}">
+      <div class="q-label">
+        Q${i+1}. What does <span class="hi-big" style="font-size:1.7rem; color:#92400E;">${q.word.hi}</span>
+        <span style="font-size:0.85rem; color:#6B7280; font-style:italic;">(${q.word.roman})</span>
+        mean?
+        <button class="speak-btn" style="width:32px; height:32px; font-size:0.9rem; display:inline-flex; vertical-align:middle; margin-left:8px;" onclick="speak('${q.word.hi}', this)">🔊</button>
+      </div>
+      <select class="exercise-input" id="h2e-a${i}" style="width: 200px;">
+        <option value="">Choose...</option>
+        ${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+function generateE2HExercise() {
+  const items = shuffle(ALL_WORDS).slice(0, 8);
+  exerciseData.e2h = items.map(w => {
+    const wrong = shuffle(ALL_WORDS.filter(x => x.hi !== w.hi)).slice(0, 3);
+    const options = shuffle([w, ...wrong]);
+    return { word: w, options };
+  });
+  document.getElementById('ex-e2h-questions').innerHTML = exerciseData.e2h.map((q, i) => `
+    <div class="exercise-question" id="e2h-q${i}">
+      <div class="q-label">Q${i+1}. Which Hindi word means "<strong>${q.word.en}</strong>"?</div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+        ${q.options.map((o, oi) => `
+          <label class="hi-option" style="cursor:pointer;">
+            <input type="radio" name="e2h-${i}" value="${o.hi}" style="margin-right: 8px;">
+            <span class="opt-hindi">${o.hi}</span>
+            <span class="opt-roman"> (${o.roman})</span>
+            <button class="speak-btn" style="width:28px; height:28px; font-size:0.8rem; display:inline-flex; margin-left:8px; vertical-align:middle;" onclick="event.preventDefault(); speak('${o.hi}', this)">🔊</button>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function generatePicExercise() {
+  const items = shuffle(ALL_WORDS).slice(0, 6);
+  exerciseData.pic = items.map(w => {
+    const wrong = shuffle(ALL_WORDS.filter(x => x.hi !== w.hi && x.emoji !== w.emoji)).slice(0, 3);
+    const options = shuffle([w, ...wrong]);
+    return { word: w, options };
+  });
+  document.getElementById('ex-pic-questions').innerHTML = exerciseData.pic.map((q, i) => `
+    <div class="exercise-question" id="pic-q${i}">
+      <div class="q-label text-center">
+        Q${i+1}. Which word describes this?
+        <div style="font-size: 4rem; margin: 8px 0;">${q.word.emoji}</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+        ${q.options.map((o) => `
+          <label class="hi-option" style="cursor:pointer;">
+            <input type="radio" name="pic-${i}" value="${o.hi}" style="margin-right: 8px;">
+            <span class="opt-hindi">${o.hi}</span>
+            <div class="opt-roman">(${o.roman}) — ${o.en}</div>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateFillExercise() {
+  const sentences = [
+    { hi: 'मुझे ___ खाना पसंद है।', en: 'I like to eat ___.', blank: 'आम', wrong: ['किताब', 'कुर्सी'], rom: 'aam', wen: 'mango' },
+    { hi: 'बंदर ___ पर चढ़ रहा है।', en: 'The monkey is climbing on the ___.', blank: 'पेड़', wrong: ['दूध', 'घर'], rom: 'ped', wen: 'tree' },
+    { hi: 'छत पर ___ बैठा है।', en: 'A ___ is sitting on the roof.', blank: 'कौआ', wrong: ['गेंद', 'कार'], rom: 'kauaa', wen: 'crow' },
+    { hi: 'माँ ___ बना रही है।', en: 'Mother is making ___.', blank: 'खाना', wrong: ['साईकिल', 'पतंग'], rom: 'khaana', wen: 'food' },
+    { hi: 'रानी ___ पढ़ रही है।', en: 'Rani is reading a ___.', blank: 'किताब', wrong: ['हाथी', 'दिल्ली'], rom: 'kitaab', wen: 'book' },
+    { hi: 'गाय ___ देती है।', en: 'The cow gives ___.', blank: 'दूध', wrong: ['पतंग', 'स्कूल'], rom: 'doodh', wen: 'milk' },
+    { hi: 'मैं कल ___ जाऊँगा।', en: 'Tomorrow I will go to ___.', blank: 'दिल्ली', wrong: ['आम', 'तोता'], rom: 'Dilli', wen: 'Delhi' },
+    { hi: 'लड़का ___ से खेल रहा है।', en: 'The boy is playing with a ___.', blank: 'गेंद', wrong: ['माँ', 'भारत'], rom: 'gend', wen: 'ball' },
+  ];
+  const selected = shuffle(sentences).slice(0, 6);
+  exerciseData.fill = selected;
+
+  document.getElementById('ex-fill-questions').innerHTML = selected.map((s, i) => {
+    const options = shuffle([s.blank, ...s.wrong]);
+    return `
+      <div class="exercise-question" id="fill-q${i}">
+        <div class="q-label">Q${i+1}.</div>
+        <div class="hi-sentence-line">${s.hi}
+          <button class="speak-btn" style="width:28px; height:28px; font-size:0.8rem; display:inline-flex; vertical-align:middle; margin-left:8px;" onclick="speak('${s.hi.replace('___', s.blank)}', this)">🔊</button>
+        </div>
+        <div class="sentence-translation">${s.en}</div>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+          ${options.map((o) => `
+            <label class="hi-option" style="cursor:pointer; min-width: 100px;">
+              <input type="radio" name="fill-${i}" value="${o}" style="margin-right: 6px;">
+              <span class="opt-hindi">${o}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function generateFindExercise() {
+  const sentences = [
+    { hi: 'तारे चमक रहे हैं।', en: 'The stars are shining.', noun: 'तारे', nounRom: 'taare', nounEn: 'stars', otherWords: ['चमक', 'रहे'] },
+    { hi: 'पिंजरे में तोता है।', en: 'There is a parrot in the cage.', noun: 'तोता', nounRom: 'tota', nounEn: 'parrot', otherWords: ['में', 'है'] },
+    { hi: 'राधा बाहर गई है।', en: 'Radha has gone outside.', noun: 'राधा', nounRom: 'Radha', nounEn: 'Radha', otherWords: ['बाहर', 'गई'] },
+    { hi: 'मेज़ पर किताब है।', en: 'The book is on the table.', noun: 'किताब', nounRom: 'kitaab', nounEn: 'book', otherWords: ['पर', 'है'] },
+    { hi: 'मैंने आइसक्रीम खाई।', en: 'I ate ice cream.', noun: 'आइसक्रीम', nounRom: 'ice cream', nounEn: 'ice cream', otherWords: ['मैंने', 'खाई'] },
+    { hi: 'किसान खेत में काम करता है।', en: 'The farmer works in the field.', noun: 'किसान', nounRom: 'kisaan', nounEn: 'farmer', otherWords: ['में', 'करता'] },
+  ];
+  const selected = shuffle(sentences).slice(0, 5);
+  exerciseData.find = selected;
+
+  document.getElementById('ex-find-questions').innerHTML = selected.map((s, i) => {
+    const options = shuffle([s.noun, ...s.otherWords]);
+    return `
+      <div class="exercise-question" id="find-q${i}">
+        <div class="q-label">Q${i+1}. Which word in this sentence is a संज्ञा (noun)?</div>
+        <div class="hi-sentence-line">${s.hi}
+          <button class="speak-btn" style="width:28px; height:28px; font-size:0.8rem; display:inline-flex; vertical-align:middle; margin-left:8px;" onclick="speak('${s.hi}', this)">🔊</button>
+        </div>
+        <div class="sentence-translation">${s.en}</div>
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 12px;">
+          ${options.map((o) => `
+            <label class="hi-option" style="cursor:pointer;">
+              <input type="radio" name="find-${i}" value="${o}" style="margin-right: 6px;">
+              <span class="opt-hindi">${o}</span>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// --- Check Exercises ---
+function checkExercise(type) {
+  let correct = 0, total = 0;
+
+  if (type === 'classify') {
+    exerciseData.classify.forEach((w, i) => {
+      total++; const el = document.getElementById(`classify-q${i}`);
+      const val = document.getElementById(`classify-a${i}`).value;
+      if (val === w.type) { correct++; el.className = 'exercise-question answered-correct'; }
+      else {
+        const typeNames = { vyakti: 'व्यक्ति (Person)', praani: 'प्राणी (Animal)', sthaan: 'स्थान (Place)', vastu: 'वस्तु (Thing)' };
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${typeNames[w.type]}</div>`;
+      }
+      document.getElementById(`classify-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'h2e') {
+    exerciseData.h2e.forEach((q, i) => {
+      total++; const el = document.getElementById(`h2e-q${i}`);
+      const val = document.getElementById(`h2e-a${i}`).value;
+      if (val === q.word.en) { correct++; el.className = 'exercise-question answered-correct'; }
+      else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${q.word.en}</div>`;
+      }
+      document.getElementById(`h2e-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'e2h') {
+    exerciseData.e2h.forEach((q, i) => {
+      total++; const el = document.getElementById(`e2h-q${i}`);
+      const selected = document.querySelector(`input[name="e2h-${i}"]:checked`);
+      const val = selected ? selected.value : '';
+      if (val === q.word.hi) { correct++; el.className = 'exercise-question answered-correct'; }
+      else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${q.word.hi} (${q.word.roman})</div>`;
+      }
+      document.querySelectorAll(`input[name="e2h-${i}"]`).forEach(r => r.disabled = true);
+    });
+  }
+
+  if (type === 'pic') {
+    exerciseData.pic.forEach((q, i) => {
+      total++; const el = document.getElementById(`pic-q${i}`);
+      const selected = document.querySelector(`input[name="pic-${i}"]:checked`);
+      const val = selected ? selected.value : '';
+      if (val === q.word.hi) { correct++; el.className = 'exercise-question answered-correct'; }
+      else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${q.word.hi} (${q.word.en})</div>`;
+      }
+      document.querySelectorAll(`input[name="pic-${i}"]`).forEach(r => r.disabled = true);
+    });
+  }
+
+  if (type === 'fill') {
+    exerciseData.fill.forEach((s, i) => {
+      total++; const el = document.getElementById(`fill-q${i}`);
+      const selected = document.querySelector(`input[name="fill-${i}"]:checked`);
+      const val = selected ? selected.value : '';
+      if (val === s.blank) { correct++; el.className = 'exercise-question answered-correct'; }
+      else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${s.blank} (${s.rom}) — ${s.wen}</div>`;
+      }
+      document.querySelectorAll(`input[name="fill-${i}"]`).forEach(r => r.disabled = true);
+    });
+  }
+
+  if (type === 'find') {
+    exerciseData.find.forEach((s, i) => {
+      total++; const el = document.getElementById(`find-q${i}`);
+      const selected = document.querySelector(`input[name="find-${i}"]:checked`);
+      const val = selected ? selected.value : '';
+      if (val === s.noun) { correct++; el.className = 'exercise-question answered-correct'; }
+      else {
+        el.className = 'exercise-question answered-wrong';
+        el.innerHTML += `<div class="text-sm mt-2" style="color: var(--color-success);">Answer: ${s.noun} (${s.nounRom}) — ${s.nounEn}</div>`;
+      }
+      document.querySelectorAll(`input[name="find-${i}"]`).forEach(r => r.disabled = true);
+    });
+  }
+
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+  const scoreEl = document.getElementById(`ex-${type}-score`);
+  scoreEl.className = 'exercise-score';
+  const encouragement = pct >= 80 ? '⭐ Shaabaash! (Well done!)' :
+                        pct >= 60 ? '👍 Good try!' :
+                        pct >= 40 ? '💪 Almost there! Try the flashcards again.' :
+                        '🌱 Learning takes time! Revisit the lessons and try again.';
+  scoreEl.innerHTML = `Score: ${correct}/${total} (${pct}%) ${encouragement}`;
+
+  if (pct >= 60) { Confetti.launch(Math.max(30, pct/2)); AudioManager.playTone('correct'); }
+  else { AudioManager.playTone('click'); }
+  if (typeof Progress !== 'undefined') Progress.trackExerciseComplete(type, correct, total);
+}
+
+// ============================================
+// QUIZ
+// ============================================
+function generateQuizQuestions() {
+  const q = [];
+  const typeLabels = { vyakti: 'व्यक्ति (Person)', praani: 'प्राणी (Animal)', sthaan: 'स्थान (Place)', vastu: 'वस्तु (Thing)' };
+
+  // --- EXPLORER: Picture + basic recognition ---
+  shuffle(ALL_WORDS).slice(0, 6).forEach((w, i) => {
+    const wrong = shuffle(ALL_WORDS.filter(x => x.en !== w.en)).slice(0, 3);
+    q.push({
+      tier: 'explorer', type: 'mcq', points: 10,
+      question: `${w.emoji} What is the English meaning of this Hindi word: ${w.hi}?`,
+      options: shuffle([w.en, ...wrong.map(x => x.en)]),
+      answer: w.en,
+      hint: `The picture shows the meaning!`,
+      explanation: `${w.hi} (${w.roman}) means "${w.en}" in English.`
+    });
+  });
+
+  // Type classification
+  shuffle(ALL_WORDS).slice(0, 5).forEach((w) => {
+    q.push({
+      tier: 'explorer', type: 'mcq', points: 10,
+      question: `${w.emoji} ${w.hi} (${w.roman}) means "${w.en}". What TYPE of संज्ञा is it?`,
+      options: [typeLabels.vyakti, typeLabels.praani, typeLabels.sthaan, typeLabels.vastu],
+      answer: typeLabels[w.type],
+      hint: 'Is it a person, animal, place, or thing?',
+      explanation: `${w.en} is a ${typeLabels[w.type]} type of noun.`
+    });
+  });
+
+  // Basic true/false
+  q.push({ tier: 'explorer', type: 'true-false', points: 10,
+    question: `"हाथी" (haathi) is a प्राणी (animal) noun.`, answer: 'true',
+    hint: 'हाथी means elephant!', explanation: 'True! हाथी (elephant) is an animal, so it is a प्राणी noun.' });
+  q.push({ tier: 'explorer', type: 'true-false', points: 10,
+    question: `"भारत" (Bharat) means England.`, answer: 'false',
+    hint: 'भारत is the Hindi name of a country near Bahrain...', explanation: 'False! भारत means India, not England.' });
+  q.push({ tier: 'explorer', type: 'true-false', points: 10,
+    question: `"किताब" (kitaab) means book.`, answer: 'true',
+    hint: 'You read a...', explanation: 'True! किताब means book in English.' });
+  q.push({ tier: 'explorer', type: 'true-false', points: 10,
+    question: `"माँ" (maa) is the Hindi word for mother.`, answer: 'true',
+    hint: 'It sounds a bit like "ma" in English!', explanation: 'True! माँ means mother. We also say "Maa" in English sometimes!' });
+
+  // --- ADVENTURER ---
+  // English to Hindi
+  shuffle(ALL_WORDS).slice(0, 6).forEach((w) => {
+    const wrong = shuffle(ALL_WORDS.filter(x => x.hi !== w.hi)).slice(0, 3);
+    q.push({
+      tier: 'adventurer', type: 'mcq', points: 15,
+      question: `Which Hindi word means "${w.en}"? ${w.emoji}`,
+      options: shuffle([w.hi, ...wrong.map(x => x.hi)]),
+      answer: w.hi,
+      hint: `Think about the sound: ${w.roman}`,
+      explanation: `${w.en} = ${w.hi} (${w.roman})`
+    });
+  });
+
+  // Identify the noun in sentence
+  const sentenceQs = [
+    { sent: 'पिंजरे में तोता है।', sentEn: 'There is a parrot in the cage.', noun: 'तोता', wrong: ['में', 'है'], nounEn: 'parrot' },
+    { sent: 'राधा बाज़ार गई।', sentEn: 'Radha went to the market.', noun: 'राधा', wrong: ['गई', 'बाज़ार'], nounEn: 'Radha (a person)' },
+    { sent: 'किसान खेत में काम करता है।', sentEn: 'The farmer works in the field.', noun: 'किसान', wrong: ['करता', 'में'], nounEn: 'farmer' },
+    { sent: 'बंदर पेड़ पर चढ़ रहा है।', sentEn: 'The monkey is climbing on the tree.', noun: 'बंदर', wrong: ['चढ़', 'पर'], nounEn: 'monkey' },
+  ];
+  sentenceQs.forEach(s => {
+    q.push({
+      tier: 'adventurer', type: 'mcq', points: 15,
+      question: `Which word is a noun (संज्ञा) in: "${s.sent}" (${s.sentEn})`,
+      options: shuffle([s.noun, ...s.wrong]),
+      answer: s.noun,
+      hint: 'A noun names a person, place, animal, or thing.',
+      explanation: `${s.noun} is the noun — it means "${s.nounEn}".`
+    });
+  });
+
+  // Type classification harder
+  shuffle(ALL_WORDS).slice(0, 4).forEach(w => {
+    q.push({
+      tier: 'adventurer', type: 'mcq', points: 15,
+      question: `Which TYPE of noun is "${w.hi}" (${w.roman})?`,
+      options: [typeLabels.vyakti, typeLabels.praani, typeLabels.sthaan, typeLabels.vastu],
+      answer: typeLabels[w.type],
+      hint: `Its meaning is: ${w.en}`,
+      explanation: `${w.hi} means ${w.en} — that's a ${typeLabels[w.type]} noun.`
+    });
+  });
+
+  q.push({ tier: 'adventurer', type: 'true-false', points: 15,
+    question: `"ताजमहल" is a स्थान (place) noun.`, answer: 'true',
+    hint: 'The Taj Mahal is a famous building in India.',
+    explanation: 'True! ताजमहल (Taj Mahal) is a specific place, so it is a स्थान noun.' });
+
+  // --- CHAMPION ---
+  // Fill in the blank with 4 options
+  const champFill = [
+    { sent: 'मुझे ___ खाना पसंद है।', sentEn: 'I like to eat ___.', answer: 'आम', options: ['आम', 'किताब', 'कुर्सी', 'पतंग'], ans_en: 'mango' },
+    { sent: 'गाय ___ देती है।', sentEn: 'The cow gives ___.', answer: 'दूध', options: ['दूध', 'पेड़', 'स्कूल', 'राजा'], ans_en: 'milk' },
+    { sent: 'पेड़ पर ___ बैठा है।', sentEn: 'A ___ is sitting on the tree.', answer: 'बंदर', options: ['बंदर', 'साईकिल', 'खाना', 'माँ'], ans_en: 'monkey' },
+    { sent: 'मेरी ___ खाना बना रही है।', sentEn: 'My ___ is making food.', answer: 'माँ', options: ['माँ', 'पतंग', 'हाथी', 'बहरीन'], ans_en: 'mother' },
+  ];
+  champFill.forEach(f => {
+    q.push({
+      tier: 'champion', type: 'mcq', points: 20,
+      question: `Fill in the blank: "${f.sent}" (${f.sentEn})`,
+      options: f.options,
+      answer: f.answer,
+      hint: `What thing/animal/person would fit here? (Answer means: ${f.ans_en})`,
+      explanation: `${f.answer} — meaning "${f.ans_en}" — fits the sentence.`
+    });
+  });
+
+  // Count the nouns in a sentence
+  q.push({ tier: 'champion', type: 'mcq', points: 20,
+    question: `Sentence: "राधा स्कूल में किताब पढ़ रही है।" (Radha is reading a book at school.) How many nouns are in this sentence?`,
+    options: ['3', '2', '4', '1'], answer: '3',
+    hint: 'Look for: person, place, thing.',
+    explanation: 'There are 3 nouns: राधा (person), स्कूल (place), किताब (thing).' });
+
+  q.push({ tier: 'champion', type: 'mcq', points: 20,
+    question: `"माँ ने हाथी को दूध दिया।" (Mother gave milk to the elephant.) How many nouns?`,
+    options: ['3', '2', '4', '1'], answer: '3',
+    hint: 'Person, animal, thing?',
+    explanation: 'There are 3 nouns: माँ (person/vyakti), हाथी (animal/praani), दूध (thing/vastu).' });
+
+  // Mix of TYPES
+  q.push({ tier: 'champion', type: 'mcq', points: 20,
+    question: `Which of these is NOT a noun?`,
+    options: ['खा', 'किताब', 'माँ', 'घर'],
+    answer: 'खा',
+    hint: 'A noun is a NAME of something. "खा" means "eat" — that\'s an action!',
+    explanation: '"खा" means "eat" — that is an action (verb/क्रिया), not a noun. किताब, माँ, and घर are all nouns.' });
+
+  q.push({ tier: 'champion', type: 'mcq', points: 20,
+    question: `"क्रिसलिन बहरीन में रहती है।" (Crislyn lives in Bahrain.) How many nouns are there?`,
+    options: ['2', '1', '3', '4'],
+    answer: '2',
+    hint: 'Person name + place name?',
+    explanation: 'There are 2 nouns: क्रिसलिन (Crislyn, a person/vyakti) and बहरीन (Bahrain, a place/sthaan).' });
+
+  // Match all 4 types
+  [['माँ', 'vyakti'], ['कौआ', 'praani'], ['दिल्ली', 'sthaan'], ['पतंग', 'vastu']].forEach(([word, type]) => {
+    q.push({ tier: 'champion', type: 'mcq', points: 20,
+      question: `"${word}" belongs to which group of संज्ञा?`,
+      options: [typeLabels.vyakti, typeLabels.praani, typeLabels.sthaan, typeLabels.vastu],
+      answer: typeLabels[type],
+      hint: 'Think about what this word names.',
+      explanation: `${word} is a ${typeLabels[type]} noun.` });
+  });
+
+  return q;
+}
+
+function startQuiz(tier) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tier-btn.${tier}`).classList.add('active');
+  const quiz = new QuizEngine({
+    containerId: 'quiz-area', questions: generateQuizQuestions(), tier, questionCount: 15,
+    onComplete: (results) => {
+      if (typeof Progress !== 'undefined') Progress.trackQuizComplete(tier, results.percentage, results.timeTaken);
+      if (results.percentage >= 60 && tier === 'explorer') Toast.show('Adventurer unlocked! ⚔️', 'badge', 4000);
+      if (results.percentage >= 70 && tier === 'adventurer') Toast.show('Champion unlocked! 👑', 'badge', 4000);
+    }
+  });
+  quiz.start();
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initLessonCards();
+  renderWordGrids();
+  renderFlashcard();
+  generateExercises();
+  if (typeof Progress !== 'undefined') {
+    Progress.init();
+    document.querySelectorAll('.lesson-card-header').forEach((h, i) => {
+      h.addEventListener('click', () => { if (h.parentElement.classList.contains('open')) Progress.trackLessonOpen(`hi01_lesson_${i+1}`); });
+    });
+    const wsLink = document.querySelector('a[href*="worksheet"]');
+    if (wsLink) wsLink.addEventListener('click', () => Progress.trackWorksheetOpen());
+  }
+});
+</script>
+
+</body>
+</html>
