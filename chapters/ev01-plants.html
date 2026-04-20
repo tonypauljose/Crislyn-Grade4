@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chapter 1: Roots, Flowers and Trees — Crislyn's EVS</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+
+  <style>
+    .interactive-area {
+      background: var(--color-bg); border-radius: var(--radius-md);
+      padding: var(--space-6); margin: var(--space-4) 0; border: 2px solid var(--color-border-light);
+    }
+
+    /* Plant diagram */
+    .plant-diagram {
+      display: flex; flex-direction: column; align-items: center;
+      gap: var(--space-1); max-width: 320px; margin: 0 auto; padding: var(--space-4);
+      position: relative;
+    }
+
+    .plant-part {
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-3) var(--space-4); border-radius: var(--radius-md);
+      transition: all var(--duration-normal) var(--ease-bounce);
+      cursor: pointer; width: 100%; border: 3px solid transparent;
+    }
+
+    .plant-part:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
+    .plant-part.selected { border-color: #059669; background: white; box-shadow: var(--shadow-glow); }
+
+    .plant-part .part-emoji { font-size: 2.5rem; flex-shrink: 0; }
+    .plant-part .part-name { font-family: var(--font-heading); font-size: var(--text-lg); }
+
+    .part-flower { background: #FCE7F3; color: #BE185D; }
+    .part-leaf { background: #D1FAE5; color: #065F46; }
+    .part-stem { background: #FEF3C7; color: #92400E; }
+    .part-root { background: #DDD6FE; color: #5B21B6; }
+    .part-fruit { background: #FED7AA; color: #9A3412; }
+
+    .plant-info {
+      background: var(--color-surface); padding: var(--space-4); border-radius: var(--radius-md);
+      margin-top: var(--space-4); border-left: 4px solid #059669;
+    }
+
+    .root-type-card {
+      padding: var(--space-5); border-radius: var(--radius-md); text-align: center;
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .root-type-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .root-type-card .root-emoji { font-size: 3rem; display: block; margin-bottom: var(--space-2); }
+    .root-type-card h4 { margin-bottom: var(--space-2); }
+    .root-type-card .examples {
+      font-weight: 700; font-size: var(--text-sm); margin-top: var(--space-2);
+    }
+
+    .tap-root { background: #FEF3C7; border: 3px solid #FCD34D; }
+    .tap-root h4 { color: #92400E; }
+    .tap-root .examples { color: #92400E; }
+
+    .fibrous-root { background: #D1FAE5; border: 3px solid #6EE7B7; }
+    .fibrous-root h4 { color: #065F46; }
+    .fibrous-root .examples { color: #065F46; }
+
+    .tree-card {
+      padding: var(--space-4); border-radius: var(--radius-md); text-align: center;
+      background: white; border: 2px solid var(--color-border-light);
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .tree-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #10B981; }
+    .tree-card .tree-emoji { font-size: 2.5rem; margin-bottom: var(--space-2); display: block; }
+
+    .exercise-question {
+      padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md);
+      margin-bottom: var(--space-3); border: 2px solid var(--color-border-light);
+      transition: border-color var(--duration-normal);
+    }
+    .exercise-question.answered-correct { border-color: var(--color-success); background: var(--color-success-light); }
+    .exercise-question.answered-wrong { border-color: var(--color-error); background: var(--color-error-light); }
+    .exercise-question .q-label { font-weight: 700; color: #059669; margin-bottom: var(--space-2); }
+
+    .exercise-input {
+      padding: var(--space-2) var(--space-3); border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+      font-size: var(--text-base); font-weight: 600; outline: none;
+      transition: border-color var(--duration-normal);
+    }
+    .exercise-input:focus { border-color: #10B981; }
+
+    .exercise-score {
+      display: flex; align-items: center; justify-content: center; gap: var(--space-4); padding: var(--space-4);
+      background: linear-gradient(135deg, #047857, #34D399); color: white; border-radius: var(--radius-md);
+      margin-top: var(--space-4); font-size: var(--text-lg); font-weight: 700;
+    }
+
+    .fact-box {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-radius: var(--radius-md); padding: var(--space-4); border-left: 4px solid #F59E0B;
+      margin: var(--space-4) 0;
+    }
+    .fact-box h4 { color: #92400E; margin-bottom: var(--space-2); }
+
+    .photosynth-box {
+      background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+      padding: var(--space-5); border-radius: var(--radius-lg); text-align: center;
+      border: 2px solid #34D399;
+    }
+
+    .tier-btn.explorer {
+      border-color: var(--color-success); color: var(--color-success); background: var(--color-success-light);
+    }
+    .tier-btn.explorer.active, .tier-btn.explorer:hover { background: var(--color-success); color: white; }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header" style="background: linear-gradient(135deg, #047857, #059669, #34D399);">
+  <div class="container">
+    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">🌱 Chapter 1</div>
+    <h1 class="fade-in-up">Roots, Flowers and Trees</h1>
+    <p class="fade-in-up delay-1">Discover the amazing world of plants — how they grow, live, and help us!</p>
+    <a href="../evs.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to EVS</a>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="learn">📖 Learn</div>
+    <div class="tab" data-tab="practice">✏️ Practice</div>
+    <div class="tab" data-tab="quiz">🎯 Quiz</div>
+    <div class="tab" data-tab="worksheet">🖨️ Worksheet</div>
+  </div>
+
+  <!-- ==================== LEARN ==================== -->
+  <div class="tab-content active" id="learn">
+    <div class="section-header">
+      <h2>📖 Learn</h2>
+      <p>Let's explore plants from roots to flowers to trees!</p>
+    </div>
+
+    <!-- Lesson 1: What Plants Need -->
+    <div class="lesson-card open fade-in-up">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">1</span>
+        <h3>What Do Plants Need to Grow?</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Plants are living things — just like you and me! To grow healthy and strong, they need <strong>four important things</strong>:</p>
+
+        <div class="grid-2 gap-4 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="card p-5 text-center" style="background: #DBEAFE; border: 2px solid #93C5FD;">
+            <div style="font-size: 3rem;">💧</div>
+            <h4 style="color: #1D4ED8;">Water</h4>
+            <p class="text-sm">From rain or watering</p>
+          </div>
+          <div class="card p-5 text-center" style="background: #FEF3C7; border: 2px solid #FCD34D;">
+            <div style="font-size: 3rem;">☀️</div>
+            <h4 style="color: #92400E;">Sunlight</h4>
+            <p class="text-sm">To make their food</p>
+          </div>
+          <div class="card p-5 text-center" style="background: #E0F2FE; border: 2px solid #7DD3FC;">
+            <div style="font-size: 3rem;">💨</div>
+            <h4 style="color: #075985;">Air</h4>
+            <p class="text-sm">Mainly carbon dioxide</p>
+          </div>
+          <div class="card p-5 text-center" style="background: #FED7AA; border: 2px solid #FB923C;">
+            <div style="font-size: 3rem;">🟫</div>
+            <h4 style="color: #9A3412;">Soil</h4>
+            <p class="text-sm">For nutrients and support</p>
+          </div>
+        </div>
+
+        <div class="fact-box mt-4">
+          <h4>🤔 Did You Know?</h4>
+          <p>Without any ONE of these four things, a plant cannot survive! That's why we water plants, place them near windows, and use good soil.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 2: Parts of a Plant -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">2</span>
+        <h3>Parts of a Plant</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Every plant has special parts that each do an important job! Click on any part below to learn more.</p>
+
+        <div class="interactive-area">
+          <div class="plant-diagram">
+            <div class="plant-part part-flower" onclick="showPartInfo('flower')">
+              <span class="part-emoji">🌸</span>
+              <div>
+                <div class="part-name">Flower</div>
+                <div style="font-size: var(--text-sm); opacity: 0.8;">Makes seeds and fruits</div>
+              </div>
+            </div>
+            <div class="plant-part part-leaf" onclick="showPartInfo('leaf')">
+              <span class="part-emoji">🍃</span>
+              <div>
+                <div class="part-name">Leaf</div>
+                <div style="font-size: var(--text-sm); opacity: 0.8;">Makes food for the plant</div>
+              </div>
+            </div>
+            <div class="plant-part part-stem" onclick="showPartInfo('stem')">
+              <span class="part-emoji">🌿</span>
+              <div>
+                <div class="part-name">Stem</div>
+                <div style="font-size: var(--text-sm); opacity: 0.8;">Supports the plant</div>
+              </div>
+            </div>
+            <div class="plant-part part-root" onclick="showPartInfo('root')">
+              <span class="part-emoji">🌱</span>
+              <div>
+                <div class="part-name">Root</div>
+                <div style="font-size: var(--text-sm); opacity: 0.8;">Holds plant in soil, drinks water</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="plant-info" id="part-info">
+            <p><strong>Click any plant part above</strong> to see what it does!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 3: Roots -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #5B21B6, #8B5CF6);">
+        <span class="lesson-number">3</span>
+        <h3>All About Roots</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Roots grow <strong>underground</strong>. They are the hidden heroes of the plant!</p>
+
+        <div class="card p-4 mt-4" style="background: #EDE9FE; border-left: 4px solid #8B5CF6;">
+          <h4 style="color: #5B21B6; margin-bottom: var(--space-2);">What Do Roots Do?</h4>
+          <ul style="list-style: disc; padding-left: var(--space-6); line-height: 2;">
+            <li><strong>Anchor the plant</strong> — hold it firmly in the soil so it doesn't fall</li>
+            <li><strong>Absorb water and minerals</strong> from the soil (like drinking through a straw!)</li>
+            <li><strong>Store food</strong> — some roots (like carrots and radishes) store food for the plant</li>
+          </ul>
+        </div>
+
+        <h4 class="mt-6 mb-3 text-center">Two Types of Roots</h4>
+        <div class="grid-2 gap-4">
+          <div class="root-type-card tap-root">
+            <span class="root-emoji">🥕</span>
+            <h4>Tap Root</h4>
+            <p style="font-size: var(--text-sm);">ONE main thick root going deep into the ground, with smaller roots branching from it.</p>
+            <div class="examples">Examples: Carrot, Radish, Turnip, Mango tree, Neem tree</div>
+          </div>
+          <div class="root-type-card fibrous-root">
+            <span class="root-emoji">🌾</span>
+            <h4>Fibrous Root</h4>
+            <p style="font-size: var(--text-sm);">MANY thin roots of the same size growing in a bunch from the base of the stem.</p>
+            <div class="examples">Examples: Grass, Wheat, Rice, Maize, Onion</div>
+          </div>
+        </div>
+
+        <div class="fact-box mt-4">
+          <h4>🤔 Cool Fact!</h4>
+          <p>When you eat a <strong>carrot</strong>, you're actually eating a ROOT! Same with radish, turnip, and beetroot. These roots store food for the plant — and we eat that food!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 4: Stems and Leaves -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #92400E, #F59E0B);">
+        <span class="lesson-number">4</span>
+        <h3>Stems and Leaves</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <div class="grid-2 gap-6">
+          <div class="card p-5" style="background: #FEF3C7; border: 2px solid #FCD34D;">
+            <h4 style="color: #92400E;">🌿 Stem</h4>
+            <p>The stem is like the <strong>skeleton</strong> of a plant. It:</p>
+            <ul style="list-style: disc; padding-left: var(--space-4); margin-top: var(--space-2);">
+              <li>Supports leaves, flowers, and fruits</li>
+              <li>Carries water from roots to leaves</li>
+              <li>Carries food from leaves to the whole plant</li>
+              <li>Holds the plant up towards sunlight</li>
+            </ul>
+            <p class="text-sm mt-2"><strong>Trees</strong> have thick woody stems called <em>trunks</em>!</p>
+          </div>
+
+          <div class="card p-5" style="background: #D1FAE5; border: 2px solid #6EE7B7;">
+            <h4 style="color: #065F46;">🍃 Leaf</h4>
+            <p>Leaves are like tiny <strong>kitchens</strong>. They:</p>
+            <ul style="list-style: disc; padding-left: var(--space-4); margin-top: var(--space-2);">
+              <li>Make food for the plant (called <strong>photosynthesis</strong>)</li>
+              <li>Breathe in carbon dioxide and breathe out oxygen</li>
+              <li>Release extra water as tiny drops</li>
+            </ul>
+            <p class="text-sm mt-2">The green colour of leaves comes from <strong>chlorophyll</strong>!</p>
+          </div>
+        </div>
+
+        <div class="photosynth-box mt-4">
+          <h4 style="color: #065F46;">✨ The Amazing Food-Making Magic</h4>
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; font-size: var(--text-lg); font-weight: 700; margin-top: var(--space-3);">
+            <span style="background: #E0F2FE; color: #075985; padding: 6px 12px; border-radius: 8px;">💧 Water</span>
+            <span style="color: #065F46;">+</span>
+            <span style="background: #FEF3C7; color: #92400E; padding: 6px 12px; border-radius: 8px;">☀️ Sunlight</span>
+            <span style="color: #065F46;">+</span>
+            <span style="background: #F3F4F6; color: #374151; padding: 6px 12px; border-radius: 8px;">💨 Air (CO₂)</span>
+            <span style="color: #065F46;">=</span>
+            <span style="background: #10B981; color: white; padding: 6px 12px; border-radius: 8px;">🍃 Food for Plant</span>
+          </div>
+          <p style="font-size: var(--text-sm); margin-top: var(--space-3);">This food-making happens inside leaves, using the green chlorophyll. It's called <strong>photosynthesis</strong>!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 5: Flowers -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #BE185D, #EC4899);">
+        <span class="lesson-number">5</span>
+        <h3>All About Flowers</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Flowers are the most <strong>beautiful and colourful</strong> part of a plant — but they have an important job too!</p>
+
+        <div class="card p-5 mt-4" style="background: #FCE7F3; border: 2px solid #F9A8D4;">
+          <h4 style="color: #BE185D;">What Do Flowers Do?</h4>
+          <ul style="list-style: disc; padding-left: var(--space-6); line-height: 2;">
+            <li>Their bright colours and smell <strong>attract insects</strong> like bees and butterflies</li>
+            <li>Insects help flowers <strong>make seeds</strong> (this is called <em>pollination</em>)</li>
+            <li>After pollination, flowers turn into <strong>fruits</strong> 🍎</li>
+            <li>Inside the fruit, there are <strong>seeds</strong> 🌱 that grow into new plants!</li>
+          </ul>
+        </div>
+
+        <div class="grid-3 gap-3 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🌹</span><br><strong>Rose</strong><br><span class="text-sm text-muted">(used for perfumes)</span></div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🌻</span><br><strong>Sunflower</strong><br><span class="text-sm text-muted">(gives us oil and seeds)</span></div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🌺</span><br><strong>Hibiscus</strong><br><span class="text-sm text-muted">(used for tea & medicine)</span></div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🌷</span><br><strong>Tulip</strong><br><span class="text-sm text-muted">(grown for beauty)</span></div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🪷</span><br><strong>Lotus</strong><br><span class="text-sm text-muted">(India's national flower)</span></div>
+          <div class="card p-3 text-center"><span style="font-size: 2rem;">🌼</span><br><strong>Daisy</strong><br><span class="text-sm text-muted">(cheerful & common)</span></div>
+        </div>
+
+        <div class="fact-box mt-4">
+          <h4>🐝 Flower → Fruit → Seed → New Plant!</h4>
+          <p>The life cycle of a flowering plant: A flower is pollinated by bees → It becomes a fruit → The fruit contains seeds → Seeds are planted → They grow into new plants → Which grow more flowers!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 6: Trees -->
+    <div class="lesson-card fade-in-up delay-5">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">6</span>
+        <h3>Trees — Giants of the Plant World</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Trees are <strong>very large plants</strong> with thick, hard, woody stems called <strong>trunks</strong>. They live for many, many years — some trees live for hundreds or even thousands of years!</p>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-5" style="background: #FEF3C7; border: 2px solid #FCD34D;">
+            <h4 style="color: #92400E;">🍂 Deciduous Trees</h4>
+            <p>These trees <strong>shed their leaves</strong> in a certain season (usually autumn/winter). New leaves grow in spring!</p>
+            <p class="text-sm mt-2"><strong>Examples:</strong> Mango, Neem, Oak, Maple</p>
+          </div>
+          <div class="card p-5" style="background: #D1FAE5; border: 2px solid #6EE7B7;">
+            <h4 style="color: #065F46;">🌲 Evergreen Trees</h4>
+            <p>These trees <strong>stay green all year round</strong>. They keep their leaves (though old ones slowly fall and new ones grow).</p>
+            <p class="text-sm mt-2"><strong>Examples:</strong> Pine, Cedar, Coconut, Banyan</p>
+          </div>
+        </div>
+
+        <h4 class="mt-6 mb-3 text-center">Trees We See Around Us</h4>
+        <div class="grid-3 gap-3" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+          <div class="tree-card"><span class="tree-emoji">🥭</span><strong>Mango</strong><br><span class="text-sm text-muted">Gives sweet fruit</span></div>
+          <div class="tree-card"><span class="tree-emoji">🌴</span><strong>Coconut</strong><br><span class="text-sm text-muted">Gives coconuts</span></div>
+          <div class="tree-card"><span class="tree-emoji">🌳</span><strong>Banyan</strong><br><span class="text-sm text-muted">Gives shade</span></div>
+          <div class="tree-card"><span class="tree-emoji">🌲</span><strong>Pine</strong><br><span class="text-sm text-muted">Gives wood & oil</span></div>
+          <div class="tree-card"><span class="tree-emoji">🍎</span><strong>Apple</strong><br><span class="text-sm text-muted">Gives apples</span></div>
+          <div class="tree-card"><span class="tree-emoji">🌿</span><strong>Neem</strong><br><span class="text-sm text-muted">Used as medicine</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 7: How Plants Help Us -->
+    <div class="lesson-card fade-in-up delay-6">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">7</span>
+        <h3>How Plants Help Us</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Plants are <strong>everywhere</strong> and they help us in so many wonderful ways!</p>
+
+        <div class="grid-3 gap-3 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="card p-4 text-center" style="background: #FEF3C7; border: 2px solid #FCD34D;">
+            <div style="font-size: 2.5rem;">🍎</div>
+            <h4 style="color: #92400E;">Food</h4>
+            <p class="text-sm">Fruits, vegetables, grains, nuts</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #E0F2FE; border: 2px solid #7DD3FC;">
+            <div style="font-size: 2.5rem;">💨</div>
+            <h4 style="color: #075985;">Oxygen</h4>
+            <p class="text-sm">The air we breathe!</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #FED7AA; border: 2px solid #FB923C;">
+            <div style="font-size: 2.5rem;">🪵</div>
+            <h4 style="color: #9A3412;">Wood</h4>
+            <p class="text-sm">Furniture, houses, paper</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #FCE7F3; border: 2px solid #F9A8D4;">
+            <div style="font-size: 2.5rem;">💊</div>
+            <h4 style="color: #BE185D;">Medicine</h4>
+            <p class="text-sm">Many medicines come from plants</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #D1FAE5; border: 2px solid #6EE7B7;">
+            <div style="font-size: 2.5rem;">👕</div>
+            <h4 style="color: #065F46;">Clothes</h4>
+            <p class="text-sm">Cotton comes from plants!</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #EDE9FE; border: 2px solid #C4B5FD;">
+            <div style="font-size: 2.5rem;">🏠</div>
+            <h4 style="color: #5B21B6;">Shelter</h4>
+            <p class="text-sm">Birds and animals live in trees</p>
+          </div>
+        </div>
+
+        <div class="fact-box mt-4">
+          <h4>🌍 Let's Protect Plants!</h4>
+          <p>Plants give us SO much, but we must take care of them too! We can: water plants, plant new trees, not pluck flowers unnecessarily, and protect forests. Every plant matters!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson 8 (Enrichment): Unusual Plants -->
+    <div class="lesson-card enrichment fade-in-up delay-7">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #047857, #10B981);">
+        <span class="lesson-number">8</span>
+        <h3>Amazing & Unusual Plants (Enrichment)</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Some plants are really special! Let's meet a few:</p>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-4">
+            <h4>🪴 Cactus</h4>
+            <p class="text-sm">Lives in <strong>deserts</strong> with very little water. Its leaves are tiny spines so water doesn't escape. Its thick stem stores water!</p>
+          </div>
+          <div class="card p-4">
+            <h4>🌸 Lotus</h4>
+            <p class="text-sm">Grows in water! Its long stem holds it up above the water surface.</p>
+          </div>
+          <div class="card p-4">
+            <h4>🌵 Venus Flytrap</h4>
+            <p class="text-sm">This plant eats INSECTS! It traps bugs when they land on its special leaves.</p>
+          </div>
+          <div class="card p-4">
+            <h4>🌴 Banyan Tree</h4>
+            <p class="text-sm">This tree grows EXTRA roots from its branches down to the ground — one tree can look like a whole forest!</p>
+          </div>
+          <div class="card p-4">
+            <h4>🎋 Bamboo</h4>
+            <p class="text-sm">The fastest-growing plant in the world! Some types grow almost <strong>1 metre in a single day</strong>!</p>
+          </div>
+          <div class="card p-4">
+            <h4>🌊 Mangroves</h4>
+            <p class="text-sm">Trees that grow with their roots partly in salty sea water. Their roots stick up above the water!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRACTICE ==================== -->
+  <div class="tab-content" id="practice">
+    <div class="section-header">
+      <h2>✏️ Practice</h2>
+      <p>Test what you've learned about plants!</p>
+    </div>
+
+    <!-- Exercise 1: Match Parts to Function -->
+    <div class="exercise-card fade-in-up" id="ex-parts">
+      <h3><span class="exercise-number">1</span> Match the Plant Part to Its Job</h3>
+      <p class="text-muted mb-4">Choose the correct plant part for each job.</p>
+      <div id="ex-parts-questions"></div>
+      <button class="btn mt-4" style="background: #059669; color: white;" onclick="checkExercise('parts')">Check Answers ✓</button>
+      <div id="ex-parts-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 2: Tap or Fibrous Roots -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-roots">
+      <h3><span class="exercise-number">2</span> Tap Root or Fibrous Root?</h3>
+      <p class="text-muted mb-4">Decide if each plant has a tap root or fibrous root.</p>
+      <div id="ex-roots-questions"></div>
+      <button class="btn mt-4" style="background: #059669; color: white;" onclick="checkExercise('roots')">Check Answers ✓</button>
+      <div id="ex-roots-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 3: Fill in the Blanks -->
+    <div class="exercise-card fade-in-up delay-2" id="ex-fill">
+      <h3><span class="exercise-number">3</span> Fill in the Blanks</h3>
+      <p class="text-muted mb-4">Complete each sentence with the correct word.</p>
+      <div id="ex-fill-questions"></div>
+      <button class="btn mt-4" style="background: #059669; color: white;" onclick="checkExercise('fill')">Check Answers ✓</button>
+      <div id="ex-fill-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 4: True or False -->
+    <div class="exercise-card fade-in-up delay-3" id="ex-tf">
+      <h3><span class="exercise-number">4</span> True or False</h3>
+      <p class="text-muted mb-4">Decide if each statement is true or false.</p>
+      <div id="ex-tf-questions"></div>
+      <button class="btn mt-4" style="background: #059669; color: white;" onclick="checkExercise('tf')">Check Answers ✓</button>
+      <div id="ex-tf-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 5: Tree or Flower -->
+    <div class="exercise-card fade-in-up delay-4" id="ex-category">
+      <h3><span class="exercise-number">5</span> Is It a Tree, Flower, or Plant Part?</h3>
+      <p class="text-muted mb-4">Categorise each item.</p>
+      <div id="ex-category-questions"></div>
+      <button class="btn mt-4" style="background: #059669; color: white;" onclick="checkExercise('category')">Check Answers ✓</button>
+      <div id="ex-category-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 6: What Plants Give Us -->
+    <div class="exercise-card fade-in-up delay-5" id="ex-help">
+      <h3><span class="exercise-number">6</span> What Do Plants Give Us?</h3>
+      <p class="text-muted mb-4">Match each item to what kind of thing plants give us.</p>
+      <div id="ex-help-questions"></div>
+      <button class="btn mt-4" style="background: #059669; color: white;" onclick="checkExercise('help')">Check Answers ✓</button>
+      <div id="ex-help-score" class="hidden"></div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ ==================== -->
+  <div class="tab-content" id="quiz">
+    <div class="section-header">
+      <h2>🎯 Quiz</h2>
+      <p>Test your mastery of plants!</p>
+    </div>
+    <div class="tier-selector">
+      <button class="tier-btn explorer active" onclick="startQuiz('explorer')">🌿 Explorer</button>
+      <button class="tier-btn adventurer" onclick="startQuiz('adventurer')">⚔️ Adventurer</button>
+      <button class="tier-btn champion" onclick="startQuiz('champion')">👑 Champion</button>
+    </div>
+    <div id="quiz-area">
+      <div class="text-center p-8">
+        <p style="font-size: var(--text-xl);">Select a tier and click to begin!</p>
+        <button class="btn btn-lg mt-4" style="background: #059669; color: white;" onclick="startQuiz('explorer')">Start Explorer Quiz 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== WORKSHEET ==================== -->
+  <div class="tab-content" id="worksheet">
+    <div class="section-header">
+      <h2>🖨️ Worksheet</h2>
+      <p>Print a worksheet to practise on paper!</p>
+    </div>
+    <div class="text-center">
+      <div class="card p-8" style="max-width: 500px; margin: 0 auto;">
+        <div style="font-size: 4rem;">🌱</div>
+        <h3 class="mt-4">Chapter 1: Roots, Flowers and Trees</h3>
+        <p class="text-muted mt-2">Match plant parts, identify roots, fill in blanks, true/false, and more!</p>
+        <a href="../worksheets/ev01-plants-worksheet.html" target="_blank" class="btn btn-lg mt-6" style="background: linear-gradient(135deg, #047857, #34D399); color: white;">
+          Open Worksheet 🖨️
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/quiz-engine.js"></script>
+<script src="../js/progress.js"></script>
+
+<script>
+// ============================================
+// LESSON INTERACTIVES
+// ============================================
+function showPartInfo(part) {
+  document.querySelectorAll('.plant-part').forEach(p => p.classList.remove('selected'));
+  const el = document.querySelector(`.part-${part}`);
+  if (el) el.classList.add('selected');
+
+  const info = {
+    flower: { icon: '🌸', title: 'Flower', text: 'The colourful and often fragrant part! It attracts bees and butterflies. After pollination, the flower becomes a FRUIT that holds seeds. Examples: rose, sunflower, lotus, hibiscus.' },
+    leaf: { icon: '🍃', title: 'Leaf', text: 'The kitchen of the plant! Leaves make food using sunlight, water, and carbon dioxide. This is called PHOTOSYNTHESIS. The green colour comes from chlorophyll. Leaves also breathe!' },
+    stem: { icon: '🌿', title: 'Stem', text: 'The backbone of the plant! Stems hold up leaves and flowers. They carry water from the roots to the leaves, and food from the leaves to the whole plant. In trees, the stem is called a TRUNK.' },
+    root: { icon: '🌱', title: 'Root', text: 'The anchor of the plant! Roots grow underground. They hold the plant firmly in the soil and absorb water and minerals. Some roots (like carrots) also store food!' }
+  };
+
+  const i = info[part];
+  document.getElementById('part-info').innerHTML = `
+    <h4 style="margin-bottom: var(--space-2);">${i.icon} ${i.title}</h4>
+    <p>${i.text}</p>
+  `;
+  if (typeof AudioManager !== 'undefined') AudioManager.playTone('click');
+}
+
+// ============================================
+// PRACTICE EXERCISES
+// ============================================
+const exerciseData = {};
+
+function shuffle(arr) { const a=[...arr]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function generateExercises() {
+  generatePartsExercise();
+  generateRootsExercise();
+  generateFillExercise();
+  generateTFExercise();
+  generateCategoryExercise();
+  generateHelpExercise();
+}
+
+function generatePartsExercise() {
+  const items = shuffle([
+    { job: 'Holds the plant in the soil and drinks water', answer: 'Root' },
+    { job: 'Makes food using sunlight and water', answer: 'Leaf' },
+    { job: 'Makes seeds and turns into a fruit', answer: 'Flower' },
+    { job: 'Supports the plant and carries water up to the leaves', answer: 'Stem' },
+    { job: 'Contains seeds that grow into new plants', answer: 'Fruit' },
+    { job: 'The green part that breathes in carbon dioxide', answer: 'Leaf' },
+    { job: 'Attracts insects with bright colours and smell', answer: 'Flower' },
+    { job: 'Absorbs minerals from the soil', answer: 'Root' },
+  ]).slice(0, 8);
+  exerciseData.parts = items;
+
+  document.getElementById('ex-parts-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="parts-q${i}">
+      <div class="q-label">Q${i+1}. ${item.job}</div>
+      <select class="exercise-input" id="parts-a${i}" style="width: 180px;">
+        <option value="">Choose...</option>
+        <option value="Root">Root</option>
+        <option value="Stem">Stem</option>
+        <option value="Leaf">Leaf</option>
+        <option value="Flower">Flower</option>
+        <option value="Fruit">Fruit</option>
+      </select>
+    </div>
+  `).join('');
+}
+
+function generateRootsExercise() {
+  const items = shuffle([
+    { plant: 'Carrot', answer: 'Tap' }, { plant: 'Grass', answer: 'Fibrous' },
+    { plant: 'Radish', answer: 'Tap' }, { plant: 'Wheat', answer: 'Fibrous' },
+    { plant: 'Mango Tree', answer: 'Tap' }, { plant: 'Rice', answer: 'Fibrous' },
+    { plant: 'Turnip', answer: 'Tap' }, { plant: 'Maize', answer: 'Fibrous' },
+    { plant: 'Neem Tree', answer: 'Tap' }, { plant: 'Onion', answer: 'Fibrous' },
+  ]).slice(0, 8);
+  exerciseData.roots = items;
+
+  document.getElementById('ex-roots-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="roots-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong>${item.plant}</strong> →
+        <select class="exercise-input" id="roots-a${i}" style="width: 180px;">
+          <option value="">Choose...</option>
+          <option value="Tap">Tap Root</option>
+          <option value="Fibrous">Fibrous Root</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateFillExercise() {
+  const items = [
+    { s: 'Plants need water, sunlight, air, and _____ to grow.', answer: 'soil' },
+    { s: 'The food-making process in leaves is called _____.', answer: 'photosynthesis' },
+    { s: 'The green colour in leaves comes from _____.', answer: 'chlorophyll' },
+    { s: 'Flowers turn into _____ which contain seeds.', answer: 'fruits' },
+    { s: 'The thick woody stem of a tree is called a _____.', answer: 'trunk' },
+    { s: 'Plants release _____ into the air, which we breathe.', answer: 'oxygen' },
+    { s: 'Trees that stay green all year are called _____ trees.', answer: 'evergreen' },
+    { s: 'Bees help flowers make seeds through _____.', answer: 'pollination' },
+  ];
+  exerciseData.fill = items;
+
+  document.getElementById('ex-fill-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="fill-q${i}">
+      <div class="q-label">Q${i+1}. ${item.s.replace('_____','<input type="text" class="exercise-input" style="width: 150px;" id="fill-a'+i+'" placeholder="..." autocomplete="off">')}</div>
+    </div>
+  `).join('');
+}
+
+function generateTFExercise() {
+  const items = shuffle([
+    { s: 'Plants need water and sunlight to grow.', a: true },
+    { s: 'The root is the part that makes food for the plant.', a: false },
+    { s: 'Carrot and radish are examples of tap roots.', a: true },
+    { s: 'Grass has a tap root.', a: false },
+    { s: 'Flowers attract insects with their colours and smell.', a: true },
+    { s: 'All trees shed their leaves in winter.', a: false },
+    { s: 'Cotton plants give us cloth for our clothes.', a: true },
+    { s: 'Leaves breathe in oxygen and breathe out carbon dioxide.', a: false },
+    { s: 'A banyan tree is an evergreen tree.', a: true },
+    { s: 'Seeds grow inside flowers before they become fruits.', a: true },
+  ]).slice(0, 8);
+  exerciseData.tf = items;
+
+  document.getElementById('ex-tf-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="tf-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        "${item.s}"
+        <select class="exercise-input" id="tf-a${i}" style="width: 100px;">
+          <option value="">Choose...</option>
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateCategoryExercise() {
+  const items = shuffle([
+    { word: 'Mango', cat: 'Tree' }, { word: 'Rose', cat: 'Flower' },
+    { word: 'Root', cat: 'Part' }, { word: 'Sunflower', cat: 'Flower' },
+    { word: 'Banyan', cat: 'Tree' }, { word: 'Stem', cat: 'Part' },
+    { word: 'Coconut', cat: 'Tree' }, { word: 'Hibiscus', cat: 'Flower' },
+    { word: 'Leaf', cat: 'Part' }, { word: 'Neem', cat: 'Tree' },
+  ]).slice(0, 8);
+  exerciseData.category = items;
+
+  document.getElementById('ex-category-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="category-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong>${item.word}</strong> →
+        <select class="exercise-input" id="category-a${i}" style="width: 160px;">
+          <option value="">Choose...</option>
+          <option value="Tree">Tree</option>
+          <option value="Flower">Flower</option>
+          <option value="Part">Plant Part</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateHelpExercise() {
+  const items = shuffle([
+    { item: 'Apple', gives: 'Food' }, { item: 'Wood from a tree', gives: 'Shelter/Furniture' },
+    { item: 'Cotton', gives: 'Clothes' }, { item: 'Neem leaves', gives: 'Medicine' },
+    { item: 'Tree branches', gives: 'Shelter/Furniture' }, { item: 'Wheat', gives: 'Food' },
+    { item: 'Aloe Vera', gives: 'Medicine' }, { item: 'Silk', gives: 'Clothes' },
+  ]).slice(0, 6);
+  exerciseData.help = items;
+
+  document.getElementById('ex-help-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="help-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong>${item.item}</strong> gives us →
+        <select class="exercise-input" id="help-a${i}" style="width: 200px;">
+          <option value="">Choose...</option>
+          <option value="Food">Food</option>
+          <option value="Clothes">Clothes</option>
+          <option value="Medicine">Medicine</option>
+          <option value="Shelter/Furniture">Shelter/Furniture</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+// --- Check Exercises ---
+function checkExercise(type) {
+  let correct = 0, total = 0;
+
+  if (type === 'parts') {
+    exerciseData.parts.forEach((item, i) => {
+      total++; const el = document.getElementById(`parts-q${i}`);
+      const val = document.getElementById(`parts-a${i}`).value;
+      if (val === item.answer) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.answer}</div>`; }
+      document.getElementById(`parts-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'roots') {
+    exerciseData.roots.forEach((item, i) => {
+      total++; const el = document.getElementById(`roots-q${i}`);
+      const val = document.getElementById(`roots-a${i}`).value;
+      if (val === item.answer) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.answer} Root</div>`; }
+      document.getElementById(`roots-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'fill') {
+    exerciseData.fill.forEach((item, i) => {
+      total++; const el = document.getElementById(`fill-q${i}`);
+      const val = document.getElementById(`fill-a${i}`).value.trim().toLowerCase();
+      if (val === item.answer.toLowerCase()) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.answer}</div>`; }
+      document.getElementById(`fill-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'tf') {
+    exerciseData.tf.forEach((item, i) => {
+      total++; const el = document.getElementById(`tf-q${i}`);
+      const val = document.getElementById(`tf-a${i}`).value;
+      if (val === String(item.a)) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.a ? 'True' : 'False'}</div>`; }
+      document.getElementById(`tf-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'category') {
+    exerciseData.category.forEach((item, i) => {
+      total++; const el = document.getElementById(`category-q${i}`);
+      const val = document.getElementById(`category-a${i}`).value;
+      if (val === item.cat) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.cat}</div>`; }
+      document.getElementById(`category-a${i}`).disabled = true;
+    });
+  }
+
+  if (type === 'help') {
+    exerciseData.help.forEach((item, i) => {
+      total++; const el = document.getElementById(`help-q${i}`);
+      const val = document.getElementById(`help-a${i}`).value;
+      if (val === item.gives) { correct++; el.className = 'exercise-question answered-correct'; }
+      else { el.className = 'exercise-question answered-wrong'; el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${item.gives}</div>`; }
+      document.getElementById(`help-a${i}`).disabled = true;
+    });
+  }
+
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+  const scoreEl = document.getElementById(`ex-${type}-score`);
+  scoreEl.className = 'exercise-score';
+  scoreEl.innerHTML = `Score: ${correct}/${total} (${pct}%) ${pct>=80?'⭐ Excellent!':pct>=60?'👍 Good job!':'💪 Keep practising!'}`;
+  if (pct >= 80) { Confetti.launch(50); AudioManager.playTone('correct'); } else { AudioManager.playTone('click'); }
+  if (typeof Progress !== 'undefined') Progress.trackExerciseComplete(type, correct, total);
+}
+
+// ============================================
+// QUIZ DATA
+// ============================================
+function generateQuizQuestions() {
+  const q = [];
+
+  // --- EXPLORER ---
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which part of the plant holds it in the soil?',options:['Root','Leaf','Flower','Stem'],answer:'Root',hint:'It\'s the part that grows underground.',explanation:'Roots grow underground and anchor the plant in the soil.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which part of the plant makes food?',options:['Leaf','Root','Flower','Stem'],answer:'Leaf',hint:'It\'s green and uses sunlight.',explanation:'Leaves make food through photosynthesis using sunlight, water, and air.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which of these is a tap root?',options:['Carrot','Grass','Wheat','Rice'],answer:'Carrot',hint:'It\'s thick and grows straight down.',explanation:'Carrot is a tap root — one main thick root going deep into the soil.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'What do plants need to grow?',options:['Water, sunlight, air, and soil','Only water','Only sunlight','Only soil'],answer:'Water, sunlight, air, and soil',hint:'All four are important!',explanation:'Plants need ALL four: water, sunlight, air, and soil to grow properly.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which flower is India\'s national flower?',options:['Lotus','Rose','Sunflower','Tulip'],answer:'Lotus',hint:'It grows in water.',explanation:'The lotus is India\'s national flower — it grows in water and is very beautiful.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Trees are large plants with thick woody stems.',answer:'true',hint:'Think of a mango or banyan tree.',explanation:'True! Trees have thick woody stems called trunks.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Grass has a tap root.',answer:'false',hint:'Grass has lots of thin roots all around.',explanation:'False! Grass has FIBROUS roots — many thin roots in a bunch.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'What is the thick woody stem of a tree called?',options:['Trunk','Branch','Leaf','Root'],answer:'Trunk',hint:'It\'s the main central part.',explanation:'The thick main stem of a tree is called the trunk.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Plants give us oxygen that we breathe.',answer:'true',hint:'Trees and plants release oxygen during photosynthesis.',explanation:'True! Plants release oxygen — they are super important for us to breathe!'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which of these is a flower?',options:['Hibiscus','Banyan','Mango','Neem'],answer:'Hibiscus',hint:'The others are all trees.',explanation:'Hibiscus is a flower. Banyan, Mango, and Neem are trees.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'What part of the plant attracts bees and butterflies?',options:['Flower','Root','Leaf','Stem'],answer:'Flower',hint:'It\'s colourful and has a sweet smell.',explanation:'Flowers attract insects with their bright colours and sweet smell.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Radish is an example of which type of root?',options:['Tap root','Fibrous root','No root','Stem root'],answer:'Tap root',hint:'It\'s a single thick root.',explanation:'Radish is a tap root — thick and goes straight down into the soil.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Cotton comes from plants.',answer:'true',hint:'We get cloth and clothes from cotton plants.',explanation:'True! Cotton is a plant, and we use it to make our clothes.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Which of these is an EVERGREEN tree?',options:['Pine','Mango','Maple','Oak'],answer:'Pine',hint:'Evergreen trees stay green all year.',explanation:'Pine is an evergreen tree — it keeps its leaves all year round.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'What connects the roots to the leaves and carries water?',options:['Stem','Flower','Fruit','Seed'],answer:'Stem',hint:'It\'s like the pipe of the plant.',explanation:'The stem carries water from roots to leaves, and food from leaves to the whole plant.'});
+
+  // --- ADVENTURER ---
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'The food-making process in plants is called:',options:['Photosynthesis','Pollination','Germination','Respiration'],answer:'Photosynthesis',hint:'Photo = light, synthesis = making.',explanation:'Photosynthesis is when leaves use sunlight + water + air to make food.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which gas do plants breathe IN to make food?',options:['Carbon dioxide','Oxygen','Nitrogen','Hydrogen'],answer:'Carbon dioxide',hint:'Humans breathe OUT this gas.',explanation:'Plants breathe IN carbon dioxide (the gas we breathe out) and breathe OUT oxygen!'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'The green colour of leaves comes from:',options:['Chlorophyll','Oxygen','Sugar','Water'],answer:'Chlorophyll',hint:'It starts with "chloro" meaning green.',explanation:'Chlorophyll is the green substance in leaves that helps them make food.'});
+  q.push({tier:'adventurer',type:'fill-blank',points:15,question:'When bees carry pollen from one flower to another, it is called _____.',answer:['pollination'],placeholder:'Type the word...',hint:'It\'s how flowers make seeds.',explanation:'Pollination is when pollen is moved from flower to flower, usually by bees or butterflies.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'After a flower is pollinated, what does it become?',options:['A fruit','A leaf','A root','Another flower'],answer:'A fruit',hint:'Inside this, there are seeds.',explanation:'A pollinated flower grows into a fruit, which contains seeds inside it.'});
+  q.push({tier:'adventurer',type:'true-false',points:15,question:'Deciduous trees lose their leaves every year.',answer:'true',hint:'They shed leaves in autumn or winter.',explanation:'True! Deciduous trees like mango and oak shed their leaves in certain seasons.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which of these is a FIBROUS root plant?',options:['Wheat','Radish','Mango','Turnip'],answer:'Wheat',hint:'Wheat grows like grass, with many thin roots.',explanation:'Wheat has fibrous roots — many thin roots growing from the base.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Why are flowers brightly coloured?',options:['To attract insects for pollination','To scare away animals','To protect the plant','To make it look pretty to humans'],answer:'To attract insects for pollination',hint:'Think about why bees visit flowers.',explanation:'Flowers are bright and fragrant to attract insects like bees, which help pollinate them.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'When you eat a CARROT, you are actually eating which part?',options:['Root','Stem','Leaf','Fruit'],answer:'Root',hint:'Carrots grow underground!',explanation:'A carrot is a root! It\'s a tap root that stores food for the plant.'});
+  q.push({tier:'adventurer',type:'fill-blank',points:15,question:'Trees that stay green all year are called _____ trees.',answer:['evergreen'],placeholder:'Type the word...',hint:'Ever + green.',explanation:'Evergreen trees like pine and banyan keep their leaves all year.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which part of the plant contains SEEDS?',options:['Fruit','Leaf','Stem','Root'],answer:'Fruit',hint:'Think of cutting open a mango or apple.',explanation:'Fruits contain seeds. When you cut open a fruit, you can see them inside!'});
+  q.push({tier:'adventurer',type:'true-false',points:15,question:'Neem trees are used to make medicines.',answer:'true',hint:'Neem has been used for medicine for thousands of years.',explanation:'True! Neem leaves and bark are used in many medicines — they help fight infections.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Which plant can eat insects?',options:['Venus Flytrap','Cactus','Lotus','Rose'],answer:'Venus Flytrap',hint:'Its name is a clue — it "flytraps"!',explanation:'Venus Flytrap is a special plant that traps and eats insects!'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Where does a cactus live?',options:['In deserts','In oceans','In icy places','In caves'],answer:'In deserts',hint:'It stores water in its thick stem.',explanation:'Cacti live in deserts where water is scarce. Their thick stems store water.'});
+  q.push({tier:'adventurer',type:'fill-blank',points:15,question:'The thick woody main stem of a tree is called a _____.',answer:['trunk'],placeholder:'Type the word...',hint:'You might also hear this word for an elephant!',explanation:'The main woody stem of a tree is called the trunk.'});
+
+  // --- CHAMPION ---
+  q.push({tier:'champion',type:'mcq',points:20,question:'Which THREE things do leaves need to make food?',options:['Water, sunlight, and carbon dioxide','Water, soil, and oxygen','Soil, sunlight, and oxygen','Water, air, and stones'],answer:'Water, sunlight, and carbon dioxide',hint:'Remember the photosynthesis equation.',explanation:'Leaves need water + sunlight + carbon dioxide to make food. They release oxygen as a by-product!'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Why does a tap root go deep into the soil?',options:['To reach water deep underground and anchor the plant','To escape from sunlight','To make food','To grow new flowers'],answer:'To reach water deep underground and anchor the plant',hint:'Think about what water sources are deep in the ground.',explanation:'Tap roots go deep to reach water far underground AND to firmly anchor large plants like trees.'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'When there is no sunlight, plants cannot make food.',answer:'true',hint:'Sunlight is essential for photosynthesis.',explanation:'True! Without sunlight, photosynthesis cannot happen, so plants cannot make food.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'What happens to plants if they do NOT get enough water?',options:['They dry up and die','They grow faster','They turn blue','Nothing happens'],answer:'They dry up and die',hint:'Water is essential for all living things.',explanation:'Without water, plants cannot survive — their leaves wilt, they dry up, and eventually die.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'The Banyan tree is special because:',options:['It grows extra roots from its branches down to the ground','It walks','It eats insects','It glows in the dark'],answer:'It grows extra roots from its branches down to the ground',hint:'One banyan tree can look like a whole forest!',explanation:'Banyan trees grow extra hanging roots from their branches that reach the ground and become new trunks!'});
+  q.push({tier:'champion',type:'fill-blank',points:20,question:'Plants breathe in _____ and release _____ through photosynthesis.',answer:['carbon dioxide and oxygen','CO2 and oxygen','carbon dioxide, oxygen'],matchType:'fuzzy',placeholder:'e.g. carbon dioxide and oxygen',hint:'Plants do the OPPOSITE of humans!',explanation:'Plants breathe in carbon dioxide and release oxygen — that\'s why forests are called the "lungs of the Earth"!'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Which of these gives us cloth, paper, AND food?',options:['Plants','Animals','Rocks','Metals'],answer:'Plants',hint:'Cotton for cloth, wood pulp for paper, grains for food...',explanation:'Plants give us cotton (cloth), wood pulp (paper), AND grains, fruits, vegetables (food). Amazing!'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'In which season do deciduous trees usually shed their leaves?',options:['Autumn/Winter','Spring','Summer','All year'],answer:'Autumn/Winter',hint:'Think about when leaves turn yellow and fall.',explanation:'Deciduous trees shed their leaves in autumn/winter, then grow new leaves in spring.'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'Bamboo is the fastest-growing plant in the world.',answer:'true',hint:'Some types grow almost 1 metre in a day!',explanation:'True! Bamboo can grow about 1 metre (or more!) in a single day — it\'s the fastest-growing plant.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'What is the main job of a FRUIT in a plant\'s life?',options:['To protect and carry seeds so new plants can grow','To feed only humans','To look pretty','To attract bees'],answer:'To protect and carry seeds so new plants can grow',hint:'Why does a plant make fruits with seeds inside?',explanation:'Fruits protect seeds and help them spread — when animals eat fruits, they drop the seeds in new places where new plants can grow!'});
+  q.push({tier:'champion',type:'fill-blank',points:20,question:'Mangroves are special trees that grow with their roots in _____ water.',answer:['salty','sea','salt'],matchType:'fuzzy',placeholder:'Type the word...',hint:'Think about where mangroves grow — near the coast.',explanation:'Mangroves grow in salty sea water — their special roots stick up above the water to breathe!'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Why are plants sometimes called "producers"?',options:['They produce (make) their own food','They produce babies','They produce noise','They produce rocks'],answer:'They produce (make) their own food',hint:'Unlike animals, plants don\'t need to eat other things.',explanation:'Plants are called "producers" because they MAKE their own food through photosynthesis. Animals that eat plants are "consumers".'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'If you cut a tree, what can you see on its trunk that tells its age?',options:['Growth rings','Leaves','Flowers','Roots'],answer:'Growth rings',hint:'Each year, the tree adds one ring.',explanation:'When you cut a tree, you can see circular growth rings — each ring shows one year of the tree\'s life!'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'Every flower always becomes a fruit.',answer:'false',hint:'Think about whether ALL flowers are pollinated.',explanation:'False! Only flowers that are pollinated become fruits. Some flowers fall off without being pollinated.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Which part of the plant does onion\'s edible part come from?',options:['Modified leaves at the base of the stem','Roots','Flowers','Fruits'],answer:'Modified leaves at the base of the stem',hint:'Onions are actually layers of special leaves!',explanation:'What we eat as an onion is actually modified LEAVES tightly packed at the base — not a root! (Though it has fibrous roots growing from its base).'});
+
+  return q;
+}
+
+function startQuiz(tier) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tier-btn.${tier}`).classList.add('active');
+  const quiz = new QuizEngine({
+    containerId: 'quiz-area', questions: generateQuizQuestions(), tier, questionCount: 15,
+    onComplete: (results) => {
+      if (typeof Progress !== 'undefined') Progress.trackQuizComplete(tier, results.percentage, results.timeTaken);
+      if (results.percentage >= 70 && tier === 'explorer') Toast.show('Adventurer unlocked! ⚔️', 'badge', 4000);
+      if (results.percentage >= 80 && tier === 'adventurer') Toast.show('Champion unlocked! 👑', 'badge', 4000);
+    }
+  });
+  quiz.start();
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initTabs();
+  initLessonCards();
+  generateExercises();
+  if (typeof Progress !== 'undefined') {
+    Progress.init();
+    document.querySelectorAll('.lesson-card-header').forEach((h, i) => {
+      h.addEventListener('click', () => { if (h.parentElement.classList.contains('open')) Progress.trackLessonOpen(`ev01_lesson_${i+1}`); });
+    });
+    const wsLink = document.querySelector('a[href*="worksheet"]');
+    if (wsLink) wsLink.addEventListener('click', () => Progress.trackWorksheetOpen());
+  }
+});
+</script>
+
+</body>
+</html>

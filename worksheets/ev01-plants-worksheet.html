@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Worksheet — Chapter 1: Roots, Flowers and Trees</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <style>
+    @media screen {
+      body { background: var(--color-bg); }
+      .worksheet-page { max-width: 800px; margin: var(--space-8) auto; background: white; padding: var(--space-8); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+      .screen-controls { max-width: 800px; margin: var(--space-4) auto var(--space-8); text-align: center; }
+    }
+    @media print { .screen-controls { display: none !important; } .worksheet-page { margin:0; padding:0; box-shadow:none; } }
+    .ws-question { margin-bottom: 12pt; page-break-inside: avoid; }
+    .ws-question .q-num { font-weight: 700; color: #059669; margin-right: 4pt; }
+    .ws-answer-line { display: block; width: 100%; height: 28pt; border-bottom: 1px dotted #999; margin-top: 4pt; }
+    .ws-answer-short { display: inline-block; width: 140pt; border-bottom: 1px dotted #999; margin: 0 6pt; text-align: center; }
+    .ws-section { margin-bottom: 18pt; page-break-inside: avoid; }
+    .ws-section h3 { font-size: 12pt; font-weight: 700; padding: 4pt 8pt; background: #f0f0f0; border-left: 4pt solid #059669; margin-bottom: 10pt; color: #000; font-family: 'Nunito', sans-serif; }
+    .ws-header { text-align: center; border-bottom: 2px solid #059669; padding-bottom: 8pt; margin-bottom: 12pt; }
+    .ws-header h1 { font-family: 'Fredoka One', cursive; font-size: 18pt; color: #047857; margin-bottom: 2pt; }
+    .ws-header .subtitle { font-size: 11pt; color: #666; }
+    .ws-student-info { display: flex; justify-content: space-between; margin-bottom: 14pt; font-size: 10pt; }
+    .ws-student-info .field { display: flex; align-items: baseline; gap: 6pt; }
+    .ws-student-info .line { display: inline-block; width: 140pt; border-bottom: 1px solid #000; }
+    .ws-answer-key { page-break-before: always; }
+    .ws-answer-key h2 { text-align: center; font-size: 14pt; margin-bottom: 12pt; font-family: 'Fredoka One', cursive; color: #047857; }
+    .ws-answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3pt 16pt; font-size: 10pt; }
+    .ws-answers-grid .ans-item { padding: 2pt 0; border-bottom: 1px dotted #ddd; }
+    .ws-answers-grid .ans-num { font-weight: 700; color: #059669; }
+    .ws-footer { text-align: center; font-size: 8pt; color: #999; margin-top: 20pt; padding-top: 6pt; border-top: 1px solid #eee; }
+  </style>
+</head>
+<body>
+<div class="screen-controls no-print">
+  <a href="../chapters/ev01-plants.html" class="btn btn-outline btn-sm">← Back to Chapter 1</a>
+  <button class="btn btn-lg" style="background: linear-gradient(135deg, #047857, #34D399); color: white; margin-left: 16px;" onclick="window.print()">🖨️ Print Worksheet</button>
+  <button class="btn btn-sm" style="background: var(--color-accent); color: var(--color-primary-dark); margin-left: 16px;" onclick="location.reload()">🔄 New Questions</button>
+  <p style="margin-top: 8px; color: var(--color-text-light); font-size: var(--text-sm);">Each reload generates different questions.</p>
+</div>
+<div class="worksheet-page" id="worksheet"></div>
+<script>
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function formatDate(){const d=new Date();const m=['January','February','March','April','May','June','July','August','September','October','November','December'];return`${String(d.getDate()).padStart(2,'0')} ${m[d.getMonth()]} ${d.getFullYear()}`;}
+
+function generate(){
+  const answers={};
+  let qn=0;
+
+  // A: Match plant part to function
+  const partsItems=shuffle([
+    {j:'Holds the plant in the soil and absorbs water',a:'Root'},
+    {j:'Makes food for the plant',a:'Leaf'},
+    {j:'Makes seeds and turns into a fruit',a:'Flower'},
+    {j:'Supports the plant and carries water up',a:'Stem'},
+    {j:'Contains seeds inside it',a:'Fruit'},
+    {j:'Attracts bees and butterflies',a:'Flower'},
+    {j:'The green part that makes food through photosynthesis',a:'Leaf'},
+    {j:'Absorbs minerals from the soil',a:'Root'},
+  ]).slice(0,6);
+  let secA=partsItems.map((item,i)=>{qn++;answers[`A${i+1}`]=item.a;return`<div class="ws-question"><span class="q-num">${qn}.</span> ${item.j} → <span class="ws-answer-short"></span></div>`;}).join('');
+
+  // B: Tap or Fibrous Roots
+  const rootItems=shuffle([
+    {p:'Carrot',a:'Tap'},{p:'Grass',a:'Fibrous'},{p:'Radish',a:'Tap'},
+    {p:'Wheat',a:'Fibrous'},{p:'Mango Tree',a:'Tap'},{p:'Rice',a:'Fibrous'},
+    {p:'Turnip',a:'Tap'},{p:'Maize',a:'Fibrous'},{p:'Neem Tree',a:'Tap'},
+    {p:'Onion',a:'Fibrous'},
+  ]).slice(0,8);
+  let secB=rootItems.map((item,i)=>{qn++;answers[`B${i+1}`]=item.a+' Root';return`<div class="ws-question"><span class="q-num">${qn}.</span> ${item.p} → <span class="ws-answer-short"></span></div>`;}).join('');
+
+  // C: Fill in the blanks
+  const fillItems=shuffle([
+    {s:'Plants need water, sunlight, air, and _____ to grow.',a:'soil'},
+    {s:'The food-making process in leaves is called _____.',a:'photosynthesis'},
+    {s:'The green colour in leaves comes from _____.',a:'chlorophyll'},
+    {s:'After pollination, flowers turn into _____ which contain seeds.',a:'fruits'},
+    {s:'The thick woody stem of a tree is called a _____.',a:'trunk'},
+    {s:'Plants release _____ into the air, which we breathe.',a:'oxygen'},
+    {s:'Trees that stay green all year are called _____ trees.',a:'evergreen'},
+    {s:'Trees that shed their leaves every year are called _____ trees.',a:'deciduous'},
+    {s:'Bees help flowers make seeds through the process of _____.',a:'pollination'},
+  ]).slice(0,6);
+  let secC=fillItems.map((item,i)=>{qn++;answers[`C${i+1}`]=item.a;return`<div class="ws-question"><span class="q-num">${qn}.</span> ${item.s.replace('_____','<span class="ws-answer-short"></span>')}</div>`;}).join('');
+
+  // D: True or False
+  const tfItems=shuffle([
+    {s:'Plants need water and sunlight to grow.',a:'True'},
+    {s:'The root makes food for the plant.',a:'False'},
+    {s:'Carrot is an example of a tap root.',a:'True'},
+    {s:'Grass has a tap root.',a:'False'},
+    {s:'Flowers attract insects with their colours and smell.',a:'True'},
+    {s:'All trees shed their leaves in winter.',a:'False'},
+    {s:'Cotton plants give us cloth for our clothes.',a:'True'},
+    {s:'Leaves breathe out oxygen.',a:'True'},
+    {s:'Seeds grow inside flowers before they become fruits.',a:'True'},
+    {s:'Plants are "producers" because they make their own food.',a:'True'},
+  ]).slice(0,8);
+  let secD=tfItems.map((item,i)=>{qn++;answers[`D${i+1}`]=item.a;return`<div class="ws-question"><span class="q-num">${qn}.</span> "${item.s}" → <span class="ws-answer-short" style="width:60pt;"></span></div>`;}).join('');
+
+  // E: Name the Category (tree/flower/part)
+  const catItems=shuffle([
+    {w:'Mango',c:'Tree'},{w:'Rose',c:'Flower'},{w:'Root',c:'Plant Part'},
+    {w:'Sunflower',c:'Flower'},{w:'Banyan',c:'Tree'},{w:'Stem',c:'Plant Part'},
+    {w:'Coconut',c:'Tree'},{w:'Hibiscus',c:'Flower'},{w:'Leaf',c:'Plant Part'},
+    {w:'Neem',c:'Tree'},{w:'Lotus',c:'Flower'},{w:'Flower',c:'Plant Part'},
+  ]).slice(0,8);
+  let secE=catItems.map((item,i)=>{qn++;answers[`E${i+1}`]=item.c;return`<div class="ws-question"><span class="q-num">${qn}.</span> ${item.w} → <span class="ws-answer-short"></span></div>`;}).join('');
+
+  // F: Short answers
+  const saItems=[
+    {q:'Name the two types of roots and give one example of each.',a:'Tap root (e.g. carrot), Fibrous root (e.g. grass)'},
+    {q:'Why do plants need sunlight?',a:'To make food through photosynthesis'},
+    {q:'Name any three things that plants give us.',a:'Food, oxygen, wood, clothes, medicine, shelter (any three)'},
+    {q:'What is the job of a stem?',a:'To support the plant and carry water from roots to leaves'},
+    {q:'Why should we not pluck flowers and cut trees unnecessarily?',a:'Plants give us oxygen, food, shelter, and keep our environment healthy. We must protect them.'},
+  ];
+  let secF=saItems.map((item,i)=>{qn++;answers[`F${i+1}`]=item.a;return`<div class="ws-question"><span class="q-num">${qn}.</span> ${item.q}<span class="ws-answer-line"></span><span class="ws-answer-line"></span></div>`;}).join('');
+
+  // Answer key
+  let ansHTML='<div class="ws-answers-grid">';
+  Object.entries(answers).forEach(([k,v])=>{ansHTML+=`<div class="ans-item"><span class="ans-num">${k}:</span> ${v}</div>`;});
+  ansHTML+='</div>';
+
+  document.getElementById('worksheet').innerHTML=`
+    <div class="ws-header">
+      <h1>Crislyn's EVS Adventure</h1>
+      <div class="subtitle">Chapter 1: Roots, Flowers and Trees — Practice Worksheet</div>
+    </div>
+    <div class="ws-student-info">
+      <div class="field"><strong>Name:</strong> <span class="line"></span></div>
+      <div class="field"><strong>Date:</strong> <span class="line" style="width:100pt;"></span></div>
+      <div class="field"><strong>Score:</strong> <span class="line" style="width:60pt;"></span></div>
+    </div>
+    <div class="ws-section"><h3>Section A: Match the Plant Part to Its Job (Root / Stem / Leaf / Flower / Fruit)</h3>${secA}</div>
+    <div class="ws-section"><h3>Section B: Tap Root or Fibrous Root?</h3>${secB}</div>
+    <div class="ws-section"><h3>Section C: Fill in the Blanks</h3>${secC}</div>
+    <div class="ws-section"><h3>Section D: True or False</h3>${secD}</div>
+    <div class="ws-section"><h3>Section E: Is it a Tree, Flower, or Plant Part?</h3>${secE}</div>
+    <div class="ws-section"><h3>Section F: Short Answer Questions</h3>${secF}</div>
+    <div class="ws-footer">Crislyn's EVS Adventure — Generated on ${formatDate()}</div>
+    <div class="ws-answer-key"><h2>Answer Key</h2>${ansHTML}</div>
+  `;
+}
+document.addEventListener('DOMContentLoaded',generate);
+</script>
+</body>
+</html>
