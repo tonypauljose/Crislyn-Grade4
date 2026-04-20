@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>हिंदी व्याकरण — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <style>
+    /* Hindi font support */
+    .hindi-text, .hindi-title {
+      font-family: 'Hind', 'Tiro Devanagari Hindi', 'Nunito', sans-serif;
+    }
+
+    .hindi-heading {
+      font-family: 'Tiro Devanagari Hindi', 'Hind', 'Nunito', sans-serif;
+      font-weight: 700;
+    }
+
+    .navbar {
+      background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
+    }
+    .nav-links { display: flex; gap: var(--space-2); }
+    .nav-link {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .page-hero {
+      background: linear-gradient(135deg, #B45309 0%, #D97706 40%, #FBBF24 100%);
+      color: white; padding: var(--space-10) 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-hero > .container { position: relative; z-index: 1; }
+    .page-hero h1 { color: white; margin-bottom: var(--space-2); }
+    .page-hero h1 .hindi-big {
+      font-family: 'Tiro Devanagari Hindi', 'Hind', serif;
+      display: block; font-size: 3rem; margin-bottom: 4px;
+    }
+    .page-hero p { opacity: 0.9; font-size: var(--text-lg); margin-bottom: 0; }
+    .page-hero .breadcrumb { font-size: var(--text-sm); opacity: 0.8; margin-bottom: var(--space-3); }
+    .page-hero .breadcrumb a { color: rgba(255,255,255,0.9); }
+    .page-hero .breadcrumb a:hover { color: white; }
+
+    .chapters-section { padding: var(--space-10) 0; }
+
+    .chapters-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6);
+    }
+
+    .chapter-card { padding: var(--space-6); text-align: center; position: relative; }
+    .chapter-card .chapter-emoji { font-size: 3rem; margin-bottom: var(--space-3); display: block; }
+    .chapter-card .chapter-hindi {
+      font-family: 'Tiro Devanagari Hindi', 'Hind', serif;
+      font-size: 2rem; color: #B45309; margin-bottom: var(--space-1);
+      line-height: 1.2;
+    }
+    .chapter-card .chapter-title {
+      font-family: var(--font-heading); font-size: var(--text-base);
+      color: var(--color-text-light); margin-bottom: var(--space-2);
+    }
+    .chapter-card .chapter-desc {
+      font-size: var(--text-sm); color: var(--color-text-light); margin-bottom: var(--space-4);
+    }
+    .chapter-card.available { border: 2px solid #FCD34D; }
+    .chapter-card.available:hover { border-color: #F59E0B; box-shadow: 0 0 20px rgba(245,158,11,0.3); }
+    .chapter-card.locked { opacity: 0.55; pointer-events: none; }
+    .chapter-card.locked .chapter-emoji { filter: grayscale(0.8); }
+
+    .chapter-card .chapter-number {
+      position: absolute; top: var(--space-3); right: var(--space-3);
+      width: 36px; height: 36px; border-radius: var(--radius-full);
+      background: #D97706; color: white; display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: var(--text-sm);
+    }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--text-xs); font-weight: 700;
+    }
+    .status-badge.ready { background: #DCFCE7; color: #166534; }
+    .status-badge.coming { background: #FFFBEB; color: #78716C; }
+
+    .tip-section { padding: var(--space-6) 0 var(--space-10); }
+    .tip-card {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-radius: var(--radius-xl); padding: var(--space-6);
+      text-align: center; max-width: 700px; margin: 0 auto; color: #78350F;
+    }
+    .tip-card h3 { color: #92400E; margin-bottom: var(--space-2); }
+    .tip-card .tip-text {
+      font-size: var(--text-lg); font-weight: 600;
+      font-family: 'Hind', 'Nunito', sans-serif;
+    }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+    }
+
+    @media (max-width: 768px) {
+      .chapters-grid { grid-template-columns: 1fr 1fr; }
+      .page-hero h1 .hindi-big { font-size: 2.2rem; }
+    }
+    @media (max-width: 480px) { .chapters-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link active">Learning</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb fade-in">
+      <a href="index.html">Home</a> → <a href="learning.html">Learning</a> → Hindi
+    </div>
+    <h1 class="fade-in-up">
+      <span class="hindi-big">हिंदी व्याकरण</span>
+      Hindi Grammar
+    </h1>
+    <p class="fade-in-up delay-1">कार्यपुस्तिका 2026-27 · Asian School Kingdom of Bahrain · Grade 4</p>
+  </div>
+</div>
+
+<!-- Welcome message for Hindi learner -->
+<div class="container" style="margin-top: var(--space-6);">
+  <div class="card fade-in-up" style="background: linear-gradient(135deg, #FFFBEB, #FEF3C7); border: 3px solid #F59E0B; padding: var(--space-6); max-width: 800px; margin: 0 auto; text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: var(--space-2);">🌸</div>
+    <h3 style="color: #B45309; margin-bottom: var(--space-3);">Don't worry, Crislyn! हिंदी is easier than you think!</h3>
+    <p style="font-size: var(--text-base); color: #78350F; line-height: 1.7; margin-bottom: var(--space-3);">
+      Every Hindi word here comes with:
+    </p>
+    <div class="grid-3" style="gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+      <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md);">
+        <div style="font-size: 2rem;">🔤</div>
+        <strong>Devanagari</strong>
+        <p style="font-size: var(--text-sm); margin: 0;">The Hindi script</p>
+      </div>
+      <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md);">
+        <div style="font-size: 2rem;">🗣️</div>
+        <strong>Pronunciation</strong>
+        <p style="font-size: var(--text-sm); margin: 0;">How to say it</p>
+      </div>
+      <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md);">
+        <div style="font-size: 2rem;">🌐</div>
+        <strong>English Meaning</strong>
+        <p style="font-size: var(--text-sm); margin: 0;">What it means</p>
+      </div>
+    </div>
+    <p style="font-size: var(--text-base); color: #78350F; margin-top: var(--space-4); margin-bottom: 0;">
+      🎧 <strong>Tap the speaker 🔊 next to any Hindi word to hear it!</strong> Listening is the secret to learning any language. आप कर सकती हैं! (You can do it!)
+    </p>
+  </div>
+</div>
+
+<!-- Chapters -->
+<div class="chapters-section">
+  <div class="container">
+    <div class="section-header mb-8">
+      <h2>पाठ · Chapters</h2>
+      <p>Click on an available chapter to start learning!</p>
+    </div>
+    <div class="chapters-grid" id="chapters-grid"></div>
+  </div>
+</div>
+
+<!-- Daily Tip -->
+<div class="tip-section">
+  <div class="container">
+    <div class="tip-card fade-in-up">
+      <h3>💡 आज का हिंदी ज्ञान · Daily Hindi Tip</h3>
+      <div class="tip-text" id="daily-tip"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
+  </div>
+</div>
+
+<script>
+const chapters = [
+  { num: 1, hindi: 'संज्ञा', title: 'Sangya (Noun)', emoji: '📦', desc: 'व्यक्ति, वस्तु, स्थान और प्राणी के नाम। Types of nouns with examples.', status: 'coming' },
+  { num: 2, hindi: 'लिंग', title: 'Ling (Gender)', emoji: '♂♀', desc: 'पुल्लिंग और स्त्रीलिंग। Masculine and feminine nouns.', status: 'coming' },
+  { num: 3, hindi: 'वचन', title: 'Vachan (Number)', emoji: '🔢', desc: 'एकवचन और बहुवचन। Singular and plural forms.', status: 'coming' },
+  { num: 4, hindi: 'सर्वनाम', title: 'Sarvanaam (Pronoun)', emoji: '👤', desc: 'मैं, तुम, वह, हम, ये, वे। Words used in place of nouns.', status: 'coming' },
+  { num: 5, hindi: 'क्रिया', title: 'Kriya (Verb)', emoji: '⚡', desc: 'कार्य करने वाले शब्द। Action words and helping verbs.', status: 'coming' },
+  { num: 6, hindi: 'कहानी लेखन', title: 'Kahani Lekhan (Story Writing)', emoji: '📖', desc: 'कहानी लिखना सीखो। Write and complete stories in Hindi.', status: 'coming' },
+];
+
+function renderChapters() {
+  const grid = document.getElementById('chapters-grid');
+  grid.innerHTML = chapters.map((ch, i) => {
+    const isAvailable = ch.status === 'available';
+    const cardClass = isAvailable ? 'card chapter-card available card-interactive fade-in-up' : 'card chapter-card locked fade-in-up';
+    const delay = `delay-${Math.min(i + 1, 8)}`;
+    const statusBadge = isAvailable
+      ? '<span class="status-badge ready">✅ तैयार · Ready</span>'
+      : '<span class="status-badge coming">🔒 जल्द आएगा · Coming Soon</span>';
+    const onclick = isAvailable ? `onclick="window.location.href='${ch.link}'"` : '';
+
+    return `
+      <div class="${cardClass} ${delay}" ${onclick}>
+        <div class="chapter-number">${ch.num}</div>
+        <span class="chapter-emoji">${ch.emoji}</span>
+        <div class="chapter-hindi">${ch.hindi}</div>
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-desc">${ch.desc}</div>
+        ${statusBadge}
+      </div>
+    `;
+  }).join('');
+}
+
+const tips = [
+  "संज्ञा (Noun) किसी व्यक्ति, वस्तु, स्थान या प्राणी के नाम को कहते हैं। Example: राम, कुर्सी, दिल्ली, हाथी",
+  "क्या आप जानते हैं? हिंदी भाषा देवनागरी लिपि में लिखी जाती है। Hindi is written in the Devanagari script!",
+  "पुल्लिंग (Masculine): लड़का, पिता, शेर। स्त्रीलिंग (Feminine): लड़की, माता, शेरनी।",
+  "एकवचन (Singular): एक चीज़ के लिए। बहुवचन (Plural): एक से अधिक चीज़ों के लिए।",
+  "सर्वनाम (Pronoun) वे शब्द हैं जो संज्ञा के स्थान पर आते हैं। जैसे: मैं, तुम, वह, हम।",
+  "क्रिया (Verb) किसी कार्य या काम को बताती है। जैसे: खाना, सोना, पढ़ना, दौड़ना।",
+  "हिंदी में कुल 11 स्वर और 33 व्यंजन हैं! Hindi has 11 vowels and 33 consonants.",
+  "ताजमहल, दिल्ली, आगरा — ये सब विशेष नाम हैं (proper nouns).",
+  "प्राणी (Living beings): हाथी, बिल्ली, तोता, मछली। वस्तु (Things): मेज़, कुर्सी, किताब।",
+  "कहानी लिखते समय शुरुआत, मध्य और अंत का ध्यान रखें! Every story has a beginning, middle, and end.",
+];
+
+function showDailyTip() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  document.getElementById('daily-tip').textContent = tips[dayOfYear % tips.length];
+}
+
+document.addEventListener('DOMContentLoaded', () => { renderChapters(); showDailyTip(); });
+</script>
+
+</body>
+</html>
