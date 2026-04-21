@@ -3,371 +3,571 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Crislyn's Learning Portal</title>
+  <title>Crislyn's World ✨</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Caveat:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
 
   <style>
-    body { background: var(--color-bg); min-height: 100vh; }
-
-    /* --- Top Bar with Bahrain Time --- */
-    .top-bar {
-      background: linear-gradient(90deg, #1E1B4B, #312E81);
-      color: rgba(255,255,255,0.9);
-      padding: 8px 0;
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .top-bar .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .top-bar .location { opacity: 0.7; }
-
-    .top-bar .bahrain-time {
-      font-family: var(--font-heading);
-      font-size: 0.95rem;
-      color: var(--color-accent);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .top-bar .bahrain-date {
-      opacity: 0.8;
-    }
-
-    /* --- Navbar --- */
-    .navbar {
-      background: var(--color-surface);
-      box-shadow: var(--shadow-sm);
-      padding: var(--space-3) 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
-
-    .nav-brand {
-      display: flex; align-items: center; gap: var(--space-2);
-      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
-    }
-
-    .nav-links { display: flex; gap: var(--space-2); }
-
-    .nav-link {
-      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
-      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
-      transition: all var(--duration-normal) var(--ease-smooth);
-    }
-
-    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
-
-    /* --- Welcome Hero --- */
-    .welcome-hero {
-      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 30%, #7C3AED 60%, #A855F7 100%);
-      color: white; padding: var(--space-10) 0 var(--space-12);
-      position: relative; overflow: hidden;
-    }
-
-    .welcome-hero::before {
-      content: ''; position: absolute; inset: 0;
+    body {
       background:
-        radial-gradient(circle at 20% 80%, rgba(250,204,21,0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(13,148,136,0.15) 0%, transparent 50%);
+        radial-gradient(circle at 10% 10%, #FEE2F0 0%, transparent 30%),
+        radial-gradient(circle at 90% 20%, #DBEAFE 0%, transparent 30%),
+        radial-gradient(circle at 20% 80%, #D1FAE5 0%, transparent 30%),
+        radial-gradient(circle at 80% 80%, #FEF3C7 0%, transparent 30%),
+        linear-gradient(135deg, #FDF4FF 0%, #FFFBEB 100%);
+      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
     }
 
-    .floating-shapes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-
-    .shape { position: absolute; opacity: 0.1; font-size: 2rem; animation: floatAround 20s linear infinite; }
-    .shape:nth-child(1) { left: 5%; top: 20%; animation-duration: 25s; font-size: 2.5rem; }
-    .shape:nth-child(2) { left: 15%; top: 65%; animation-delay: -3s; animation-duration: 20s; }
-    .shape:nth-child(3) { left: 30%; top: 10%; animation-delay: -7s; animation-duration: 28s; font-size: 2.2rem; }
-    .shape:nth-child(4) { left: 50%; top: 70%; animation-delay: -5s; animation-duration: 22s; }
-    .shape:nth-child(5) { left: 70%; top: 15%; animation-delay: -10s; animation-duration: 30s; font-size: 2rem; }
-    .shape:nth-child(6) { left: 85%; top: 55%; animation-delay: -2s; animation-duration: 18s; font-size: 2.3rem; }
-    .shape:nth-child(7) { left: 42%; top: 40%; animation-delay: -8s; animation-duration: 24s; }
-    .shape:nth-child(8) { left: 62%; top: 80%; animation-delay: -12s; animation-duration: 26s; }
-
-    @keyframes floatAround {
-      0% { transform: translateY(0) rotate(0deg); }
-      25% { transform: translateY(-30px) rotate(90deg); }
-      50% { transform: translateY(-10px) rotate(180deg); }
-      75% { transform: translateY(-40px) rotate(270deg); }
-      100% { transform: translateY(0) rotate(360deg); }
+    /* Top bar — Bahrain time */
+    .top-bar {
+      background: linear-gradient(90deg, #7C3AED, #EC4899);
+      color: white; padding: 8px 0; font-size: 0.85rem; font-weight: 600;
+    }
+    .top-bar .container {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .top-bar .location { opacity: 0.9; }
+    .top-bar .bahrain-time {
+      font-family: 'Caveat', cursive; font-size: 1.05rem; color: #FEF3C7;
+      display: flex; align-items: center; gap: 6px;
     }
 
-    .welcome-hero > .container { position: relative; z-index: 1; }
-
-    .welcome-bold {
-      font-family: var(--font-heading); font-size: 4rem; font-weight: 900;
-      letter-spacing: 2px; margin-bottom: var(--space-2); text-transform: uppercase;
-      background: linear-gradient(90deg, #FACC15, #FDE68A, #FACC15);
+    /* Navbar */
+    .navbar {
+      background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 12px 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Fredoka One', cursive; font-size: 1.3rem;
+      background: linear-gradient(90deg, #EC4899, #7C3AED);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; text-shadow: none;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-link {
+      padding: 8px 18px; border-radius: 99px; font-weight: 700;
+      font-size: 0.95rem; color: #6B21A8;
+      background: white; border: 2px solid #E9D5FF;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-link:hover {
+      transform: translateY(-2px) scale(1.05);
+      background: #FAF5FF; border-color: #A855F7;
     }
 
-    .welcome-subtitle {
-      font-size: var(--text-xl); opacity: 0.9; margin-bottom: var(--space-6); line-height: 1.5;
+    /* === HERO === */
+    .hero {
+      padding: 30px 0 60px; position: relative; overflow: hidden;
     }
 
-    .greeting-line {
-      font-size: var(--text-lg); opacity: 0.85; font-weight: 600; margin-bottom: var(--space-1);
+    .sticker {
+      position: absolute; font-size: 3rem;
+      animation: floatDance 6s ease-in-out infinite;
+      pointer-events: none; z-index: 0;
+    }
+    .sticker:nth-child(1) { top: 8%; left: 5%; animation-delay: 0s; font-size: 3rem; }
+    .sticker:nth-child(2) { top: 15%; right: 8%; animation-delay: -1s; font-size: 2.5rem; }
+    .sticker:nth-child(3) { top: 40%; left: 3%; animation-delay: -2s; font-size: 2.8rem; }
+    .sticker:nth-child(4) { top: 60%; right: 5%; animation-delay: -3s; font-size: 3.2rem; }
+    .sticker:nth-child(5) { top: 75%; left: 8%; animation-delay: -4s; font-size: 2.3rem; }
+    .sticker:nth-child(6) { top: 85%; right: 10%; animation-delay: -0.5s; font-size: 2.8rem; }
+
+    @keyframes floatDance {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      25% { transform: translateY(-15px) rotate(5deg); }
+      50% { transform: translateY(-5px) rotate(-3deg); }
+      75% { transform: translateY(-20px) rotate(8deg); }
     }
 
-    /* --- Visitor Section --- */
-    .visitor-section {
-      padding: var(--space-10) 0;
+    .hero-content {
+      text-align: center; position: relative; z-index: 1;
     }
 
-    .visitor-card {
-      background: var(--color-surface); border-radius: var(--radius-xl);
-      padding: var(--space-8); box-shadow: var(--shadow-lg);
-      max-width: 750px; margin: 0 auto; text-align: center;
-      border: 3px solid var(--color-primary-lighter);
+    .hero-greeting {
+      font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+      color: #6B21A8; margin-bottom: 4px;
     }
 
-    .visitor-card h3 { margin-bottom: var(--space-2); }
-
-    .name-input-row {
-      display: flex; align-items: center; justify-content: center;
-      gap: var(--space-3); margin: var(--space-5) 0; flex-wrap: wrap;
+    .hero-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 4.5rem; line-height: 1;
+      background: linear-gradient(90deg, #EC4899, #A855F7, #3B82F6, #10B981, #F59E0B, #EF4444);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 3px 3px 0 rgba(236, 72, 153, 0.2);
+      margin-bottom: 12px;
     }
+
+    .hero-name {
+      font-family: 'Caveat', cursive; font-size: 2.2rem;
+      color: #EC4899; transform: rotate(-3deg);
+      display: inline-block; margin-top: 4px;
+    }
+
+    .hero-sub {
+      font-family: 'Patrick Hand', cursive; font-size: 1.3rem;
+      color: #6B21A8; margin-top: 8px;
+    }
+
+    /* === SECTION STYLING === */
+    section { padding: 40px 0; }
+
+    .section-title {
+      font-family: 'Fredoka One', cursive; font-size: 2.2rem;
+      text-align: center; margin-bottom: 20px;
+      color: #6B21A8;
+    }
+
+    .section-sub {
+      font-family: 'Patrick Hand', cursive; font-size: 1.2rem;
+      text-align: center; color: #9333EA; margin-bottom: 30px;
+    }
+
+    /* === VISITOR / GUESTBOOK === */
+    .visitor-wrap {
+      max-width: 720px; margin: 0 auto; padding: 0 24px;
+    }
+
+    .scrapbook-card {
+      background: white; border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.15);
+      padding: 30px; position: relative;
+    }
+
+    .washi-top-pink, .washi-top-yellow, .washi-top-mint {
+      position: absolute; top: -12px; width: 100px; height: 28px;
+      border-radius: 4px; transform: rotate(-4deg);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .washi-top-pink { left: 20px; background: repeating-linear-gradient(-45deg, #F9A8D4, #F9A8D4 6px, #FBCFE8 6px, #FBCFE8 12px); }
+    .washi-top-yellow { right: 30px; top: -10px; background: repeating-linear-gradient(45deg, #FBBF24, #FBBF24 6px, #FDE68A 6px, #FDE68A 12px); transform: rotate(5deg); }
+    .washi-top-mint { left: 50%; top: -14px; background: repeating-linear-gradient(-30deg, #6EE7B7, #6EE7B7 6px, #A7F3D0 6px, #A7F3D0 12px); transform: translateX(-50%) rotate(-2deg); }
 
     .name-input {
-      padding: var(--space-3) var(--space-5); border: 3px solid var(--color-border);
-      border-radius: var(--radius-md); font-size: var(--text-lg); font-weight: 700;
+      padding: 14px 20px; border: 3px dashed #C4B5FD;
+      border-radius: 16px; font-size: 1.1rem; font-weight: 700;
       text-align: center; width: 260px; outline: none;
-      transition: border-color var(--duration-normal);
-      font-family: var(--font-body);
+      font-family: 'Patrick Hand', cursive; color: #6B21A8;
+      background: #FAF5FF; transition: all 0.3s;
     }
-
-    .name-input:focus { border-color: var(--color-primary-light); box-shadow: var(--shadow-glow); }
-
-    /* Avatar Grid */
-    .avatar-label-heading { font-weight: 700; margin-bottom: var(--space-3); color: var(--color-text-light); }
+    .name-input:focus { border-style: solid; border-color: #A855F7; background: white; }
 
     .avatar-group-label {
-      font-size: var(--text-sm); font-weight: 700; margin-bottom: var(--space-2);
-      color: var(--color-primary); text-transform: uppercase; letter-spacing: 1px;
+      font-family: 'Fredoka One', cursive; font-size: 0.95rem;
+      color: #EC4899; margin: 10px 0 8px;
+      letter-spacing: 1px;
     }
 
     .avatar-grid {
-      display: flex; gap: var(--space-3); justify-content: center;
-      flex-wrap: wrap; margin-bottom: var(--space-4);
+      display: flex; gap: 10px; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 16px;
     }
 
     .avatar-option {
-      width: 64px; height: 64px; border-radius: 50%;
-      border: 3px solid var(--color-border); display: flex;
-      align-items: center; justify-content: center; font-size: 2.2rem;
-      cursor: pointer; transition: all var(--duration-normal) var(--ease-bounce);
-      background: var(--color-bg);
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 3px solid #E9D5FF; display: flex;
+      align-items: center; justify-content: center; font-size: 1.8rem;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: white;
     }
-
-    .avatar-option:hover { transform: scale(1.15); border-color: var(--color-primary-light); box-shadow: var(--shadow-md); }
-
+    .avatar-option:hover { transform: scale(1.2) rotate(10deg); }
     .avatar-option.selected {
-      border-color: var(--color-primary); background: var(--color-bg-alt);
-      box-shadow: var(--shadow-glow); transform: scale(1.15);
+      border-color: #EC4899; background: #FCE7F3;
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.2);
+      transform: scale(1.15);
     }
-
     .avatar-option.girl { border-color: #F9A8D4; }
-    .avatar-option.girl:hover, .avatar-option.girl.selected { border-color: #EC4899; box-shadow: 0 0 15px rgba(236,72,153,0.3); }
-
     .avatar-option.boy { border-color: #93C5FD; }
-    .avatar-option.boy:hover, .avatar-option.boy.selected { border-color: #3B82F6; box-shadow: 0 0 15px rgba(59,130,246,0.3); }
 
-    /* Visitor Display */
     .visitor-display {
-      display: none; padding: var(--space-6);
-      background: linear-gradient(135deg, var(--color-bg-alt), #F3E8FF);
-      border-radius: var(--radius-lg); margin-top: var(--space-5);
+      display: none; padding: 20px;
+      background: linear-gradient(135deg, #FCE7F3, #FEF3C7);
+      border-radius: 16px; margin-top: 20px;
+      text-align: center;
     }
-
-    .visitor-display.show { display: block; animation: popIn 0.4s var(--ease-bounce); }
-
-    .visitor-avatar-big { font-size: 4.5rem; margin-bottom: var(--space-2); }
-
+    .visitor-display.show { display: block; animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .visitor-avatar-big { font-size: 3.5rem; margin-bottom: 6px; }
     .visitor-name-display {
-      font-family: var(--font-heading); font-size: var(--text-2xl);
-      color: var(--color-primary);
+      font-family: 'Caveat', cursive; font-size: 2rem; color: #BE185D;
     }
 
-    .visitor-welcome-msg { color: var(--color-text-light); font-weight: 600; margin-top: var(--space-1); }
+    /* === MOOD TRACKER === */
+    .mood-wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
 
-    /* --- Crislyn's World (Profile) --- */
-    .crislyn-world {
-      padding: var(--space-10) 0; background: var(--color-surface);
+    .mood-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 12px; margin-top: 16px;
     }
 
-    .world-header { text-align: center; margin-bottom: var(--space-8); }
-
-    .world-header h2 { margin-bottom: var(--space-2); }
-
-    .world-intro {
-      font-size: var(--text-lg); color: var(--color-text-light);
-      max-width: 600px; margin: 0 auto;
+    .mood-btn {
+      background: white; border: 3px solid #FDE68A;
+      border-radius: 18px; padding: 12px 8px; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+    }
+    .mood-btn:hover { transform: translateY(-6px) scale(1.05); border-color: #F59E0B; }
+    .mood-btn.selected {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-color: #F59E0B; transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+    }
+    .mood-btn .mood-emoji { font-size: 2.5rem; display: block; margin-bottom: 4px; }
+    .mood-btn .mood-label {
+      font-family: 'Patrick Hand', cursive; font-size: 0.95rem;
+      color: #92400E; font-weight: 700;
     }
 
-    .world-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: var(--space-6); max-width: 950px; margin: 0 auto;
+    .mood-message {
+      margin-top: 20px; padding: 16px; border-radius: 14px;
+      text-align: center; font-family: 'Caveat', cursive;
+      font-size: 1.4rem; color: #92400E;
+      background: linear-gradient(135deg, #FEF3C7, #FBBF24);
+      display: none;
+    }
+    .mood-message.show { display: block; animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+    /* === ABOUT ME POLAROID === */
+    .about-wrap {
+      max-width: 900px; margin: 0 auto; padding: 0 24px;
     }
 
-    .world-card {
-      border-radius: var(--radius-xl); padding: var(--space-6); text-align: center;
-      position: relative; overflow: hidden; transition: all var(--duration-normal) var(--ease-bounce);
+    .polaroid {
+      background: white; padding: 16px 16px 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border-radius: 4px; transform: rotate(-2deg);
+      transition: transform 0.3s;
+    }
+    .polaroid:hover { transform: rotate(0deg) scale(1.02); }
+
+    .polaroid-image {
+      width: 100%; height: 200px;
+      background: linear-gradient(135deg, #FBCFE8, #C4B5FD, #93C5FD);
+      border-radius: 4px; display: flex; align-items: center;
+      justify-content: center; font-size: 6rem; position: relative;
     }
 
-    .world-card:hover { transform: translateY(-6px) rotate(-1deg); }
-
-    .world-card .world-icon { font-size: 3.5rem; margin-bottom: var(--space-3); display: block; }
-    .world-card h4 { margin-bottom: var(--space-2); }
-    .world-card p { font-size: var(--text-sm); margin-bottom: 0; }
-
-    .world-card.avatar-world {
-      background: linear-gradient(135deg, #FCE7F3, #FDF2F8);
-      border: 2px solid #F9A8D4; color: #831843;
-    }
-    .world-card.avatar-world h4 { color: #BE185D; }
-
-    .world-card.legos {
-      background: linear-gradient(135deg, #FEF3C7, #FFFBEB);
-      border: 2px solid #FCD34D; color: #78350F;
-    }
-    .world-card.legos h4 { color: #B45309; }
-
-    .world-card.cycling {
-      background: linear-gradient(135deg, #CCFBF1, #F0FDFA);
-      border: 2px solid #5EEAD4; color: #134E4A;
-    }
-    .world-card.cycling h4 { color: #0F766E; }
-
-    .world-card.hide-seek {
-      background: linear-gradient(135deg, #EDE9FE, #F5F3FF);
-      border: 2px solid #C4B5FD; color: #3B0764;
-    }
-    .world-card.hide-seek h4 { color: #6D28D9; }
-
-    /* Connection lines between worlds */
-    .world-connector {
-      text-align: center; padding: var(--space-4) 0;
-      font-family: var(--font-heading); font-size: var(--text-lg);
-      color: var(--color-primary-light);
+    .polaroid-caption {
+      font-family: 'Caveat', cursive; font-size: 1.8rem;
+      color: #6B21A8; text-align: center; margin-top: 12px;
     }
 
-    /* Crislyn profile badge */
-    .crislyn-badge {
-      display: flex; align-items: center; gap: var(--space-4);
-      background: linear-gradient(135deg, #6B21A8, #A855F7);
-      color: white; border-radius: var(--radius-xl); padding: var(--space-6);
-      max-width: 600px; margin: var(--space-6) auto 0;
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 2fr;
+      gap: 30px; align-items: start;
     }
 
-    .crislyn-badge-avatar { font-size: 4rem; flex-shrink: 0; }
-
-    .crislyn-badge-info h4 { color: var(--color-accent); margin-bottom: var(--space-1); font-size: var(--text-xl); }
-    .crislyn-badge-info p { opacity: 0.9; font-size: var(--text-sm); margin-bottom: 0; }
-
-    /* --- Stats, Actions, Challenge, Footer (reused) --- */
-    .stats-strip { margin-top: calc(-1 * var(--space-6)); position: relative; z-index: 2; padding: 0 0 var(--space-6); }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
-
-    .stat-card {
-      background: var(--color-surface); border-radius: var(--radius-lg);
-      padding: var(--space-4); text-align: center; box-shadow: var(--shadow-md);
-      transition: all var(--duration-normal) var(--ease-bounce);
+    .favorites-list {
+      background: white; border-radius: 16px; padding: 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      position: relative;
     }
-    .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-    .stat-icon { font-size: 1.8rem; margin-bottom: var(--space-1); }
-    .stat-value { font-family: var(--font-heading); font-size: var(--text-xl); color: var(--color-primary); }
-    .stat-label { font-size: var(--text-xs); color: var(--color-text-light); margin-top: 2px; }
 
-    .actions-section { padding: var(--space-8) 0; }
-
-    .action-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-6); }
-
-    .action-card {
-      background: var(--color-surface); border-radius: var(--radius-xl); padding: var(--space-8);
-      text-align: center; box-shadow: var(--shadow-md); transition: all var(--duration-normal) var(--ease-bounce);
-      cursor: pointer; border: 3px solid transparent; text-decoration: none; color: inherit; display: block;
+    .favorites-list h3 {
+      font-family: 'Fredoka One', cursive; color: #EC4899;
+      margin-bottom: 16px; font-size: 1.3rem;
     }
-    .action-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-xl); }
-    .action-card.learning { border-color: var(--color-primary-lighter); background: linear-gradient(to bottom, white, #FAF5FF); }
-    .action-card.learning:hover { border-color: var(--color-primary); }
-    .action-card.fun { border-color: var(--color-accent-light); background: linear-gradient(to bottom, white, #FFFBEB); }
-    .action-card.fun:hover { border-color: var(--color-accent-dark); }
-    .action-card.progress { border-color: var(--color-teal-light); background: linear-gradient(to bottom, white, #F0FDFA); }
-    .action-card.progress:hover { border-color: var(--color-teal); }
-    .action-icon { font-size: 3.5rem; margin-bottom: var(--space-3); display: block; }
-    .action-card h3 { font-size: var(--text-xl); margin-bottom: var(--space-2); }
-    .action-card p { color: var(--color-text-light); margin-bottom: var(--space-4); }
-    .action-btn {
-      display: inline-flex; align-items: center; gap: var(--space-2); font-weight: 700;
-      font-size: var(--text-sm); padding: var(--space-2) var(--space-5); border-radius: var(--radius-full);
+
+    .fav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 2px dotted #E9D5FF;
+      font-family: 'Patrick Hand', cursive; font-size: 1.15rem;
+      color: #4C1D95;
     }
-    .action-card.learning .action-btn { background: var(--color-primary); color: white; }
-    .action-card.fun .action-btn { background: var(--color-accent); color: var(--color-primary-dark); }
-    .action-card.progress .action-btn { background: var(--color-teal); color: white; }
+    .fav-item:last-child { border-bottom: none; }
+    .fav-item .fav-icon { font-size: 1.6rem; flex-shrink: 0; width: 40px; text-align: center; }
+    .fav-item .fav-label { font-weight: 700; color: #9333EA; }
+    .fav-item .fav-value { margin-left: auto; font-family: 'Caveat', cursive; font-size: 1.4rem; color: #BE185D; }
 
-    .challenge-section { padding: var(--space-6) 0 var(--space-10); }
+    /* === FRIENDS GUESTBOOK === */
+    .besties-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
-    .challenge-card {
-      background: linear-gradient(135deg, #FEF3C7, #FDE68A, #FACC15);
-      border-radius: var(--radius-xl); padding: var(--space-6); max-width: 700px;
-      margin: 0 auto; text-align: center; box-shadow: 0 4px 20px rgba(234,179,8,0.25);
+    .besties-scrapbook {
+      background: white; border-radius: 20px; padding: 30px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .sign-in-box {
+      background: #FEF3C7; border: 3px dashed #F59E0B;
+      border-radius: 16px; padding: 20px; margin-bottom: 24px;
+    }
+
+    .sign-in-box h4 {
+      font-family: 'Fredoka One', cursive; color: #B45309;
+      margin-bottom: 12px; text-align: center;
+    }
+
+    .sign-in-row {
+      display: flex; gap: 12px; justify-content: center;
+      flex-wrap: wrap; align-items: center; margin-top: 10px;
+    }
+
+    .sign-message {
+      width: 100%; max-width: 400px; padding: 10px 14px;
+      border: 2px solid #FCD34D; border-radius: 12px;
+      font-family: 'Patrick Hand', cursive; font-size: 1rem;
+      outline: none;
+    }
+    .sign-message:focus { border-color: #F59E0B; }
+
+    .sign-btn {
+      background: linear-gradient(135deg, #F59E0B, #EF4444);
+      color: white; border: none; padding: 10px 24px;
+      border-radius: 99px; font-weight: 700; font-size: 1rem;
+      cursor: pointer; transition: all 0.3s;
+      font-family: 'Fredoka One', cursive;
+    }
+    .sign-btn:hover { transform: scale(1.08); box-shadow: 0 6px 16px rgba(245,158,11,0.4); }
+
+    .besties-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .bestie-note {
+      background: white; padding: 16px 14px 20px; border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center; position: relative;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bestie-note:nth-child(3n+1) { transform: rotate(-3deg); background: #FEF3C7; }
+    .bestie-note:nth-child(3n+2) { transform: rotate(2deg); background: #FCE7F3; }
+    .bestie-note:nth-child(3n) { transform: rotate(-1deg); background: #DBEAFE; }
+    .bestie-note:hover { transform: rotate(0deg) scale(1.05); z-index: 1; }
+
+    .bestie-note .b-avatar { font-size: 2.5rem; margin-bottom: 6px; }
+    .bestie-note .b-name {
+      font-family: 'Caveat', cursive; font-size: 1.4rem;
+      color: #6B21A8; font-weight: 700;
+    }
+    .bestie-note .b-message {
+      font-family: 'Patrick Hand', cursive; font-size: 0.95rem;
+      color: #4C1D95; margin-top: 6px;
+    }
+
+    .no-besties {
+      text-align: center; padding: 30px;
+      font-family: 'Patrick Hand', cursive; font-size: 1.2rem;
+      color: #9CA3AF;
+    }
+
+    /* === MY FAVORITE THINGS === */
+    .faves-wrap {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px; max-width: 1000px; margin: 0 auto; padding: 0 24px;
+    }
+
+    .fave-card {
+      border-radius: 24px; padding: 30px 20px; text-align: center;
+      position: relative; overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    .fave-card:hover { transform: translateY(-8px) rotate(-2deg); }
+
+    .fave-card .fave-emoji {
+      font-size: 5rem; display: block; margin-bottom: 10px;
+      animation: wobble 3s ease-in-out infinite;
+    }
+    .fave-card:hover .fave-emoji {
+      animation-duration: 0.6s;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+
+    .fave-card h4 {
+      font-family: 'Fredoka One', cursive; font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .fave-card p {
+      font-family: 'Patrick Hand', cursive; font-size: 1.05rem;
+      margin: 0; line-height: 1.5;
+    }
+
+    .fave-avatar { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); color: #831843; }
+    .fave-avatar h4 { color: #BE185D; }
+    .fave-legos { background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #78350F; }
+    .fave-legos h4 { color: #B45309; }
+    .fave-cycling { background: linear-gradient(135deg, #CCFBF1, #A7F3D0); color: #134E4A; }
+    .fave-cycling h4 { color: #0F766E; }
+    .fave-hideseek { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); color: #3B0764; }
+    .fave-hideseek h4 { color: #6D28D9; }
+
+    /* === FUN ZONE === */
+    .fun-wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    .fun-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .fun-card {
+      background: white; border-radius: 20px; padding: 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08); text-align: center;
+      position: relative;
+    }
+
+    .fun-card h3 {
+      font-family: 'Fredoka One', cursive; font-size: 1.3rem;
+      color: #6B21A8; margin-bottom: 16px;
+    }
+
+    /* Spinner */
+    .spinner-wrap {
+      position: relative; width: 220px; height: 220px; margin: 0 auto;
+    }
+    .spinner-disk {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: conic-gradient(
+        #EC4899 0deg 45deg, #F59E0B 45deg 90deg,
+        #10B981 90deg 135deg, #3B82F6 135deg 180deg,
+        #A855F7 180deg 225deg, #EF4444 225deg 270deg,
+        #14B8A6 270deg 315deg, #F97316 315deg 360deg
+      );
+      transition: transform 3s cubic-bezier(0.2, 0.8, 0.3, 1);
+      box-shadow: 0 8px 20px rgba(124,58,237,0.3);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .spinner-disk::after {
+      content: '✨'; position: absolute; font-size: 2rem;
+      background: white; width: 50px; height: 50px;
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center;
+    }
+    .spinner-pointer {
+      position: absolute; top: -5px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 15px solid transparent; border-right: 15px solid transparent;
+      border-top: 25px solid #4C1D95;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      z-index: 1;
+    }
+    .spin-btn {
+      background: linear-gradient(135deg, #EC4899, #A855F7);
+      color: white; border: none; padding: 12px 32px;
+      border-radius: 99px; font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem; cursor: pointer; margin-top: 16px;
+      box-shadow: 0 6px 16px rgba(236,72,153,0.3);
+      transition: all 0.2s;
+    }
+    .spin-btn:hover { transform: scale(1.08); }
+    .spin-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .spin-result {
+      margin-top: 14px; font-family: 'Caveat', cursive;
+      font-size: 1.4rem; color: #BE185D; min-height: 40px;
+    }
+
+    /* Animal quiz */
+    .quiz-question {
+      font-family: 'Patrick Hand', cursive; font-size: 1.15rem;
+      color: #4C1D95; margin-bottom: 14px;
+    }
+    .quiz-opt {
+      background: white; border: 3px solid #E9D5FF;
+      border-radius: 14px; padding: 10px 14px; cursor: pointer;
+      font-family: 'Patrick Hand', cursive; font-size: 1.05rem;
+      margin-bottom: 8px; transition: all 0.25s;
+      color: #4C1D95; width: 100%; text-align: left;
+    }
+    .quiz-opt:hover { border-color: #A855F7; background: #FAF5FF; transform: translateX(4px); }
+    .quiz-result {
+      background: linear-gradient(135deg, #FCE7F3, #FEF3C7);
+      padding: 16px; border-radius: 14px; margin-top: 10px;
+      display: none;
+    }
+    .quiz-result.show { display: block; animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .quiz-result .animal-emoji { font-size: 3.5rem; margin-bottom: 6px; }
+    .quiz-result .animal-name {
+      font-family: 'Fredoka One', cursive; font-size: 1.3rem;
+      color: #BE185D;
+    }
+    .quiz-result .animal-desc {
+      font-family: 'Patrick Hand', cursive; font-size: 1rem;
+      color: #78350F; margin-top: 4px;
+    }
+    .retry-btn {
+      background: #F59E0B; color: white; border: none;
+      padding: 6px 16px; border-radius: 99px; margin-top: 10px;
+      font-family: 'Fredoka One', cursive; font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    /* === SPARKLE (daily tip) === */
+    .sparkle-wrap {
+      max-width: 700px; margin: 0 auto; padding: 0 24px;
+    }
+
+    .sparkle-card {
+      background: linear-gradient(135deg, #FEF3C7, #FACC15);
+      border-radius: 24px; padding: 30px; text-align: center;
+      box-shadow: 0 8px 30px rgba(250,204,21,0.3);
       position: relative; overflow: hidden;
     }
-    .challenge-card::before {
-      content: ''; position: absolute; top: -50%; right: -30%;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 70%); border-radius: 50%;
+    .sparkle-card::before {
+      content: '✨'; position: absolute; top: 10px; left: 20px;
+      font-size: 2rem; opacity: 0.3;
     }
-    .challenge-card > * { position: relative; }
-    .challenge-card h3 { color: #92400E; margin-bottom: var(--space-3); }
-    .challenge-text { font-size: var(--text-lg); font-weight: 700; color: #78350F; margin-bottom: var(--space-4); line-height: 1.6; }
-    .challenge-answer {
-      display: inline-block; background: white; padding: var(--space-2) var(--space-6);
-      border-radius: var(--radius-md); font-family: var(--font-heading); font-size: var(--text-lg);
-      color: var(--color-primary); cursor: pointer; box-shadow: var(--shadow-sm);
-      transition: all var(--duration-normal) var(--ease-bounce);
+    .sparkle-card::after {
+      content: '🌟'; position: absolute; bottom: 10px; right: 20px;
+      font-size: 2.2rem; opacity: 0.3;
     }
-    .challenge-answer:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
+    .sparkle-card h3 {
+      font-family: 'Fredoka One', cursive; color: #B45309;
+      font-size: 1.5rem; margin-bottom: 10px;
+    }
+    .sparkle-text {
+      font-family: 'Caveat', cursive; font-size: 1.5rem;
+      color: #78350F; line-height: 1.5;
+    }
+
+    /* === LEARN CTA === */
+    .learn-cta-wrap {
+      text-align: center; padding: 60px 24px;
+    }
+    .learn-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, #7C3AED, #EC4899);
+      color: white; padding: 20px 44px; border-radius: 99px;
+      font-family: 'Fredoka One', cursive; font-size: 1.5rem;
+      text-decoration: none; box-shadow: 0 10px 30px rgba(124,58,237,0.4);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .learn-cta:hover { transform: translateY(-4px) scale(1.05); }
 
     .footer {
-      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
-      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+      text-align: center; padding: 24px;
+      font-family: 'Caveat', cursive; font-size: 1.2rem;
+      color: #9333EA;
     }
 
+    /* Responsive */
     @media (max-width: 768px) {
-      .welcome-bold { font-size: 2.8rem; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .world-grid { grid-template-columns: 1fr 1fr; }
-      .crislyn-badge { flex-direction: column; text-align: center; }
-      .name-input { width: 200px; }
+      .hero-title { font-size: 3rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .fun-grid { grid-template-columns: 1fr; }
+      .mood-grid { grid-template-columns: repeat(3, 1fr); }
+      .polaroid { transform: rotate(0); }
       .top-bar .container { flex-direction: column; gap: 4px; text-align: center; }
-    }
-
-    @media (max-width: 480px) {
-      .world-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- Top Bar — Bahrain Date & Time -->
+<!-- Top Bar -->
 <div class="top-bar">
   <div class="container">
     <span class="location">🇧🇭 Bahrain</span>
@@ -379,233 +579,291 @@
 <!-- Navbar -->
 <nav class="navbar">
   <div class="container">
-    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's World</a>
     <div class="nav-links">
-      <a href="index.html" class="nav-link active">Home</a>
-      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="index.html" class="nav-link">🏠 Home</a>
+      <a href="learning.html" class="nav-link">📚 Learn</a>
     </div>
   </div>
 </nav>
 
-<!-- Welcome Hero -->
-<div class="welcome-hero">
-  <div class="floating-shapes">
-    <span class="shape">📐</span><span class="shape">✏️</span><span class="shape">📖</span>
-    <span class="shape">🌟</span><span class="shape">🔢</span><span class="shape">🎯</span>
-    <span class="shape">💡</span><span class="shape">🏆</span>
+<!-- HERO -->
+<section class="hero">
+  <span class="sticker">💖</span>
+  <span class="sticker">⭐</span>
+  <span class="sticker">🌈</span>
+  <span class="sticker">🦄</span>
+  <span class="sticker">✨</span>
+  <span class="sticker">🎀</span>
+
+  <div class="container hero-content">
+    <div class="hero-greeting fade-in" id="greeting">Hey there!</div>
+    <div class="hero-title fade-in-up">Crislyn's World</div>
+    <div class="hero-name fade-in-up delay-1">✏️ a super cool Grade 4 hangout ✏️</div>
+    <div class="hero-sub fade-in-up delay-2">where friends can say hi, play games, and learn stuff!</div>
   </div>
-  <div class="container" style="text-align: center;">
-    <div class="greeting-line fade-in" id="greeting"></div>
-    <div class="welcome-bold fade-in-up">Welcome</div>
-    <p class="welcome-subtitle fade-in-up delay-1">to Crislyn's Learning Adventure! Explore, play, and grow smarter every day.</p>
-    <div class="fade-in-up delay-2">
-      <a href="learning.html" class="btn btn-accent btn-lg" style="font-size: var(--text-lg);">Start Learning 📚</a>
-    </div>
-  </div>
-</div>
+</section>
 
-<!-- Visitor Section — Name + Avatar -->
-<div class="visitor-section">
-  <div class="container">
-    <div class="visitor-card fade-in-up">
-      <h3>Who's visiting today?</h3>
-      <p class="text-muted">Type your name and pick your avatar!</p>
+<!-- VISITOR: Who is here? -->
+<section class="visitor-wrap">
+  <div class="scrapbook-card fade-in-up">
+    <span class="washi-top-pink"></span>
+    <span class="washi-top-mint"></span>
+    <span class="washi-top-yellow"></span>
 
-      <div class="name-input-row">
-        <input type="text" class="name-input" id="visitor-name" placeholder="Your name..." maxlength="20"
-               oninput="updateVisitorDisplay()" autocomplete="off">
-      </div>
+    <h2 class="section-title">🎉 Who's here today?</h2>
+    <p class="section-sub">Type your name and pick an avatar!</p>
 
-      <!-- Girl Avatars -->
-      <div class="avatar-group-label">Girls</div>
-      <div class="avatar-grid">
-        <div class="avatar-option girl" onclick="selectAvatar(this, '👧')" title="Girl 1">👧</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '👩‍🎓')" title="Scholar Girl">👩‍🎓</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '🧚')" title="Fairy">🧚</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '👸')" title="Princess">👸</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '🦄')" title="Unicorn">🦄</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '🌸')" title="Flower">🌸</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '🦋')" title="Butterfly">🦋</div>
-        <div class="avatar-option girl" onclick="selectAvatar(this, '🐱')" title="Kitty">🐱</div>
-      </div>
-
-      <!-- Boy Avatars -->
-      <div class="avatar-group-label">Boys</div>
-      <div class="avatar-grid">
-        <div class="avatar-option boy" onclick="selectAvatar(this, '👦')" title="Boy 1">👦</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '🧑‍🚀')" title="Astronaut">🧑‍🚀</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '🦸')" title="Superhero">🦸</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '🏄')" title="Surfer">🏄</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '🤖')" title="Robot">🤖</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '🐉')" title="Dragon">🐉</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '🦁')" title="Lion">🦁</div>
-        <div class="avatar-option boy" onclick="selectAvatar(this, '⚽')" title="Football">⚽</div>
-      </div>
-
-      <!-- Visitor Display -->
-      <div class="visitor-display" id="visitor-display">
-        <div class="visitor-avatar-big" id="visitor-avatar-big">👧</div>
-        <div class="visitor-name-display" id="visitor-name-display"></div>
-        <div class="visitor-welcome-msg">Welcome to Crislyn's world! Have fun learning!</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Crislyn's World (Profile) -->
-<div class="crislyn-world">
-  <div class="container">
-    <div class="world-header">
-      <h2 class="fade-in-up">Crislyn's World</h2>
-      <p class="world-intro fade-in-up delay-1">Where imagination meets learning, and every day is an adventure!</p>
+    <div style="text-align: center; margin: 20px 0;">
+      <input type="text" class="name-input" id="visitor-name" placeholder="Your name..." maxlength="20"
+             oninput="updateVisitorDisplay()" autocomplete="off">
     </div>
 
-    <div class="world-grid">
-      <div class="world-card avatar-world fade-in-up delay-1">
-        <span class="world-icon">🎮</span>
-        <h4>Avatar World</h4>
-        <p>Creating characters, building stories, and exploring magical places in her favourite game!</p>
-      </div>
-
-      <div class="world-card legos fade-in-up delay-2">
-        <span class="world-icon">🧱</span>
-        <h4>Lego Builder</h4>
-        <p>Brick by brick, Crislyn builds amazing creations — castles, vehicles, and entire worlds!</p>
-      </div>
-
-      <div class="world-card cycling fade-in-up delay-3">
-        <span class="world-icon">🚲</span>
-        <h4>Cycling Explorer</h4>
-        <p>Pedalling through the neighbourhood, feeling the wind, and discovering new paths!</p>
-      </div>
-
-      <div class="world-card hide-seek fade-in-up delay-4">
-        <span class="world-icon">🙈</span>
-        <h4>Hide & Seek Champion</h4>
-        <p>The ultimate seeker and the sneakiest hider — nobody can find her!</p>
-      </div>
+    <div class="avatar-group-label" style="text-align: center;">🎀 GIRLS</div>
+    <div class="avatar-grid">
+      <div class="avatar-option girl" onclick="selectAvatar(this, '👧')">👧</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '👩‍🎓')">👩‍🎓</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '🧚')">🧚</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '👸')">👸</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '🦄')">🦄</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '🌸')">🌸</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '🦋')">🦋</div>
+      <div class="avatar-option girl" onclick="selectAvatar(this, '🐱')">🐱</div>
     </div>
 
-    <div class="world-connector fade-in-up delay-5">
-      ✨ All these worlds connect in Crislyn's imagination ✨
+    <div class="avatar-group-label" style="text-align: center;">⚡ BOYS</div>
+    <div class="avatar-grid">
+      <div class="avatar-option boy" onclick="selectAvatar(this, '👦')">👦</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '🧑‍🚀')">🧑‍🚀</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '🦸')">🦸</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '🏄')">🏄</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '🤖')">🤖</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '🐉')">🐉</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '🦁')">🦁</div>
+      <div class="avatar-option boy" onclick="selectAvatar(this, '⚽')">⚽</div>
     </div>
 
-    <div class="crislyn-badge fade-in-up delay-5">
-      <div class="crislyn-badge-avatar">👩‍🎓</div>
-      <div class="crislyn-badge-info">
-        <h4>Crislyn Tony</h4>
-        <p>Grade 4 student at Asian School Bahrain. Loves Avatar World, building Legos, cycling adventures, and winning at hide & seek. Learning is her newest superpower!</p>
-      </div>
+    <div class="visitor-display" id="visitor-display">
+      <div class="visitor-avatar-big" id="visitor-avatar-big">👧</div>
+      <div class="visitor-name-display" id="visitor-name-display"></div>
+      <p style="font-family: 'Patrick Hand', cursive; color: #831843; font-size: 1.1rem; margin: 6px 0 0;">Welcome to my world! 🌟</p>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Stats Strip -->
-<div class="stats-strip" style="padding-top: var(--space-8);">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-card fade-in-up delay-1">
-        <div class="stat-icon">📖</div>
-        <div class="stat-value">1</div>
-        <div class="stat-label">Chapter Ready</div>
-      </div>
-      <div class="stat-card fade-in-up delay-2">
-        <div class="stat-icon">✏️</div>
-        <div class="stat-value">11</div>
-        <div class="stat-label">Lessons</div>
-      </div>
-      <div class="stat-card fade-in-up delay-3">
-        <div class="stat-icon">🎯</div>
-        <div class="stat-value">100+</div>
-        <div class="stat-label">Quiz Questions</div>
-      </div>
-      <div class="stat-card fade-in-up delay-4">
-        <div class="stat-icon">🏆</div>
-        <div class="stat-value">21</div>
-        <div class="stat-label">Badges to Earn</div>
-      </div>
+<!-- MOOD TRACKER -->
+<section class="mood-wrap">
+  <h2 class="section-title">🌈 How are you feeling?</h2>
+  <p class="section-sub">Tap the face that matches your mood today!</p>
+
+  <div class="scrapbook-card fade-in-up" style="background: #FFFBEB;">
+    <div class="mood-grid">
+      <button class="mood-btn" onclick="pickMood(this, 'super')">
+        <span class="mood-emoji">🤩</span>
+        <div class="mood-label">Super!</div>
+      </button>
+      <button class="mood-btn" onclick="pickMood(this, 'happy')">
+        <span class="mood-emoji">😊</span>
+        <div class="mood-label">Happy</div>
+      </button>
+      <button class="mood-btn" onclick="pickMood(this, 'okay')">
+        <span class="mood-emoji">🙂</span>
+        <div class="mood-label">Okay</div>
+      </button>
+      <button class="mood-btn" onclick="pickMood(this, 'tired')">
+        <span class="mood-emoji">😴</span>
+        <div class="mood-label">Tired</div>
+      </button>
+      <button class="mood-btn" onclick="pickMood(this, 'sad')">
+        <span class="mood-emoji">😢</span>
+        <div class="mood-label">Sad</div>
+      </button>
     </div>
+    <div class="mood-message" id="mood-message"></div>
   </div>
-</div>
+</section>
 
-<!-- Quick Actions -->
-<div class="actions-section">
-  <div class="container">
-    <div class="section-header mb-8">
-      <h2>What would you like to do?</h2>
-      <p>Pick your adventure!</p>
+<!-- ABOUT ME -->
+<section class="about-wrap">
+  <h2 class="section-title">📸 All About Me</h2>
+  <p class="section-sub">This is me — Crislyn! 💖</p>
+
+  <div class="about-grid">
+    <div class="polaroid">
+      <div class="polaroid-image">👩‍🎓</div>
+      <div class="polaroid-caption">~ Crislyn Tony ~</div>
     </div>
-    <div class="action-cards">
-      <a href="learning.html" class="action-card learning fade-in-up delay-1">
-        <span class="action-icon">📚</span>
-        <h3>Learning</h3>
-        <p>Jump into your subjects — interactive lessons, practice exercises, and quizzes!</p>
-        <span class="action-btn">Explore Subjects →</span>
-      </a>
-      <a href="maths.html" class="action-card fun fade-in-up delay-2">
-        <span class="action-icon">🔢</span>
-        <h3>Maths Practice</h3>
-        <p>Go directly to your Maths chapters — Numbers, Addition, Multiplication and more!</p>
-        <span class="action-btn">Open Maths →</span>
-      </a>
-      <div class="action-card progress fade-in-up delay-3" style="cursor: default; opacity: 0.6;">
-        <span class="action-icon">📊</span>
-        <h3>My Progress</h3>
-        <p>Track your scores, streaks, and achievements across all subjects.</p>
-        <span class="action-btn" style="opacity: 0.6;">Coming Soon</span>
+    <div class="favorites-list">
+      <h3>⭐ My Favourites ⭐</h3>
+      <div class="fav-item">
+        <span class="fav-icon">🎂</span>
+        <span class="fav-label">Age:</span>
+        <span class="fav-value">9 years old</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">🏫</span>
+        <span class="fav-label">Grade:</span>
+        <span class="fav-value">Grade 4</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">📍</span>
+        <span class="fav-label">Lives in:</span>
+        <span class="fav-value">Bahrain 🇧🇭</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">🎨</span>
+        <span class="fav-label">Fav Colour:</span>
+        <span class="fav-value">Purple & Pink</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">🍕</span>
+        <span class="fav-label">Fav Food:</span>
+        <span class="fav-value">Pizza!</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">🎮</span>
+        <span class="fav-label">Fav Game:</span>
+        <span class="fav-value">Avatar World</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">📚</span>
+        <span class="fav-label">Fav Subject:</span>
+        <span class="fav-value">Maths!</span>
+      </div>
+      <div class="fav-item">
+        <span class="fav-icon">✨</span>
+        <span class="fav-label">Super Power:</span>
+        <span class="fav-value">Learning fast!</span>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- Daily Challenge -->
-<div class="challenge-section">
-  <div class="container">
-    <div class="challenge-card fade-in-up">
-      <h3>🧩 Daily Brain Teaser</h3>
-      <div class="challenge-text" id="challenge-question"></div>
-      <div class="challenge-answer" id="challenge-answer" onclick="revealAnswer()">Tap to reveal answer!</div>
+<!-- BESTIES GUESTBOOK -->
+<section class="besties-wrap">
+  <h2 class="section-title">👯 My Besties Wall</h2>
+  <p class="section-sub">Hey friends — leave a sticky note for Crislyn!</p>
+
+  <div class="besties-scrapbook fade-in-up">
+    <div class="sign-in-box">
+      <h4>✏️ Sign the Besties Wall!</h4>
+      <div style="text-align: center; font-family: 'Patrick Hand', cursive; color: #78350F; font-size: 1rem;">
+        First type your name and pick an avatar above ⬆️, then leave a message!
+      </div>
+      <div class="sign-in-row">
+        <input type="text" class="sign-message" id="bestie-message"
+               placeholder="Leave a sweet message... 💌" maxlength="60">
+        <button class="sign-btn" onclick="signBesties()">📌 Pin It!</button>
+      </div>
+    </div>
+
+    <div class="besties-grid" id="besties-grid"></div>
+  </div>
+</section>
+
+<!-- MY FAVORITE THINGS -->
+<section class="faves-section">
+  <h2 class="section-title">💫 Stuff I LOVE!</h2>
+  <p class="section-sub">These are the things that make me happy 🥰</p>
+
+  <div class="faves-wrap">
+    <div class="fave-card fave-avatar">
+      <span class="fave-emoji">🎮</span>
+      <h4>Avatar World</h4>
+      <p>I could play this ALL day! I make cool characters and go on adventures!</p>
+    </div>
+    <div class="fave-card fave-legos">
+      <span class="fave-emoji">🧱</span>
+      <h4>Lego Builder</h4>
+      <p>Building is my favourite! Castles, cars, entire worlds — brick by brick!</p>
+    </div>
+    <div class="fave-card fave-cycling">
+      <span class="fave-emoji">🚲</span>
+      <h4>Cycling</h4>
+      <p>Zooming around on my bike feels like flying! 💨</p>
+    </div>
+    <div class="fave-card fave-hideseek">
+      <span class="fave-emoji">🙈</span>
+      <h4>Hide & Seek</h4>
+      <p>I'm the BEST at finding the sneakiest hiding spots! 🔍</p>
     </div>
   </div>
+</section>
+
+<!-- FUN ZONE -->
+<section class="fun-wrap">
+  <h2 class="section-title">🎲 Fun Zone</h2>
+  <p class="section-sub">Quick games to try!</p>
+
+  <div class="fun-grid">
+    <!-- Spin the Wheel -->
+    <div class="fun-card">
+      <h3>🎡 What Should I Do?</h3>
+      <div class="spinner-wrap">
+        <div class="spinner-pointer"></div>
+        <div class="spinner-disk" id="spinner-disk"></div>
+      </div>
+      <button class="spin-btn" id="spin-btn" onclick="spinWheel()">SPIN! 🎯</button>
+      <div class="spin-result" id="spin-result">Spin to see what to do next!</div>
+    </div>
+
+    <!-- Animal Quiz -->
+    <div class="fun-card">
+      <h3>🐾 Which Animal Are You?</h3>
+      <div id="quiz-container">
+        <div id="quiz-body">
+          <p class="quiz-question" id="quiz-q">Loading quiz...</p>
+          <div id="quiz-opts"></div>
+        </div>
+        <div class="quiz-result" id="quiz-result"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPARKLE (Daily tip) -->
+<section class="sparkle-wrap">
+  <div class="sparkle-card fade-in-up">
+    <h3>✨ Today's Sparkle ✨</h3>
+    <div class="sparkle-text" id="sparkle-text">...</div>
+  </div>
+</section>
+
+<!-- LEARN CTA -->
+<div class="learn-cta-wrap">
+  <a href="learning.html" class="learn-cta">📚 Let's Learn Stuff! →</a>
 </div>
 
 <!-- Footer -->
 <div class="footer">
-  <div class="container">
-    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
-  </div>
+  ~ Made with 💖 for Crislyn · crislyntony.com ~
 </div>
 
 <script>
-// --- Bahrain Date & Time (UTC+3) ---
+// =============== BAHRAIN TIME ===============
 function updateBahrainTime() {
   const options = { timeZone: 'Asia/Bahrain' };
   const now = new Date();
-
-  // Time
-  const timeStr = now.toLocaleTimeString('en-US', {
-    ...options, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-  });
+  const timeStr = now.toLocaleTimeString('en-US', { ...options, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
   document.getElementById('bahrain-time').innerHTML = `🕐 ${timeStr}`;
 
-  // Date (DD MMMM YYYY)
   const day = now.toLocaleDateString('en-GB', { ...options, day: '2-digit' });
   const month = now.toLocaleDateString('en-GB', { ...options, month: 'long' });
   const year = now.toLocaleDateString('en-GB', { ...options, year: 'numeric' });
   document.getElementById('bahrain-date').textContent = `${day} ${month} ${year}`;
 }
 
-// --- Time-based Greeting ---
+// =============== GREETING ===============
 function setGreeting() {
   const hour = parseInt(new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Bahrain', hour: '2-digit', hour12: false }));
-  let greeting, emoji;
-  if (hour < 12) { greeting = 'Good Morning'; emoji = '🌅'; }
-  else if (hour < 17) { greeting = 'Good Afternoon'; emoji = '☀️'; }
-  else { greeting = 'Good Evening'; emoji = '🌙'; }
-  document.getElementById('greeting').textContent = `${emoji} ${greeting}!`;
+  let greeting = '';
+  if (hour < 12) greeting = '☀️ Good morning, friend!';
+  else if (hour < 17) greeting = '🌞 Good afternoon, friend!';
+  else greeting = '🌙 Good evening, friend!';
+  document.getElementById('greeting').textContent = greeting;
 }
 
-// --- Visitor Name & Avatar ---
+// =============== VISITOR NAME + AVATAR ===============
 let selectedAvatar = '';
 const VISITOR_KEY = 'crislyn_visitor';
 
@@ -619,12 +877,10 @@ function selectAvatar(el, emoji) {
 function updateVisitorDisplay() {
   const name = document.getElementById('visitor-name').value.trim();
   const display = document.getElementById('visitor-display');
-
   if (name && selectedAvatar) {
     document.getElementById('visitor-avatar-big').textContent = selectedAvatar;
-    document.getElementById('visitor-name-display').textContent = name;
+    document.getElementById('visitor-name-display').textContent = `Hi ${name}!`;
     display.classList.add('show');
-    // Save to localStorage
     localStorage.setItem(VISITOR_KEY, JSON.stringify({ name, avatar: selectedAvatar }));
   } else {
     display.classList.remove('show');
@@ -637,7 +893,6 @@ function loadSavedVisitor() {
     if (saved && saved.name && saved.avatar) {
       document.getElementById('visitor-name').value = saved.name;
       selectedAvatar = saved.avatar;
-      // Select the matching avatar option
       document.querySelectorAll('.avatar-option').forEach(opt => {
         if (opt.textContent.trim() === saved.avatar) opt.classList.add('selected');
       });
@@ -646,57 +901,242 @@ function loadSavedVisitor() {
   } catch {}
 }
 
-// --- Daily Brain Teaser ---
-const challenges = [
-  { q: "I am an odd number. Take away one letter and I become even. What number am I?", a: "SEVEN (remove the 'S' and it becomes EVEN!)" },
-  { q: "What is the smallest 6-digit number you can make using the digits 3, 0, 8, 1, 5, 2?", a: "1,02,358" },
-  { q: "If you write all numbers from 1 to 100, how many times do you write the digit 5?", a: "20 times!" },
-  { q: "I am a Roman numeral. I am also a word that means 'to look at'. What am I?", a: "C (See = C = 100)" },
-  { q: "What number do you get if you multiply all the digits on a telephone keypad?", a: "Zero! (anything × 0 = 0)" },
-  { q: "The predecessor of the smallest 7-digit number is the largest ___ digit number.", a: "6-digit number (9,99,999)" },
-  { q: "How many seconds are there in one day?", a: "86,400 seconds (24 × 60 × 60)" },
-  { q: "What is XLIV + XVI in Hindu-Arabic numerals?", a: "44 + 16 = 60 (which is LX in Roman!)" },
-  { q: "If you arrange 1, 2, 3, 4, 5 to make the largest number, then subtract the smallest, what do you get?", a: "54,321 - 12,345 = 41,976" },
-  { q: "I have 6 faces, 12 edges, and 8 corners. What shape am I?", a: "A cube (or cuboid)!" },
-  { q: "If today is Tuesday, what day will it be after 100 days?", a: "Thursday! (100 ÷ 7 = 14 remainder 2)" },
-  { q: "Which is greater: the largest 5-digit number or ten times the largest 4-digit number?", a: "99,999 vs 99,990 — 99,999 is greater by 9!" },
-  { q: "A number has 5 in its tens place and 3 in its ten-thousands place. Face value of 5 is ___ and place value of 3 is ___.", a: "Face value of 5 = 5, Place value of 3 = 30,000" },
-  { q: "What is the difference between the largest 3-digit number and the smallest 4-digit number?", a: "1,000 - 999 = 1!" },
+// =============== MOOD TRACKER ===============
+const MOOD_KEY = 'crislyn_mood';
+const moodMessages = {
+  super: '🎉 Woohoo! You\'re feeling amazing today! Enjoy every moment!',
+  happy: '😊 Yay! A happy day is a fantastic day! Keep smiling!',
+  okay: '🙂 That\'s alright! Some days are just okay — tomorrow can be great!',
+  tired: '😴 Rest up, buddy! Maybe grab a snack and take a little break!',
+  sad: '🫂 Aww, it\'s okay to feel sad. Give yourself a hug — you matter!',
+};
+
+function pickMood(btn, mood) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const msg = document.getElementById('mood-message');
+  msg.textContent = moodMessages[mood];
+  msg.classList.add('show');
+  localStorage.setItem(MOOD_KEY, JSON.stringify({ mood, date: new Date().toDateString() }));
+}
+
+function loadSavedMood() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(MOOD_KEY));
+    if (saved && saved.date === new Date().toDateString()) {
+      const btn = [...document.querySelectorAll('.mood-btn')].find(b =>
+        b.getAttribute('onclick').includes(`'${saved.mood}'`));
+      if (btn) pickMood(btn, saved.mood);
+    }
+  } catch {}
+}
+
+// =============== BESTIES GUESTBOOK ===============
+const BESTIES_KEY = 'crislyn_besties';
+
+function signBesties() {
+  const name = document.getElementById('visitor-name').value.trim();
+  const message = document.getElementById('bestie-message').value.trim();
+
+  if (!name || !selectedAvatar) {
+    alert('Please type your name and pick an avatar above first! 🎀');
+    return;
+  }
+  if (!message) {
+    alert('Leave a sweet message for Crislyn! 💌');
+    return;
+  }
+
+  const besties = JSON.parse(localStorage.getItem(BESTIES_KEY) || '[]');
+  // Check if this person already signed — update instead of duplicate
+  const idx = besties.findIndex(b => b.name.toLowerCase() === name.toLowerCase());
+  const entry = { name, avatar: selectedAvatar, message, date: new Date().toDateString() };
+  if (idx >= 0) besties[idx] = entry;
+  else besties.unshift(entry);
+
+  // Keep only last 20
+  localStorage.setItem(BESTIES_KEY, JSON.stringify(besties.slice(0, 20)));
+  document.getElementById('bestie-message').value = '';
+  renderBesties();
+
+  // Celebration
+  if (typeof Confetti !== 'undefined') Confetti.launch(40);
+  if (typeof AudioManager !== 'undefined') AudioManager.playTone('correct');
+}
+
+function renderBesties() {
+  const besties = JSON.parse(localStorage.getItem(BESTIES_KEY) || '[]');
+  const grid = document.getElementById('besties-grid');
+  if (besties.length === 0) {
+    grid.innerHTML = '<div class="no-besties" style="grid-column: 1/-1;">No notes yet — be the first! 💌</div>';
+    return;
+  }
+  grid.innerHTML = besties.map(b => `
+    <div class="bestie-note">
+      <div class="b-avatar">${b.avatar}</div>
+      <div class="b-name">${b.name}</div>
+      <div class="b-message">"${b.message}"</div>
+    </div>
+  `).join('');
+}
+
+// =============== SPINNER ===============
+const spinOptions = [
+  { emoji: '🧱', text: 'Build something with Legos!' },
+  { emoji: '🚲', text: 'Go for a cycle ride!' },
+  { emoji: '📖', text: 'Read a fun book!' },
+  { emoji: '🎨', text: 'Draw or doodle!' },
+  { emoji: '🙈', text: 'Play hide and seek!' },
+  { emoji: '🎮', text: 'Play Avatar World!' },
+  { emoji: '💃', text: 'Dance to your favourite song!' },
+  { emoji: '🧮', text: 'Solve a Maths puzzle!' },
 ];
 
-let answerRevealed = false;
+let spinning = false;
+let spinRotation = 0;
 
-function showDailyChallenge() {
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
-  const challenge = challenges[dayOfYear % challenges.length];
-  document.getElementById('challenge-question').textContent = challenge.q;
-  document.getElementById('challenge-answer').textContent = 'Tap to reveal answer!';
-  document.getElementById('challenge-answer').dataset.answer = challenge.a;
-  answerRevealed = false;
+function spinWheel() {
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('spin-btn').disabled = true;
+
+  const extraSpins = 5;
+  const randomDeg = Math.floor(Math.random() * 360);
+  spinRotation += (extraSpins * 360) + randomDeg;
+  document.getElementById('spinner-disk').style.transform = `rotate(${spinRotation}deg)`;
+
+  setTimeout(() => {
+    const finalAngle = (360 - (spinRotation % 360)) % 360;
+    const slice = Math.floor(finalAngle / 45);
+    const choice = spinOptions[slice];
+    document.getElementById('spin-result').innerHTML =
+      `<span style="font-size:2rem;">${choice.emoji}</span><br>${choice.text}`;
+    document.getElementById('spin-btn').disabled = false;
+    spinning = false;
+    if (typeof Confetti !== 'undefined') Confetti.launch(30);
+  }, 3000);
 }
 
-function revealAnswer() {
-  const el = document.getElementById('challenge-answer');
-  if (!answerRevealed) {
-    el.textContent = el.dataset.answer;
-    el.style.background = '#DCFCE7'; el.style.color = '#166534';
-    answerRevealed = true;
-  } else {
-    el.textContent = 'Tap to reveal answer!';
-    el.style.background = 'white'; el.style.color = 'var(--color-primary)';
-    answerRevealed = false;
+// =============== ANIMAL QUIZ ===============
+const quizQuestions = [
+  {
+    q: 'What do you do at a party?',
+    opts: [
+      { text: '💃 Dance in the middle!', type: { lion: 2, dolphin: 1 } },
+      { text: '🤝 Chat with friends', type: { dolphin: 2, owl: 1 } },
+      { text: '🎯 Play games', type: { fox: 2, lion: 1 } },
+      { text: '📚 Find a quiet corner', type: { owl: 2, fox: 1 } },
+    ]
+  },
+  {
+    q: 'Your idea of a perfect weekend?',
+    opts: [
+      { text: '🏞️ Outdoor adventure', type: { lion: 2, fox: 1 } },
+      { text: '🎨 Art and crafts', type: { owl: 2, dolphin: 1 } },
+      { text: '🏊 Pool or beach day', type: { dolphin: 2, lion: 1 } },
+      { text: '🧩 Puzzles and games', type: { fox: 2, owl: 1 } },
+    ]
+  },
+  {
+    q: 'Your best skill?',
+    opts: [
+      { text: '🧠 Being clever', type: { fox: 2, owl: 1 } },
+      { text: '💪 Being brave', type: { lion: 2, fox: 1 } },
+      { text: '💖 Being kind', type: { dolphin: 2, owl: 1 } },
+      { text: '📖 Being smart', type: { owl: 2, dolphin: 1 } },
+    ]
   }
+];
+
+const animalResults = {
+  lion: { emoji: '🦁', name: 'You\'re a Lion!', desc: 'Brave, bold, and a born leader! Roar!' },
+  fox: { emoji: '🦊', name: 'You\'re a Fox!', desc: 'Clever, quick, and full of cool ideas!' },
+  owl: { emoji: '🦉', name: 'You\'re an Owl!', desc: 'Wise, thoughtful, and super smart!' },
+  dolphin: { emoji: '🐬', name: 'You\'re a Dolphin!', desc: 'Playful, kind, and lovely to be around!' }
+};
+
+let qIdx = 0;
+let scores = { lion: 0, fox: 0, owl: 0, dolphin: 0 };
+
+function renderQuiz() {
+  if (qIdx >= quizQuestions.length) {
+    showAnimalResult();
+    return;
+  }
+  const q = quizQuestions[qIdx];
+  document.getElementById('quiz-q').textContent = `Q${qIdx+1}: ${q.q}`;
+  document.getElementById('quiz-opts').innerHTML = q.opts.map((opt, i) =>
+    `<button class="quiz-opt" onclick="pickQuizOpt(${i})">${opt.text}</button>`
+  ).join('');
+  document.getElementById('quiz-body').style.display = 'block';
+  document.getElementById('quiz-result').classList.remove('show');
 }
 
-// --- Init ---
+function pickQuizOpt(i) {
+  const opt = quizQuestions[qIdx].opts[i];
+  Object.entries(opt.type).forEach(([animal, pts]) => { scores[animal] += pts; });
+  qIdx++;
+  renderQuiz();
+}
+
+function showAnimalResult() {
+  document.getElementById('quiz-body').style.display = 'none';
+  let winner = 'dolphin'; let max = -1;
+  Object.entries(scores).forEach(([a, s]) => { if (s > max) { max = s; winner = a; } });
+  const r = animalResults[winner];
+  const result = document.getElementById('quiz-result');
+  result.innerHTML = `
+    <div class="animal-emoji">${r.emoji}</div>
+    <div class="animal-name">${r.name}</div>
+    <div class="animal-desc">${r.desc}</div>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 Try Again</button>
+  `;
+  result.classList.add('show');
+  if (typeof Confetti !== 'undefined') Confetti.launch(50);
+}
+
+function resetQuiz() {
+  qIdx = 0;
+  scores = { lion: 0, fox: 0, owl: 0, dolphin: 0 };
+  renderQuiz();
+}
+
+// =============== SPARKLE TIPS ===============
+const sparkles = [
+  '💡 Be the reason someone smiles today!',
+  '🌈 Every mistake is a chance to learn something cool!',
+  '⭐ You are braver than you think!',
+  '🌸 Kind people are the coolest people!',
+  '🚀 Dream big — and then take a tiny step!',
+  '✨ Your imagination is your superpower!',
+  '📖 One page a day keeps the boredom away!',
+  '💪 You can do hard things!',
+  '🎨 There are no wrong colours in your rainbow!',
+  '🎯 Mistakes prove that you are trying!',
+  '🌟 Be yourself — everyone else is taken!',
+  '🦋 Small steps grow into big adventures!',
+  '🧁 Treat yourself kindly — you deserve it!',
+  '🎈 Laugh often, love always, learn every day!',
+];
+
+function showSparkle() {
+  const day = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  document.getElementById('sparkle-text').textContent = sparkles[day % sparkles.length];
+}
+
+// =============== INIT ===============
 document.addEventListener('DOMContentLoaded', () => {
   updateBahrainTime();
   setInterval(updateBahrainTime, 1000);
   setGreeting();
   loadSavedVisitor();
-  showDailyChallenge();
+  loadSavedMood();
+  renderBesties();
+  renderQuiz();
+  showSparkle();
 });
 </script>
+<script src="js/common.js"></script>
 
 </body>
 </html>
