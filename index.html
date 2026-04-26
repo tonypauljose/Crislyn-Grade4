@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Caveat:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Caveat:wght@400;700&family=Patrick+Hand&family=Edu+NSW+ACT+Foundation:wght@400..700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/components.css">
@@ -598,25 +598,404 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <span class="sticker">💖</span>
-  <span class="sticker">⭐</span>
-  <span class="sticker">🌈</span>
-  <span class="sticker">🦄</span>
-  <span class="sticker">✨</span>
-  <span class="sticker">🎀</span>
+<!-- HERO 2.0 - Big featured scene -->
+<section class="hero-stage">
+  <div class="hero-decor">
+    <span class="hero-orb orb-1"></span>
+    <span class="hero-orb orb-2"></span>
+    <span class="hero-orb orb-3"></span>
+    <span class="hero-orb orb-4"></span>
 
-  <div class="container hero-content">
-    <div class="hero-greeting fade-in" id="greeting">Hey there!</div>
-    <div class="hero-title fade-in-up">Crislyn's World</div>
-    <div class="hero-name fade-in-up delay-1">✏️ a super cool Grade 4 hangout ✏️</div>
-    <div class="hero-sub fade-in-up delay-2">where friends can say hi, play games, and learn stuff!</div>
+    <span class="float-emoji f1">💖</span>
+    <span class="float-emoji f2">⭐</span>
+    <span class="float-emoji f3">🌈</span>
+    <span class="float-emoji f4">🦄</span>
+    <span class="float-emoji f5">✨</span>
+    <span class="float-emoji f6">🎀</span>
+    <span class="float-emoji f7">🌸</span>
+    <span class="float-emoji f8">🦋</span>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-greeting-line fade-in" id="greeting">Hey there, friend!</div>
+    <h1 class="hero-headline fade-in-up">
+      <span class="hero-headline-1">Welcome to</span>
+      <span class="hero-headline-2">Crislyn's World</span>
+    </h1>
+    <p class="hero-tagline fade-in-up delay-1">A magical place to learn, play, draw, and dream ✨</p>
+
+    <!-- Pixie's stage - the big featured 3D scene -->
+    <div class="hero-pixie-stage fade-in-up delay-2">
+      <div id="hero-pixie-canvas"></div>
+      <div class="hero-pixie-shadow"></div>
+      <div class="pixie-callout fade-in-up delay-3">
+        <span class="callout-arrow">↘</span>
+        <span class="callout-text">Tap me!</span>
+      </div>
+    </div>
+
+    <!-- Big action buttons -->
+    <div class="hero-actions fade-in-up delay-3">
+      <a href="learning.html" class="hero-btn hero-btn-learn">
+        <span class="hero-btn-emoji">📚</span>
+        <span class="hero-btn-label">Keep<br>Learning</span>
+      </a>
+      <a href="art-studio.html" class="hero-btn hero-btn-art">
+        <span class="hero-btn-emoji">🎨</span>
+        <span class="hero-btn-label">Make<br>Art</span>
+      </a>
+      <a href="#today-quest" class="hero-btn hero-btn-quest">
+        <span class="hero-btn-emoji">🎯</span>
+        <span class="hero-btn-label">Today's<br>Quest</span>
+      </a>
+      <a href="#besties" class="hero-btn hero-btn-friends">
+        <span class="hero-btn-emoji">👯</span>
+        <span class="hero-btn-label">Friends<br>Wall</span>
+      </a>
+    </div>
   </div>
 </section>
 
+<style>
+  .hero-stage {
+    position: relative;
+    min-height: 80vh;
+    padding: 50px 24px 80px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 30% 30%, rgba(244, 166, 189, 0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 70%, rgba(110, 198, 240, 0.25) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 100%, rgba(255, 203, 71, 0.25) 0%, transparent 50%),
+      linear-gradient(180deg, #FFF8F8 0%, #FDF4FF 50%, #FFFBEB 100%);
+  }
+
+  .hero-decor {
+    position: absolute; inset: 0;
+    overflow: hidden; pointer-events: none;
+  }
+
+  .hero-orb {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(244,166,189,0.0));
+    filter: blur(2px);
+    animation: orbFloat 12s ease-in-out infinite;
+  }
+  .orb-1 { width: 220px; height: 220px; top: -50px; left: -60px;
+    background: radial-gradient(circle, rgba(244,166,189,0.4), transparent 70%);
+    animation-delay: 0s; }
+  .orb-2 { width: 280px; height: 280px; top: 5%; right: -80px;
+    background: radial-gradient(circle, rgba(201, 167, 224, 0.35), transparent 70%);
+    animation-delay: -3s; }
+  .orb-3 { width: 200px; height: 200px; bottom: 10%; left: 5%;
+    background: radial-gradient(circle, rgba(123, 211, 168, 0.3), transparent 70%);
+    animation-delay: -6s; }
+  .orb-4 { width: 240px; height: 240px; bottom: -50px; right: 10%;
+    background: radial-gradient(circle, rgba(255, 203, 71, 0.3), transparent 70%);
+    animation-delay: -9s; }
+
+  @keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -30px) scale(1.1); }
+  }
+
+  .float-emoji {
+    position: absolute;
+    font-size: 2.6rem;
+    animation: emojiBob 6s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+  }
+  .f1 { top: 12%; left: 6%; font-size: 2.4rem; animation-delay: 0s; }
+  .f2 { top: 18%; right: 10%; animation-delay: -1.2s; }
+  .f3 { top: 36%; left: 4%; font-size: 2.8rem; animation-delay: -2.4s; }
+  .f4 { top: 28%; right: 6%; font-size: 3rem; animation-delay: -3.6s; }
+  .f5 { bottom: 30%; left: 8%; font-size: 2.2rem; animation-delay: -4.8s; }
+  .f6 { bottom: 20%; right: 12%; font-size: 2.5rem; animation-delay: -1.8s; }
+  .f7 { top: 60%; left: 12%; font-size: 2rem; animation-delay: -3.2s; }
+  .f8 { bottom: 40%; right: 4%; font-size: 2.4rem; animation-delay: -2s; }
+
+  @keyframes emojiBob {
+    0%, 100% { transform: translateY(0) rotate(-8deg); }
+    50% { transform: translateY(-18px) rotate(8deg); }
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-greeting-line {
+    font-family: 'Edu NSW ACT Foundation', 'Patrick Hand', cursive;
+    font-size: 1.6rem;
+    color: #6B21A8;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .hero-headline {
+    font-family: 'Fredoka One', cursive;
+    line-height: 0.95;
+    margin: 0 0 16px;
+    text-shadow: 0 4px 18px rgba(124, 58, 237, 0.18);
+  }
+  .hero-headline-1 {
+    display: block;
+    font-size: 2.4rem;
+    color: #6B21A8;
+    margin-bottom: 4px;
+  }
+  .hero-headline-2 {
+    display: block;
+    font-size: 5.8rem;
+    background: linear-gradient(90deg, #EC4899 0%, #A855F7 30%, #3B82F6 60%, #10B981 90%, #F59E0B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1px;
+  }
+
+  .hero-tagline {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.4rem;
+    color: #5B21B6;
+    margin-bottom: 32px;
+    opacity: 0.9;
+  }
+
+  /* Featured Pixie stage - small Three.js view embedded in hero */
+  .hero-pixie-stage {
+    position: relative;
+    width: 280px; height: 280px;
+    margin: 0 auto 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #hero-pixie-canvas {
+    width: 280px; height: 280px;
+  }
+  .hero-pixie-shadow {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 200px; height: 30px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.18), transparent 70%);
+    z-index: 0;
+    animation: shadowPulse 2s ease-in-out infinite;
+  }
+  @keyframes shadowPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+    50% { transform: translateX(-50%) scale(1.15); opacity: 0.5; }
+  }
+
+  .pixie-callout {
+    position: absolute;
+    top: 30px; right: -40px;
+    background: white;
+    border: 3px solid #F4A6BD;
+    padding: 10px 16px; border-radius: 18px;
+    font-family: 'Patrick Hand', cursive; font-size: 1rem;
+    color: #BE185D; font-weight: 700;
+    box-shadow: 0 6px 14px rgba(244,166,189,0.35);
+    animation: calloutWobble 3s ease-in-out infinite;
+  }
+  .pixie-callout .callout-arrow {
+    display: inline-block; transform: rotate(45deg);
+    margin-right: 4px;
+  }
+  @keyframes calloutWobble {
+    0%, 100% { transform: rotate(-3deg) scale(1); }
+    50% { transform: rotate(3deg) scale(1.05); }
+  }
+
+  /* Quick action buttons */
+  .hero-actions {
+    display: flex; gap: 16px; justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hero-btn {
+    background: white;
+    border-radius: 24px;
+    padding: 18px 22px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 130px;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 3px solid transparent;
+  }
+  .hero-btn:hover {
+    transform: translateY(-8px) rotate(-2deg);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.15);
+  }
+  .hero-btn-emoji { font-size: 2.4rem; }
+  .hero-btn-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1rem; line-height: 1.2;
+    text-align: center;
+  }
+  .hero-btn-learn { border-color: #C9A7E0; }
+  .hero-btn-learn .hero-btn-label { color: #6B21A8; }
+  .hero-btn-art { border-color: #F9A8D4; }
+  .hero-btn-art .hero-btn-label { color: #BE185D; }
+  .hero-btn-quest { border-color: #FCD34D; }
+  .hero-btn-quest .hero-btn-label { color: #B45309; }
+  .hero-btn-friends { border-color: #6EE7B7; }
+  .hero-btn-friends .hero-btn-label { color: #047857; }
+
+  @media (max-width: 768px) {
+    .hero-stage { min-height: auto; padding: 30px 18px 60px; }
+    .hero-headline-1 { font-size: 1.6rem; }
+    .hero-headline-2 { font-size: 3.4rem; }
+    .hero-tagline { font-size: 1.15rem; }
+    .hero-pixie-stage, #hero-pixie-canvas { width: 220px; height: 220px; }
+    .pixie-callout { right: -10px; top: 0; font-size: 0.9rem; }
+    .hero-btn { min-width: 110px; padding: 14px 16px; }
+    .hero-btn-emoji { font-size: 2rem; }
+  }
+</style>
+
+<script>
+  // Featured BIG Pixie 3D scene in the hero
+  function initHeroPixie() {
+    if (typeof THREE === 'undefined') { setTimeout(initHeroPixie, 80); return; }
+    const wrap = document.getElementById('hero-pixie-canvas');
+    if (!wrap) return;
+
+    const W = wrap.clientWidth, H = wrap.clientHeight;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 100);
+    camera.position.set(0, 0.4, 5.2);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(W, H);
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    wrap.appendChild(renderer.domElement);
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const key = new THREE.DirectionalLight(0xfff5e6, 1.2);
+    key.position.set(2, 3, 3); scene.add(key);
+    const fill = new THREE.DirectionalLight(0xffe0f0, 0.6);
+    fill.position.set(-2, 1, 1); scene.add(fill);
+    const rim = new THREE.DirectionalLight(0xc9a7e0, 0.5);
+    rim.position.set(0, 1, -2); scene.add(rim);
+
+    // Build kitten
+    const cat = new THREE.Group();
+    const mat = new THREE.MeshStandardMaterial({ color: 0xfac6d7, roughness: 0.7 });
+    const accent = new THREE.MeshStandardMaterial({ color: 0xf8b5cb, roughness: 0.7 });
+    const eyeMat = new THREE.MeshStandardMaterial({ color: 0x1f2a44, roughness: 0.3, metalness: 0.2 });
+    const shineMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const horn = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 0.4, metalness: 0.6, emissive: 0xffaa00, emissiveIntensity: 0.2 });
+    const innerEar = new THREE.MeshStandardMaterial({ color: 0xf8c8d5, roughness: 0.8 });
+
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.85, 32, 32), mat);
+    body.position.y = -0.55; body.scale.set(1, 0.9, 1); cat.add(body);
+
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.78, 32, 32), mat);
+    head.position.set(0, 0.45, 0); head.scale.set(1, 0.95, 0.95); cat.add(head);
+
+    const earGeo = new THREE.ConeGeometry(0.22, 0.4, 12);
+    const earL = new THREE.Mesh(earGeo, mat);
+    earL.position.set(-0.42, 0.95, 0.1); earL.rotation.set(-0.2, 0, -0.3); cat.add(earL);
+    const earR = new THREE.Mesh(earGeo, mat);
+    earR.position.set(0.42, 0.95, 0.1); earR.rotation.set(-0.2, 0, 0.3); cat.add(earR);
+
+    const innerEarGeo = new THREE.ConeGeometry(0.12, 0.25, 12);
+    const innerL = new THREE.Mesh(innerEarGeo, innerEar);
+    innerL.position.set(-0.42, 0.95, 0.18); innerL.rotation.set(-0.2, 0, -0.3); cat.add(innerL);
+    const innerR = new THREE.Mesh(innerEarGeo, innerEar);
+    innerR.position.set(0.42, 0.95, 0.18); innerR.rotation.set(-0.2, 0, 0.3); cat.add(innerR);
+
+    const hornM = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.45, 16), horn);
+    hornM.position.set(0, 1.15, 0.25); hornM.rotation.x = -0.05; cat.add(hornM);
+
+    const eyeGeo = new THREE.SphereGeometry(0.13, 24, 24);
+    const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeL.position.set(-0.25, 0.5, 0.62); cat.add(eyeL);
+    const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
+    eyeR.position.set(0.25, 0.5, 0.62); cat.add(eyeR);
+
+    const shineGeo = new THREE.SphereGeometry(0.04, 12, 12);
+    const shineL = new THREE.Mesh(shineGeo, shineMat);
+    shineL.position.set(-0.22, 0.55, 0.74); cat.add(shineL);
+    const shineR = new THREE.Mesh(shineGeo, shineMat);
+    shineR.position.set(0.28, 0.55, 0.74); cat.add(shineR);
+
+    const cheekMat = new THREE.MeshStandardMaterial({ color: 0xff8fa3, transparent: true, opacity: 0.5 });
+    const cheekGeo = new THREE.SphereGeometry(0.13, 16, 16);
+    const cheekL = new THREE.Mesh(cheekGeo, cheekMat);
+    cheekL.position.set(-0.45, 0.32, 0.55); cheekL.scale.set(1, 0.6, 0.4); cat.add(cheekL);
+    const cheekR = new THREE.Mesh(cheekGeo, cheekMat);
+    cheekR.position.set(0.45, 0.32, 0.55); cheekR.scale.set(1, 0.6, 0.4); cat.add(cheekR);
+
+    const noseM = new THREE.MeshStandardMaterial({ color: 0xe68fa0, roughness: 0.6 });
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.08, 4), noseM);
+    nose.position.set(0, 0.32, 0.72); nose.rotation.x = Math.PI; cat.add(nose);
+
+    const mouthCurve = new THREE.QuadraticBezierCurve3(
+      new THREE.Vector3(-0.1, 0.18, 0.7),
+      new THREE.Vector3(0, 0.13, 0.74),
+      new THREE.Vector3(0.1, 0.18, 0.7)
+    );
+    const mouth = new THREE.Mesh(
+      new THREE.TubeGeometry(mouthCurve, 12, 0.015, 8, false),
+      new THREE.MeshStandardMaterial({ color: 0x9c2b5e })
+    );
+    cat.add(mouth);
+
+    // Tail
+    const tailG = new THREE.Group();
+    const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.05, 0.7, 12), accent);
+    tail.position.y = 0.35; tailG.add(tail);
+    tailG.position.set(-0.7, -0.6, -0.5);
+    tailG.rotation.set(0.3, 0, 0.4);
+    cat.add(tailG);
+
+    cat.position.y = 0.2;
+    scene.add(cat);
+
+    let t = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      t += 0.016;
+
+      // Idle breathing
+      body.scale.set(1, 0.9 + Math.sin(t * 1.6) * 0.018, 1);
+      cat.position.y = 0.2 + Math.sin(t * 1.4) * 0.03;
+      cat.rotation.y = Math.sin(t * 0.4) * 0.15;
+      tailG.rotation.z = 0.4 + Math.sin(t * 2.5) * 0.3;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Click to bounce + Pixie speech
+    wrap.style.cursor = 'pointer';
+    wrap.addEventListener('click', () => {
+      if (typeof Pixie !== 'undefined') Pixie.onClick();
+      let phase = 0;
+      const baseY = cat.position.y;
+      const bounce = setInterval(() => {
+        phase += 0.18;
+        cat.position.y = baseY + Math.sin(phase) * 0.4;
+        if (phase >= Math.PI) { cat.position.y = baseY; clearInterval(bounce); }
+      }, 16);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initHeroPixie, 600);
+  });
+</script>
+
 <!-- DAILY QUEST -->
-<section class="quest-wrap" style="max-width: 720px; margin: 0 auto; padding: 0 24px 30px;">
+<section id="today-quest" class="quest-wrap" style="max-width: 720px; margin: 0 auto; padding: 0 24px 30px; scroll-margin-top: 80px;">
   <div class="quest-card" id="daily-quest-card">
     <!-- filled by JS -->
   </div>
@@ -859,7 +1238,7 @@
 </section>
 
 <!-- BESTIES GUESTBOOK -->
-<section class="besties-wrap">
+<section id="besties" class="besties-wrap" style="scroll-margin-top: 80px;">
   <h2 class="section-title">👯 My Besties Wall</h2>
   <p class="section-sub">Hey friends — leave a sticky note for Crislyn!</p>
 
