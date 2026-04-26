@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌈 Color Magic — Crislyn's World</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #FEF3C7, #FFFBEB);
+      font-family: 'Nunito', sans-serif; min-height: 100vh; margin: 0;
+    }
+
+    .navbar {
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 12px 24px; display: flex;
+      align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      background: linear-gradient(90deg, #EC4899, #7C3AED);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .back-link {
+      padding: 8px 18px; border-radius: 99px; font-weight: 700;
+      font-size: 0.9rem; color: #6B21A8; background: white;
+      border: 2px solid #E9D5FF; text-decoration: none;
+    }
+    .back-link:hover { background: #FAF5FF; }
+
+    .wrap { max-width: 1100px; margin: 30px auto; padding: 0 24px; }
+    .header { text-align: center; margin-bottom: 24px; }
+    .header h1 {
+      font-family: 'Fredoka One', cursive; font-size: 2.5rem;
+      color: #B45309; margin: 0;
+    }
+    .header p {
+      font-family: 'Patrick Hand', cursive; color: #D97706;
+      font-size: 1.2rem; margin: 4px 0 0;
+    }
+
+    .picker-row {
+      display: flex; gap: 12px; justify-content: center;
+      margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .pic-thumb {
+      width: 80px; height: 80px; border-radius: 16px;
+      cursor: pointer; padding: 8px;
+      background: white; border: 3px solid transparent;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pic-thumb:hover { transform: translateY(-3px) scale(1.05); }
+    .pic-thumb.active {
+      border-color: #F59E0B;
+      box-shadow: 0 0 0 4px rgba(245,158,11,0.3), 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .pic-thumb svg { width: 100%; height: 100%; }
+
+    .studio-frame {
+      background: white; border-radius: 28px;
+      padding: 24px; box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15);
+      display: grid; grid-template-columns: 1fr 90px; gap: 20px;
+    }
+
+    .canvas-area {
+      background: #FFFEF5; border-radius: 18px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.04);
+      padding: 20px;
+      min-height: 500px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .canvas-area svg {
+      width: 100%; max-width: 600px;
+      height: auto;
+    }
+    .canvas-area svg [data-fill] {
+      fill: white;
+      stroke: #1F2A44;
+      stroke-width: 3;
+      cursor: pointer;
+      transition: fill 0.3s, transform 0.2s;
+    }
+    .canvas-area svg [data-fill]:hover {
+      filter: brightness(0.95);
+    }
+
+    .palette {
+      display: flex; flex-direction: column; gap: 10px;
+      padding: 14px 8px; background: linear-gradient(180deg, #FEF3C7, #FDE68A);
+      border-radius: 18px;
+    }
+    .palette .label {
+      font-family: 'Fredoka One', cursive; font-size: 0.7rem;
+      color: #B45309; text-align: center; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .swatch {
+      width: 50px; height: 50px; border-radius: 50%;
+      border: 3px solid white; cursor: pointer; margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .swatch:hover { transform: scale(1.15); }
+    .swatch.active {
+      box-shadow: 0 0 0 4px #B45309, 0 4px 10px rgba(0,0,0,0.2);
+      transform: scale(1.1);
+    }
+
+    .actions-row {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 20px; flex-wrap: wrap;
+    }
+    .action-btn {
+      padding: 12px 24px; border-radius: 99px;
+      font-family: 'Fredoka One', cursive; font-size: 1rem;
+      cursor: pointer; border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .action-btn:hover { transform: translateY(-3px) scale(1.05); }
+    .action-btn.primary {
+      background: linear-gradient(135deg, #F59E0B, #EF4444); color: white;
+    }
+    .action-btn.secondary {
+      background: white; color: #B45309; border: 2px solid #FDE68A;
+    }
+
+    @media (max-width: 768px) {
+      .studio-frame { grid-template-columns: 1fr; }
+      .palette { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .swatch { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">✨ Crislyn's World</a>
+  <a href="art-studio.html" class="back-link">← Art Studio</a>
+</nav>
+
+<div class="wrap">
+  <div class="header">
+    <h1>🌈 Color Magic</h1>
+    <p>Pick a colour, then tap any white area to fill it!</p>
+  </div>
+
+  <div class="picker-row" id="picker-row"></div>
+
+  <div class="studio-frame">
+    <div class="canvas-area" id="canvas-area">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="palette">
+      <div class="label">🎨 Colour</div>
+      <div id="palette-swatches"></div>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button class="action-btn secondary" onclick="resetPicture()">🔄 Reset</button>
+    <button class="action-btn primary" onclick="finishPicture()">🌟 I'm Done!</button>
+  </div>
+</div>
+
+<script>
+  // Pre-drawn pictures with regions to fill
+  const pictures = {
+    butterfly: {
+      label: 'Butterfly',
+      thumb: '🦋',
+      svg: `
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <ellipse data-fill="left-wing-top" cx="120" cy="140" rx="80" ry="70"/>
+          <ellipse data-fill="right-wing-top" cx="280" cy="140" rx="80" ry="70"/>
+          <ellipse data-fill="left-wing-bottom" cx="130" cy="250" rx="60" ry="55"/>
+          <ellipse data-fill="right-wing-bottom" cx="270" cy="250" rx="60" ry="55"/>
+          <ellipse data-fill="body" cx="200" cy="200" rx="14" ry="80"/>
+          <circle data-fill="left-wing-top" cx="100" cy="135" r="12" stroke-width="2"/>
+          <circle data-fill="right-wing-top" cx="300" cy="135" r="12" stroke-width="2"/>
+          <circle data-fill="left-wing-bottom" cx="120" cy="245" r="9" stroke-width="2"/>
+          <circle data-fill="right-wing-bottom" cx="280" cy="245" r="9" stroke-width="2"/>
+          <line x1="200" y1="125" x2="180" y2="100" stroke="#1F2A44" stroke-width="3"/>
+          <line x1="200" y1="125" x2="220" y2="100" stroke="#1F2A44" stroke-width="3"/>
+          <circle cx="180" cy="98" r="4" fill="#1F2A44"/>
+          <circle cx="220" cy="98" r="4" fill="#1F2A44"/>
+        </svg>`
+    },
+    flower: {
+      label: 'Flower',
+      thumb: '🌸',
+      svg: `
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <ellipse data-fill="petal-1" cx="200" cy="100" rx="40" ry="55"/>
+          <ellipse data-fill="petal-2" cx="290" cy="160" rx="55" ry="40" transform="rotate(45 290 160)"/>
+          <ellipse data-fill="petal-3" cx="290" cy="240" rx="55" ry="40" transform="rotate(-45 290 240)"/>
+          <ellipse data-fill="petal-4" cx="200" cy="300" rx="40" ry="55"/>
+          <ellipse data-fill="petal-5" cx="110" cy="240" rx="55" ry="40" transform="rotate(45 110 240)"/>
+          <ellipse data-fill="petal-6" cx="110" cy="160" rx="55" ry="40" transform="rotate(-45 110 160)"/>
+          <circle data-fill="center" cx="200" cy="200" r="35"/>
+          <path data-fill="stem" d="M 195 320 Q 200 360 205 380 L 195 380 Q 195 360 195 320 Z"/>
+          <path data-fill="leaf" d="M 200 350 Q 240 340 260 360 Q 240 360 220 380 Q 210 365 200 350 Z"/>
+        </svg>`
+    },
+    fish: {
+      label: 'Fish',
+      thumb: '🐠',
+      svg: `
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <ellipse data-fill="body" cx="200" cy="200" rx="120" ry="60"/>
+          <path data-fill="tail" d="M 320 200 L 380 140 L 380 260 Z"/>
+          <path data-fill="fin-top" d="M 180 140 Q 200 110 220 140 Z"/>
+          <path data-fill="fin-bottom" d="M 180 260 Q 200 290 220 260 Z"/>
+          <circle data-fill="eye" cx="160" cy="190" r="14" stroke-width="2"/>
+          <circle cx="158" cy="188" r="6" fill="#1F2A44"/>
+          <path data-fill="stripe-1" d="M 230 150 Q 220 200 230 250 Q 220 200 230 150 Z"/>
+          <path data-fill="stripe-2" d="M 270 160 Q 260 200 270 240 Q 260 200 270 160 Z"/>
+        </svg>`
+    },
+    sun: {
+      label: 'Sun',
+      thumb: '☀️',
+      svg: `
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <circle data-fill="sun" cx="200" cy="200" r="80"/>
+          <path data-fill="ray-1" d="M 200 80 L 210 110 L 190 110 Z"/>
+          <path data-fill="ray-2" d="M 200 320 L 210 290 L 190 290 Z"/>
+          <path data-fill="ray-3" d="M 80 200 L 110 190 L 110 210 Z"/>
+          <path data-fill="ray-4" d="M 320 200 L 290 190 L 290 210 Z"/>
+          <path data-fill="ray-5" d="M 115 115 L 145 135 L 135 145 Z"/>
+          <path data-fill="ray-6" d="M 285 285 L 255 265 L 265 255 Z"/>
+          <path data-fill="ray-7" d="M 115 285 L 145 265 L 135 255 Z"/>
+          <path data-fill="ray-8" d="M 285 115 L 255 135 L 265 145 Z"/>
+          <circle cx="180" cy="190" r="6" fill="#1F2A44"/>
+          <circle cx="220" cy="190" r="6" fill="#1F2A44"/>
+          <path d="M 175 220 Q 200 240 225 220" stroke="#1F2A44" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>`
+    },
+    house: {
+      label: 'House',
+      thumb: '🏠',
+      svg: `
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <path data-fill="roof" d="M 80 200 L 200 100 L 320 200 Z"/>
+          <rect data-fill="walls" x="100" y="200" width="200" height="160"/>
+          <rect data-fill="door" x="170" y="270" width="60" height="90"/>
+          <circle data-fill="doorknob" cx="220" cy="320" r="4" stroke-width="2"/>
+          <rect data-fill="window-left" x="125" y="220" width="40" height="40"/>
+          <rect data-fill="window-right" x="235" y="220" width="40" height="40"/>
+          <line x1="145" y1="220" x2="145" y2="260" stroke="#1F2A44" stroke-width="2"/>
+          <line x1="125" y1="240" x2="165" y2="240" stroke="#1F2A44" stroke-width="2"/>
+          <line x1="255" y1="220" x2="255" y2="260" stroke="#1F2A44" stroke-width="2"/>
+          <line x1="235" y1="240" x2="275" y2="240" stroke="#1F2A44" stroke-width="2"/>
+          <rect data-fill="chimney" x="240" y="120" width="25" height="60"/>
+          <circle data-fill="sun" cx="60" cy="80" r="35"/>
+          <path data-fill="cloud" d="M 280 100 Q 300 80 320 100 Q 340 80 360 100 Q 360 120 320 120 Q 280 120 280 100 Z"/>
+          <rect data-fill="grass" x="0" y="360" width="400" height="40"/>
+        </svg>`
+    },
+    cat: {
+      label: 'Cat',
+      thumb: '🐱',
+      svg: `
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <ellipse data-fill="body" cx="200" cy="280" rx="100" ry="70"/>
+          <circle data-fill="head" cx="200" cy="180" r="80"/>
+          <path data-fill="ear-left" d="M 140 130 L 130 70 L 175 105 Z"/>
+          <path data-fill="ear-right" d="M 260 130 L 270 70 L 225 105 Z"/>
+          <path data-fill="inner-ear-left" d="M 145 125 L 138 90 L 168 110 Z"/>
+          <path data-fill="inner-ear-right" d="M 255 125 L 262 90 L 232 110 Z"/>
+          <ellipse cx="175" cy="180" rx="8" ry="12" fill="#1F2A44"/>
+          <ellipse cx="225" cy="180" rx="8" ry="12" fill="#1F2A44"/>
+          <circle cx="173" cy="176" r="3" fill="white"/>
+          <circle cx="223" cy="176" r="3" fill="white"/>
+          <path data-fill="nose" d="M 195 215 L 205 215 L 200 222 Z"/>
+          <path d="M 195 222 Q 200 230 205 222" stroke="#1F2A44" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <line x1="160" y1="210" x2="140" y2="208" stroke="#1F2A44" stroke-width="2"/>
+          <line x1="160" y1="218" x2="140" y2="218" stroke="#1F2A44" stroke-width="2"/>
+          <line x1="240" y1="210" x2="260" y2="208" stroke="#1F2A44" stroke-width="2"/>
+          <line x1="240" y1="218" x2="260" y2="218" stroke="#1F2A44" stroke-width="2"/>
+          <ellipse data-fill="paw-left" cx="150" cy="340" rx="22" ry="14"/>
+          <ellipse data-fill="paw-right" cx="250" cy="340" rx="22" ry="14"/>
+          <path data-fill="tail" d="M 290 280 Q 340 240 320 180 Q 310 220 320 260 Q 320 280 290 290 Z"/>
+        </svg>`
+    },
+  };
+
+  const colors = [
+    '#EF4444', '#F97316', '#FBBF24', '#84CC16',
+    '#10B981', '#06B6D4', '#3B82F6', '#8B5CF6',
+    '#EC4899', '#F472B6', '#A78BFA', '#F2B544',
+    '#7C2D12', '#374151', '#FFFFFF', '#FFC0CB',
+  ];
+
+  let currentPic = 'butterfly';
+  let currentColor = '#EC4899';
+  let originalSVG = '';
+
+  function renderThumbs() {
+    const row = document.getElementById('picker-row');
+    row.innerHTML = Object.entries(pictures).map(([id, p]) => `
+      <div class="pic-thumb ${id === currentPic ? 'active' : ''}" onclick="loadPic('${id}', this)">
+        <span style="font-size: 2.5rem;">${p.thumb}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderPalette() {
+    const wrap = document.getElementById('palette-swatches');
+    wrap.innerHTML = colors.map(c => `
+      <div class="swatch ${c === currentColor ? 'active' : ''}"
+           style="background: ${c}"
+           onclick="setColor('${c}', this)"></div>
+    `).join('');
+  }
+
+  function setColor(c, el) {
+    currentColor = c;
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+
+  function loadPic(id, el) {
+    currentPic = id;
+    if (el) {
+      document.querySelectorAll('.pic-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+    const area = document.getElementById('canvas-area');
+    area.innerHTML = pictures[id].svg;
+    originalSVG = pictures[id].svg;
+    // Bind click on each fillable region
+    area.querySelectorAll('[data-fill]').forEach(region => {
+      region.addEventListener('click', () => {
+        region.style.fill = currentColor;
+      });
+    });
+  }
+
+  function resetPicture() {
+    loadPic(currentPic);
+  }
+
+  function finishPicture() {
+    if (typeof State !== 'undefined') State.addStars(8, `Coloured ${pictures[currentPic].label}!`);
+    if (typeof Pixie !== 'undefined') Pixie.say(`Beautiful! ${pictures[currentPic].label} looks amazing! 🌈`, 'cheer');
+    if (typeof Confetti !== 'undefined') Confetti.launch(50);
+    else if (window.alert) {
+      // Fallback simple feedback
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderThumbs();
+    renderPalette();
+    loadPic(currentPic);
+  });
+</script>
+
+</body>
+</html>

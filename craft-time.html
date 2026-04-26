@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✂️ Craft Time — Crislyn's World</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #D1FAE5, #FEF3C7);
+      font-family: 'Nunito', sans-serif; min-height: 100vh; margin: 0;
+    }
+
+    .navbar {
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 12px 24px; display: flex;
+      align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      background: linear-gradient(90deg, #EC4899, #7C3AED);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .back-link {
+      padding: 8px 18px; border-radius: 99px; font-weight: 700;
+      font-size: 0.9rem; color: #6B21A8; background: white;
+      border: 2px solid #E9D5FF; text-decoration: none;
+    }
+    .back-link:hover { background: #FAF5FF; }
+
+    .wrap { max-width: 1100px; margin: 30px auto; padding: 0 24px; }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 {
+      font-family: 'Fredoka One', cursive; font-size: 2.5rem;
+      color: #047857; margin: 0;
+    }
+    .header p {
+      font-family: 'Patrick Hand', cursive; color: #059669;
+      font-size: 1.2rem; margin: 4px 0 0;
+    }
+
+    .crafts-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .craft-card {
+      background: white; border-radius: 24px; padding: 24px;
+      box-shadow: 0 8px 24px rgba(16,185,129,0.12);
+      border: 3px solid #A7F3D0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .craft-card:hover {
+      transform: translateY(-6px) rotate(-1deg);
+      box-shadow: 0 12px 32px rgba(16,185,129,0.2);
+    }
+
+    .craft-emoji {
+      font-size: 4rem; margin-bottom: 10px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+    }
+
+    .craft-card h3 {
+      font-family: 'Fredoka One', cursive; font-size: 1.5rem;
+      color: #047857; margin: 0 0 6px;
+    }
+
+    .craft-card .difficulty {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 99px; font-size: 0.75rem; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .difficulty.easy { background: #D1FAE5; color: #065F46; }
+    .difficulty.medium { background: #FEF3C7; color: #B45309; }
+    .difficulty.hard { background: #FEE2E2; color: #991B1B; }
+
+    .craft-meta {
+      font-family: 'Patrick Hand', cursive; font-size: 1rem;
+      color: #4B5563; margin-bottom: 14px; line-height: 1.5;
+    }
+
+    .craft-section { margin-bottom: 12px; }
+    .craft-section h4 {
+      font-family: 'Fredoka One', cursive; font-size: 0.95rem;
+      color: #059669; margin: 8px 0 4px;
+    }
+    .craft-section ul {
+      padding-left: 20px; margin: 0;
+      font-family: 'Patrick Hand', cursive; font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .craft-card .show-more {
+      width: 100%; padding: 10px;
+      margin-top: 8px;
+      border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #10B981, #34D399); color: white;
+      font-family: 'Fredoka One', cursive; font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .craft-card .show-more:hover { transform: scale(1.03); }
+
+    .craft-details {
+      display: none; margin-top: 14px;
+      padding: 14px; background: #F0FDF4;
+      border-radius: 14px; border: 2px dashed #6EE7B7;
+    }
+    .craft-card.expanded .craft-details { display: block; animation: slideIn 0.3s ease-out; }
+    .craft-card.expanded .show-more { background: #6B7280; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .print-btn {
+      width: 100%; margin-top: 8px; padding: 10px;
+      border: 2px dashed #047857; border-radius: 12px;
+      background: white; color: #047857;
+      font-family: 'Fredoka One', cursive; font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .print-btn:hover { background: #ECFDF5; }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">✨ Crislyn's World</a>
+  <a href="art-studio.html" class="back-link">← Art Studio</a>
+</nav>
+
+<div class="wrap">
+  <div class="header">
+    <h1>✂️ Craft Time</h1>
+    <p>Fun things to make — pick a craft and let's create!</p>
+  </div>
+
+  <div class="crafts-grid" id="crafts-grid"></div>
+</div>
+
+<script>
+  const crafts = [
+    {
+      id: 'paper-airplane',
+      emoji: '✈️',
+      title: 'Paper Airplane',
+      difficulty: 'easy',
+      time: '5 min',
+      need: ['1 sheet of A4 paper'],
+      steps: [
+        'Fold the paper in half lengthwise, then unfold.',
+        'Fold the top two corners down to the centre line.',
+        'Fold the new top edges down to the centre line again.',
+        'Fold the airplane in half along the original centre line.',
+        'Fold each side down to make wings.',
+        'Hold under the wings and throw gently!',
+      ],
+      tip: 'Decorate it with stickers or markers before flying!'
+    },
+    {
+      id: 'origami-heart',
+      emoji: '💖',
+      title: 'Origami Heart',
+      difficulty: 'medium',
+      time: '8 min',
+      need: ['1 square paper (pink or red works best!)'],
+      steps: [
+        'Fold the square paper in half, then unfold.',
+        'Fold the top corner down to meet the bottom edge.',
+        'Bring the two side corners up to meet at the top.',
+        'Fold the top tip down into a small triangle.',
+        'Fold the two top corners down slightly to round the heart.',
+        'Flip it over — your heart is done!',
+      ],
+      tip: 'Give it to mum or a best friend!'
+    },
+    {
+      id: 'paper-crown',
+      emoji: '👑',
+      title: 'Paper Crown',
+      difficulty: 'easy',
+      time: '10 min',
+      need: ['Long strip of paper', 'Markers/crayons', 'Glitter (optional)', 'Tape'],
+      steps: [
+        'Cut a long strip of paper that wraps around your head plus 2 cm extra.',
+        'Mark the top edge with zig-zags or curves to make crown points.',
+        'Cut along the marks carefully.',
+        'Decorate with markers — draw jewels, stars, hearts!',
+        'Add glitter if you have it!',
+        'Tape the ends together to fit your head.',
+      ],
+      tip: 'Make one for each of your friends and have a royal tea party!'
+    },
+    {
+      id: 'animal-mask',
+      emoji: '🦁',
+      title: 'Animal Mask',
+      difficulty: 'medium',
+      time: '15 min',
+      need: ['Paper plate or thick paper', 'Markers/paint', 'Scissors', 'Elastic or string', 'Glue (optional)'],
+      steps: [
+        'Hold the paper plate to your face — mark where the eye holes go.',
+        'Cut out two eye holes carefully (ask a grown-up for help).',
+        'Decide which animal: cat, lion, fox, panda, owl?',
+        'Draw the face — add ears, whiskers, fur using markers.',
+        'For 3D ears: cut triangles from extra paper and glue them on.',
+        'Make tiny holes on the sides — tie elastic or string through.',
+        'Wear it and roar! 🦁',
+      ],
+      tip: 'Try painting with bright colours for a magical look!'
+    },
+    {
+      id: 'paper-doll',
+      emoji: '👗',
+      title: 'Paper Dolls with Outfits',
+      difficulty: 'medium',
+      time: '20 min',
+      need: ['Thick paper', 'Pencil', 'Markers/colour pencils', 'Scissors'],
+      steps: [
+        'Draw a simple person on thick paper (head, body, arms, legs).',
+        'Cut out the doll carefully.',
+        'On another sheet, draw outfits — dresses, jackets, fairy wings, superhero capes!',
+        'Add small flaps at the shoulders so the outfits clip on.',
+        'Cut out each outfit.',
+        'Mix and match outfits on your doll!',
+      ],
+      tip: 'Make a whole family of paper dolls — each one different!'
+    },
+    {
+      id: 'butterfly',
+      emoji: '🦋',
+      title: 'Symmetry Butterfly',
+      difficulty: 'easy',
+      time: '8 min',
+      need: ['White paper', 'Paints (any colours)', 'Brush'],
+      steps: [
+        'Fold a sheet of paper in half, then open it flat.',
+        'On ONE side of the fold, paint colourful blobs and shapes.',
+        'While the paint is wet, fold the paper in half and press gently.',
+        'Open it slowly — both sides match exactly!',
+        'When dry, draw a butterfly body in the centre.',
+        'Cut the butterfly shape if you want — or leave the painting on the page!',
+      ],
+      tip: 'Symmetry is when both sides are exactly the same — like your face! 🦋'
+    },
+    {
+      id: 'friendship-bracelet',
+      emoji: '🎀',
+      title: 'Friendship Bracelet',
+      difficulty: 'medium',
+      time: '15 min',
+      need: ['3 colourful threads (40 cm each)', 'Tape'],
+      steps: [
+        'Tie the 3 threads together at the top.',
+        'Tape the knot to a table to keep it still.',
+        'Pick the leftmost thread. Wrap it OVER and UNDER the second thread, then pull tight.',
+        'Do the same with the same thread on the third one.',
+        'Now the leftmost thread has moved to the right.',
+        'Pick the new leftmost thread and repeat!',
+        'Keep going until it fits your wrist, then tie a knot.',
+        'Cut off extra and give to your best friend!',
+      ],
+      tip: 'Use her favourite colours to make it extra special!'
+    },
+    {
+      id: 'bookmark',
+      emoji: '🔖',
+      title: 'Cute Bookmark',
+      difficulty: 'easy',
+      time: '10 min',
+      need: ['Thick paper or cardstock', 'Markers', 'Scissors', 'Hole punch (optional)', 'Ribbon (optional)'],
+      steps: [
+        'Cut a strip of thick paper about 5 cm wide and 18 cm long.',
+        'Decorate the strip — draw stars, hearts, flowers, your name.',
+        'On top, draw a cute character or animal peeking out.',
+        'Punch a small hole at the top.',
+        'Tie a ribbon through the hole.',
+        'Slide it into your favourite book!',
+      ],
+      tip: 'Make different bookmarks for different books!'
+    },
+  ];
+
+  function renderCrafts() {
+    const grid = document.getElementById('crafts-grid');
+    grid.innerHTML = crafts.map(c => `
+      <div class="craft-card" id="craft-${c.id}">
+        <div class="craft-emoji">${c.emoji}</div>
+        <h3>${c.title}</h3>
+        <span class="difficulty ${c.difficulty}">${c.difficulty === 'easy' ? '⭐ Easy' : c.difficulty === 'medium' ? '⭐⭐ Medium' : '⭐⭐⭐ Tricky'}</span>
+        <div class="craft-meta">⏱️ ${c.time}</div>
+        <button class="show-more" onclick="toggleCraft('${c.id}', this)">Show me how →</button>
+        <div class="craft-details">
+          <div class="craft-section">
+            <h4>📦 You'll need:</h4>
+            <ul>${c.need.map(n => `<li>${n}</li>`).join('')}</ul>
+          </div>
+          <div class="craft-section">
+            <h4>📝 Steps:</h4>
+            <ol style="padding-left: 20px; line-height: 1.6; font-family: 'Patrick Hand', cursive;">
+              ${c.steps.map(s => `<li>${s}</li>`).join('')}
+            </ol>
+          </div>
+          <div class="craft-section">
+            <h4>💡 Tip:</h4>
+            <p style="font-family: 'Patrick Hand', cursive; margin: 0; font-style: italic;">${c.tip}</p>
+          </div>
+          <button class="print-btn" onclick="printCraft('${c.id}')">🖨️ Print Instructions</button>
+          <button class="show-more" onclick="markDone('${c.id}', this)">🌟 I made it!</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleCraft(id, btn) {
+    const card = document.getElementById('craft-' + id);
+    card.classList.toggle('expanded');
+    btn.textContent = card.classList.contains('expanded') ? 'Hide instructions' : 'Show me how →';
+  }
+
+  function markDone(id, btn) {
+    const craft = crafts.find(c => c.id === id);
+    if (typeof State !== 'undefined') State.addStars(15, `Made ${craft.title}!`);
+    if (typeof Pixie !== 'undefined') Pixie.say(`Wow! You made ${craft.title}! Show me! 🎨`, 'cheer');
+    btn.textContent = '✅ Awesome work!';
+    btn.style.background = '#10B981';
+  }
+
+  function printCraft(id) {
+    const craft = crafts.find(c => c.id === id);
+    const w = window.open('', '_blank');
+    w.document.write(`
+      <!DOCTYPE html><html><head><title>${craft.title} — Instructions</title>
+      <style>
+        body { font-family: 'Nunito', sans-serif; padding: 30px; line-height: 1.6; color: #1F2A44; }
+        h1 { color: #047857; font-family: 'Fredoka One', cursive; }
+        h2 { color: #059669; font-size: 1.2em; }
+        ul, ol { padding-left: 24px; }
+        .emoji { font-size: 4rem; }
+        .footer { margin-top: 40px; text-align: center; font-size: 0.85rem; color: #6B7280; }
+      </style></head><body>
+        <div class="emoji">${craft.emoji}</div>
+        <h1>${craft.title}</h1>
+        <p><strong>Difficulty:</strong> ${craft.difficulty} &nbsp; <strong>Time:</strong> ${craft.time}</p>
+        <h2>📦 You'll need:</h2>
+        <ul>${craft.need.map(n => `<li>${n}</li>`).join('')}</ul>
+        <h2>📝 Steps:</h2>
+        <ol>${craft.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+        <h2>💡 Tip:</h2>
+        <p><em>${craft.tip}</em></p>
+        <div class="footer">Crislyn's World · crislyntony.com</div>
+      </body></html>
+    `);
+    w.document.close();
+    setTimeout(() => w.print(), 400);
+  }
+
+  document.addEventListener('DOMContentLoaded', renderCrafts);
+</script>
+
+</body>
+</html>

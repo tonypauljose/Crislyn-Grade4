@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 Drawing Pad — Crislyn's World</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #FDF4FF, #FFFBEB);
+      font-family: 'Nunito', sans-serif; min-height: 100vh; margin: 0;
+    }
+
+    .navbar {
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 12px 24px; display: flex;
+      align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      background: linear-gradient(90deg, #EC4899, #7C3AED);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .back-link {
+      padding: 8px 18px; border-radius: 99px;
+      font-weight: 700; font-size: 0.9rem;
+      color: #6B21A8; background: white;
+      border: 2px solid #E9D5FF; text-decoration: none;
+    }
+    .back-link:hover { background: #FAF5FF; }
+
+    .studio-wrap {
+      max-width: 1200px; margin: 20px auto; padding: 0 24px;
+    }
+
+    .studio-header { text-align: center; margin-bottom: 20px; }
+    .studio-header h1 {
+      font-family: 'Fredoka One', cursive; font-size: 2.5rem;
+      color: #BE185D; margin: 0;
+    }
+    .studio-header p {
+      font-family: 'Patrick Hand', cursive; color: #9333EA;
+      font-size: 1.2rem; margin: 4px 0 0;
+    }
+
+    .studio-frame {
+      background: white; border-radius: 28px;
+      padding: 20px; box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+      display: grid; grid-template-columns: 90px 1fr; gap: 20px;
+    }
+
+    .toolbar {
+      display: flex; flex-direction: column; gap: 12px;
+      padding: 14px 8px;
+      background: linear-gradient(180deg, #FCE7F3, #FBCFE8);
+      border-radius: 18px;
+    }
+
+    .tool-section { display: flex; flex-direction: column; gap: 6px; }
+    .tool-section .tool-label {
+      font-family: 'Fredoka One', cursive; font-size: 0.7rem;
+      color: #BE185D; text-align: center;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+
+    .tool-btn {
+      width: 60px; height: 60px; border-radius: 50%;
+      border: 3px solid white; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; background: white; color: #6B21A8;
+    }
+    .tool-btn:hover { transform: scale(1.12); }
+    .tool-btn.active {
+      box-shadow: 0 0 0 4px #EC4899, 0 4px 10px rgba(0,0,0,0.15);
+      transform: scale(1.1);
+    }
+
+    .swatch {
+      width: 50px; height: 50px; border-radius: 50%;
+      border: 3px solid white; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin: 0 auto;
+    }
+    .swatch:hover { transform: scale(1.15); }
+    .swatch.active {
+      box-shadow: 0 0 0 4px #6B21A8, 0 4px 10px rgba(0,0,0,0.2);
+      transform: scale(1.1);
+    }
+
+    .swatch-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    }
+
+    .brush-size {
+      display: flex; flex-direction: column; gap: 4px; align-items: center;
+    }
+    .brush-size input {
+      width: 60px; cursor: pointer;
+    }
+
+    .canvas-area {
+      background: white; border-radius: 18px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.06);
+      position: relative;
+      min-height: 500px;
+      overflow: hidden;
+    }
+
+    #drawing-canvas {
+      width: 100%; height: 100%;
+      display: block; cursor: crosshair;
+      touch-action: none;
+    }
+
+    .actions-row {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 20px; flex-wrap: wrap;
+    }
+    .action-btn {
+      padding: 12px 24px; border-radius: 99px;
+      font-family: 'Fredoka One', cursive; font-size: 1rem;
+      cursor: pointer; border: none;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .action-btn:hover { transform: translateY(-3px) scale(1.05); }
+    .action-btn.primary {
+      background: linear-gradient(135deg, #EC4899, #7C3AED);
+      color: white;
+    }
+    .action-btn.secondary {
+      background: white; color: #6B21A8;
+      border: 2px solid #E9D5FF;
+    }
+    .action-btn.danger {
+      background: linear-gradient(135deg, #FCA5A5, #EF4444);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .studio-frame { grid-template-columns: 1fr; }
+      .toolbar { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+      .canvas-area { min-height: 400px; }
+      .tool-btn, .swatch { width: 44px; height: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">✨ Crislyn's World</a>
+  <a href="art-studio.html" class="back-link">← Art Studio</a>
+</nav>
+
+<div class="studio-wrap">
+  <div class="studio-header">
+    <h1>🎨 Drawing Pad</h1>
+    <p>Pick a colour, pick a brush, and create something amazing!</p>
+  </div>
+
+  <div class="studio-frame">
+    <div class="toolbar">
+      <div class="tool-section">
+        <div class="tool-label">🖌️ Tool</div>
+        <button class="tool-btn active" data-tool="brush" onclick="setTool('brush', this)">🖌️</button>
+        <button class="tool-btn" data-tool="eraser" onclick="setTool('eraser', this)">🧽</button>
+      </div>
+
+      <div class="tool-section">
+        <div class="tool-label">🎨 Colour</div>
+        <div class="swatch-grid" id="swatches"></div>
+      </div>
+
+      <div class="tool-section">
+        <div class="tool-label">📏 Size</div>
+        <div class="brush-size">
+          <input type="range" id="brush-size" min="2" max="60" value="10" oninput="updateSize(this.value)">
+          <span id="size-display" style="font-family: 'Fredoka One', cursive; color: #BE185D;">10</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-area">
+      <canvas id="drawing-canvas"></canvas>
+    </div>
+  </div>
+
+  <div class="actions-row">
+    <button class="action-btn secondary" onclick="undo()">↩️ Undo</button>
+    <button class="action-btn danger" onclick="clearCanvas()">🗑️ Clear</button>
+    <button class="action-btn primary" onclick="saveDrawing()">💾 Save Drawing</button>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('drawing-canvas');
+  const ctx = canvas.getContext('2d');
+  const colors = [
+    '#000000', '#FFFFFF',
+    '#EF4444', '#F97316',
+    '#FBBF24', '#84CC16',
+    '#10B981', '#06B6D4',
+    '#3B82F6', '#8B5CF6',
+    '#EC4899', '#A78BFA',
+    '#F472B6', '#FB923C',
+    '#F2B544', '#7C2D12',
+  ];
+
+  let currentTool = 'brush';
+  let currentColor = '#EC4899';
+  let currentSize = 10;
+  let drawing = false;
+  let lastX = 0, lastY = 0;
+  let history = [];
+
+  // Resize canvas to container
+  function resizeCanvas() {
+    const wrap = canvas.parentElement;
+    const w = wrap.clientWidth;
+    const h = Math.max(500, wrap.clientHeight);
+    // Save current
+    const tmp = document.createElement('canvas');
+    tmp.width = canvas.width; tmp.height = canvas.height;
+    tmp.getContext('2d').drawImage(canvas, 0, 0);
+    canvas.width = w; canvas.height = h;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
+    // Restore
+    if (tmp.width > 0 && tmp.height > 0) ctx.drawImage(tmp, 0, 0);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  }
+
+  function renderSwatches() {
+    const wrap = document.getElementById('swatches');
+    wrap.innerHTML = colors.map(c => `
+      <div class="swatch ${c === currentColor ? 'active' : ''}"
+           style="background: ${c}"
+           onclick="setColor('${c}', this)"></div>
+    `).join('');
+  }
+
+  function setColor(c, el) {
+    currentColor = c;
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+
+  function setTool(tool, btn) {
+    currentTool = tool;
+    document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    canvas.style.cursor = tool === 'eraser' ? 'cell' : 'crosshair';
+  }
+
+  function updateSize(val) {
+    currentSize = parseInt(val);
+    document.getElementById('size-display').textContent = val;
+  }
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    return { x: cx * (canvas.width / rect.width), y: cy * (canvas.height / rect.height) };
+  }
+
+  function startDraw(e) {
+    e.preventDefault();
+    drawing = true;
+    const p = getPos(e);
+    lastX = p.x; lastY = p.y;
+    // Save state to history (max 20)
+    history.push(canvas.toDataURL());
+    if (history.length > 20) history.shift();
+    // Draw a single dot too
+    ctx.fillStyle = currentTool === 'eraser' ? '#FFFFFF' : currentColor;
+    ctx.beginPath(); ctx.arc(p.x, p.y, currentSize / 2, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function moveDraw(e) {
+    if (!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.strokeStyle = currentTool === 'eraser' ? '#FFFFFF' : currentColor;
+    ctx.lineWidth = currentSize;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+  }
+
+  function stopDraw() { drawing = false; }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+  canvas.addEventListener('touchstart', startDraw);
+  canvas.addEventListener('touchmove', moveDraw);
+  canvas.addEventListener('touchend', stopDraw);
+
+  function undo() {
+    if (history.length === 0) return;
+    const img = new Image();
+    img.onload = () => {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+    };
+    img.src = history.pop();
+  }
+
+  function clearCanvas() {
+    if (confirm('Clear your drawing? This cannot be undone!')) {
+      history.push(canvas.toDataURL());
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  function saveDrawing() {
+    const link = document.createElement('a');
+    const date = new Date().toISOString().slice(0, 10);
+    link.download = `crislyn-drawing-${date}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    if (typeof State !== 'undefined') State.addStars(5, 'Drew a picture!');
+    if (typeof Pixie !== 'undefined') setTimeout(() => Pixie.say('Beautiful drawing! 🎨', 'cheer'), 500);
+  }
+
+  // Init
+  window.addEventListener('resize', resizeCanvas);
+  document.addEventListener('DOMContentLoaded', () => {
+    resizeCanvas();
+    renderSwatches();
+  });
+</script>
+
+</body>
+</html>

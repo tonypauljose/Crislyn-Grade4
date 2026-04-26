@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✍️ Handwriting Practice — Crislyn's World</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #DBEAFE, #FFFBEB);
+      font-family: 'Nunito', sans-serif; min-height: 100vh; margin: 0;
+    }
+
+    .navbar {
+      background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      padding: 12px 24px; display: flex;
+      align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand {
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      background: linear-gradient(90deg, #EC4899, #7C3AED);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .back-link {
+      padding: 8px 18px; border-radius: 99px; font-weight: 700;
+      font-size: 0.9rem; color: #6B21A8; background: white;
+      border: 2px solid #E9D5FF; text-decoration: none;
+    }
+    .back-link:hover { background: #FAF5FF; }
+
+    .wrap { max-width: 900px; margin: 30px auto; padding: 0 24px; }
+
+    .header { text-align: center; margin-bottom: 24px; }
+    .header h1 {
+      font-family: 'Fredoka One', cursive; font-size: 2.5rem;
+      color: #1D4ED8; margin: 0;
+    }
+    .header p {
+      font-family: 'Patrick Hand', cursive; color: #6366F1;
+      font-size: 1.2rem; margin: 4px 0 0;
+    }
+
+    .mode-tabs {
+      display: flex; gap: 12px; justify-content: center;
+      margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .mode-tab {
+      padding: 12px 24px; border-radius: 99px;
+      font-family: 'Fredoka One', cursive; font-size: 1rem;
+      cursor: pointer; border: 3px solid transparent;
+      background: white; color: #6B21A8;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .mode-tab:hover { transform: translateY(-2px) scale(1.05); }
+    .mode-tab.active {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white;
+      border-color: #4F46E5;
+    }
+
+    .alphabet-bar {
+      background: white; border-radius: 20px;
+      padding: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      margin-bottom: 20px; text-align: center;
+      max-height: 180px; overflow-y: auto;
+    }
+    .char-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; margin: 4px;
+      border-radius: 12px; cursor: pointer;
+      background: #F3F4F6; color: #374151;
+      font-family: 'Fredoka One', cursive; font-size: 1.2rem;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .char-btn:hover { background: #DBEAFE; transform: scale(1.1); }
+    .char-btn.active {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6);
+      color: white; border-color: #4F46E5;
+      transform: scale(1.15);
+    }
+    .char-btn.done {
+      background: linear-gradient(135deg, #10B981, #34D399);
+      color: white;
+    }
+
+    .trace-area {
+      background: white; border-radius: 28px;
+      padding: 30px; box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+      text-align: center;
+    }
+
+    .trace-target {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.5rem; color: #4F46E5;
+      margin-bottom: 14px;
+    }
+
+    .trace-canvas-wrap {
+      position: relative; display: inline-block;
+      border-radius: 18px; overflow: hidden;
+      background:
+        repeating-linear-gradient(0deg, transparent 0 79px, #E5E7EB 79px 80px),
+        repeating-linear-gradient(90deg, transparent 0 79px, #F3F4F6 79px 80px),
+        white;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    .trace-canvas-wrap canvas {
+      display: block;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .trace-letter {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fredoka One', cursive; font-size: 22rem;
+      color: rgba(99, 102, 241, 0.18);
+      line-height: 1;
+      user-select: none;
+    }
+
+    .actions-row {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 20px; flex-wrap: wrap;
+    }
+    .action-btn {
+      padding: 12px 24px; border-radius: 99px;
+      font-family: 'Fredoka One', cursive; font-size: 1rem;
+      cursor: pointer; border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .action-btn:hover { transform: translateY(-3px) scale(1.05); }
+    .action-btn.primary {
+      background: linear-gradient(135deg, #6366F1, #8B5CF6); color: white;
+    }
+    .action-btn.secondary {
+      background: white; color: #4F46E5;
+      border: 2px solid #C7D2FE;
+    }
+
+    .stars-display {
+      margin-top: 20px;
+      font-family: 'Caveat', cursive; font-size: 1.4rem;
+      color: #4F46E5; text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 { font-size: 2rem; }
+      .trace-letter { font-size: 14rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-brand">✨ Crislyn's World</a>
+  <a href="art-studio.html" class="back-link">← Art Studio</a>
+</nav>
+
+<div class="wrap">
+  <div class="header">
+    <h1>✍️ Handwriting Practice</h1>
+    <p>Trace each letter or number with your finger or mouse!</p>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('upper', this)">A B C (UPPERCASE)</button>
+    <button class="mode-tab" onclick="setMode('lower', this)">a b c (lowercase)</button>
+    <button class="mode-tab" onclick="setMode('numbers', this)">1 2 3 (Numbers)</button>
+  </div>
+
+  <div class="alphabet-bar" id="alphabet-bar"></div>
+
+  <div class="trace-area">
+    <div class="trace-target" id="trace-target">Trace the letter ↓</div>
+    <div class="trace-canvas-wrap" id="canvas-wrap">
+      <div class="trace-letter" id="trace-letter">A</div>
+      <canvas id="trace-canvas" width="500" height="500"></canvas>
+    </div>
+    <div class="actions-row">
+      <button class="action-btn secondary" onclick="clearTrace()">🗑️ Clear</button>
+      <button class="action-btn primary" onclick="finishTrace()">⭐ I'm Done!</button>
+    </div>
+    <div class="stars-display" id="stars-display"></div>
+  </div>
+</div>
+
+<script>
+  let mode = 'upper';
+  let currentChar = 'A';
+  let completed = { upper: [], lower: [], numbers: [] };
+
+  const sets = {
+    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''),
+    lower: 'abcdefghijklmnopqrstuvwxyz'.split(''),
+    numbers: '0123456789'.split(''),
+  };
+
+  // Load completed state
+  try {
+    const saved = JSON.parse(localStorage.getItem('crislyn_handwriting') || '{}');
+    Object.assign(completed, saved);
+  } catch {}
+
+  function saveCompleted() {
+    localStorage.setItem('crislyn_handwriting', JSON.stringify(completed));
+  }
+
+  function setMode(m, btn) {
+    mode = m;
+    document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAlphabet();
+    setChar(sets[m][0]);
+  }
+
+  function renderAlphabet() {
+    const bar = document.getElementById('alphabet-bar');
+    bar.innerHTML = sets[mode].map(c => `
+      <div class="char-btn ${c === currentChar ? 'active' : ''} ${completed[mode].includes(c) ? 'done' : ''}"
+           onclick="setChar('${c}')">${c}${completed[mode].includes(c) ? '⭐' : ''}</div>
+    `).join('');
+  }
+
+  function setChar(c) {
+    currentChar = c;
+    document.getElementById('trace-letter').textContent = c;
+    document.getElementById('trace-target').textContent = `Trace the ${mode === 'numbers' ? 'number' : 'letter'}: ${c}`;
+    clearTrace();
+    renderAlphabet();
+    updateStars();
+  }
+
+  function updateStars() {
+    const total = sets[mode].length;
+    const done = completed[mode].length;
+    const display = document.getElementById('stars-display');
+    if (done === 0) {
+      display.textContent = `Start with ${currentChar}!`;
+    } else if (done === total) {
+      display.textContent = `🎉 You finished all of them! Amazing!`;
+    } else {
+      display.textContent = `⭐ ${done} / ${total} done — keep going!`;
+    }
+  }
+
+  // Drawing on canvas
+  const canvas = document.getElementById('trace-canvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false;
+  let lastX = 0, lastY = 0;
+  let strokeCount = 0;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    return { x: cx * (canvas.width / rect.width), y: cy * (canvas.height / rect.height) };
+  }
+
+  function startDraw(e) {
+    e.preventDefault();
+    drawing = true;
+    const p = getPos(e);
+    lastX = p.x; lastY = p.y;
+    strokeCount++;
+  }
+
+  function moveDraw(e) {
+    if (!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.strokeStyle = '#6366F1';
+    ctx.lineWidth = 18;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+  }
+
+  function stopDraw() { drawing = false; }
+
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  canvas.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('mouseleave', stopDraw);
+  canvas.addEventListener('touchstart', startDraw);
+  canvas.addEventListener('touchmove', moveDraw);
+  canvas.addEventListener('touchend', stopDraw);
+
+  function clearTrace() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    strokeCount = 0;
+  }
+
+  function finishTrace() {
+    if (strokeCount === 0) {
+      alert("Try tracing the letter first! 🎨");
+      return;
+    }
+    if (!completed[mode].includes(currentChar)) {
+      completed[mode].push(currentChar);
+      saveCompleted();
+      if (typeof State !== 'undefined') State.addStars(2, `Traced ${currentChar}`);
+      if (typeof Pixie !== 'undefined') Pixie.say(`Great job tracing ${currentChar}! ⭐`, 'cheer');
+    } else {
+      if (typeof Pixie !== 'undefined') Pixie.say(`You already mastered ${currentChar}! Try a new one!`, 'cheer');
+    }
+    // Move to next char automatically
+    const idx = sets[mode].indexOf(currentChar);
+    const nextIdx = (idx + 1) % sets[mode].length;
+    setTimeout(() => setChar(sets[mode][nextIdx]), 1200);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderAlphabet();
+    updateStars();
+  });
+</script>
+
+</body>
+</html>

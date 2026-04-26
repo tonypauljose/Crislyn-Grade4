@@ -1,43 +1,27 @@
 /* =====================================================
-   PIXIE the Mascot — visual styles
-   A magical kitten companion with 5 expressions.
+   PIXIE 3D — Mascot container, bubble, animations
    ===================================================== */
 
-.pixie-container {
-  position: fixed; bottom: 24px; right: 24px;
+.pixie3d-container {
+  position: fixed; bottom: 20px; right: 20px;
   z-index: 500; cursor: pointer; user-select: none;
+  width: 160px; height: 160px;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.pixie-container:hover { transform: scale(1.08); }
+.pixie3d-container:hover { transform: scale(1.05); }
 
-.pixie-svg {
-  width: 110px; height: 110px;
-  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.12));
-  animation: pixieFloat 4s ease-in-out infinite;
-}
-
-@keyframes pixieFloat {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-6px) rotate(2deg); }
-}
-
-/* Expressions: control via .pixie-expression-* class on the .pixie-svg */
-.pixie-eye-left, .pixie-eye-right {
-  transition: all 0.3s ease;
-}
-.pixie-mouth { transition: all 0.3s ease; }
-.pixie-cheer .pixie-eye-left, .pixie-cheer .pixie-eye-right {
-  ry: 2; rx: 6;
-  /* "happy closed eye" curve via CSS — we'll override with d= in JS */
+.pixie3d-canvas {
+  width: 100%; height: 100%;
+  filter: drop-shadow(0 8px 18px rgba(244, 166, 189, 0.35));
 }
 
 /* Speech bubble */
-.pixie-bubble {
-  position: fixed; bottom: 140px; right: 20px;
+.pixie3d-bubble {
+  position: fixed; bottom: 190px; right: 20px;
   max-width: 280px; padding: 14px 18px;
-  background: white; border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  background: white; border-radius: 22px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
   font-family: 'Patrick Hand', 'Nunito', cursive;
   font-size: 1.05rem; line-height: 1.4;
   color: var(--t-text, #1F2A44);
@@ -48,24 +32,24 @@
   border: 3px solid var(--t-primary, #F4A6BD);
 }
 
-.pixie-bubble.show {
+.pixie3d-bubble.show {
   opacity: 1; pointer-events: auto;
   transform: translateY(0) scale(1);
 }
 
-.pixie-bubble::after {
+.pixie3d-bubble::after {
   content: '';
   position: absolute;
-  bottom: -16px; right: 30px;
+  bottom: -16px; right: 50px;
   width: 0; height: 0;
   border-left: 14px solid transparent;
   border-right: 14px solid transparent;
   border-top: 16px solid white;
 }
-.pixie-bubble::before {
+.pixie3d-bubble::before {
   content: '';
   position: absolute;
-  bottom: -20px; right: 28px;
+  bottom: -20px; right: 48px;
   width: 0; height: 0;
   border-left: 16px solid transparent;
   border-right: 16px solid transparent;
@@ -73,7 +57,7 @@
   z-index: -1;
 }
 
-.pixie-bubble-close {
+.pixie3d-bubble-close {
   position: absolute; top: 4px; right: 6px;
   width: 22px; height: 22px; border-radius: 50%;
   background: var(--t-bg-2, #f0f0f0);
@@ -81,26 +65,11 @@
   display: flex; align-items: center; justify-content: center;
   font-weight: bold; color: var(--t-text-soft, #666);
 }
-.pixie-bubble-close:hover { background: var(--t-primary-soft, #fce7f0); }
+.pixie3d-bubble-close:hover { background: var(--t-primary-soft, #fce7f0); }
 
-/* Sparkles around Pixie */
-.pixie-sparkle {
-  position: absolute; font-size: 1rem;
-  pointer-events: none;
-  animation: pixieSparkle 2s ease-in-out infinite;
-}
-.pixie-sparkle:nth-child(1) { top: -8px; left: 8px; animation-delay: 0s; }
-.pixie-sparkle:nth-child(2) { top: 20px; right: -4px; animation-delay: 0.7s; }
-.pixie-sparkle:nth-child(3) { bottom: 10px; left: -8px; animation-delay: 1.3s; }
-
-@keyframes pixieSparkle {
-  0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
-  50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
-}
-
-/* Flash notification (e.g. "+10 ⭐") */
-.pixie-flash {
-  position: fixed; bottom: 140px; right: 20px;
+/* Flash notification */
+.pixie3d-flash {
+  position: fixed; bottom: 200px; right: 20px;
   background: linear-gradient(135deg, var(--t-accent, #FFCB47), var(--t-accent-deep, #F2B544));
   color: var(--t-text, #1F2A44);
   padding: 8px 18px; border-radius: 99px;
@@ -119,14 +88,12 @@
   100% { transform: translateY(-50px); opacity: 0; }
 }
 
-/* Mobile adjustment */
+/* Mobile */
 @media (max-width: 768px) {
-  .pixie-container { bottom: 14px; right: 14px; }
-  .pixie-svg { width: 80px; height: 80px; }
-  .pixie-bubble { bottom: 100px; right: 14px; max-width: 220px; font-size: 0.95rem; padding: 10px 14px; }
+  .pixie3d-container { bottom: 12px; right: 12px; width: 110px; height: 110px; }
+  .pixie3d-bubble { bottom: 134px; right: 12px; max-width: 220px; font-size: 0.95rem; padding: 10px 14px; }
 }
 
-/* Hide Pixie when sound panel is interacting (prevent overlap) */
 @media (max-height: 600px) {
-  .pixie-container { display: none; }
+  .pixie3d-container { display: none; }
 }
