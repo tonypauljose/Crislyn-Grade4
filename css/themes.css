@@ -1,0 +1,121 @@
+/* =====================================================
+   CRISLYN'S WORLD — Theme System
+   3 themes user can pick: Strawberry Cream (default),
+   Lavender Dreams, Mint Sunshine.
+   Each one retints the whole site via CSS custom props.
+   ===================================================== */
+
+:root,
+[data-theme="strawberry"] {
+  --t-bg-1: #FFF8F0;
+  --t-bg-2: #FFF0F5;
+  --t-bg-3: #FDFCF8;
+
+  --t-primary: #F4A6BD;        /* dusty rose */
+  --t-primary-deep: #DC8AA0;
+  --t-primary-soft: #FCE7F0;
+
+  --t-accent: #FFCB47;         /* sunshine yellow */
+  --t-accent-deep: #F2B544;    /* gold */
+
+  --t-success: #7BD3A8;        /* mint */
+  --t-info: #6EC6F0;           /* sky */
+  --t-warm: #F39C5C;           /* saffron */
+
+  --t-text: #1F2A44;           /* deep navy, never black */
+  --t-text-soft: #5C6580;
+  --t-text-mute: #8A92A8;
+
+  --t-card: #FFFFFF;
+  --t-card-soft: #FFF8F0;
+  --t-shadow: rgba(244, 166, 189, 0.18);
+  --t-shadow-deep: rgba(244, 166, 189, 0.30);
+
+  /* Subject colors — always consistent */
+  --subj-maths: #6EC6F0;       /* sky blue */
+  --subj-english: #C9A7E0;     /* lavender */
+  --subj-evs: #7BD3A8;         /* mint */
+  --subj-hindi: #F39C5C;       /* saffron */
+}
+
+[data-theme="lavender"] {
+  --t-bg-1: #F5F0FA;
+  --t-bg-2: #EDE5F7;
+  --t-bg-3: #FBFAFD;
+
+  --t-primary: #C9A7E0;
+  --t-primary-deep: #A87FCF;
+  --t-primary-soft: #EDE0F5;
+
+  --t-accent: #FFCB47;
+  --t-accent-deep: #F2B544;
+
+  --t-success: #7BD3A8;
+  --t-info: #6EC6F0;
+  --t-warm: #F39C5C;
+
+  --t-text: #2B1F44;
+  --t-text-soft: #5F5680;
+  --t-text-mute: #8A85A8;
+
+  --t-card: #FFFFFF;
+  --t-card-soft: #F8F4FC;
+  --t-shadow: rgba(168, 127, 207, 0.18);
+  --t-shadow-deep: rgba(168, 127, 207, 0.30);
+}
+
+[data-theme="mint"] {
+  --t-bg-1: #F0FAF5;
+  --t-bg-2: #E5F7ED;
+  --t-bg-3: #FAFDFB;
+
+  --t-primary: #7BD3A8;
+  --t-primary-deep: #4FB389;
+  --t-primary-soft: #DEF3E8;
+
+  --t-accent: #FFCB47;
+  --t-accent-deep: #F2B544;
+
+  --t-success: #6EC6F0;
+  --t-info: #C9A7E0;
+  --t-warm: #F39C5C;
+
+  --t-text: #1F4434;
+  --t-text-soft: #486056;
+  --t-text-mute: #7A8A82;
+
+  --t-card: #FFFFFF;
+  --t-card-soft: #F0FAF5;
+  --t-shadow: rgba(75, 179, 137, 0.18);
+  --t-shadow-deep: rgba(75, 179, 137, 0.30);
+}
+
+/* =====================================================
+   Reusable themed utility classes
+   ===================================================== */
+.themed-bg { background: linear-gradient(135deg, var(--t-bg-1), var(--t-bg-2)); }
+.themed-card {
+  background: var(--t-card);
+  border-radius: 24px;
+  box-shadow: 0 6px 24px var(--t-shadow);
+  padding: 24px;
+}
+.themed-text { color: var(--t-text); }
+.themed-text-soft { color: var(--t-text-soft); }
+.themed-primary { color: var(--t-primary-deep); }
+
+/* Theme picker widget styling (used by state.js) */
+.theme-picker {
+  display: flex; gap: 8px; align-items: center;
+}
+.theme-swatch {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 3px solid #fff; cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.theme-swatch:hover { transform: scale(1.2); }
+.theme-swatch.active { box-shadow: 0 0 0 3px var(--t-primary), 0 2px 6px rgba(0,0,0,0.2); transform: scale(1.15); }
+.theme-swatch.strawberry { background: linear-gradient(135deg, #F4A6BD, #FFCB47); }
+.theme-swatch.lavender { background: linear-gradient(135deg, #C9A7E0, #FFCB47); }
+.theme-swatch.mint { background: linear-gradient(135deg, #7BD3A8, #6EC6F0); }

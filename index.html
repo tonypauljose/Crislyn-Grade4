@@ -12,9 +12,14 @@
   <link rel="stylesheet" href="css/common.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
 
   <!-- Google Analytics -->
   <script src="js/analytics.js"></script>
+  <!-- Crislyn's World — central state + Pixie mascot -->
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie.js" defer></script>
 
   <style>
     body {
@@ -587,6 +592,7 @@
       <a href="index.html" class="nav-link">🏠 Home</a>
       <a href="learning.html" class="nav-link">📚 Learn</a>
     </div>
+    <!-- HUD will be auto-injected here by state.js -->
   </div>
 </nav>
 
@@ -606,6 +612,114 @@
     <div class="hero-sub fade-in-up delay-2">where friends can say hi, play games, and learn stuff!</div>
   </div>
 </section>
+
+<!-- DAILY QUEST -->
+<section class="quest-wrap" style="max-width: 720px; margin: 0 auto; padding: 0 24px 30px;">
+  <div class="quest-card" id="daily-quest-card">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<style>
+  .quest-card {
+    background: linear-gradient(135deg, #FFCB47, #F2B544);
+    border-radius: 24px;
+    padding: 22px 26px;
+    box-shadow: 0 10px 30px rgba(242, 181, 68, 0.35);
+    display: flex; align-items: center; gap: 18px;
+    color: #4C1D95;
+    position: relative; overflow: hidden;
+  }
+  .quest-card::before {
+    content: '';
+    position: absolute; top: -30%; right: -10%;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%);
+    border-radius: 50%;
+  }
+  .quest-card > * { position: relative; }
+  .quest-icon {
+    font-size: 3rem; flex-shrink: 0;
+    animation: questBounce 2s ease-in-out infinite;
+  }
+  @keyframes questBounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-6px) rotate(5deg); }
+  }
+  .quest-info { flex: 1; }
+  .quest-info .quest-label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem; color: #4C1D95;
+    margin-bottom: 4px;
+  }
+  .quest-info .quest-task {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1.1rem; color: #5B21B6;
+  }
+  .quest-info .quest-reward {
+    font-size: 0.85rem; opacity: 0.8; margin-top: 4px;
+  }
+  .quest-card.done {
+    background: linear-gradient(135deg, #7BD3A8, #4FB389);
+    color: white;
+  }
+  .quest-card.done .quest-info .quest-label,
+  .quest-card.done .quest-info .quest-task { color: white; }
+
+  .quest-btn {
+    background: white;
+    color: #B45309;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 99px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+  }
+  .quest-btn:hover { transform: scale(1.08); }
+
+  @media (max-width: 768px) {
+    .quest-card { flex-direction: column; text-align: center; gap: 10px; }
+  }
+</style>
+
+<script>
+  function renderDailyQuest() {
+    const q = State.getDailyQuest();
+    const card = document.getElementById('daily-quest-card');
+    if (!card) return;
+    if (q.done) {
+      card.className = 'quest-card done';
+      card.innerHTML = `
+        <div class="quest-icon">🎉</div>
+        <div class="quest-info">
+          <div class="quest-label">Today's quest done!</div>
+          <div class="quest-task">Come back tomorrow for a new one!</div>
+        </div>
+      `;
+    } else {
+      card.className = 'quest-card';
+      card.innerHTML = `
+        <div class="quest-icon">🎯</div>
+        <div class="quest-info">
+          <div class="quest-label">Today's Adventure!</div>
+          <div class="quest-task">${q.label}</div>
+          <div class="quest-reward">Reward: +${q.stars} ⭐ stars</div>
+        </div>
+        <button class="quest-btn" onclick="State.completeDailyQuest(); renderDailyQuest();">I did it! 🌟</button>
+      `;
+    }
+  }
+  // Run after State.js is ready
+  function tryRenderQuest() {
+    if (typeof State !== 'undefined' && State.data) renderDailyQuest();
+    else setTimeout(tryRenderQuest, 80);
+  }
+  document.addEventListener('DOMContentLoaded', tryRenderQuest);
+</script>
 
 <!-- VISITOR: Who is here? -->
 <section class="visitor-wrap">
@@ -763,6 +877,170 @@
     <div class="besties-grid" id="besties-grid"></div>
   </div>
 </section>
+
+<!-- PIXIE'S GARDEN + STICKER SHELF -->
+<section class="garden-wrap">
+  <h2 class="section-title">🌱 Pixie's Garden &amp; My Stickers</h2>
+  <p class="section-sub">Your garden grows as you earn stars! Stickers come from completing chapters!</p>
+
+  <div class="garden-grid">
+    <div class="garden-card" id="pixie-garden">
+      <h3>🌳 Pixie's Garden</h3>
+      <div class="garden-scene" id="garden-scene"></div>
+      <div class="garden-progress" id="garden-progress"></div>
+    </div>
+
+    <div class="sticker-shelf-card">
+      <h3>🎨 My Sticker Shelf</h3>
+      <div class="sticker-shelf-grid" id="sticker-shelf"></div>
+      <button class="see-all-btn" onclick="State._showStickerPanel()">See My Whole Collection →</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .garden-wrap {
+    max-width: 1000px; margin: 0 auto; padding: 0 24px;
+  }
+  .garden-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin-top: 20px;
+  }
+  .garden-card, .sticker-shelf-card {
+    background: white; border-radius: 24px;
+    padding: 24px; box-shadow: 0 6px 20px rgba(124,58,237,0.1);
+    border: 3px solid var(--t-primary-soft, #FCE7F0);
+  }
+  .garden-card h3, .sticker-shelf-card h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.3rem; color: var(--t-primary-deep, #DC8AA0);
+    margin-bottom: 14px;
+  }
+  .garden-scene {
+    height: 200px; border-radius: 16px;
+    background: linear-gradient(180deg, #BFDBFE 0%, #DBEAFE 50%, #D1FAE5 50%, #BBF7D0 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 14px;
+    font-size: 4rem;
+  }
+  .garden-progress {
+    margin-top: 12px;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 1rem; color: var(--t-text-soft, #5C6580);
+    text-align: center;
+  }
+  .garden-progress .progress-bar {
+    height: 10px; background: var(--t-bg-2, #FFE4F0);
+    border-radius: 99px; margin-top: 6px; overflow: hidden;
+  }
+  .garden-progress .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #F4A6BD, #FFCB47);
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .sticker-shelf-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 12px; min-height: 130px;
+  }
+  .shelf-sticker {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    border-radius: 12px; padding: 8px;
+    text-align: center; font-size: 1.6rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .shelf-sticker:hover { transform: scale(1.15) rotate(-5deg); }
+  .shelf-sticker.empty {
+    background: #F3F4F6; opacity: 0.5; box-shadow: none;
+    color: #9CA3AF;
+  }
+  .shelf-empty-msg {
+    grid-column: 1 / -1; text-align: center; padding: 20px;
+    font-family: 'Patrick Hand', cursive; font-size: 1rem;
+    color: var(--t-text-mute, #9CA3AF);
+  }
+  .see-all-btn {
+    margin-top: 14px; width: 100%;
+    padding: 10px; border: 2px dashed var(--t-primary, #F4A6BD);
+    background: transparent; border-radius: 12px;
+    font-family: 'Patrick Hand', cursive; font-size: 1rem;
+    color: var(--t-primary-deep, #DC8AA0); cursor: pointer;
+    transition: all 0.25s;
+  }
+  .see-all-btn:hover { background: var(--t-primary-soft, #FCE7F0); }
+
+  @media (max-width: 768px) {
+    .garden-grid { grid-template-columns: 1fr; }
+    .sticker-shelf-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+
+<script>
+  function renderGarden() {
+    if (typeof State === 'undefined' || !State.data) {
+      setTimeout(renderGarden, 80);
+      return;
+    }
+    const level = State.data.gardenLevel;
+    const stars = State.data.stars;
+    const stages = [
+      { emoji: '🌱', label: 'A tiny seedling — keep going!', threshold: 10 },
+      { emoji: '🌿', label: 'A sprout!', threshold: 50 },
+      { emoji: '🌷🌼🌻', label: 'Sapling!', threshold: 100 },
+      { emoji: '🌸🌺🌼🌷', label: 'Flowers blooming!', threshold: 200 },
+      { emoji: '🦋🌸🌼🌷🌺🦋', label: 'Butterflies!', threshold: 500 },
+      { emoji: '🌳🏡🦋🌸✨', label: 'A magical treehouse!', threshold: Infinity },
+    ];
+    const stage = stages[level];
+    const nextStage = stages[level + 1];
+
+    document.getElementById('garden-scene').innerHTML = `<div style="font-size: 3rem;">${stage.emoji}</div>`;
+
+    const progressEl = document.getElementById('garden-progress');
+    if (nextStage) {
+      const remain = stage.threshold - stars;
+      const pct = Math.min(100, (stars / stage.threshold) * 100);
+      progressEl.innerHTML = `
+        <div>${stage.label} ${remain > 0 ? `(${remain} more stars to grow!)` : ''}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width: ${pct}%"></div></div>
+      `;
+    } else {
+      progressEl.innerHTML = `<div>🎉 Maximum garden! You've earned ${stars} stars total!</div>`;
+    }
+  }
+
+  function renderStickerShelf() {
+    if (typeof State === 'undefined' || !State.data) {
+      setTimeout(renderStickerShelf, 80);
+      return;
+    }
+    const stickers = State.data.stickers;
+    const shelf = document.getElementById('sticker-shelf');
+    const stickerEmojis = {
+      'numbers-ch1': '🔢', 'sentences-ch1': '📝', 'nouns-ch2': '📦',
+      'plants-ch1': '🌳', 'sangya-ch1': '📖',
+    };
+    if (stickers.length === 0) {
+      shelf.innerHTML = `
+        <div class="shelf-empty-msg">No stickers yet!<br>Complete a chapter to earn your first one ⭐</div>
+      `;
+    } else {
+      const display = stickers.slice(0, 8);
+      shelf.innerHTML = display.map(s => `
+        <div class="shelf-sticker" title="${s.label}">${stickerEmojis[s.id] || '🎨'}</div>
+      `).join('') + (stickers.length < 8 ? Array(Math.max(0, 4 - stickers.length)).fill(0).map(() =>
+        `<div class="shelf-sticker empty">?</div>`
+      ).join('') : '');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderGarden();
+    renderStickerShelf();
+  });
+</script>
 
 <!-- MY FAVORITE THINGS -->
 <section class="faves-section">
