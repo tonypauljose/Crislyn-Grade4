@@ -21,7 +21,8 @@ const State = {
       gardenLevel: 0,                // visual stage 0-5
       theme: 'strawberry',           // 'strawberry' | 'lavender' | 'mint'
       mascotName: 'Pixie',
-      mascotMood: 'idle',            // last expression shown
+      mascotMood: 'idle',
+      character: 'fox',              // user's chosen 3D companion: fox/cesium/duck/brainstem            // last expression shown
       onboardingDone: false,
       dailyQuest: null,              // { date: 'YYYY-MM-DD', task, done }
       perks: {                       // unlocks for Pixie
