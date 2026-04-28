@@ -143,6 +143,7 @@
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
       <a href="learning.html" class="nav-link active">Learning</a>
+      <a href="exam.html" class="nav-link">📝 Exam</a>
       <a href="art-studio.html" class="nav-link">🎨 Art</a>
     </div>
   </div>
@@ -193,11 +194,22 @@
   </div>
 </div>
 
-<!-- Chapters -->
-<div class="chapters-section">
+<!-- Reading Stories (textbook stories with sentence-by-sentence reader) -->
+<div class="chapters-section" style="padding-bottom: var(--space-4);">
   <div class="container">
     <div class="section-header mb-8">
-      <h2>पाठ · Chapters</h2>
+      <h2>📖 कहानियाँ · Reading Stories</h2>
+      <p>Read your textbook stories — every line in Hindi, English letters, and English meaning. Tap 🔊 to hear it!</p>
+    </div>
+    <div class="chapters-grid" id="stories-grid"></div>
+  </div>
+</div>
+
+<!-- Grammar Chapters -->
+<div class="chapters-section" style="padding-top: var(--space-6);">
+  <div class="container">
+    <div class="section-header mb-8">
+      <h2>व्याकरण · Grammar Chapters</h2>
       <p>Click on an available chapter to start learning!</p>
     </div>
     <div class="chapters-grid" id="chapters-grid"></div>
@@ -222,6 +234,12 @@
 </div>
 
 <script>
+const stories = [
+  { num: 1, hindi: 'आम का पेड़', title: 'The Mango Tree', emoji: '🥭',
+    desc: 'सौरभ की कहानी — Read along sentence by sentence with audio in three languages. Easy, gentle, and visual.',
+    status: 'available', link: 'chapters/hi02-aam-ka-ped.html', badge: 'NEW · Read with audio' },
+];
+
 const chapters = [
   { num: 1, hindi: 'संज्ञा', title: 'Sangya (Noun)', emoji: '📦', desc: 'व्यक्ति, वस्तु, स्थान और प्राणी के नाम। Types of nouns with examples.', status: 'available', link: 'chapters/hi01-sangya.html' },
   { num: 2, hindi: 'लिंग', title: 'Ling (Gender)', emoji: '♂♀', desc: 'पुल्लिंग और स्त्रीलिंग। Masculine and feminine nouns.', status: 'coming' },
@@ -255,6 +273,30 @@ function renderChapters() {
   }).join('');
 }
 
+function renderStories() {
+  const grid = document.getElementById('stories-grid');
+  if (!grid) return;
+  grid.innerHTML = stories.map((s, i) => {
+    const isAvailable = s.status === 'available';
+    const cardClass = isAvailable ? 'card chapter-card available card-interactive fade-in-up' : 'card chapter-card locked fade-in-up';
+    const delay = `delay-${Math.min(i + 1, 4)}`;
+    const onclick = isAvailable ? `onclick="window.location.href='${s.link}'"` : '';
+    const badge = isAvailable
+      ? `<span class="status-badge ready" style="background:#DCFCE7; color:#166534;">🆕 ${s.badge || 'Ready'}</span>`
+      : '<span class="status-badge coming">🔒 जल्द आएगा · Coming Soon</span>';
+    return `
+      <div class="${cardClass} ${delay}" ${onclick}>
+        <div class="chapter-number">${s.num}</div>
+        <span class="chapter-emoji">${s.emoji}</span>
+        <div class="chapter-hindi">${s.hindi}</div>
+        <div class="chapter-title">${s.title}</div>
+        <div class="chapter-desc">${s.desc}</div>
+        ${badge}
+      </div>
+    `;
+  }).join('');
+}
+
 const tips = [
   "संज्ञा (Noun) किसी व्यक्ति, वस्तु, स्थान या प्राणी के नाम को कहते हैं। Example: राम, कुर्सी, दिल्ली, हाथी",
   "क्या आप जानते हैं? हिंदी भाषा देवनागरी लिपि में लिखी जाती है। Hindi is written in the Devanagari script!",
@@ -273,7 +315,7 @@ function showDailyTip() {
   document.getElementById('daily-tip').textContent = tips[dayOfYear % tips.length];
 }
 
-document.addEventListener('DOMContentLoaded', () => { renderChapters(); showDailyTip(); });
+document.addEventListener('DOMContentLoaded', () => { renderStories(); renderChapters(); showDailyTip(); });
 </script>
 
 </body>

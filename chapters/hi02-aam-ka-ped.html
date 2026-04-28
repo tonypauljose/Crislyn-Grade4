@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>आम का पेड़ — Reading Story · Crislyn's Hindi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <link rel="stylesheet" href="../css/themes.css">
+  <link rel="stylesheet" href="../css/pixie.css">
+
+  <script src="../js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="../js/state.js" defer></script>
+  <script src="../js/pixie3d.js" defer></script>
+
+  <style>
+    .hi { font-family: 'Tiro Devanagari Hindi', 'Hind', 'Nunito', sans-serif; }
+    .hi-big { font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700; }
+
+    /* Page header */
+    .page-header {
+      background: linear-gradient(135deg, #B45309, #D97706, #FBBF24);
+      color: white; padding: var(--space-8) 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-header h1 { color: white; margin-bottom: var(--space-2); font-size: 2rem; }
+    .page-header h1 .hi-big { display: block; font-size: 3.2rem; line-height: 1; margin-bottom: 6px; }
+    .page-header p { opacity: 0.95; font-size: var(--text-base); margin: 0; }
+    .back-btn {
+      display: inline-block; margin-top: var(--space-3);
+      background: rgba(255,255,255,0.22); color: white;
+      padding: 6px 16px; border-radius: var(--radius-full); font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.32); }
+
+    /* Don't worry intro card */
+    .intro-card {
+      background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+      border: 3px solid #F59E0B;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      max-width: 880px; margin: var(--space-6) auto;
+      text-align: center;
+    }
+    .intro-card h3 { color: #B45309; margin-bottom: var(--space-3); }
+    .intro-card p { color: #78350F; font-size: var(--text-base); line-height: 1.7; margin: 0 0 var(--space-2); }
+
+    /* Reading controls bar */
+    .reading-controls {
+      position: sticky; top: 12px; z-index: 50;
+      background: white; border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      max-width: 900px; margin: 0 auto var(--space-5);
+      display: flex; gap: var(--space-3); flex-wrap: wrap; align-items: center;
+      box-shadow: var(--shadow-md);
+    }
+    .reading-controls .label {
+      font-weight: 700; color: var(--color-primary-dark);
+      margin-right: 4px; font-size: 0.9rem;
+    }
+    .toggle-btn {
+      padding: 6px 12px; border-radius: var(--radius-full);
+      background: var(--color-bg-alt); color: var(--color-text);
+      font-weight: 700; font-size: 0.85rem;
+      border: 2px solid transparent; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .toggle-btn:hover { transform: translateY(-1px); }
+    .toggle-btn.active {
+      background: #F59E0B; color: white; border-color: #B45309;
+    }
+
+    /* Section titles */
+    .section-title {
+      max-width: 900px; margin: var(--space-8) auto var(--space-4);
+      padding: 0 var(--space-4);
+      display: flex; align-items: center; gap: var(--space-3);
+    }
+    .section-title h2 {
+      font-family: var(--font-heading);
+      color: var(--color-primary-dark);
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    .section-title .hi-big { color: #B45309; font-size: 2rem; }
+    .section-title .badge {
+      background: #FEF3C7; color: #92400E;
+      padding: 4px 12px; border-radius: var(--radius-full);
+      font-size: 0.75rem; font-weight: 800; letter-spacing: 0.5px;
+    }
+
+    /* Vocab grid */
+    .vocab-grid {
+      max-width: 1000px; margin: 0 auto; padding: 0 var(--space-4);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-4);
+    }
+    .vocab-card {
+      background: white; border: 3px solid #FCD34D;
+      border-radius: var(--radius-lg);
+      padding: var(--space-4); text-align: center;
+      display: flex; flex-direction: column; gap: 6px; align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .vocab-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(245,158,11,0.25); }
+    .vocab-card .v-emoji { font-size: 2.6rem; line-height: 1; }
+    .vocab-card .v-hi {
+      font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
+      font-size: 1.9rem; color: #92400E; line-height: 1.1;
+    }
+    .vocab-card .v-roman {
+      font-style: italic; font-weight: 600; color: #A16207; font-size: 0.85rem;
+    }
+    .vocab-card .v-en {
+      font-weight: 800; color: #1E1B4B; font-size: 1rem;
+    }
+    .speak-btn {
+      background: #F59E0B; color: white; border: none;
+      width: 38px; height: 38px; border-radius: 50%;
+      cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; margin-top: 4px;
+    }
+    .speak-btn:hover { background: #D97706; transform: scale(1.1); }
+    .speak-btn:active { transform: scale(0.95); }
+    .speak-btn.speaking { background: #10B981; animation: pulse 1s infinite; }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,0.6); }
+      50%      { transform: scale(1.06); box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+    }
+
+    /* Scene card */
+    .scene {
+      max-width: 900px; margin: 0 auto var(--space-6);
+      background: white; border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .scene__head {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      padding: var(--space-4) var(--space-5);
+      display: flex; align-items: center; gap: var(--space-4);
+      border-bottom: 2px solid #FCD34D;
+    }
+    .scene__head .scene-emoji { font-size: 2.5rem; }
+    .scene__head .scene-titles { flex: 1; min-width: 0; }
+    .scene__head .scene-hi {
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: 1.4rem; color: #92400E; line-height: 1.2; font-weight: 700;
+    }
+    .scene__head .scene-en {
+      font-size: 0.9rem; color: #78350F; font-weight: 700;
+    }
+    .scene__head .play-scene-btn {
+      background: #B45309; color: white; border: none;
+      padding: 8px 14px; border-radius: var(--radius-full);
+      font-weight: 800; font-size: 0.85rem; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    .scene__head .play-scene-btn:hover { background: #78350F; transform: translateY(-1px); }
+    .scene__head .play-scene-btn.playing { background: #10B981; }
+
+    .scene__body { padding: var(--space-3); display: flex; flex-direction: column; }
+
+    .sentence {
+      display: flex; gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      transition: background 0.3s;
+      align-items: flex-start;
+    }
+    .sentence:hover { background: #FFFBEB; }
+    .sentence.current {
+      background: #DCFCE7;
+      box-shadow: inset 4px 0 0 #16A34A;
+    }
+    .sentence .sent-num {
+      flex: 0 0 36px;
+      width: 36px; height: 36px;
+      background: #FED7AA; color: #9A3412;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.85rem;
+      margin-top: 2px;
+    }
+    .sentence.current .sent-num { background: #16A34A; color: white; }
+    .sentence .sent-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .sentence .s-hi {
+      font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
+      font-size: 1.4rem; color: #1E1B4B; line-height: 1.5;
+    }
+    .sentence .s-roman {
+      font-style: italic; font-weight: 600;
+      color: #6B21A8; font-size: 0.95rem; line-height: 1.4;
+    }
+    .sentence .s-en {
+      font-size: 0.95rem; color: #4B5563; font-weight: 600; line-height: 1.4;
+    }
+    .sentence .speak-btn { flex: 0 0 38px; align-self: flex-start; margin-top: 2px; }
+
+    /* Hide Roman / English when toggled off */
+    body.hide-roman .s-roman { display: none; }
+    body.hide-en    .s-en    { display: none; }
+
+    /* Big play-everything button */
+    .play-all-row {
+      max-width: 900px; margin: var(--space-6) auto;
+      text-align: center; padding: 0 var(--space-4);
+    }
+    .play-all-btn {
+      background: linear-gradient(135deg, #16A34A, #22C55E);
+      color: white; border: none;
+      padding: 14px 28px; border-radius: var(--radius-full);
+      font-weight: 800; font-size: 1.1rem; cursor: pointer;
+      box-shadow: 0 6px 20px rgba(22,163,74,0.35);
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.2s;
+    }
+    .play-all-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22,163,74,0.45); }
+    .play-all-btn.playing { background: linear-gradient(135deg, #B91C1C, #EF4444); }
+
+    /* Comprehension card */
+    .comp-card {
+      max-width: 900px; margin: 0 auto var(--space-5);
+      background: white; border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+    }
+    .comp-q { font-weight: 700; color: var(--color-text); margin-bottom: var(--space-3); font-size: var(--text-base); }
+    .comp-options { display: flex; flex-direction: column; gap: var(--space-2); }
+    .comp-option {
+      padding: var(--space-3) var(--space-4);
+      border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+      cursor: pointer; font-weight: 600;
+      background: white; transition: all 0.2s;
+    }
+    .comp-option:hover { border-color: var(--color-primary-light); background: var(--color-surface-hover); }
+    .comp-option.is-correct { border-color: #16A34A; background: #DCFCE7; color: #166534; }
+    .comp-option.is-wrong   { border-color: #EF4444; background: #FEE2E2; color: #991B1B; }
+    .comp-feedback {
+      margin-top: var(--space-3); padding: var(--space-3);
+      background: #FEF3C7; border-radius: var(--radius-sm);
+      font-weight: 600; color: #78350F; display: none;
+    }
+    .comp-feedback.show { display: block; }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+      margin-top: var(--space-8);
+    }
+
+    /* ----------------------- ACTIVITIES ----------------------- */
+    .activity-card {
+      max-width: 900px; margin: 0 auto var(--space-5);
+      background: white; border: 2px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--space-5);
+    }
+    .activity-card h3 {
+      font-family: var(--font-heading); color: var(--color-primary-dark);
+      margin: 0 0 var(--space-2); font-size: 1.3rem;
+    }
+    .activity-card .activity-sub {
+      color: var(--color-text-light); font-size: 0.95rem;
+      margin: 0 0 var(--space-4); line-height: 1.5;
+    }
+    .activity-actions {
+      display: flex; gap: var(--space-3); flex-wrap: wrap;
+      margin-top: var(--space-4); justify-content: center;
+    }
+    .act-btn {
+      padding: 8px 18px; border-radius: var(--radius-full);
+      font-weight: 800; font-size: 0.9rem; cursor: pointer;
+      border: 2px solid transparent; transition: all 0.15s;
+    }
+    .act-btn-primary { background: #B45309; color: white; }
+    .act-btn-primary:hover { background: #78350F; transform: translateY(-1px); }
+    .act-btn-secondary { background: var(--color-bg-alt); color: var(--color-text); }
+    .act-btn-secondary:hover { background: var(--color-border); }
+    .activity-feedback {
+      margin-top: var(--space-3); padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-sm); font-weight: 700;
+      display: none;
+    }
+    .activity-feedback.show { display: block; }
+    .activity-feedback.ok   { background: #DCFCE7; color: #166534; border: 2px solid #16A34A; }
+    .activity-feedback.bad  { background: #FEE2E2; color: #991B1B; border: 2px solid #EF4444; }
+
+    /* Activity 1 — Sequence */
+    .seq-list { display: flex; flex-direction: column; gap: var(--space-2); }
+    .seq-item {
+      display: flex; align-items: center; gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: #FFFBEB; border: 2px solid #FCD34D;
+      border-radius: var(--radius-md); cursor: pointer;
+      transition: all 0.15s;
+    }
+    .seq-item:hover { background: #FEF3C7; transform: translateX(2px); }
+    .seq-item .seq-pos {
+      flex: 0 0 38px; width: 38px; height: 38px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      background: white; border: 2px dashed #B45309; color: #B45309;
+      font-weight: 800; font-size: 1rem;
+    }
+    .seq-item.assigned .seq-pos { background: #B45309; color: white; border-style: solid; }
+    .seq-item.is-correct { background: #DCFCE7; border-color: #16A34A; }
+    .seq-item.is-correct .seq-pos { background: #16A34A; border-color: #16A34A; }
+    .seq-item.is-wrong { background: #FEE2E2; border-color: #EF4444; }
+    .seq-item.is-wrong .seq-pos { background: #EF4444; border-color: #EF4444; color: white; }
+    .seq-item .seq-text { flex: 1; min-width: 0; }
+    .seq-item .seq-hi { font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700; font-size: 1.1rem; color: #92400E; line-height: 1.4; }
+    .seq-item .seq-en { font-size: 0.85rem; color: #78350F; font-weight: 600; }
+
+    /* Activity 2 / 6 — Bucket sorting */
+    .chip-pool {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: var(--space-3); background: #FFFBEB;
+      border: 2px dashed #FCD34D; border-radius: var(--radius-md);
+      min-height: 60px; margin-bottom: var(--space-4);
+    }
+    .chip {
+      padding: 8px 14px; border-radius: var(--radius-full);
+      background: white; border: 2px solid #B45309;
+      color: #92400E; font-weight: 700;
+      font-family: 'Tiro Devanagari Hindi', serif; font-size: 1rem;
+      cursor: pointer; transition: all 0.15s;
+      user-select: none;
+    }
+    .chip:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .chip.is-selected { background: #B45309; color: white; box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.25); }
+    .chip.placed { opacity: 0.55; pointer-events: none; }
+    .buckets {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-3);
+    }
+    .bucket {
+      background: var(--color-surface); border: 2px solid var(--color-border);
+      border-radius: var(--radius-md); padding: var(--space-3);
+      min-height: 120px; display: flex; flex-direction: column; gap: 8px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .bucket:hover { border-color: var(--color-primary-light); background: var(--color-surface-hover); }
+    .bucket.bucket--ready { border-color: #B45309; background: #FFFBEB; }
+    .bucket .bucket-label {
+      font-weight: 800; color: var(--color-primary-dark);
+      text-align: center; font-size: 0.9rem;
+      padding: 6px; border-bottom: 2px solid var(--color-border-light);
+    }
+    .bucket .bucket-items { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bucket .bucket-item {
+      padding: 4px 10px; border-radius: var(--radius-full);
+      background: white; font-weight: 700; font-size: 0.85rem;
+      font-family: 'Tiro Devanagari Hindi', serif;
+      border: 1px solid var(--color-border);
+    }
+    .bucket .bucket-item.is-ok  { background: #DCFCE7; border-color: #16A34A; color: #166534; }
+    .bucket .bucket-item.is-bad { background: #FEE2E2; border-color: #EF4444; color: #991B1B; }
+
+    /* Activity 3 — Adjective matching */
+    .adj-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-3); }
+    .adj-row {
+      background: #FFFBEB; border: 2px solid #FCD34D;
+      border-radius: var(--radius-md); padding: var(--space-3) var(--space-4);
+    }
+    .adj-row .adj-prompt {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
+      color: #92400E; font-size: 1.1rem; margin-bottom: var(--space-2);
+    }
+    .adj-row .adj-prompt small { font-style: italic; font-size: 0.8rem; color: #A16207; }
+    .adj-row .adj-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .adj-opt {
+      padding: 6px 14px; border-radius: var(--radius-full);
+      background: white; border: 2px solid #FCD34D;
+      cursor: pointer; font-weight: 700; font-size: 0.95rem;
+      font-family: 'Tiro Devanagari Hindi', serif; color: #92400E;
+      transition: all 0.15s;
+    }
+    .adj-opt:hover { transform: translateY(-1px); }
+    .adj-opt.is-correct { background: #DCFCE7; border-color: #16A34A; color: #166534; }
+    .adj-opt.is-wrong   { background: #FEE2E2; border-color: #EF4444; color: #991B1B; }
+
+    /* Activity 4 — काम vs नाम */
+    .word-pick-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--space-3);
+    }
+    .word-pick {
+      background: #FFFBEB; border: 2px solid #FCD34D;
+      border-radius: var(--radius-md); padding: var(--space-3);
+      text-align: center;
+    }
+    .word-pick .wp-hi {
+      font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
+      font-size: 1.4rem; color: #92400E; margin-bottom: 4px;
+    }
+    .word-pick .wp-en { font-size: 0.85rem; color: #78350F; margin-bottom: 8px; font-weight: 600; }
+    .word-pick .wp-buttons { display: flex; gap: 6px; justify-content: center; }
+    .word-pick .wp-btn {
+      padding: 6px 14px; border-radius: var(--radius-full);
+      background: white; border: 2px solid #B45309; color: #92400E;
+      font-weight: 800; font-size: 0.85rem; cursor: pointer;
+    }
+    .word-pick .wp-btn:hover { background: #FEF3C7; }
+    .word-pick.locked .wp-btn { pointer-events: none; opacity: 0.6; }
+    .word-pick .wp-btn.is-correct { background: #16A34A; color: white; border-color: #16A34A; }
+    .word-pick .wp-btn.is-wrong   { background: #EF4444; color: white; border-color: #EF4444; }
+
+    /* Activity 5 — Maze */
+    .maze {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 6px; max-width: 540px; margin: 0 auto;
+    }
+    .maze-cell {
+      aspect-ratio: 1; padding: 6px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: #FFFBEB; border: 2px solid #FCD34D;
+      border-radius: var(--radius-sm);
+      cursor: pointer; transition: all 0.15s;
+      text-align: center;
+    }
+    .maze-cell .mc-emoji { font-size: 1.4rem; line-height: 1; }
+    .maze-cell .mc-hi {
+      font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
+      font-size: 0.78rem; color: #92400E; line-height: 1.1;
+    }
+    .maze-cell:hover { transform: scale(1.04); }
+    .maze-cell.is-fruit-found {
+      background: #DCFCE7; border-color: #16A34A;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+    }
+    .maze-cell.is-veg-tap { animation: shake 0.4s; background: #FEE2E2; border-color: #EF4444; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+    .maze-counter {
+      text-align: center; margin: var(--space-3) 0;
+      font-weight: 800; color: var(--color-primary-dark);
+      font-size: 1.1rem;
+    }
+    .maze-counter strong { color: #16A34A; }
+
+    /* Activity 7 — Riddles */
+    .riddle-card-inner {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border: 3px dashed #D97706; border-radius: var(--radius-lg);
+      padding: var(--space-5); margin-bottom: var(--space-4);
+    }
+    .riddle-card-inner .riddle-hi {
+      font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
+      font-size: 1.2rem; color: #78350F; line-height: 1.7;
+      text-align: center; margin-bottom: var(--space-3);
+    }
+    .riddle-card-inner .riddle-en {
+      font-size: 0.9rem; color: #92400E; font-style: italic;
+      text-align: center; margin-bottom: var(--space-3);
+    }
+    .riddle-options { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .riddle-opt {
+      padding: 8px 16px; border-radius: var(--radius-full);
+      background: white; border: 2px solid #D97706;
+      font-weight: 800; cursor: pointer;
+      font-family: 'Tiro Devanagari Hindi', serif;
+      font-size: 1rem; color: #92400E;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.15s;
+    }
+    .riddle-opt:hover { transform: translateY(-1px); }
+    .riddle-opt.is-correct { background: #16A34A; color: white; border-color: #16A34A; }
+    .riddle-opt.is-wrong   { background: #EF4444; color: white; border-color: #EF4444; }
+
+    @media (max-width: 640px) {
+      .page-header h1 .hi-big { font-size: 2.4rem; }
+      .vocab-grid { grid-template-columns: repeat(2, 1fr); }
+      .sentence .s-hi { font-size: 1.2rem; }
+      .scene__head { flex-wrap: wrap; }
+      .reading-controls { gap: 8px; padding: var(--space-2) var(--space-3); }
+      .toggle-btn { padding: 4px 10px; font-size: 0.78rem; }
+      .maze { max-width: 100%; }
+      .maze-cell .mc-hi { font-size: 0.65rem; }
+      .maze-cell .mc-emoji { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <h1>
+      <span class="hi-big">आम का पेड़</span>
+      The Mango Tree
+    </h1>
+    <p>Reading Story · Read together with Crislyn · Tap any 🔊 to hear Hindi</p>
+    <a href="../hindi.html" class="back-btn">← Back to Hindi</a>
+  </div>
+</div>
+
+<!-- Don't worry intro -->
+<div class="container">
+  <div class="intro-card fade-in-up">
+    <div style="font-size: 2.5rem; margin-bottom: 4px;">🌸</div>
+    <h3>Don't worry, Crislyn — let's read this together!</h3>
+    <p>This is the story of <strong class="hi-big">सौरभ</strong> (<em>Saurabh</em>), a boy who plants a mango seed. We'll read it <strong>one sentence at a time</strong>.</p>
+    <p>Every line shows you three things: the <strong>Hindi</strong> (big), how to <strong>say it</strong> (in English letters), and what it <strong>means</strong>. Tap the 🔊 button on any line to hear it.</p>
+    <p>👇 Start with the words below — meet them once, and you'll spot them all over the story!</p>
+  </div>
+</div>
+
+<!-- Reading controls -->
+<div class="container">
+  <div class="reading-controls fade-in">
+    <span class="label">Show:</span>
+    <button class="toggle-btn active" id="tg-roman" onclick="toggleRoman()">🔤 Sound-out (English letters)</button>
+    <button class="toggle-btn active" id="tg-en"    onclick="toggleEn()">🌐 English meaning</button>
+    <span class="label" style="margin-left:auto;">Speed:</span>
+    <button class="toggle-btn active" id="tg-speed" onclick="toggleSpeed()">🐢 Slow (best for now)</button>
+  </div>
+</div>
+
+<!-- Vocabulary preview -->
+<div class="section-title">
+  <span style="font-size:2rem;">🔤</span>
+  <h2>New Words · <span class="hi-big">नए शब्द</span></h2>
+  <span class="badge">12 WORDS</span>
+</div>
+<div class="vocab-grid" id="vocab-grid"></div>
+
+<!-- Scene 1 -->
+<div class="section-title" style="margin-top: var(--space-10);">
+  <span style="font-size:2rem;">📖</span>
+  <h2>The Story · <span class="hi-big">कहानी</span></h2>
+  <span class="badge">3 SCENES</span>
+</div>
+
+<div id="story-host"></div>
+
+<!-- Play the whole story -->
+<div class="play-all-row">
+  <button class="play-all-btn" id="play-all-btn" onclick="playAll()">
+    <span id="play-all-icon">▶️</span>
+    <span id="play-all-text">Read the whole story to me</span>
+  </button>
+  <p style="margin-top: var(--space-2); font-size: 0.85rem; color: var(--color-text-light);">
+    The current sentence will glow green so you know where we are.
+  </p>
+</div>
+
+<!-- Comprehension -->
+<div class="section-title">
+  <span style="font-size:2rem;">🎯</span>
+  <h2>Did you get it?</h2>
+  <span class="badge">5 QUESTIONS</span>
+</div>
+
+<div class="container" id="comp-host"></div>
+
+<!-- ============================================================
+     ACTIVITIES · गतिविधियाँ
+     ============================================================ -->
+<div class="section-title" style="margin-top: var(--space-10);">
+  <span style="font-size:2rem;">🎨</span>
+  <h2>Activities · <span class="hi-big">गतिविधियाँ</span></h2>
+  <span class="badge">7 ACTIVITIES</span>
+</div>
+
+<div class="container">
+
+  <!-- Activity 1: Sequence -->
+  <div class="activity-card fade-in-up">
+    <h3>1. <span class="hi-big">गुठली की बुआई का क्रम</span> · Order of Planting</h3>
+    <p class="activity-sub">Saurabh did 8 things to plant his mango seed. <strong>Tap them in the right order!</strong> The number you tap will appear on each card.</p>
+    <div class="seq-list" id="seq-list"></div>
+    <div class="activity-actions">
+      <button class="act-btn act-btn-secondary" onclick="seqReset()">↻ Reset</button>
+      <button class="act-btn act-btn-primary" onclick="seqCheck()">✓ Check</button>
+    </div>
+    <div class="activity-feedback" id="seq-fb"></div>
+  </div>
+
+  <!-- Activity 2: Sort fruits / grains / vegetables -->
+  <div class="activity-card fade-in-up">
+    <h3>2. <span class="hi-big">फल · अनाज · सब्ज़ी</span> · Sort into Baskets</h3>
+    <p class="activity-sub">Tap a word, then tap the right basket. Fruits go in 🥭, grains in 🌾, vegetables in 🥕.</p>
+    <div class="chip-pool" id="sort-pool"></div>
+    <div class="buckets" id="sort-buckets"></div>
+    <div class="activity-actions">
+      <button class="act-btn act-btn-secondary" onclick="sortReset()">↻ Reset</button>
+    </div>
+  </div>
+
+  <!-- Activity 3: Adjective matching -->
+  <div class="activity-card fade-in-up">
+    <h3>3. <span class="hi-big">विशेषता</span> · Match the Describing Word</h3>
+    <p class="activity-sub">In the story, each describing word goes with one thing. <strong>मीठे</strong> goes with… आम (sweet mangoes)! Find the right friend for each word below.</p>
+    <div class="adj-grid" id="adj-grid"></div>
+  </div>
+
+  <!-- Activity 4: काम vs नाम -->
+  <div class="activity-card fade-in-up">
+    <h3>4. <span class="hi-big">काम वाले शब्द</span> या <span class="hi-big">नाम वाले शब्द</span>?</h3>
+    <p class="activity-sub">Look at each word from the story. Is it a <strong>doing word</strong> (काम / verb) or a <strong>naming word</strong> (नाम / noun)? Tap the right answer.</p>
+    <div class="word-pick-grid" id="words-grid"></div>
+  </div>
+
+  <!-- Activity 5: With pit / without pit -->
+  <div class="activity-card fade-in-up">
+    <h3>5. <span class="hi-big">गुठली वाले फल</span> या <span class="hi-big">बिना गुठली वाले फल</span>?</h3>
+    <p class="activity-sub">A <strong>गुठली</strong> is a big, hard pit (like a mango pit). Some fruits have one big pit, others don't. Sort these fruits!</p>
+    <div class="chip-pool" id="pit-pool"></div>
+    <div class="buckets" id="pit-buckets"></div>
+    <div class="activity-actions">
+      <button class="act-btn act-btn-secondary" onclick="pitReset()">↻ Reset</button>
+    </div>
+  </div>
+
+  <!-- Activity 6: Maze -->
+  <div class="activity-card fade-in-up">
+    <h3>6. <span class="hi-big">भूलभुलैया</span> · Help Priya Through the Fruit Maze</h3>
+    <p class="activity-sub">Tap <strong>only the fruits</strong> to get from <span class="hi-big" style="color:#16A34A;">सेब</span> (apple) to <span class="hi-big" style="color:#16A34A;">अंगूर</span> (grapes). If you tap a vegetable, it'll shake red!</p>
+    <div class="maze" id="maze"></div>
+    <div class="maze-counter" id="maze-counter">Fruits found: <strong>0</strong> / 12</div>
+  </div>
+
+  <!-- Activity 7: Riddles -->
+  <div class="activity-card fade-in-up">
+    <h3>7. <span class="hi-big">बूझो तो जानें</span> · Solve the Riddles</h3>
+    <p class="activity-sub">Read the riddle. Which fruit is it about? Tap the answer!</p>
+    <div id="riddle-host"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · <a href="../hindi.html">हिंदी Home</a> · <a href="../index.html">Portal</a></p>
+  </div>
+</div>
+
+<script src="../js/common.js"></script>
+<script>
+// ============================================================
+// VOCABULARY (12 key words from the story, met BEFORE reading)
+// ============================================================
+const VOCAB = [
+  { hi: 'आम',     roman: 'aam',      en: 'Mango',          emoji: '🥭' },
+  { hi: 'पेड़',    roman: 'ped',      en: 'Tree',           emoji: '🌳' },
+  { hi: 'पौधा',   roman: 'paudha',   en: 'Plant / Sapling', emoji: '🌱' },
+  { hi: 'गुठली',   roman: 'guthli',   en: 'Seed (mango pit)', emoji: '🌰' },
+  { hi: 'बगीचा',  roman: 'bagicha',  en: 'Garden',         emoji: '🌷' },
+  { hi: 'पानी',   roman: 'paani',    en: 'Water',          emoji: '💧' },
+  { hi: 'मिट्टी',  roman: 'mitti',    en: 'Soil',           emoji: '🪴' },
+  { hi: 'वर्षा',   roman: 'varsha',   en: 'Rain',           emoji: '🌧️' },
+  { hi: 'चाचाजी', roman: 'chachaji', en: 'Uncle (father\'s brother)', emoji: '👨' },
+  { hi: 'पिताजी', roman: 'pitaji',   en: 'Father',         emoji: '👨‍👧' },
+  { hi: 'बहन',    roman: 'bahan',    en: 'Sister',         emoji: '👧' },
+  { hi: 'मीठा',   roman: 'meetha',   en: 'Sweet',          emoji: '🍭' }
+];
+
+// ============================================================
+// STORY (broken into 3 scenes, sentence-by-sentence)
+// ============================================================
+const STORY = [
+  {
+    sceneHi: 'दृश्य 1: चाचाजी ने आम भेजे',
+    sceneEn: 'Scene 1: Uncle sends mangoes',
+    emoji: '🥭',
+    sentences: [
+      { hi: 'गरमियों के दिन थे।', roman: 'Garmiyon ke din the.', en: 'It was the days of summer.' },
+      { hi: 'सौरभ के चाचाजी ने अपने बगीचे के एक टोकरी आम भेजे।', roman: 'Saurabh ke chachaji ne apne bagiche ke ek tokri aam bheje.', en: 'Saurabh\'s uncle sent a basket of mangoes from his garden.' },
+      { hi: 'आम बहुत मीठे थे।', roman: 'Aam bahut meethe the.', en: 'The mangoes were very sweet.' },
+      { hi: 'सौरभ को आम बहुत अच्छे लगे।', roman: 'Saurabh ko aam bahut acche lage.', en: 'Saurabh liked the mangoes very much.' },
+      { hi: 'उसने सोचा — ऐसे ही आम मैं अपने बगीचे में लगाऊँगा।', roman: 'Usne socha — aise hi aam main apne bagiche mein lagaaunga.', en: 'He thought — I will plant such mangoes in my own garden.' }
+    ]
+  },
+  {
+    sceneHi: 'दृश्य 2: सौरभ ने गुठली बोई',
+    sceneEn: 'Scene 2: Saurabh plants the seed',
+    emoji: '🌱',
+    sentences: [
+      { hi: 'उसने बगीचे में एक जगह थोड़ी मिट्टी खोदी।', roman: 'Usne bagiche mein ek jagah thodi mitti khodi.', en: 'He dug a little soil in one spot in the garden.' },
+      { hi: 'वहाँ आम की एक गुठली डाल दी।', roman: 'Vahaan aam ki ek guthli daal di.', en: 'There he placed one mango seed.' },
+      { hi: 'गुठली पर मिट्टी डालकर उसने थोड़ा पानी छिड़क दिया।', roman: 'Guthli par mitti daalkar usne thoda paani chhidak diya.', en: 'After putting soil over the seed, he sprinkled a little water.' },
+      { hi: 'वह प्रतिदिन सुबह वहाँ पानी डालता।', roman: 'Vah pratidin subah vahaan paani daalta.', en: 'Every morning he would pour water there.' },
+      { hi: 'कुछ दिन बीत गए। आम का पौधा नहीं निकला।', roman: 'Kuchh din beet gaye. Aam ka paudha nahin nikla.', en: 'A few days passed. The mango plant did not come up.' },
+      { hi: 'उसने पानी डालना बंद कर दिया।', roman: 'Usne paani daalna band kar diya.', en: 'He stopped pouring water.' }
+    ]
+  },
+  {
+    sceneHi: 'दृश्य 3: पौधा निकला!',
+    sceneEn: 'Scene 3: The plant sprouts!',
+    emoji: '🌳',
+    sentences: [
+      { hi: 'एक दिन हलकी-हलकी वर्षा हो रही थी।', roman: 'Ek din halki-halki varsha ho rahi thi.', en: 'One day, it was raining gently.' },
+      { hi: 'सौरभ घूमता हुआ बगीचे में उसी जगह पर जा पहुँचा।', roman: 'Saurabh ghoomta hua bagiche mein usi jagah par ja pahuncha.', en: 'Wandering around, Saurabh reached that very spot in the garden.' },
+      { hi: 'सामने ही लाल-लाल कोंपलों वाला नन्हा-सा पौधा लगा था।', roman: 'Saamne hi laal-laal kompalon vaala nanha-sa paudha laga tha.', en: 'Right in front, a tiny plant with red-red buds was growing.' },
+      { hi: 'पौधा देखते ही सौरभ प्रसन्न हो उठा।', roman: 'Paudha dekhte hi Saurabh prasann ho utha.', en: 'As soon as he saw the plant, Saurabh became very happy.' },
+      { hi: '"पौधा निकल आया, पौधा निकल आया," कहते-कहते वह अंदर भागा।', roman: '"Paudha nikal aaya, paudha nikal aaya," kahte-kahte vah andar bhaaga.', en: 'Saying "The plant came out! The plant came out!", he ran inside.' },
+      { hi: 'अपनी छोटी बहन प्रिया का हाथ पकड़कर उसे बगीचे में ले आया।', roman: 'Apni chhoti bahan Priya ka haath pakadkar use bagiche mein le aaya.', en: 'Holding his little sister Priya\'s hand, he brought her to the garden.' },
+      { hi: 'पौधा देखकर प्रिया भी खुशी से उछल पड़ी।', roman: 'Paudha dekhkar Priya bhi khushi se uchhal padi.', en: 'Seeing the plant, Priya too jumped with joy.' },
+      { hi: 'सौरभ बोला, "यह पौधा मैंने लगाया है। यह आम का पौधा है। इसमें खूब मीठे आम लगेंगे।"', roman: 'Saurabh bola, "Yeh paudha maine lagaaya hai. Yeh aam ka paudha hai. Ismein khoob meethe aam lagenge."', en: 'Saurabh said, "I planted this plant. This is a mango plant. It will grow lots of sweet mangoes."' },
+      { hi: 'दोनों भागे-भागे पिताजी के पास गए।', roman: 'Donon bhaage-bhaage pitaji ke paas gaye.', en: 'Both of them ran quickly to their father.' },
+      { hi: 'पिताजी बोले, "क्या बात है? आज तुम दोनों बहुत प्रसन्न हो।"', roman: 'Pitaji bole, "Kya baat hai? Aaj tum donon bahut prasann ho."', en: 'Father said, "What\'s the matter? Today you two are very happy."' },
+      { hi: 'प्रिया बोली, "पिताजी, बगीचे में आम का पौधा निकल आया है। अगले वर्ष हम अपने ही पौधे के आम खाएँगे।"', roman: 'Priya boli, "Pitaji, bagiche mein aam ka paudha nikal aaya hai. Agle varsh hum apne hi paudhe ke aam khaayenge."', en: 'Priya said, "Father, a mango plant has come up in the garden. Next year we will eat mangoes from our own plant."' },
+      { hi: 'उसकी बात सुनकर पिताजी हँसे।', roman: 'Uski baat sunkar pitaji hanse.', en: 'Hearing her words, Father laughed.' },
+      { hi: 'वे प्यार से बोले, "छोटे से पौधे को बड़ा होने में बहुत समय लगेगा।"', roman: 'Ve pyaar se bole, "Chhote se paudhe ko bada hone mein bahut samay lagega."', en: 'He said lovingly, "It will take a long time for this small plant to grow big."' },
+      { hi: '"चार-पाँच वर्ष में यह एक बड़ा पेड़ बन जाएगा। इसका तना मोटा होगा। बड़ी-बड़ी शाखाएँ होंगी। तब इसमें आम लगेंगे।"', roman: '"Chaar-paanch varsh mein yeh ek bada ped ban jaayega. Iska tana mota hoga. Badi-badi shaakhaayen hongi. Tab ismein aam lagenge."', en: '"In four-five years it will become a big tree. Its trunk will be thick. There will be big-big branches. Then it will grow mangoes."' },
+      { hi: 'यह सुनकर प्रिया थोड़ी उदास हो गई।', roman: 'Yeh sunkar Priya thodi udaas ho gayi.', en: 'Hearing this, Priya became a little sad.' },
+      { hi: 'पर सौरभ तुरंत बोला, "कोई बात नहीं। हम पौधे की देखभाल करेंगे। एक दिन हम इसके फल अवश्य खाएँगे।"', roman: 'Par Saurabh turant bola, "Koi baat nahin. Hum paudhe ki dekhbhal karenge. Ek din hum iske phal avashya khaayenge."', en: 'But Saurabh quickly said, "Never mind. We will take care of the plant. One day we will surely eat its fruits."' }
+    ]
+  }
+];
+
+// ============================================================
+// COMPREHENSION QUESTIONS — gentle, mostly in English with Hindi quotes
+// ============================================================
+const COMP = [
+  {
+    q: 'Who sent Saurabh a basket of mangoes? <br><span class="hi-big" style="color:#92400E;">सौरभ को आम किसने भेजे?</span>',
+    options: ['His teacher', 'His chachaji (uncle)', 'His friend', 'His mother'],
+    answer: 1,
+    explain: 'सौरभ के <strong class="hi-big">चाचाजी</strong> (chachaji / uncle) ने अपने बगीचे से आम भेजे थे।'
+  },
+  {
+    q: 'What did Saurabh do with one mango seed (<span class="hi-big">गुठली</span>)?',
+    options: ['He threw it away', 'He ate it', 'He planted it in the garden', 'He gave it to Priya'],
+    answer: 2,
+    explain: 'सौरभ ने <strong class="hi-big">गुठली</strong> को बगीचे में मिट्टी में डालकर पानी छिड़का — he planted it!'
+  },
+  {
+    q: 'Why did Saurabh stop watering the spot? <br><span class="hi-big" style="color:#92400E;">सौरभ ने पानी डालना क्यों बंद कर दिया?</span>',
+    options: ['He got tired', 'No plant came up after many days', 'It started raining', 'His mother told him to stop'],
+    answer: 1,
+    explain: 'कुछ दिन बीत गए पर <strong class="hi-big">पौधा नहीं निकला</strong> — the plant didn\'t come up, so he gave up watering.'
+  },
+  {
+    q: 'When did the plant finally come up?',
+    options: ['On a sunny day', 'After Saurabh watered it again', 'On a day when it was gently raining', 'When Priya watered it'],
+    answer: 2,
+    explain: 'एक दिन <strong class="hi-big">हलकी-हलकी वर्षा</strong> हो रही थी — gentle rain helped the seed sprout.'
+  },
+  {
+    q: 'How long did Father say it will take for the plant to become a big mango tree?',
+    options: ['A few days', 'A few months', 'One year', 'Four to five years'],
+    answer: 3,
+    explain: 'पिताजी ने कहा <strong>"चार-पाँच वर्ष में यह एक बड़ा पेड़ बन जाएगा।"</strong> — 4–5 years to grow into a big tree.'
+  }
+];
+
+// ============================================================
+// SPEAK (Web Speech API)
+// ============================================================
+let speechRate = 0.7; // slow by default
+let allBtns = []; // every speak-btn on the page
+function clearSpeakingClass() {
+  allBtns.forEach(b => b.classList.remove('speaking'));
+  document.querySelectorAll('.sentence.current').forEach(s => s.classList.remove('current'));
+}
+
+function speak(text, btn, opts = {}) {
+  if (!('speechSynthesis' in window)) {
+    alert('Sorry! Your browser does not support audio pronunciation.');
+    return Promise.resolve();
+  }
+  return new Promise(resolve => {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'hi-IN';
+    u.rate = opts.rate || speechRate;
+    if (btn) {
+      clearSpeakingClass();
+      btn.classList.add('speaking');
+    }
+    if (opts.highlightEl) {
+      document.querySelectorAll('.sentence.current').forEach(s => s.classList.remove('current'));
+      opts.highlightEl.classList.add('current');
+      opts.highlightEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    u.onend = () => {
+      if (btn) btn.classList.remove('speaking');
+      if (opts.highlightEl) opts.highlightEl.classList.remove('current');
+      resolve();
+    };
+    u.onerror = () => { if (btn) btn.classList.remove('speaking'); resolve(); };
+    window.speechSynthesis.speak(u);
+  });
+}
+
+// ============================================================
+// RENDER VOCAB
+// ============================================================
+function renderVocab() {
+  document.getElementById('vocab-grid').innerHTML = VOCAB.map((w, i) => `
+    <div class="vocab-card fade-in-up" style="animation-delay:${i * 40}ms;">
+      <div class="v-emoji">${w.emoji}</div>
+      <div class="v-hi">${w.hi}</div>
+      <div class="v-roman">${w.roman}</div>
+      <div class="v-en">${w.en}</div>
+      <button class="speak-btn" title="Hear it" data-text="${w.hi} ${w.roman} ${w.en}">🔊</button>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('#vocab-grid .speak-btn').forEach(btn => {
+    btn.addEventListener('click', () => speak(btn.dataset.text, btn));
+  });
+}
+
+// ============================================================
+// RENDER STORY
+// ============================================================
+let sentenceIndex = 0;
+const sceneSentenceRefs = []; // [[sentenceEls...], ...]
+
+function renderStory() {
+  const host = document.getElementById('story-host');
+  let counter = 0;
+  host.innerHTML = STORY.map((scene, si) => `
+    <section class="scene fade-in-up" data-scene="${si}">
+      <header class="scene__head">
+        <span class="scene-emoji">${scene.emoji}</span>
+        <div class="scene-titles">
+          <div class="scene-hi">${scene.sceneHi}</div>
+          <div class="scene-en">${scene.sceneEn}</div>
+        </div>
+        <button class="play-scene-btn" data-scene="${si}">▶️ Play scene</button>
+      </header>
+      <div class="scene__body">
+        ${scene.sentences.map((s) => {
+          counter += 1;
+          return `
+            <div class="sentence" data-idx="${counter - 1}">
+              <div class="sent-num">${counter}</div>
+              <div class="sent-text">
+                <div class="s-hi">${s.hi}</div>
+                <div class="s-roman">${s.roman}</div>
+                <div class="s-en">${s.en}</div>
+              </div>
+              <button class="speak-btn" title="Hear it" data-text="${s.hi}">🔊</button>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </section>
+  `).join('');
+
+  // wire per-sentence speak
+  document.querySelectorAll('.sentence .speak-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sent = btn.closest('.sentence');
+      speak(btn.dataset.text, btn, { highlightEl: sent });
+    });
+  });
+
+  // wire play-scene
+  document.querySelectorAll('.play-scene-btn').forEach(btn => {
+    btn.addEventListener('click', () => playScene(parseInt(btn.dataset.scene, 10), btn));
+  });
+
+  // refresh allBtns cache for clearSpeakingClass()
+  allBtns = Array.from(document.querySelectorAll('.speak-btn'));
+}
+
+async function playScene(sceneIdx, btn) {
+  const scene = STORY[sceneIdx];
+  const sceneEl = document.querySelector(`.scene[data-scene="${sceneIdx}"]`);
+  if (!scene || !sceneEl) return;
+
+  // toggle off if already playing
+  if (btn.classList.contains('playing')) {
+    window.speechSynthesis.cancel();
+    btn.classList.remove('playing');
+    btn.innerHTML = '▶️ Play scene';
+    clearSpeakingClass();
+    return;
+  }
+
+  // stop any other scene that's playing
+  document.querySelectorAll('.play-scene-btn.playing').forEach(b => {
+    b.classList.remove('playing');
+    b.innerHTML = '▶️ Play scene';
+  });
+
+  btn.classList.add('playing');
+  btn.innerHTML = '⏸ Stop';
+  const sentEls = sceneEl.querySelectorAll('.sentence');
+
+  for (let i = 0; i < scene.sentences.length; i++) {
+    if (!btn.classList.contains('playing')) break;
+    await speak(scene.sentences[i].hi, null, { highlightEl: sentEls[i] });
+    await new Promise(r => setTimeout(r, 350));
+  }
+
+  btn.classList.remove('playing');
+  btn.innerHTML = '▶️ Play scene';
+  clearSpeakingClass();
+}
+
+// ============================================================
+// PLAY ENTIRE STORY
+// ============================================================
+async function playAll() {
+  const btn = document.getElementById('play-all-btn');
+  const icon = document.getElementById('play-all-icon');
+  const text = document.getElementById('play-all-text');
+
+  if (btn.classList.contains('playing')) {
+    window.speechSynthesis.cancel();
+    btn.classList.remove('playing');
+    icon.textContent = '▶️';
+    text.textContent = 'Read the whole story to me';
+    clearSpeakingClass();
+    return;
+  }
+
+  btn.classList.add('playing');
+  icon.textContent = '⏸';
+  text.textContent = 'Stop';
+
+  const all = document.querySelectorAll('.sentence');
+  const flat = [];
+  STORY.forEach(s => s.sentences.forEach(x => flat.push(x.hi)));
+
+  for (let i = 0; i < flat.length; i++) {
+    if (!btn.classList.contains('playing')) break;
+    await speak(flat[i], null, { highlightEl: all[i] });
+    await new Promise(r => setTimeout(r, 280));
+  }
+
+  btn.classList.remove('playing');
+  icon.textContent = '▶️';
+  text.textContent = 'Read the whole story to me';
+  clearSpeakingClass();
+}
+
+// ============================================================
+// COMPREHENSION
+// ============================================================
+function renderComp() {
+  const host = document.getElementById('comp-host');
+  host.innerHTML = COMP.map((q, i) => `
+    <div class="comp-card fade-in-up">
+      <div class="comp-q">Q${i + 1}. ${q.q}</div>
+      <div class="comp-options">
+        ${q.options.map((o, j) => `
+          <div class="comp-option" data-q="${i}" data-j="${j}">${String.fromCharCode(65 + j)}. ${o}</div>
+        `).join('')}
+      </div>
+      <div class="comp-feedback" id="fb-${i}"></div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.comp-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const qi = +opt.dataset.q;
+      const ji = +opt.dataset.j;
+      const q = COMP[qi];
+      const card = opt.closest('.comp-card');
+      // lock the card
+      card.querySelectorAll('.comp-option').forEach(o => o.style.pointerEvents = 'none');
+      card.querySelectorAll('.comp-option').forEach((o, idx) => {
+        if (idx === q.answer) o.classList.add('is-correct');
+        else if (idx === ji) o.classList.add('is-wrong');
+      });
+      const fb = document.getElementById('fb-' + qi);
+      const isCorrect = ji === q.answer;
+      fb.innerHTML = (isCorrect ? '✅ <strong>Yes!</strong> ' : '💡 <strong>The right answer is highlighted in green.</strong> ') + q.explain;
+      fb.classList.add('show');
+      if (window.AudioManager) AudioManager.playTone(isCorrect ? 'correct' : 'wrong');
+      if (isCorrect && window.Confetti) Confetti.launch(40);
+      if (isCorrect && window.State && State.addStars) State.addStars(2, 'Reading question right!');
+    });
+  });
+}
+
+// ============================================================
+// TOGGLES
+// ============================================================
+function toggleRoman() {
+  document.body.classList.toggle('hide-roman');
+  document.getElementById('tg-roman').classList.toggle('active');
+}
+function toggleEn() {
+  document.body.classList.toggle('hide-en');
+  document.getElementById('tg-en').classList.toggle('active');
+}
+function toggleSpeed() {
+  speechRate = (speechRate < 0.85) ? 0.95 : 0.7;
+  const btn = document.getElementById('tg-speed');
+  if (speechRate < 0.85) {
+    btn.classList.add('active');
+    btn.innerHTML = '🐢 Slow (best for now)';
+  } else {
+    btn.classList.remove('active');
+    btn.innerHTML = '🚶 Normal speed';
+  }
+}
+
+// ============================================================
+// ACTIVITY 1 — गुठली की बुआई का क्रम (Sequence)
+// ============================================================
+const SEQ = [
+  { hi: 'धरती पर पानी डाला।',                                       en: 'Poured water on the soil.',                  correct: 8 },
+  { hi: 'खुरपी से धरती में गड्ढा खोदा।',                              en: 'Dug a hole with a small spade.',              correct: 4 },
+  { hi: 'गुठली बोने के लिए अपनी माँ से सही स्थान का सुझाव माँगा।',     en: 'Asked mother to suggest the right spot.',     correct: 3 },
+  { hi: 'माता-पिता से गुठली बोने की इच्छा बताई।',                     en: 'Told parents he wanted to plant a seed.',     correct: 1 },
+  { hi: 'बाल्टी में पानी लेकर आया।',                                  en: 'Brought water in a bucket.',                  correct: 7 },
+  { hi: 'माताजी से गुठली बोने की जानकारी ली।',                        en: 'Got info about planting from his mother.',    correct: 2 },
+  { hi: 'गड्ढे में गुठली डालकर उस पर मिट्टी डाली।',                    en: 'Put the seed in the hole and covered with soil.', correct: 6 },
+  { hi: 'गड्ढे में खाद डाली।',                                        en: 'Put manure (fertilizer) in the hole.',        correct: 5 }
+];
+let seqAssigned = new Array(SEQ.length).fill(0); // each item's user-given position
+
+function renderSeq() {
+  const list = document.getElementById('seq-list');
+  list.innerHTML = SEQ.map((s, i) => `
+    <div class="seq-item" data-i="${i}">
+      <div class="seq-pos">—</div>
+      <div class="seq-text">
+        <div class="seq-hi">${s.hi}</div>
+        <div class="seq-en">${s.en}</div>
+      </div>
+    </div>
+  `).join('');
+  list.querySelectorAll('.seq-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const i = +el.dataset.i;
+      if (seqAssigned[i] !== 0) return; // already assigned
+      const nextPos = Math.max(0, ...seqAssigned) + 1;
+      if (nextPos > SEQ.length) return;
+      seqAssigned[i] = nextPos;
+      el.classList.add('assigned');
+      el.querySelector('.seq-pos').textContent = nextPos;
+      if (window.AudioManager) AudioManager.playTone('click');
+    });
+  });
+}
+function seqReset() {
+  seqAssigned = new Array(SEQ.length).fill(0);
+  document.querySelectorAll('#seq-list .seq-item').forEach(el => {
+    el.classList.remove('assigned', 'is-correct', 'is-wrong');
+    el.querySelector('.seq-pos').textContent = '—';
+  });
+  document.getElementById('seq-fb').classList.remove('show');
+}
+function seqCheck() {
+  const fb = document.getElementById('seq-fb');
+  if (seqAssigned.includes(0)) {
+    fb.className = 'activity-feedback show bad';
+    fb.textContent = 'Tap every step first — some are still un-numbered.';
+    return;
+  }
+  let right = 0;
+  document.querySelectorAll('#seq-list .seq-item').forEach(el => {
+    const i = +el.dataset.i;
+    if (seqAssigned[i] === SEQ[i].correct) { el.classList.add('is-correct'); right++; }
+    else el.classList.add('is-wrong');
+  });
+  if (right === SEQ.length) {
+    fb.className = 'activity-feedback show ok';
+    fb.textContent = `🌟 Perfect! All 8 steps in order!`;
+    if (window.Confetti) Confetti.launch(80);
+    if (window.AudioManager) AudioManager.playTone('levelup');
+    if (window.State && State.addStars) State.addStars(5, 'Sequence solved!');
+  } else {
+    fb.className = 'activity-feedback show bad';
+    fb.innerHTML = `${right} / ${SEQ.length} correct. Tap <strong>↻ Reset</strong> and try again — first he TELLS his parents, THEN he learns how to plant.`;
+    if (window.AudioManager) AudioManager.playTone('wrong');
+  }
+}
+
+// ============================================================
+// ACTIVITY 2 — Sort into फल / अनाज / सब्ज़ी
+// ============================================================
+const SORT = {
+  cats: [
+    { id: 'fruit', label: 'फल · Fruits', emoji: '🥭' },
+    { id: 'grain', label: 'अनाज · Grains', emoji: '🌾' },
+    { id: 'veg',   label: 'सब्ज़ी · Vegetables', emoji: '🥕' }
+  ],
+  items: [
+    { hi: 'आम', cat: 'fruit' }, { hi: 'सेब', cat: 'fruit' }, { hi: 'पपीता', cat: 'fruit' },
+    { hi: 'लीची', cat: 'fruit' }, { hi: 'केला', cat: 'fruit' }, { hi: 'अनार', cat: 'fruit' },
+    { hi: 'गेहूँ', cat: 'grain' }, { hi: 'बाजरा', cat: 'grain' }, { hi: 'चावल', cat: 'grain' }, { hi: 'मकई', cat: 'grain' },
+    { hi: 'करेला', cat: 'veg' }, { hi: 'ककड़ी', cat: 'veg' }, { hi: 'आलू', cat: 'veg' },
+    { hi: 'मूली', cat: 'veg' }, { hi: 'लौकी', cat: 'veg' }, { hi: 'बैंगन', cat: 'veg' },
+    { hi: 'गाजर', cat: 'veg' }, { hi: 'पालक', cat: 'veg' }
+  ]
+};
+let sortSelectedIdx = -1;
+function renderSort() {
+  const pool = document.getElementById('sort-pool');
+  pool.innerHTML = SORT.items.map((it, i) => `<div class="chip" data-i="${i}">${it.hi}</div>`).join('');
+  pool.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+    if (c.classList.contains('placed')) return;
+    pool.querySelectorAll('.chip').forEach(x => x.classList.remove('is-selected'));
+    c.classList.add('is-selected');
+    sortSelectedIdx = +c.dataset.i;
+    document.querySelectorAll('#sort-buckets .bucket').forEach(b => b.classList.add('bucket--ready'));
+  }));
+
+  const buckets = document.getElementById('sort-buckets');
+  buckets.innerHTML = SORT.cats.map(c => `
+    <div class="bucket" data-cat="${c.id}">
+      <div class="bucket-label">${c.emoji} ${c.label}</div>
+      <div class="bucket-items"></div>
+    </div>
+  `).join('');
+  buckets.querySelectorAll('.bucket').forEach(b => b.addEventListener('click', () => {
+    if (sortSelectedIdx < 0) return;
+    const it = SORT.items[sortSelectedIdx];
+    const chip = pool.querySelector(`.chip[data-i="${sortSelectedIdx}"]`);
+    const correct = b.dataset.cat === it.cat;
+    const item = document.createElement('div');
+    item.className = 'bucket-item ' + (correct ? 'is-ok' : 'is-bad');
+    item.textContent = it.hi;
+    b.querySelector('.bucket-items').appendChild(item);
+    chip.classList.add('placed'); chip.classList.remove('is-selected');
+    sortSelectedIdx = -1;
+    document.querySelectorAll('#sort-buckets .bucket').forEach(x => x.classList.remove('bucket--ready'));
+    if (window.AudioManager) AudioManager.playTone(correct ? 'correct' : 'wrong');
+    if (correct && window.State && State.addStars) State.addStars(1, 'सही!');
+
+    // all done?
+    const allPlaced = Array.from(pool.querySelectorAll('.chip')).every(x => x.classList.contains('placed'));
+    if (allPlaced && window.Confetti) Confetti.launch(60);
+  }));
+}
+function sortReset() { renderSort(); }
+
+// ============================================================
+// ACTIVITY 3 — विशेषता matching
+// ============================================================
+const ADJ = [
+  { adj: 'मीठे',     en: 'sweet',    correct: 'आम',      en_correct: 'mangoes',  options: ['आम', 'पानी', 'मिट्टी', 'पौधा'] },
+  { adj: 'नन्हा',    en: 'tiny',     correct: 'पौधा',     en_correct: 'plant',    options: ['तना', 'पौधा', 'बहन', 'आम'] },
+  { adj: 'छोटी',     en: 'little',   correct: 'बहन',     en_correct: 'sister',    options: ['पेड़', 'गुठली', 'बहन', 'शाखा'] },
+  { adj: 'बड़ी-बड़ी', en: 'big big', correct: 'शाखाएँ',   en_correct: 'branches',  options: ['पौधा', 'शाखाएँ', 'पानी', 'कोंपलें'] },
+  { adj: 'मोटा',     en: 'thick',    correct: 'तना',     en_correct: 'trunk',     options: ['तना', 'फल', 'मिट्टी', 'पत्ता'] },
+  { adj: 'लाल-लाल',  en: 'red red',  correct: 'कोंपलें',  en_correct: 'buds',      options: ['पानी', 'मिट्टी', 'कोंपलें', 'गुठली'] }
+];
+function renderAdj() {
+  const grid = document.getElementById('adj-grid');
+  grid.innerHTML = ADJ.map((p, i) => `
+    <div class="adj-row" data-i="${i}">
+      <div class="adj-prompt"><span class="hi-big">${p.adj}</span> <small>(${p.en})</small> ___?</div>
+      <div class="adj-options">
+        ${p.options.map(o => `<div class="adj-opt" data-w="${o}">${o}</div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.adj-row').forEach(row => {
+    const i = +row.dataset.i;
+    const p = ADJ[i];
+    row.querySelectorAll('.adj-opt').forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (row.dataset.locked) return;
+        const ok = opt.dataset.w === p.correct;
+        row.querySelectorAll('.adj-opt').forEach(o => {
+          if (o.dataset.w === p.correct) o.classList.add('is-correct');
+          else if (o === opt && !ok) o.classList.add('is-wrong');
+        });
+        row.dataset.locked = '1';
+        if (window.AudioManager) AudioManager.playTone(ok ? 'correct' : 'wrong');
+        if (ok && window.State && State.addStars) State.addStars(2, 'विशेषता मिल गई!');
+      });
+    });
+  });
+}
+
+// ============================================================
+// ACTIVITY 4 — काम vs नाम
+// ============================================================
+const KAAM_NAAM = [
+  { hi: 'खोदना',   en: 'to dig',    kind: 'काम' },
+  { hi: 'सौरभ',    en: 'Saurabh',   kind: 'नाम' },
+  { hi: 'भेजना',   en: 'to send',   kind: 'काम' },
+  { hi: 'चाचाजी',  en: 'uncle',     kind: 'नाम' },
+  { hi: 'भागना',   en: 'to run',    kind: 'काम' },
+  { hi: 'बगीचा',   en: 'garden',    kind: 'नाम' },
+  { hi: 'बोलना',   en: 'to speak',  kind: 'काम' },
+  { hi: 'पौधा',    en: 'plant',     kind: 'नाम' },
+  { hi: 'हँसना',   en: 'to laugh',  kind: 'काम' },
+  { hi: 'प्रिया',  en: 'Priya',     kind: 'नाम' },
+  { hi: 'सुनना',   en: 'to hear',   kind: 'काम' },
+  { hi: 'गुठली',   en: 'seed-pit',  kind: 'नाम' }
+];
+function renderWords() {
+  const grid = document.getElementById('words-grid');
+  grid.innerHTML = KAAM_NAAM.map((w, i) => `
+    <div class="word-pick" data-i="${i}">
+      <div class="wp-hi">${w.hi}</div>
+      <div class="wp-en">${w.en}</div>
+      <div class="wp-buttons">
+        <button class="wp-btn" data-pick="काम">काम (verb)</button>
+        <button class="wp-btn" data-pick="नाम">नाम (noun)</button>
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.word-pick').forEach(card => {
+    const i = +card.dataset.i;
+    const w = KAAM_NAAM[i];
+    card.querySelectorAll('.wp-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        if (card.classList.contains('locked')) return;
+        const ok = b.dataset.pick === w.kind;
+        b.classList.add(ok ? 'is-correct' : 'is-wrong');
+        if (!ok) {
+          // also show the correct one
+          card.querySelector(`.wp-btn[data-pick="${w.kind}"]`).classList.add('is-correct');
+        }
+        card.classList.add('locked');
+        if (window.AudioManager) AudioManager.playTone(ok ? 'correct' : 'wrong');
+        if (ok && window.State && State.addStars) State.addStars(1, w.kind);
+      });
+    });
+  });
+}
+
+// ============================================================
+// ACTIVITY 5 — गुठली वाले / बिना गुठली
+// ============================================================
+const PIT = {
+  cats: [
+    { id: 'pit',  label: 'गुठली वाले फल · With Pit', emoji: '🥭' },
+    { id: 'nopit', label: 'बिना गुठली · Without Pit', emoji: '🍌' }
+  ],
+  items: [
+    { hi: 'आम',         cat: 'pit' },
+    { hi: 'आड़ू',        cat: 'pit' },
+    { hi: 'आलूबुख़ारा',   cat: 'pit' },
+    { hi: 'लीची',        cat: 'pit' },
+    { hi: 'चेरी',        cat: 'pit' },
+    { hi: 'खजूर',        cat: 'pit' },
+    { hi: 'केला',        cat: 'nopit' },
+    { hi: 'सेब',         cat: 'nopit' },
+    { hi: 'अमरूद',       cat: 'nopit' },
+    { hi: 'अंगूर',        cat: 'nopit' }
+  ]
+};
+let pitSelectedIdx = -1;
+function renderPit() {
+  const pool = document.getElementById('pit-pool');
+  pool.innerHTML = PIT.items.map((it, i) => `<div class="chip" data-i="${i}">${it.hi}</div>`).join('');
+  pool.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+    if (c.classList.contains('placed')) return;
+    pool.querySelectorAll('.chip').forEach(x => x.classList.remove('is-selected'));
+    c.classList.add('is-selected');
+    pitSelectedIdx = +c.dataset.i;
+  }));
+
+  const buckets = document.getElementById('pit-buckets');
+  buckets.innerHTML = PIT.cats.map(c => `
+    <div class="bucket" data-cat="${c.id}">
+      <div class="bucket-label">${c.emoji} ${c.label}</div>
+      <div class="bucket-items"></div>
+    </div>
+  `).join('');
+  buckets.querySelectorAll('.bucket').forEach(b => b.addEventListener('click', () => {
+    if (pitSelectedIdx < 0) return;
+    const it = PIT.items[pitSelectedIdx];
+    const chip = pool.querySelector(`.chip[data-i="${pitSelectedIdx}"]`);
+    const correct = b.dataset.cat === it.cat;
+    const item = document.createElement('div');
+    item.className = 'bucket-item ' + (correct ? 'is-ok' : 'is-bad');
+    item.textContent = it.hi;
+    b.querySelector('.bucket-items').appendChild(item);
+    chip.classList.add('placed'); chip.classList.remove('is-selected');
+    pitSelectedIdx = -1;
+    if (window.AudioManager) AudioManager.playTone(correct ? 'correct' : 'wrong');
+    if (correct && window.State && State.addStars) State.addStars(1, 'सही!');
+  }));
+}
+function pitReset() { renderPit(); }
+
+// ============================================================
+// ACTIVITY 6 — Maze
+// ============================================================
+const MAZE_GRID = [
+  // Row 0
+  [{hi:'सेब', e:'🍎', f:1}, {hi:'भिंडी', e:'🥒', f:0}, {hi:'केला', e:'🍌', f:1}, {hi:'तोरी', e:'🥒', f:0}, {hi:'नीबू', e:'🍋', f:1}],
+  // Row 1
+  [{hi:'तरबूज', e:'🍉', f:1}, {hi:'आम', e:'🥭', f:1}, {hi:'पपीता', e:'🥭', f:1}, {hi:'खरबूजा', e:'🍈', f:1}, {hi:'आलू', e:'🥔', f:0}],
+  // Row 2
+  [{hi:'पेठा', e:'🎃', f:0}, {hi:'करेला', e:'🥒', f:0}, {hi:'घीया', e:'🥒', f:0}, {hi:'अनार', e:'🍎', f:1}, {hi:'कद्दू', e:'🎃', f:0}],
+  // Row 3
+  [{hi:'शिमला मिर्च', e:'🫑', f:0}, {hi:'अरबी', e:'🥔', f:0}, {hi:'बैंगन', e:'🍆', f:0}, {hi:'आलूबुख़ारा', e:'🍑', f:1}, {hi:'अनानास', e:'🍍', f:1}],
+  // Row 4
+  [{hi:'कटहल', e:'🥥', f:1}, {hi:'हरी मिर्च', e:'🌶️', f:0}, {hi:'लहसुन', e:'🧄', f:0}, {hi:'अदरक', e:'🫚', f:0}, {hi:'अंगूर', e:'🍇', f:1}]
+];
+let mazeFound = 0;
+const mazeTotalFruits = MAZE_GRID.flat().filter(c => c.f === 1).length;
+
+function renderMaze() {
+  const m = document.getElementById('maze');
+  let html = '';
+  MAZE_GRID.forEach((row, r) => {
+    row.forEach((c, ci) => {
+      html += `<div class="maze-cell" data-r="${r}" data-c="${ci}" data-f="${c.f}">
+                 <div class="mc-emoji">${c.e}</div>
+                 <div class="mc-hi">${c.hi}</div>
+               </div>`;
+    });
+  });
+  m.innerHTML = html;
+  m.querySelectorAll('.maze-cell').forEach(cell => {
+    cell.addEventListener('click', () => {
+      if (cell.classList.contains('is-fruit-found')) return;
+      if (cell.dataset.f === '1') {
+        cell.classList.add('is-fruit-found');
+        mazeFound++;
+        document.querySelector('#maze-counter strong').textContent = mazeFound;
+        if (window.AudioManager) AudioManager.playTone('correct');
+        if (mazeFound === mazeTotalFruits) {
+          if (window.Confetti) Confetti.launch(120);
+          if (window.AudioManager) AudioManager.playTone('levelup');
+          if (window.State && State.addStars) State.addStars(8, 'सब फल मिल गए!');
+          if (window.Toast) Toast.show('Wahooo! Crislyn found every fruit! 🌟', 'success', 4000);
+        }
+      } else {
+        cell.classList.add('is-veg-tap');
+        if (window.AudioManager) AudioManager.playTone('wrong');
+        setTimeout(() => cell.classList.remove('is-veg-tap'), 500);
+      }
+    });
+  });
+}
+
+// ============================================================
+// ACTIVITY 7 — Riddles
+// ============================================================
+const RIDDLES = [
+  {
+    hi: 'लाल-लाल डिबिया के अंदर,<br>छोटे-छोटे पीले खाने।<br>इन खानों के भीतर हैं,<br>सफेद लाल मोती के दाने।',
+    en: 'Inside a red-red box, small yellow chambers. Inside the chambers, white-red pearl-like seeds.',
+    options: ['तरबूज', 'अनार', 'आम', 'सेब'],
+    answer: 1,
+    explainHi: 'अनार · pomegranate',
+    explain: 'It\'s pomegranate (अनार) — red on the outside with hundreds of red-pearly seeds inside!'
+  },
+  {
+    hi: 'ऊपर से तो है हरा,<br>अंदर से है लाल।<br>उतना मीठा रस भरा,<br>जितनी मोटी खाल।',
+    en: 'Green on the outside, red inside. As sweet and juicy as the rind is thick.',
+    options: ['तरबूज', 'अमरूद', 'सेब', 'अनार'],
+    answer: 0,
+    explainHi: 'तरबूज · watermelon',
+    explain: 'It\'s watermelon (तरबूज) — thick green skin, sweet red juicy inside!'
+  }
+];
+function renderRiddles() {
+  const host = document.getElementById('riddle-host');
+  host.innerHTML = RIDDLES.map((r, i) => `
+    <div class="riddle-card-inner" data-i="${i}">
+      <div class="riddle-hi">${r.hi}</div>
+      <div class="riddle-en">${r.en}</div>
+      <div class="riddle-options">
+        ${r.options.map((o, j) => `<button class="riddle-opt" data-j="${j}">${o}</button>`).join('')}
+      </div>
+      <div class="activity-feedback" id="riddle-fb-${i}"></div>
+    </div>
+  `).join('');
+  host.querySelectorAll('.riddle-card-inner').forEach(card => {
+    const i = +card.dataset.i;
+    const r = RIDDLES[i];
+    card.querySelectorAll('.riddle-opt').forEach(b => {
+      b.addEventListener('click', () => {
+        if (card.dataset.locked) return;
+        const j = +b.dataset.j;
+        card.querySelectorAll('.riddle-opt').forEach((opt, idx) => {
+          if (idx === r.answer) opt.classList.add('is-correct');
+          else if (idx === j) opt.classList.add('is-wrong');
+        });
+        const fb = document.getElementById('riddle-fb-' + i);
+        const ok = j === r.answer;
+        fb.className = 'activity-feedback show ' + (ok ? 'ok' : 'bad');
+        fb.innerHTML = (ok ? '🎉 ' : '💡 ') + `<span class="hi-big">${r.explainHi}</span> — ${r.explain}`;
+        card.dataset.locked = '1';
+        if (window.AudioManager) AudioManager.playTone(ok ? 'correct' : 'wrong');
+        if (ok && window.Confetti) Confetti.launch(40);
+        if (ok && window.State && State.addStars) State.addStars(3, 'पहेली सुलझाई!');
+      });
+    });
+  });
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderVocab();
+  renderStory();
+  renderComp();
+  renderSeq();
+  renderSort();
+  renderAdj();
+  renderWords();
+  renderPit();
+  renderMaze();
+  renderRiddles();
+
+  // Pixie greeting (if available)
+  if (window.Pixie && Pixie.say) {
+    setTimeout(() => Pixie.say('Tap any 🔊 — I\'ll read it to you!', 'cheer'), 1200);
+  }
+});
+</script>
+
+</body>
+</html>
