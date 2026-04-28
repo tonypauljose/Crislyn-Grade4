@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📝 Exam Mode — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+  <link rel="stylesheet" href="css/print.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9D%3C/text%3E%3C/svg%3E">
+
+  <!-- Google Analytics -->
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    .navbar {
+      background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
+    }
+    .nav-links { display: flex; gap: var(--space-2); }
+    .nav-link {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .page-hero {
+      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 40%, #A855F7 100%);
+      color: white; padding: var(--space-10) 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-hero > .container { position: relative; z-index: 1; }
+    .page-hero h1 { color: white; margin-bottom: var(--space-2); }
+    .page-hero p { opacity: 0.9; font-size: var(--text-lg); margin-bottom: 0; }
+    .page-hero .breadcrumb { font-size: var(--text-sm); opacity: 0.8; margin-bottom: var(--space-3); }
+    .page-hero .breadcrumb a { color: rgba(255,255,255,0.9); }
+    .page-hero .breadcrumb a:hover { color: white; }
+
+    .rules-section { padding: var(--space-8) 0 var(--space-4); }
+    .rules-card {
+      background: linear-gradient(135deg, #FEF3C7, #FFFBEB);
+      border: 2px solid var(--color-accent);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .rules-card h3 { color: #92400E; margin-bottom: var(--space-3); }
+    .rules-card ul {
+      margin: 0; padding-left: var(--space-6); line-height: 1.8;
+      color: #5C2C0E; font-size: var(--text-base);
+    }
+
+    .chapters-section { padding: var(--space-8) 0 var(--space-10); }
+
+    .subject-block { margin-bottom: var(--space-8); }
+    .subject-block h2 {
+      font-family: var(--font-heading);
+      color: var(--color-primary-dark);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-2);
+      border-bottom: 3px solid var(--color-border);
+      display: flex; align-items: center; gap: var(--space-3);
+    }
+
+    .chapters-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-5);
+    }
+
+    .exam-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      border: 2px solid var(--color-border);
+      cursor: pointer;
+      transition: all var(--duration-normal) var(--ease-bounce);
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column; gap: var(--space-2);
+    }
+    .exam-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(168, 85, 247, 0.05));
+      opacity: 0; transition: opacity var(--duration-normal);
+    }
+    .exam-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-glow); border-color: var(--color-primary); }
+    .exam-card:hover::before { opacity: 1; }
+
+    .exam-card .emoji { font-size: 2.5rem; }
+    .exam-card .subj-tag {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.5px;
+      padding: 3px 10px; border-radius: var(--radius-full);
+      width: fit-content;
+    }
+    .exam-card .subj-maths { background: var(--color-primary-lighter); color: var(--color-primary-dark); }
+    .exam-card .subj-eng   { background: #BFDBFE; color: #1E40AF; }
+    .exam-card .subj-evs   { background: #BBF7D0; color: #166534; }
+    .exam-card .subj-hindi { background: #FED7AA; color: #9A3412; }
+
+    .exam-card .card-title {
+      font-family: var(--font-heading); font-size: var(--text-lg);
+      color: var(--color-text); line-height: 1.2; margin: 0;
+    }
+    .exam-card .card-meta {
+      font-size: 0.85rem; color: var(--color-text-light);
+      display: flex; gap: var(--space-3); flex-wrap: wrap;
+    }
+    .exam-card .card-cta {
+      margin-top: auto;
+      align-self: flex-start;
+      padding: 8px 16px;
+      background: var(--color-primary);
+      color: white;
+      font-weight: 700;
+      border-radius: var(--radius-full);
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .exam-card:hover .card-cta { background: var(--color-primary-dark); }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+    }
+
+    /* Hide picker nav while exam is running */
+    body.exam-running .navbar,
+    body.exam-running .page-hero,
+    body.exam-running .rules-section,
+    body.exam-running .chapters-section,
+    body.exam-running .footer { display: none; }
+
+    .exam-stage { padding: var(--space-5) 0; }
+
+    @media (max-width: 768px) {
+      .chapters-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .chapters-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="exam.html" class="nav-link active">📝 Exam</a>
+      <a href="art-studio.html" class="nav-link">🎨 Art</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb fade-in">
+      <a href="index.html">Home</a> → Exam Mode
+    </div>
+    <h1 class="fade-in-up">📝 Exam Mode</h1>
+    <p class="fade-in-up delay-1">25 questions · 30-minute timer · Pick a chapter and give it a try!</p>
+  </div>
+</div>
+
+<!-- Rules -->
+<div class="rules-section">
+  <div class="container">
+    <div class="rules-card fade-in-up">
+      <h3>📋 How the exam works</h3>
+      <ul>
+        <li><strong>25 questions</strong> — a mix of multiple-choice, true/false and fill-in-the-blank.</li>
+        <li><strong>30-minute timer</strong> at the top. The exam auto-submits when it hits 0:00.</li>
+        <li>You can <strong>jump between questions</strong>, mark some for review, and change your answers any time before you submit.</li>
+        <li>Nothing is graded until you click <strong>Submit</strong>. Then you'll see your marks out of 100, with a friendly review of every question.</li>
+        <li><strong>Optional:</strong> at submit-time you can enter a parent's email and get the result by email — leave blank to skip.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Chapter picker -->
+<div class="chapters-section">
+  <div class="container">
+    <div id="picker-host"></div>
+  </div>
+</div>
+
+<!-- Exam stage (filled when exam starts) -->
+<section class="exam-stage" id="exam-stage" style="display:none;">
+  <div class="container">
+    <div id="exam-host"></div>
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/exam-engine.js"></script>
+<script>
+  // List of chapters with available exam banks.
+  // Add a new entry whenever a new chapter bank is published in /data/.
+  const CHAPTERS = [
+    // Maths
+    { id: 'ch01', subj: 'Maths', subjClass: 'subj-maths', title: 'Numbers',
+      desc: 'Place value, expanded form, comparing, predecessor/successor, Roman numerals.',
+      file: 'data/ch01-numbers.js', bank: 'CH01_BANK', emoji: '🔢', back: 'maths.html' },
+
+    // English
+    { id: 'en01', subj: 'English', subjClass: 'subj-eng', title: 'Kinds of Sentences',
+      desc: 'Declarative, interrogative, exclamatory, imperative — and their punctuation.',
+      file: 'data/en01-sentences.js', bank: 'EN01_BANK', emoji: '📝', back: 'english.html' },
+    { id: 'en02', subj: 'English', subjClass: 'subj-eng', title: 'Nouns',
+      desc: 'Common, proper, collective, abstract & material nouns. Plurals + possessives.',
+      file: 'data/en02-nouns.js', bank: 'EN02_BANK', emoji: '📦', back: 'english.html' },
+
+    // EVS
+    { id: 'ev01', subj: 'EVS', subjClass: 'subj-evs', title: 'Roots, Flowers and Trees',
+      desc: 'Plant parts, tap vs fibrous roots, leaves, flowers, photosynthesis basics.',
+      file: 'data/ev01-plants.js', bank: 'EV01_BANK', emoji: '🌳', back: 'evs.html' },
+
+    // Hindi
+    { id: 'hi01', subj: 'Hindi', subjClass: 'subj-hindi', title: 'संज्ञा (Sangya / Noun)',
+      desc: 'व्यक्ति · प्राणी · स्थान · वस्तु — names of people, animals, places and things.',
+      file: 'data/hi01-sangya.js', bank: 'HI01_BANK', emoji: '✍️', back: 'hindi.html' }
+  ];
+
+  function renderPicker() {
+    // Group by subject in the order they appear above
+    const order = [];
+    const groups = {};
+    for (const ch of CHAPTERS) {
+      if (!groups[ch.subj]) { groups[ch.subj] = []; order.push(ch.subj); }
+      groups[ch.subj].push(ch);
+    }
+    const subjEmoji = { Maths: '🔢', English: '📝', EVS: '🌍', Hindi: '✍️' };
+    const html = order.map(subj => `
+      <section class="subject-block fade-in-up">
+        <h2><span>${subjEmoji[subj] || '📚'}</span> ${subj}</h2>
+        <div class="chapters-grid">
+          ${groups[subj].map(c => `
+            <a class="exam-card" href="?ch=${c.id}">
+              <span class="emoji">${c.emoji}</span>
+              <span class="subj-tag ${c.subjClass}">${c.subj}</span>
+              <h3 class="card-title">${c.title}</h3>
+              <p class="card-meta">25 Q · 30 min · ${c.subj} exam</p>
+              <p style="font-size:0.9rem; color:var(--color-text-light); margin:0;">${c.desc}</p>
+              <span class="card-cta">Start exam →</span>
+            </a>
+          `).join('')}
+        </div>
+      </section>
+    `).join('');
+    document.getElementById('picker-host').innerHTML = html;
+  }
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  async function startExam(chapterId) {
+    const ch = CHAPTERS.find(c => c.id === chapterId);
+    if (!ch) {
+      if (window.Toast) Toast.show('Unknown chapter — back to picker.', 'info');
+      return;
+    }
+    try { await loadScript(ch.file); }
+    catch (err) {
+      if (window.Toast) Toast.show('Could not load exam questions.', 'error');
+      return;
+    }
+    const bank = window[ch.bank];
+    if (!bank || !Array.isArray(bank) || bank.length === 0) {
+      if (window.Toast) Toast.show('Exam bank not found or empty.', 'error');
+      return;
+    }
+
+    document.body.classList.add('exam-running');
+    document.getElementById('exam-stage').style.display = 'block';
+
+    const studentName = (window.State && State.data && State.data.mascotName) ? 'Crislyn' : 'Crislyn';
+    const exam = new ExamEngine({
+      containerId: 'exam-host',
+      subject: ch.subj,
+      chapter: ch.id,
+      chapterTitle: ch.title,
+      bank: bank,
+      count: 25,
+      durationSec: 30 * 60,
+      studentName: studentName,
+      backHref: ch.back || 'learning.html'
+    });
+    exam.start();
+    if (window.AudioManager) AudioManager.playTone('levelup');
+  }
+
+  // Boot
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(location.search);
+    const chParam = params.get('ch');
+    if (chParam) {
+      // Hide picker, show exam directly
+      document.getElementById('picker-host').style.display = 'none';
+      startExam(chParam);
+    } else {
+      renderPicker();
+    }
+  });
+</script>
+
+</body>
+</html>
