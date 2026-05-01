@@ -1052,6 +1052,175 @@
 }
 
 /* ============================================================
+   FRIENDS — surprise greeting for visiting friends
+   ============================================================ */
+
+.friend-modal-overlay { z-index: 5000; }
+.friend-modal {
+  background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 60%, #E9D5FF 100%);
+  max-width: 560px;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  border: 3px solid #C4B5FD;
+}
+.friend-modal__floats {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden;
+}
+.friend-modal__floats span {
+  position: absolute;
+  font-size: 1.8rem;
+  opacity: 0.18;
+  animation: floatY 6s ease-in-out infinite;
+}
+.friend-modal__floats span:nth-child(1) { top: 6%;  left: 6%;  animation-delay: 0s;   }
+.friend-modal__floats span:nth-child(2) { top: 22%; right: 8%; animation-delay: 1s;   }
+.friend-modal__floats span:nth-child(3) { bottom: 28%; left: 5%; animation-delay: 2s; font-size: 1.4rem; }
+.friend-modal__floats span:nth-child(4) { top: 48%; right: 12%; animation-delay: 0.5s; font-size: 1.4rem; }
+.friend-modal__floats span:nth-child(5) { bottom: 10%; right: 5%; animation-delay: 1.5s; }
+.friend-modal__floats span:nth-child(6) { top: 60%; left: 10%; animation-delay: 2.5s; font-size: 1.2rem; }
+.friend-modal__floats span:nth-child(7) { top: 14%; left: 45%; animation-delay: 3.0s; font-size: 1rem; }
+.friend-modal__floats span:nth-child(8) { bottom: 18%; left: 50%; animation-delay: 1.7s; font-size: 1.1rem; }
+@keyframes floatY {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-14px) rotate(3deg); }
+}
+
+.friend-modal__content {
+  position: relative; z-index: 1;
+  padding: var(--space-8) var(--space-6) var(--space-6);
+  text-align: center;
+}
+.friend-modal__eyebrow {
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 1.5px;
+  color: #7C3AED;
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+}
+.friend-modal__title {
+  font-family: var(--font-heading);
+  color: #4C1D95;
+  font-size: 2.2rem;
+  margin: 0 0 var(--space-3);
+  line-height: 1.1;
+}
+.friend-modal__intro {
+  color: var(--color-text);
+  font-size: var(--text-base);
+  margin: 0 0 var(--space-5);
+  line-height: 1.5;
+}
+.friend-modal__facts {
+  display: flex; flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+.friend-fact {
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid #C4B5FD;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  display: flex; align-items: center; gap: var(--space-3);
+  text-align: left;
+  transition: transform 0.2s var(--ease-bounce);
+}
+.friend-fact:hover { transform: translateY(-2px); }
+.friend-fact__icon { font-size: 1.6rem; flex-shrink: 0; }
+.friend-fact__text {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+.friend-modal__sign {
+  background: rgba(255, 255, 255, 0.65);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  color: #4C1D95;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: center;
+}
+.friend-modal__signoff {
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px dashed #C4B5FD;
+}
+.friend-modal__signoff em { color: #7C3AED; font-weight: 700; font-style: italic; }
+.friend-modal__signoff small { color: var(--color-text-light); font-style: italic; }
+.friend-modal__cta {
+  background: linear-gradient(135deg, #7C3AED, #A78BFA);
+  color: white;
+  font-size: 1.05rem;
+}
+.friend-modal__cta:hover {
+  background: linear-gradient(135deg, #6D28D9, #8B5CF6);
+}
+
+/* Welcome-back banner (subtle, dismissible) */
+.friend-welcome-bar {
+  position: fixed;
+  top: 16px; left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: linear-gradient(135deg, #C4B5FD, #A78BFA);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 999px;
+  box-shadow: 0 8px 30px rgba(124, 58, 237, 0.35);
+  font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+  z-index: 4500;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s var(--ease-bounce);
+  max-width: 92vw;
+  font-size: 0.92rem;
+}
+.friend-welcome-bar.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.friend-welcome-bar .fwb__emoji { font-size: 1.2rem; }
+.friend-welcome-bar .fwb__text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.friend-welcome-bar .fwb__notme {
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.friend-welcome-bar .fwb__notme:hover { background: rgba(255, 255, 255, 0.4); }
+.friend-welcome-bar .fwb__close {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  opacity: 0.85;
+}
+.friend-welcome-bar .fwb__close:hover { opacity: 1; }
+
+@media (max-width: 480px) {
+  .friend-modal__title { font-size: 1.7rem; }
+  .friend-modal__content { padding: var(--space-6) var(--space-4) var(--space-4); }
+  .friend-fact { padding: var(--space-2) var(--space-3); }
+  .friend-fact__text { font-size: 0.88rem; }
+  .friend-welcome-bar {
+    font-size: 0.82rem;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .friend-welcome-bar .fwb__text { white-space: normal; }
+}
+
+/* ============================================================
    EXAM MODE
    Sticky timer bar, palette, question card, results review.
    ============================================================ */
