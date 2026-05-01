@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📖 Today's Bible Story — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%96%3C/text%3E%3C/svg%3E">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+  <script src="js/friends.js" defer></script>
+
+  <style>
+    .navbar {
+      background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
+    }
+    .nav-links { display: flex; gap: var(--space-2); }
+    .nav-link {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .bible-hero {
+      text-align: center;
+      padding: var(--space-8) var(--space-4) var(--space-4);
+    }
+    .bible-hero .eyebrow {
+      font-size: 0.85rem; font-weight: 800; letter-spacing: 1.5px;
+      color: #B45309; text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+    .bible-hero h1 {
+      font-family: var(--font-heading);
+      color: #4C1D95; font-size: 2.4rem;
+      margin: 0 0 var(--space-2);
+      line-height: 1.1;
+    }
+    .bible-hero .ref {
+      font-size: 1rem; color: var(--color-text-light); font-weight: 700;
+      font-family: 'Tiro Devanagari Hindi', serif;
+    }
+    .bible-streak {
+      display: inline-block;
+      margin-top: var(--space-3);
+      background: linear-gradient(135deg, #FCD34D, #F59E0B);
+      color: #5C2C0E;
+      padding: 6px 18px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+      margin-top: var(--space-8);
+    }
+    .footer a { color: var(--color-primary); }
+
+    @media (max-width: 600px) {
+      .bible-hero h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="exam.html" class="nav-link">📝 Exam</a>
+      <a href="bible.html" class="nav-link active">📖 Bible</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="bible-hero">
+  <div class="container">
+    <div class="eyebrow" id="bible-greeting">📖 Today's Bible Story</div>
+    <h1 id="bible-title">…</h1>
+    <div class="ref" id="bible-ref">…</div>
+    <div class="bible-streak" id="bible-streak" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- Storybook stage -->
+<section class="container">
+  <div class="storybook" id="storybook">
+    <!-- pages render here -->
+  </div>
+</section>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · <a href="index.html">Home</a> · <a href="learning.html">Learning</a></p>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="data/bible-stories.js"></script>
+<script src="js/bible-of-day.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  let entry = null;
+  let pageIdx = 0;          // 0..N-1 = story pages, N = "story finished" view
+  let isAnimating = false;
+
+  function init() {
+    entry = window.BibleOfDay && BibleOfDay.today();
+    if (!entry) {
+      document.getElementById('storybook').innerHTML = `
+        <div style="text-align:center; padding: var(--space-8);">
+          <div style="font-size:3rem;">📖</div>
+          <h2 style="color: var(--color-text-light);">Today's story is on its way!</h2>
+          <p>Come back in a little while — Crislyn's portal is loading more stories.</p>
+        </div>`;
+      return;
+    }
+    document.getElementById('bible-greeting').textContent = BibleOfDay.greeting();
+    document.getElementById('bible-title').textContent = entry.title || 'Today\'s Story';
+    document.getElementById('bible-ref').textContent = (entry.book || '') + (entry.ref ? ' ' + entry.ref : '');
+
+    const s = BibleOfDay.streak();
+    if (s > 0) {
+      const el = document.getElementById('bible-streak');
+      el.style.display = 'inline-block';
+      el.textContent = (s === 1)
+        ? '🌟 Started a new streak today!'
+        : `🌟 ${s} days in a row — keep it going!`;
+    }
+
+    renderPage();
+  }
+
+  function renderPage() {
+    const stage = document.getElementById('storybook');
+    const total = entry.pages.length;
+
+    if (pageIdx < total) {
+      // Render the storybook page
+      const p = entry.pages[pageIdx];
+      stage.innerHTML = `
+        <div class="storybook-panel" data-bg="${p.bg || 'cream'}">
+          <button class="storybook-listen" type="button" title="Read this page to me">🔊</button>
+          <div class="storybook-illust"><span class="float">${p.emoji || '📖'}</span></div>
+          <div class="storybook-scene">${p.scene || ''}</div>
+          <div class="storybook-text">${escapeHtml(p.text || '')}</div>
+        </div>
+
+        <div class="storybook-nav">
+          <button class="act-btn act-btn-secondary" id="page-back" ${pageIdx === 0 ? 'disabled' : ''}>◀ Back</button>
+          <div class="storybook-dots" id="storybook-dots"></div>
+          <button class="act-btn act-btn-primary" id="page-next">${pageIdx === total - 1 ? 'Finish ✨' : 'Next ▶'}</button>
+        </div>
+      `;
+      // Render dots
+      const dots = document.getElementById('storybook-dots');
+      let dotsHtml = '';
+      for (let i = 0; i < total; i++) {
+        dotsHtml += `<span class="storybook-dot${i === pageIdx ? ' is-current' : ''}" data-i="${i}" tabindex="0" aria-label="Go to page ${i + 1}"></span>`;
+      }
+      dots.innerHTML = dotsHtml;
+
+      // Wire interactions
+      document.getElementById('page-back').addEventListener('click', () => goTo(pageIdx - 1, 'back'));
+      document.getElementById('page-next').addEventListener('click', () => {
+        if (pageIdx === total - 1) goTo(total, 'forward');
+        else goTo(pageIdx + 1, 'forward');
+      });
+      dots.querySelectorAll('.storybook-dot').forEach(d => {
+        d.addEventListener('click', () => goTo(parseInt(d.dataset.i, 10), 'forward'));
+      });
+      stage.querySelector('.storybook-listen').addEventListener('click', () => speakPage(p));
+    } else {
+      // "Story finished" view
+      const alreadyRead = window.BibleOfDay && BibleOfDay.isReadToday();
+      stage.innerHTML = `
+        <div class="storybook-panel storybook-end" data-bg="rainbow">
+          <div class="storybook-end__crown">✨</div>
+          <h2 class="storybook-end__title">You finished today's story!</h2>
+
+          <div class="anchor-card">
+            <div class="anchor-card__label">Verse to remember</div>
+            <div class="anchor-card__text">"${escapeHtml(entry.anchorVerse || '')}"</div>
+            <div class="anchor-card__ref">— ${escapeHtml(entry.anchorRef || '')}</div>
+          </div>
+
+          ${entry.reflection ? `
+            <div class="reflection-card">
+              <span class="reflection-card__icon">💡</span>
+              <span class="reflection-card__text">${escapeHtml(entry.reflection)}</span>
+            </div>` : ''}
+
+          <div class="storybook-end__actions">
+            <button class="act-btn act-btn-primary" id="mark-read-btn">${alreadyRead ? '✓ Already read today' : '⭐ Mark as read'}</button>
+            <button class="act-btn act-btn-secondary" id="reread-btn">🔁 Read it again</button>
+            <a class="act-btn act-btn-secondary" href="index.html">← Back to home</a>
+          </div>
+          <div class="storybook-end__feedback" id="end-feedback"></div>
+        </div>
+      `;
+      const markBtn = document.getElementById('mark-read-btn');
+      if (alreadyRead) markBtn.disabled = true;
+      markBtn.addEventListener('click', onMarkRead);
+      document.getElementById('reread-btn').addEventListener('click', () => { pageIdx = 0; renderPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+  }
+
+  function goTo(target, direction) {
+    if (isAnimating) return;
+    const total = entry.pages.length;
+    if (target < 0 || target > total) return;
+    isAnimating = true;
+    const stage = document.getElementById('storybook');
+    const panel = stage.querySelector('.storybook-panel');
+    if (!panel || (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      pageIdx = target;
+      renderPage();
+      isAnimating = false;
+      return;
+    }
+    panel.classList.add(direction === 'back' ? 'is-leaving-right' : 'is-leaving-left');
+    setTimeout(() => {
+      pageIdx = target;
+      renderPage();
+      const newPanel = stage.querySelector('.storybook-panel');
+      if (newPanel) {
+        newPanel.classList.add(direction === 'back' ? 'is-entering-left' : 'is-entering-right');
+        requestAnimationFrame(() => {
+          newPanel.classList.remove('is-entering-left', 'is-entering-right');
+        });
+      }
+      isAnimating = false;
+    }, 220);
+  }
+
+  function speakPage(page) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(page.text || '');
+    u.lang = 'en-US';
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  }
+
+  function onMarkRead() {
+    if (!window.BibleOfDay) return;
+    const result = BibleOfDay.markRead();
+    const fb = document.getElementById('end-feedback');
+    const btn = document.getElementById('mark-read-btn');
+    if (result.alreadyRead) {
+      fb.textContent = 'Already read today 💜 — see you tomorrow!';
+      fb.className = 'storybook-end__feedback show';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = '✓ Marked as read';
+    fb.innerHTML = (result.streak === 1)
+      ? '🌟 You earned 5 stars! New streak started!'
+      : `🌟 You earned 5 stars! That's <strong>${result.streak} days in a row</strong>!`;
+    fb.className = 'storybook-end__feedback show';
+    if (window.Toast && Toast.show) Toast.show('+5 stars · Bible read!', 'xp', 2500);
+  }
+
+  function escapeHtml(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+</body>
+</html>

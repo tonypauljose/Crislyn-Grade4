@@ -594,6 +594,7 @@
     <div class="nav-links">
       <a href="index.html" class="nav-link">🏠 Home</a>
       <a href="learning.html" class="nav-link">📚 Learn</a>
+      <a href="bible.html" class="nav-link">📖 Bible</a>
       <a href="exam.html" class="nav-link">📝 Exam</a>
       <a href="art-studio.html" class="nav-link" style="background: #FCE7F3; border-color: #F9A8D4; color: #BE185D;">🎨 Art</a>
     </div>
@@ -1097,6 +1098,37 @@
     else setTimeout(tryRenderQuest, 80);
   }
   document.addEventListener('DOMContentLoaded', tryRenderQuest);
+</script>
+
+<!-- TODAY'S BIBLE STORY (storybook reader) -->
+<section class="container" style="padding: 0 16px; margin: 12px auto 24px;">
+  <a href="bible.html" class="bible-card fade-in-up" id="bible-home-card" style="text-decoration: none; cursor: pointer;">
+    <div class="bible-card__emoji" id="bible-card-emoji">📖</div>
+    <div class="bible-card__body">
+      <div class="bible-card__eyebrow">📖 Today's Bible Story</div>
+      <h3 class="bible-card__title" id="bible-card-title">Loading today's story…</h3>
+      <p class="bible-card__preview" id="bible-card-preview"></p>
+      <span class="bible-card__cta">Open the storybook →</span>
+    </div>
+  </a>
+</section>
+<script src="data/bible-stories.js"></script>
+<script src="js/bible-of-day.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!window.BibleOfDay) return;
+    const e = BibleOfDay.today();
+    if (!e) return;
+    const titleEl = document.getElementById('bible-card-title');
+    const previewEl = document.getElementById('bible-card-preview');
+    const emojiEl = document.getElementById('bible-card-emoji');
+    if (titleEl) titleEl.textContent = e.title || 'Today\'s Story';
+    if (previewEl && e.pages && e.pages[0]) {
+      const t = e.pages[0].text || '';
+      previewEl.textContent = t.length > 130 ? t.slice(0, 127).trim() + '…' : t;
+    }
+    if (emojiEl && e.pages && e.pages[0] && e.pages[0].emoji) emojiEl.textContent = e.pages[0].emoji;
+  });
 </script>
 
 <!-- VISITOR: Who is here? -->
