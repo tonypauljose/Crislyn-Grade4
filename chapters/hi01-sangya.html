@@ -526,7 +526,7 @@
 
     <!-- Ex 1: Classify -->
     <div class="exercise-card fade-in-up" id="ex-classify">
-      <h3><span class="exercise-number">1</span> Which type of संज्ञा is it?</h3>
+      <h3><span class="exercise-number">1</span> यह कौन-सी संज्ञा है? <small style="font-weight: 500; color: #6B7280;">(Which type of noun?)</small></h3>
       <p class="text-muted mb-4">Choose व्यक्ति (person), प्राणी (animal), स्थान (place), or वस्तु (thing).</p>
       <div id="ex-classify-questions"></div>
       <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('classify')">Check Answers ✓</button>
@@ -535,7 +535,7 @@
 
     <!-- Ex 2: Hindi to English -->
     <div class="exercise-card fade-in-up delay-1" id="ex-h2e">
-      <h3><span class="exercise-number">2</span> Hindi → English</h3>
+      <h3><span class="exercise-number">2</span> हिंदी से अंग्रेज़ी <small style="font-weight: 500; color: #6B7280;">(Hindi to English)</small></h3>
       <p class="text-muted mb-4">What does each Hindi word mean in English? Tap 🔊 to hear it!</p>
       <div id="ex-h2e-questions"></div>
       <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('h2e')">Check Answers ✓</button>
@@ -544,7 +544,7 @@
 
     <!-- Ex 3: English to Hindi -->
     <div class="exercise-card fade-in-up delay-2" id="ex-e2h">
-      <h3><span class="exercise-number">3</span> English → Hindi</h3>
+      <h3><span class="exercise-number">3</span> अंग्रेज़ी से हिंदी <small style="font-weight: 500; color: #6B7280;">(English to Hindi)</small></h3>
       <p class="text-muted mb-4">Which Hindi word means this in English?</p>
       <div id="ex-e2h-questions"></div>
       <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('e2h')">Check Answers ✓</button>
@@ -553,7 +553,7 @@
 
     <!-- Ex 4: Match the picture -->
     <div class="exercise-card fade-in-up delay-3" id="ex-pic">
-      <h3><span class="exercise-number">4</span> Match the Picture</h3>
+      <h3><span class="exercise-number">4</span> चित्र से मिलाओ <small style="font-weight: 500; color: #6B7280;">(Match the picture)</small></h3>
       <p class="text-muted mb-4">Which Hindi word describes this picture?</p>
       <div id="ex-pic-questions"></div>
       <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('pic')">Check Answers ✓</button>
@@ -571,7 +571,7 @@
 
     <!-- Ex 6: Find the noun in the sentence -->
     <div class="exercise-card fade-in-up delay-5" id="ex-find">
-      <h3><span class="exercise-number">6</span> Find the संज्ञा in the sentence</h3>
+      <h3><span class="exercise-number">6</span> वाक्य में संज्ञा ढूँढो <small style="font-weight: 500; color: #6B7280;">(Find the noun in the sentence)</small></h3>
       <p class="text-muted mb-4">Which word in the sentence is the noun (the name of something)?</p>
       <div id="ex-find-questions"></div>
       <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('find')">Check Answers ✓</button>
@@ -820,9 +820,9 @@ function generateH2EExercise() {
   document.getElementById('ex-h2e-questions').innerHTML = exerciseData.h2e.map((q, i) => `
     <div class="exercise-question" id="h2e-q${i}">
       <div class="q-label">
-        Q${i+1}. What does <span class="hi-big" style="font-size:1.7rem; color:#92400E;">${q.word.hi}</span>
+        Q${i+1}. <span class="hi-big" style="font-size:1.7rem; color:#92400E;">${q.word.hi}</span>
         <span style="font-size:0.85rem; color:#6B7280; font-style:italic;">(${q.word.roman})</span>
-        mean?
+        का अर्थ क्या है? <small style="color:#6B7280;">(What does it mean?)</small>
         <button class="speak-btn" style="width:32px; height:32px; font-size:0.9rem; display:inline-flex; vertical-align:middle; margin-left:8px;" onclick="speak('${q.word.hi}', this)">🔊</button>
       </div>
       <select class="exercise-input" id="h2e-a${i}" style="width: 200px;">
@@ -842,7 +842,7 @@ function generateE2HExercise() {
   });
   document.getElementById('ex-e2h-questions').innerHTML = exerciseData.e2h.map((q, i) => `
     <div class="exercise-question" id="e2h-q${i}">
-      <div class="q-label">Q${i+1}. Which Hindi word means "<strong>${q.word.en}</strong>"?</div>
+      <div class="q-label">Q${i+1}. "<strong>${q.word.en}</strong>" को हिंदी में क्या कहते हैं? <small style="color:#6B7280;">(Which Hindi word means this?)</small></div>
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
         ${q.options.map((o, oi) => `
           <label class="hi-option" style="cursor:pointer;">
@@ -867,7 +867,7 @@ function generatePicExercise() {
   document.getElementById('ex-pic-questions').innerHTML = exerciseData.pic.map((q, i) => `
     <div class="exercise-question" id="pic-q${i}">
       <div class="q-label text-center">
-        Q${i+1}. Which word describes this?
+        Q${i+1}. यह कौन-सा शब्द है? <small style="color:#6B7280;">(Which word is this?)</small>
         <div style="font-size: 4rem; margin: 8px 0;">${q.word.emoji}</div>
       </div>
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
@@ -935,7 +935,7 @@ function generateFindExercise() {
     const options = shuffle([s.noun, ...s.otherWords]);
     return `
       <div class="exercise-question" id="find-q${i}">
-        <div class="q-label">Q${i+1}. Which word in this sentence is a संज्ञा (noun)?</div>
+        <div class="q-label">Q${i+1}. इस वाक्य में संज्ञा कौन-सा शब्द है? <small style="color:#6B7280;">(Which word is the noun?)</small></div>
         <div class="hi-sentence-line">${s.hi}
           <button class="speak-btn" style="width:28px; height:28px; font-size:0.8rem; display:inline-flex; vertical-align:middle; margin-left:8px;" onclick="speak('${s.hi}', this)">🔊</button>
         </div>
@@ -1066,7 +1066,7 @@ function generateQuizQuestions() {
     const wrong = shuffle(ALL_WORDS.filter(x => x.en !== w.en)).slice(0, 3);
     q.push({
       tier: 'explorer', type: 'mcq', points: 10,
-      question: `${w.emoji} What is the English meaning of this Hindi word: ${w.hi}?`,
+      question: `${w.emoji} ${w.hi} का अर्थ क्या है? <small style="color:#6B7280;">(What does this Hindi word mean?)</small>`,
       options: shuffle([w.en, ...wrong.map(x => x.en)]),
       answer: w.en,
       hint: `The picture shows the meaning!`,
@@ -1078,7 +1078,7 @@ function generateQuizQuestions() {
   shuffle(ALL_WORDS).slice(0, 5).forEach((w) => {
     q.push({
       tier: 'explorer', type: 'mcq', points: 10,
-      question: `${w.emoji} ${w.hi} (${w.roman}) means "${w.en}". What TYPE of संज्ञा is it?`,
+      question: `${w.emoji} ${w.hi} (${w.roman}) — "${w.en}" कौन-सी संज्ञा है? <small style="color:#6B7280;">(Which type of noun is it?)</small>`,
       options: [typeLabels.vyakti, typeLabels.praani, typeLabels.sthaan, typeLabels.vastu],
       answer: typeLabels[w.type],
       hint: 'Is it a person, animal, place, or thing?',
@@ -1088,16 +1088,16 @@ function generateQuizQuestions() {
 
   // Basic true/false
   q.push({ tier: 'explorer', type: 'true-false', points: 10,
-    question: `"हाथी" (haathi) is a प्राणी (animal) noun.`, answer: 'true',
+    question: `"हाथी" (haathi) एक प्राणी संज्ञा है। <small style="color:#6B7280;">(Haathi is an animal noun.)</small>`, answer: 'true',
     hint: 'हाथी means elephant!', explanation: 'True! हाथी (elephant) is an animal, so it is a प्राणी noun.' });
   q.push({ tier: 'explorer', type: 'true-false', points: 10,
-    question: `"भारत" (Bharat) means England.`, answer: 'false',
+    question: `"भारत" (Bharat) का अर्थ England है। <small style="color:#6B7280;">(Bharat means England.)</small>`, answer: 'false',
     hint: 'भारत is the Hindi name of a country near Bahrain...', explanation: 'False! भारत means India, not England.' });
   q.push({ tier: 'explorer', type: 'true-false', points: 10,
-    question: `"किताब" (kitaab) means book.`, answer: 'true',
+    question: `"किताब" (kitaab) का अर्थ book है। <small style="color:#6B7280;">(Kitaab means book.)</small>`, answer: 'true',
     hint: 'You read a...', explanation: 'True! किताब means book in English.' });
   q.push({ tier: 'explorer', type: 'true-false', points: 10,
-    question: `"माँ" (maa) is the Hindi word for mother.`, answer: 'true',
+    question: `"माँ" (maa) mother के लिए हिंदी शब्द है। <small style="color:#6B7280;">(Maa is the Hindi word for mother.)</small>`, answer: 'true',
     hint: 'It sounds a bit like "ma" in English!', explanation: 'True! माँ means mother. We also say "Maa" in English sometimes!' });
 
   // --- ADVENTURER ---
@@ -1106,7 +1106,7 @@ function generateQuizQuestions() {
     const wrong = shuffle(ALL_WORDS.filter(x => x.hi !== w.hi)).slice(0, 3);
     q.push({
       tier: 'adventurer', type: 'mcq', points: 15,
-      question: `Which Hindi word means "${w.en}"? ${w.emoji}`,
+      question: `"${w.en}" को हिंदी में क्या कहते हैं? ${w.emoji} <small style="color:#6B7280;">(Which Hindi word means this?)</small>`,
       options: shuffle([w.hi, ...wrong.map(x => x.hi)]),
       answer: w.hi,
       hint: `Think about the sound: ${w.roman}`,
@@ -1124,7 +1124,7 @@ function generateQuizQuestions() {
   sentenceQs.forEach(s => {
     q.push({
       tier: 'adventurer', type: 'mcq', points: 15,
-      question: `Which word is a noun (संज्ञा) in: "${s.sent}" (${s.sentEn})`,
+      question: `"${s.sent}" इस वाक्य में संज्ञा कौन-सा शब्द है? <small style="color:#6B7280;">(Which word is the noun? — ${s.sentEn})</small>`,
       options: shuffle([s.noun, ...s.wrong]),
       answer: s.noun,
       hint: 'A noun names a person, place, animal, or thing.',
@@ -1136,7 +1136,7 @@ function generateQuizQuestions() {
   shuffle(ALL_WORDS).slice(0, 4).forEach(w => {
     q.push({
       tier: 'adventurer', type: 'mcq', points: 15,
-      question: `Which TYPE of noun is "${w.hi}" (${w.roman})?`,
+      question: `"${w.hi}" (${w.roman}) कौन-सी संज्ञा है? <small style="color:#6B7280;">(Which type of noun?)</small>`,
       options: [typeLabels.vyakti, typeLabels.praani, typeLabels.sthaan, typeLabels.vastu],
       answer: typeLabels[w.type],
       hint: `Its meaning is: ${w.en}`,
@@ -1145,7 +1145,7 @@ function generateQuizQuestions() {
   });
 
   q.push({ tier: 'adventurer', type: 'true-false', points: 15,
-    question: `"ताजमहल" is a स्थान (place) noun.`, answer: 'true',
+    question: `"ताजमहल" एक स्थान-वाचक संज्ञा है। <small style="color:#6B7280;">(Taj Mahal is a place-noun.)</small>`, answer: 'true',
     hint: 'The Taj Mahal is a famous building in India.',
     explanation: 'True! ताजमहल (Taj Mahal) is a specific place, so it is a स्थान noun.' });
 
@@ -1160,7 +1160,7 @@ function generateQuizQuestions() {
   champFill.forEach(f => {
     q.push({
       tier: 'champion', type: 'mcq', points: 20,
-      question: `Fill in the blank: "${f.sent}" (${f.sentEn})`,
+      question: `खाली स्थान भरो: "${f.sent}" <small style="color:#6B7280;">(Fill in the blank — ${f.sentEn})</small>`,
       options: f.options,
       answer: f.answer,
       hint: `What thing/animal/person would fit here? (Answer means: ${f.ans_en})`,
@@ -1170,27 +1170,27 @@ function generateQuizQuestions() {
 
   // Count the nouns in a sentence
   q.push({ tier: 'champion', type: 'mcq', points: 20,
-    question: `Sentence: "राधा स्कूल में किताब पढ़ रही है।" (Radha is reading a book at school.) How many nouns are in this sentence?`,
+    question: `"राधा स्कूल में किताब पढ़ रही है।" इस वाक्य में कितनी संज्ञाएँ हैं? <small style="color:#6B7280;">(Radha is reading a book at school. How many nouns?)</small>`,
     options: ['3', '2', '4', '1'], answer: '3',
     hint: 'Look for: person, place, thing.',
     explanation: 'There are 3 nouns: राधा (person), स्कूल (place), किताब (thing).' });
 
   q.push({ tier: 'champion', type: 'mcq', points: 20,
-    question: `"माँ ने हाथी को दूध दिया।" (Mother gave milk to the elephant.) How many nouns?`,
+    question: `"माँ ने हाथी को दूध दिया।" इस वाक्य में कितनी संज्ञाएँ हैं? <small style="color:#6B7280;">(Mother gave milk to the elephant. How many nouns?)</small>`,
     options: ['3', '2', '4', '1'], answer: '3',
     hint: 'Person, animal, thing?',
     explanation: 'There are 3 nouns: माँ (person/vyakti), हाथी (animal/praani), दूध (thing/vastu).' });
 
   // Mix of TYPES
   q.push({ tier: 'champion', type: 'mcq', points: 20,
-    question: `Which of these is NOT a noun?`,
+    question: `इनमें से कौन-सा शब्द संज्ञा नहीं है? <small style="color:#6B7280;">(Which of these is NOT a noun?)</small>`,
     options: ['खा', 'किताब', 'माँ', 'घर'],
     answer: 'खा',
     hint: 'A noun is a NAME of something. "खा" means "eat" — that\'s an action!',
     explanation: '"खा" means "eat" — that is an action (verb/क्रिया), not a noun. किताब, माँ, and घर are all nouns.' });
 
   q.push({ tier: 'champion', type: 'mcq', points: 20,
-    question: `"क्रिसलिन बहरीन में रहती है।" (Crislyn lives in Bahrain.) How many nouns are there?`,
+    question: `"क्रिसलिन बहरीन में रहती है।" इस वाक्य में कितनी संज्ञाएँ हैं? <small style="color:#6B7280;">(Crislyn lives in Bahrain. How many nouns?)</small>`,
     options: ['2', '1', '3', '4'],
     answer: '2',
     hint: 'Person name + place name?',
@@ -1199,7 +1199,7 @@ function generateQuizQuestions() {
   // Match all 4 types
   [['माँ', 'vyakti'], ['कौआ', 'praani'], ['दिल्ली', 'sthaan'], ['पतंग', 'vastu']].forEach(([word, type]) => {
     q.push({ tier: 'champion', type: 'mcq', points: 20,
-      question: `"${word}" belongs to which group of संज्ञा?`,
+      question: `"${word}" किस प्रकार की संज्ञा है? <small style="color:#6B7280;">(Which group of noun is this?)</small>`,
       options: [typeLabels.vyakti, typeLabels.praani, typeLabels.sthaan, typeLabels.vastu],
       answer: typeLabels[type],
       hint: 'Think about what this word names.',
