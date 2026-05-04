@@ -199,7 +199,8 @@
     .sentence .sent-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .sentence .s-hi {
       font-family: 'Tiro Devanagari Hindi', serif; font-weight: 700;
-      font-size: 1.4rem; color: #1E1B4B; line-height: 1.5;
+      font-size: 1.75rem; color: #1E1B4B; line-height: 1.55;
+      letter-spacing: 0.5px;
     }
     .sentence .s-roman {
       font-style: italic; font-weight: 600;
@@ -209,6 +210,38 @@
       font-size: 0.95rem; color: #4B5563; font-weight: 600; line-height: 1.4;
     }
     .sentence .speak-btn { flex: 0 0 38px; align-self: flex-start; margin-top: 2px; }
+    .sentence .sent-actions {
+      display: flex; flex-direction: column; gap: 6px;
+      flex: 0 0 auto; align-self: flex-start; margin-top: 2px;
+    }
+    .practice-btn {
+      background: white; color: #B45309;
+      border: 2px solid #F59E0B;
+      width: 38px; height: 38px; border-radius: 50%;
+      cursor: pointer; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      padding: 0; white-space: nowrap; overflow: visible;
+    }
+    .practice-btn:hover { background: #FEF3C7; transform: scale(1.08); }
+    .practice-btn.practicing {
+      background: #10B981; color: white; border-color: #047857;
+      width: auto; min-width: 90px; padding: 0 10px;
+      animation: pulse 1.4s infinite;
+    }
+    .sentence.practice-prompt {
+      background: #FEF3C7;
+      box-shadow: inset 5px 0 0 #F59E0B, 0 0 0 3px rgba(245, 158, 11, 0.18);
+      animation: practicePromptPulse 1.6s ease-in-out infinite;
+    }
+    .sentence.practice-prompt .s-hi {
+      color: #92400E;
+      text-shadow: 0 0 1px rgba(146, 64, 14, 0.2);
+    }
+    @keyframes practicePromptPulse {
+      0%, 100% { box-shadow: inset 5px 0 0 #F59E0B, 0 0 0 3px rgba(245, 158, 11, 0.18); }
+      50%      { box-shadow: inset 5px 0 0 #F59E0B, 0 0 0 6px rgba(245, 158, 11, 0.36); }
+    }
 
     /* Hide Roman / English when toggled off */
     body.hide-roman .s-roman { display: none; }
@@ -486,7 +519,7 @@
     @media (max-width: 640px) {
       .page-header h1 .hi-big { font-size: 2.4rem; }
       .vocab-grid { grid-template-columns: repeat(2, 1fr); }
-      .sentence .s-hi { font-size: 1.2rem; }
+      .sentence .s-hi { font-size: 1.45rem; }
       .scene__head { flex-wrap: wrap; }
       .reading-controls { gap: 8px; padding: var(--space-2) var(--space-3); }
       .toggle-btn { padding: 4px 10px; font-size: 0.78rem; }
@@ -496,7 +529,7 @@
     }
   </style>
 </head>
-<body>
+<body class="hide-roman">
 
 <!-- Page Header -->
 <div class="page-header">
@@ -514,10 +547,10 @@
 <div class="container">
   <div class="intro-card fade-in-up">
     <div style="font-size: 2.5rem; margin-bottom: 4px;">🌸</div>
-    <h3>Don't worry, Crislyn — let's read this together!</h3>
-    <p>This is the story of <strong class="hi-big">सौरभ</strong> (<em>Saurabh</em>), a boy who plants a mango seed. We'll read it <strong>one sentence at a time</strong>.</p>
-    <p>Every line shows you three things: the <strong>Hindi</strong> (big), how to <strong>say it</strong> (in English letters), and what it <strong>means</strong>. Tap the 🔊 button on any line to hear it.</p>
-    <p>👇 Start with the words below — meet them once, and you'll spot them all over the story!</p>
+    <h3>Let's practise speaking Hindi today, Crislyn!</h3>
+    <p>This is the story of <strong class="hi-big">सौरभ</strong> (<em>Saurabh</em>), a boy who plants a mango seed.</p>
+    <p>👀 <strong>Look at the Hindi (big letters) first.</strong> Then tap <strong>🔊 Listen</strong> to hear it. Then tap <strong>🎤 Say it</strong> — Pixie reads it, you say it back, and Pixie reads it once more so you can check.</p>
+    <p>The English letters are hidden by default — try without them! If you really get stuck, tap "🔤 Show sound-out" above to reveal them, then turn them off again.</p>
   </div>
 </div>
 
@@ -525,7 +558,7 @@
 <div class="container">
   <div class="reading-controls fade-in">
     <span class="label">Show:</span>
-    <button class="toggle-btn active" id="tg-roman" onclick="toggleRoman()">🔤 Sound-out (English letters)</button>
+    <button class="toggle-btn" id="tg-roman" onclick="toggleRoman()">🔤 Show sound-out (only if stuck)</button>
     <button class="toggle-btn active" id="tg-en"    onclick="toggleEn()">🌐 English meaning</button>
     <span class="label" style="margin-left:auto;">Speed:</span>
     <button class="toggle-btn active" id="tg-speed" onclick="toggleSpeed()">🐢 Slow (best for now)</button>
@@ -771,6 +804,30 @@ function clearSpeakingClass() {
   document.querySelectorAll('.sentence.current').forEach(s => s.classList.remove('current'));
 }
 
+// Cache the best available Hindi voice — prefer real hi-IN voices, then known
+// Indian-female names. Falls back to system default if none.
+let _cachedHiVoice = null;
+function pickHindiVoice() {
+  if (_cachedHiVoice) return _cachedHiVoice;
+  const voices = (window.speechSynthesis && window.speechSynthesis.getVoices()) || [];
+  if (!voices.length) return null;
+  const hi = voices.filter(v => /^hi/i.test(v.lang || ''));
+  const candidates = hi.length ? hi : voices;
+  const patterns = [
+    /madhur/i, /kalpana/i, /heera/i, /lekha/i, /veena/i,    // Indian female voices
+    /swara/i, /aditi/i, /priya/i, /shruti/i,
+    /rishi/i, /hemant/i, /aaditya/i,                          // Indian male voices
+    /female/i,
+    /hi[-_]IN/i
+  ];
+  for (const p of patterns) {
+    const v = candidates.find(x => p.test(x.name || '') || p.test(x.lang || ''));
+    if (v) { _cachedHiVoice = v; return v; }
+  }
+  _cachedHiVoice = candidates[0];
+  return _cachedHiVoice;
+}
+
 function speak(text, btn, opts = {}) {
   if (!('speechSynthesis' in window)) {
     alert('Sorry! Your browser does not support audio pronunciation.');
@@ -778,26 +835,66 @@ function speak(text, btn, opts = {}) {
   }
   return new Promise(resolve => {
     window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'hi-IN';
-    u.rate = opts.rate || speechRate;
-    if (btn) {
-      clearSpeakingClass();
-      btn.classList.add('speaking');
-    }
-    if (opts.highlightEl) {
-      document.querySelectorAll('.sentence.current').forEach(s => s.classList.remove('current'));
-      opts.highlightEl.classList.add('current');
-      opts.highlightEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    u.onend = () => {
-      if (btn) btn.classList.remove('speaking');
-      if (opts.highlightEl) opts.highlightEl.classList.remove('current');
-      resolve();
+    const fire = () => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'hi-IN';
+      u.rate = opts.rate || speechRate;
+      const v = pickHindiVoice();
+      if (v) u.voice = v;
+      if (btn) {
+        clearSpeakingClass();
+        btn.classList.add('speaking');
+      }
+      if (opts.highlightEl) {
+        document.querySelectorAll('.sentence.current').forEach(s => s.classList.remove('current'));
+        opts.highlightEl.classList.add('current');
+        opts.highlightEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      u.onend = () => {
+        if (btn) btn.classList.remove('speaking');
+        if (opts.highlightEl) opts.highlightEl.classList.remove('current');
+        resolve();
+      };
+      u.onerror = () => { if (btn) btn.classList.remove('speaking'); resolve(); };
+      window.speechSynthesis.speak(u);
     };
-    u.onerror = () => { if (btn) btn.classList.remove('speaking'); resolve(); };
-    window.speechSynthesis.speak(u);
+    if (!window.speechSynthesis.getVoices().length) {
+      window.speechSynthesis.addEventListener('voiceschanged', fire, { once: true });
+      setTimeout(() => { if (!_cachedHiVoice) fire(); }, 500);
+    } else {
+      fire();
+    }
   });
+}
+
+// "Say it!" practice mode — plays the audio, pauses for her to repeat, plays
+// once more. Run on each sentence individually so she actively mimics.
+async function practiceSentence(text, btn, sentEl) {
+  if (btn._practiceRunning) {
+    btn._practiceRunning = false;
+    window.speechSynthesis.cancel();
+    btn.textContent = '🎤';
+    btn.classList.remove('practicing');
+    sentEl.classList.remove('practice-prompt');
+    return;
+  }
+  btn._practiceRunning = true;
+  btn.classList.add('practicing');
+  sentEl.classList.add('current');
+  for (let i = 0; i < 2; i++) {
+    if (!btn._practiceRunning) break;
+    btn.textContent = i === 0 ? '🎤 Listen…' : '🎤 Once more…';
+    sentEl.classList.remove('practice-prompt');
+    await speak(text, null, { highlightEl: sentEl });
+    if (!btn._practiceRunning) break;
+    btn.textContent = '🗣️ Your turn!';
+    sentEl.classList.add('practice-prompt');
+    await new Promise(r => setTimeout(r, 2800));
+  }
+  btn._practiceRunning = false;
+  btn.textContent = '🎤';
+  btn.classList.remove('practicing');
+  sentEl.classList.remove('practice-prompt', 'current');
 }
 
 // ============================================================
@@ -849,7 +946,10 @@ function renderStory() {
                 <div class="s-roman">${s.roman}</div>
                 <div class="s-en">${s.en}</div>
               </div>
-              <button class="speak-btn" title="Hear it" data-text="${s.hi}">🔊</button>
+              <div class="sent-actions">
+                <button class="speak-btn" title="Hear it" data-text="${s.hi}">🔊</button>
+                <button class="practice-btn" title="Listen, then say it back" data-text="${s.hi}">🎤</button>
+              </div>
             </div>
           `;
         }).join('')}
@@ -862,6 +962,14 @@ function renderStory() {
     btn.addEventListener('click', () => {
       const sent = btn.closest('.sentence');
       speak(btn.dataset.text, btn, { highlightEl: sent });
+    });
+  });
+
+  // wire per-sentence "Say it!" practice
+  document.querySelectorAll('.sentence .practice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sent = btn.closest('.sentence');
+      practiceSentence(btn.dataset.text, btn, sent);
     });
   });
 
