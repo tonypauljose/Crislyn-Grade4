@@ -196,17 +196,53 @@
     } catch (_) { return { alreadyDone: false, streak: 0 }; }
   }
 
-  // ----- Web Speech wrapper -----
+  // ----- Web Speech wrapper (kid-friendly voice) -----
+  let _cachedVoice = null;
+  function _pickKidVoice() {
+    if (_cachedVoice) return _cachedVoice;
+    const voices = (window.speechSynthesis && window.speechSynthesis.getVoices()) || [];
+    if (!voices.length) return null;
+    // Priority — first match wins. Kid/young voices first, then friendly female,
+    // then any English voice. Only en-* voices considered for tables (English).
+    const en = voices.filter(v => /^en[-_]/i.test(v.lang || ''));
+    const candidates = en.length ? en : voices;
+    const patterns = [
+      /child|kid|junior/i,
+      /samantha/i, /karen/i, /tessa/i,           // macOS / iOS friendly female
+      /aria/i, /jenny/i, /zira/i,                // Windows / Edge friendly female
+      /allison/i, /ava|salli|ivy|kimberly|joanna/i, // Polly-ish names
+      /google.*us.*english/i,
+      /female/i
+    ];
+    for (const p of patterns) {
+      const v = candidates.find(x => p.test(x.name || ''));
+      if (v) { _cachedVoice = v; return v; }
+    }
+    _cachedVoice = candidates[0];
+    return _cachedVoice;
+  }
   function speak(text, opts) {
     if (!('speechSynthesis' in window)) return;
     opts = opts || {};
     window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    u.rate = opts.rate || 0.95;
-    u.pitch = opts.pitch || 1.0;
-    if (opts.onend) u.onend = opts.onend;
-    window.speechSynthesis.speak(u);
+    const fire = () => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate  = opts.rate  || 0.85;   // a touch slower — easier for a 9-year-old to follow
+      u.pitch = opts.pitch || 1.45;   // higher pitch reads younger / less robotic
+      const v = _pickKidVoice();
+      if (v) u.voice = v;
+      if (opts.onend) u.onend = opts.onend;
+      window.speechSynthesis.speak(u);
+    };
+    // Voices load async on first page paint — wait if needed.
+    if (!window.speechSynthesis.getVoices().length) {
+      window.speechSynthesis.addEventListener('voiceschanged', fire, { once: true });
+      // safety net — if voiceschanged never fires, still try after 500ms
+      setTimeout(() => { if (!_cachedVoice) fire(); }, 500);
+    } else {
+      fire();
+    }
   }
 
   function tableRowSpeech(a, b) {

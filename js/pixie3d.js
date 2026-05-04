@@ -156,7 +156,8 @@ const Pixie3D = {
     this.camera.position.set(0, 110, 220);
     this.camera.lookAt(0, 50, 0);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: false });
+    this.renderer.setClearColor(0x000000, 0);   // ensure fully transparent canvas
     this.renderer.setSize(W, H);
     this.renderer.setPixelRatio(window.devicePixelRatio || 1);
     this.renderer.shadowMap.enabled = true;
