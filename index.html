@@ -595,6 +595,7 @@
       <a href="index.html" class="nav-link">🏠 Home</a>
       <a href="learning.html" class="nav-link">📚 Learn</a>
       <a href="bible.html" class="nav-link">📖 Bible</a>
+      <a href="tables.html" class="nav-link">✖️ Tables</a>
       <a href="exam.html" class="nav-link">📝 Exam</a>
       <a href="art-studio.html" class="nav-link" style="background: #FCE7F3; border-color: #F9A8D4; color: #BE185D;">🎨 Art</a>
     </div>
@@ -1128,6 +1129,40 @@
       previewEl.textContent = t.length > 130 ? t.slice(0, 127).trim() + '…' : t;
     }
     if (emojiEl && e.pages && e.pages[0] && e.pages[0].emoji) emojiEl.textContent = e.pages[0].emoji;
+  });
+</script>
+
+<!-- TODAY'S TIMES TABLE -->
+<section class="container" style="padding: 0 16px; margin: 12px auto 24px;">
+  <a href="tables.html" class="bible-card fade-in-up" style="text-decoration: none; cursor: pointer; background: linear-gradient(135deg, #CFFAFE, #FACC15); border-color: #14B8A6;">
+    <div class="bible-card__emoji">✖️</div>
+    <div class="bible-card__body">
+      <div class="bible-card__eyebrow" style="color: #0E7490;" id="tables-card-eyebrow">✖️ Today's Times Table</div>
+      <h3 class="bible-card__title" id="tables-card-title" style="color: #0C4A6E;">Loading…</h3>
+      <p class="bible-card__preview" id="tables-card-preview" style="color: #075985;">Read it aloud, then play three fun games to make it stick!</p>
+      <span class="bible-card__cta" style="background: #0E7490;">Open Tables Adventure →</span>
+    </div>
+  </a>
+</section>
+<script src="js/tables-engine.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!window.TablesEngine) return;
+    const t = TablesEngine.todayTable();
+    const titleEl = document.getElementById('tables-card-title');
+    const eyebrowEl = document.getElementById('tables-card-eyebrow');
+    const previewEl = document.getElementById('tables-card-preview');
+    if (titleEl) titleEl.textContent = '×' + t + ' Table';
+    const streak = TablesEngine.readingStreak();
+    if (streak > 0) {
+      eyebrowEl.innerHTML = '✖️ Today\'s Times Table · 🔥 ' + streak + ' day' + (streak === 1 ? '' : 's') + ' in a row';
+    }
+    const read = TablesEngine.isReadToday();
+    if (previewEl) {
+      previewEl.textContent = read
+        ? '✓ Read today! Pop in for a game?'
+        : 'Read aloud, then play 3 fun games — Quick-Draw, Memory Match, Tables Tower!';
+    }
   });
 </script>
 

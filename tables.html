@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>✖️ Times Tables — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%96%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+  <script src="js/friends.js" defer></script>
+
+  <style>
+    .navbar {
+      background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
+    }
+    .nav-links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nav-link {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .tables-hero {
+      background: linear-gradient(135deg, #0E7490 0%, #14B8A6 50%, #FACC15 100%);
+      color: white; text-align: center; padding: var(--space-8) var(--space-4);
+      position: relative; overflow: hidden;
+    }
+    .tables-hero h1 {
+      color: white;
+      font-family: var(--font-heading);
+      font-size: 2.4rem; margin: 0 0 var(--space-2);
+    }
+    .tables-hero .today-banner {
+      display: inline-block;
+      background: rgba(255,255,255,0.22);
+      padding: 8px 24px; border-radius: var(--radius-full);
+      font-weight: 800; font-size: 1.1rem; margin-top: var(--space-2);
+    }
+    .tables-hero .streak-badge {
+      display: inline-block; margin-top: var(--space-3);
+      background: var(--color-accent); color: #5C2C0E;
+      padding: 6px 18px; border-radius: var(--radius-full);
+      font-weight: 800; font-size: 0.95rem;
+    }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+      margin-top: var(--space-8);
+    }
+
+    @media (max-width: 600px) {
+      .tables-hero h1 { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="bible.html" class="nav-link">📖 Bible</a>
+      <a href="tables.html" class="nav-link active">✖️ Tables</a>
+      <a href="exam.html" class="nav-link">📝 Exam</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="tables-hero">
+  <div class="container">
+    <h1>✖️ Times Tables Adventure</h1>
+    <p style="opacity:0.95; margin: 0;">Read, practise, and beat your best!</p>
+    <div class="today-banner" id="today-banner">Loading…</div>
+    <div class="streak-badge" id="streak-badge" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- Daily Reading -->
+<section class="container" style="padding-top: var(--space-6);">
+  <div class="reading-section-header">
+    <div>
+      <h2 style="margin:0; font-family: var(--font-heading); color: var(--color-primary-dark); font-size: 1.6rem;">📖 Daily Tables Reading</h2>
+      <p style="margin: 4px 0 0; color: var(--color-text-light);">Read each table aloud — the rows are tappable to hear them.</p>
+    </div>
+    <button class="act-btn act-btn-primary" id="mark-read-btn" type="button">⭐ Mark as read</button>
+  </div>
+
+  <div class="tables-grid" id="tables-grid"></div>
+</section>
+
+<!-- Games -->
+<section class="container" style="padding-top: var(--space-8);">
+  <div id="games-section">
+    <h2 style="font-family: var(--font-heading); color: var(--color-primary-dark); font-size: 1.6rem; margin: 0 0 var(--space-2); text-align: center;">🎮 Pick a Game</h2>
+    <p style="text-align: center; color: var(--color-text-light); margin: 0 0 var(--space-6);">Three different ways to beat your best — tap one to start.</p>
+
+    <div class="games-grid" id="game-picker">
+      <button class="game-card game-quickdraw" data-game="quickdraw" type="button">
+        <div class="game-card__emoji">🤠</div>
+        <div class="game-card__title">Quick-Draw</div>
+        <div class="game-card__sub">60 seconds · combo meter</div>
+        <div class="game-card__desc">How many can you answer before time runs out? Strings of right answers boost your points.</div>
+        <div class="game-card__cta">Play →</div>
+        <div class="game-card__best" id="best-quickdraw"></div>
+      </button>
+
+      <button class="game-card game-memory" data-game="memorymatch" type="button">
+        <div class="game-card__emoji">🐚</div>
+        <div class="game-card__title">Memory Match</div>
+        <div class="game-card__sub">24 cards · pairs game</div>
+        <div class="game-card__desc">Flip cards to match each equation with its answer. The faster you finish, the higher your score!</div>
+        <div class="game-card__cta">Play →</div>
+        <div class="game-card__best" id="best-memorymatch"></div>
+      </button>
+
+      <button class="game-card game-tower" data-game="tower" type="button">
+        <div class="game-card__emoji">🏰</div>
+        <div class="game-card__title">Tables Tower</div>
+        <div class="game-card__sub">10 floors · earn crowns</div>
+        <div class="game-card__desc">Climb a 10-floor tower one table at a time. Reach the top to earn that table's crown — for ever!</div>
+        <div class="game-card__cta">Play →</div>
+        <div class="game-card__best" id="best-tower"></div>
+      </button>
+    </div>
+
+    <div class="crown-row" id="crown-row" style="display:none;"></div>
+  </div>
+
+  <div id="game-stage" style="display:none;"></div>
+</section>
+
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · <a href="learning.html">Learning</a> · <a href="index.html">Home</a></p>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/tables-engine.js"></script>
+<script src="js/games/quickdraw.js"></script>
+<script src="js/games/memory-match.js"></script>
+<script src="js/games/tables-tower.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  function init() {
+    // Hero banner
+    document.getElementById('today-banner').textContent = TablesEngine.todayLabel();
+
+    // Streak badge
+    const s = TablesEngine.readingStreak();
+    if (s > 0) {
+      const el = document.getElementById('streak-badge');
+      el.style.display = 'inline-block';
+      el.textContent = (s === 1) ? '🔥 Just started a streak today!' : `🔥 ${s} days in a row reading tables!`;
+    }
+
+    renderTables();
+    renderBests();
+    renderCrowns();
+    wireGames();
+    wireMarkRead();
+  }
+
+  function renderTables() {
+    const today = TablesEngine.todayTable();
+    const grid = document.getElementById('tables-grid');
+    let html = '';
+    for (let n = 1; n <= 10; n++) {
+      const isToday = n === today;
+      let rows = '';
+      for (let m = 1; m <= 10; m++) {
+        rows += `
+          <li class="table-row" data-a="${n}" data-b="${m}">
+            <span class="table-eq">${n} × ${m}</span>
+            <span class="table-eq-eq">=</span>
+            <span class="table-product">${n * m}</span>
+            <button class="table-row-listen" type="button" title="Hear it">🔊</button>
+          </li>
+        `;
+      }
+      html += `
+        <article class="table-card${isToday ? ' is-today' : ''}">
+          <header class="table-card__head">
+            <h3>×${n}${isToday ? ' <span class="table-today-pill">Today</span>' : ''}</h3>
+            <button class="table-readall" data-table="${n}" type="button" title="Read the whole table">▶️ Read all</button>
+          </header>
+          <ol class="table-rows">${rows}</ol>
+        </article>
+      `;
+    }
+    grid.innerHTML = html;
+
+    // Wire per-row listen
+    grid.querySelectorAll('.table-row-listen').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const li = btn.closest('.table-row');
+        const a = parseInt(li.dataset.a, 10);
+        const b = parseInt(li.dataset.b, 10);
+        TablesEngine.speak(TablesEngine.tableRowSpeech(a, b));
+        li.classList.add('is-speaking');
+        setTimeout(() => li.classList.remove('is-speaking'), 800);
+      });
+    });
+    // Tap row text → also reads it
+    grid.querySelectorAll('.table-row').forEach(li => {
+      li.addEventListener('click', e => {
+        if (e.target.closest('button')) return;
+        const a = parseInt(li.dataset.a, 10);
+        const b = parseInt(li.dataset.b, 10);
+        TablesEngine.speak(TablesEngine.tableRowSpeech(a, b));
+        li.classList.add('is-speaking');
+        setTimeout(() => li.classList.remove('is-speaking'), 800);
+      });
+    });
+    // Read whole table
+    grid.querySelectorAll('.table-readall').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const t = parseInt(btn.dataset.table, 10);
+        const card = btn.closest('.table-card');
+        readWholeTable(t, card, btn);
+      });
+    });
+  }
+
+  function readWholeTable(n, card, btn) {
+    const rows = Array.from(card.querySelectorAll('.table-row'));
+    let i = 0;
+    btn.classList.add('is-playing');
+    btn.textContent = '⏸ Stop';
+    let stopped = false;
+    const stop = () => {
+      stopped = true;
+      window.speechSynthesis && window.speechSynthesis.cancel();
+      btn.classList.remove('is-playing');
+      btn.textContent = '▶️ Read all';
+      rows.forEach(r => r.classList.remove('is-speaking'));
+      btn.removeEventListener('click', stop);
+      btn.addEventListener('click', () => readWholeTable(n, card, btn), { once: true });
+    };
+    btn.addEventListener('click', stop, { once: true });
+
+    function step() {
+      if (stopped || i >= rows.length) {
+        if (!stopped) {
+          btn.classList.remove('is-playing');
+          btn.textContent = '▶️ Read all';
+        }
+        return;
+      }
+      const r = rows[i];
+      const a = parseInt(r.dataset.a, 10);
+      const b = parseInt(r.dataset.b, 10);
+      r.classList.add('is-speaking');
+      r.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      TablesEngine.speak(TablesEngine.tableRowSpeech(a, b), {
+        rate: 0.9,
+        onend: () => {
+          r.classList.remove('is-speaking');
+          i++;
+          setTimeout(step, 120);
+        }
+      });
+    }
+    step();
+  }
+
+  function renderBests() {
+    const qd = TablesEngine.getBest('quickdraw');
+    if (qd && qd.value !== undefined) {
+      document.getElementById('best-quickdraw').textContent = '🏆 Best: ' + qd.value;
+    }
+    const mm = TablesEngine.getBest('memorymatch');
+    if (mm && mm.value !== undefined) {
+      const m = Math.floor(mm.value / 60);
+      const s = mm.value % 60;
+      document.getElementById('best-memorymatch').textContent = '🏆 Best: ' + m + ':' + String(s).padStart(2, '0');
+    }
+    const crowns = TablesEngine.listCrowns();
+    if (crowns.length) {
+      document.getElementById('best-tower').textContent = '👑 ' + crowns.length + ' crown' + (crowns.length === 1 ? '' : 's');
+    }
+  }
+
+  function renderCrowns() {
+    const crowns = TablesEngine.listCrowns();
+    const row = document.getElementById('crown-row');
+    if (!crowns.length) { row.style.display = 'none'; return; }
+    row.style.display = 'flex';
+    row.innerHTML = '<span class="crown-row__label">Your crowns:</span>' +
+      crowns.map(c => `<span class="crown-row__item">👑 ×${c}</span>`).join('');
+  }
+
+  function wireGames() {
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.game;
+        startGame(id);
+      });
+    });
+  }
+
+  function startGame(id) {
+    const picker = document.getElementById('game-picker');
+    const stage = document.getElementById('game-stage');
+    const crownRow = document.getElementById('crown-row');
+    picker.style.display = 'none';
+    if (crownRow) crownRow.style.display = 'none';
+    stage.style.display = 'block';
+    const onExit = () => {
+      stage.style.display = 'none';
+      stage.innerHTML = '';
+      picker.style.display = '';
+      renderBests();
+      renderCrowns();
+      window.scrollTo({ top: stage.offsetTop - 80, behavior: 'smooth' });
+    };
+    if (id === 'quickdraw') QuickDraw.start({ host: stage, onExit });
+    else if (id === 'memorymatch') MemoryMatch.start({ host: stage, onExit });
+    else if (id === 'tower') TablesTower.start({ host: stage, onExit });
+    window.scrollTo({ top: stage.offsetTop - 80, behavior: 'smooth' });
+  }
+
+  function wireMarkRead() {
+    const btn = document.getElementById('mark-read-btn');
+    function paint() {
+      if (TablesEngine.isReadToday()) {
+        btn.textContent = '✓ Read today!';
+        btn.disabled = true;
+        btn.classList.add('act-btn-secondary');
+        btn.classList.remove('act-btn-primary');
+      }
+    }
+    paint();
+    btn.addEventListener('click', () => {
+      const r = TablesEngine.markReadingDone();
+      if (r.alreadyDone) {
+        if (window.Toast && Toast.show) Toast.show('Already read today 💜', 'info', 2500);
+      } else {
+        if (window.Toast && Toast.show) Toast.show('+5 stars · ' + (r.streak === 1 ? 'streak started!' : r.streak + ' days in a row 🔥'), 'xp', 3000);
+        // Update streak badge
+        const el = document.getElementById('streak-badge');
+        el.style.display = 'inline-block';
+        el.textContent = (r.streak === 1) ? '🔥 Just started a streak today!' : `🔥 ${r.streak} days in a row reading tables!`;
+      }
+      paint();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+
+</body>
+</html>

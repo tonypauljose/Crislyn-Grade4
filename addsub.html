@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>➕➖ Addition & Subtraction — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9E%95%3C/text%3E%3C/svg%3E">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+  <script src="js/friends.js" defer></script>
+
+  <style>
+    .navbar {
+      background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
+    }
+    .nav-links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nav-link {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .as-hero {
+      background: linear-gradient(135deg, #0369A1 0%, #38BDF8 50%, #FACC15 100%);
+      color: white; text-align: center; padding: var(--space-8) var(--space-4);
+    }
+    .as-hero h1 { color: white; font-family: var(--font-heading); font-size: 2.4rem; margin: 0 0 var(--space-2); }
+    .as-hero .streak-badge {
+      display: inline-block; margin-top: var(--space-3);
+      background: var(--color-accent); color: #5C2C0E;
+      padding: 6px 18px; border-radius: var(--radius-full);
+      font-weight: 800; font-size: 0.95rem;
+    }
+
+    /* Daily warm-up styling */
+    .warmup-card {
+      background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+      border: 3px solid #2563EB;
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      max-width: 720px; margin: 0 auto;
+    }
+    .warmup-card h2 {
+      font-family: var(--font-heading); color: #1E3A8A;
+      margin: 0 0 var(--space-3);
+    }
+    .warmup-problem {
+      background: white; border: 2px solid #BFDBFE;
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      display: flex; align-items: center; gap: var(--space-3);
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: #1E3A8A;
+      margin-bottom: var(--space-2);
+    }
+    .warmup-problem.is-correct { background: #DCFCE7; border-color: #16A34A; }
+    .warmup-problem.is-wrong { background: #FEE2E2; border-color: #EF4444; }
+    .warmup-num { color: #1D4ED8; }
+    .warmup-input {
+      flex: 0 0 100px;
+      padding: 6px 10px; border: 2px solid #BFDBFE;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-heading); font-size: 1.4rem;
+      font-weight: 800;
+      color: #1E3A8A;
+      text-align: center;
+      outline: none;
+      margin-left: auto;
+    }
+    .warmup-input:focus { border-color: #2563EB; }
+    .warmup-input:disabled { background: white; }
+    .warmup-correct-show {
+      flex: 0 0 auto;
+      font-weight: 800; color: #166534;
+      margin-left: auto;
+    }
+    .warmup-actions {
+      display: flex; gap: var(--space-3); justify-content: center;
+      margin-top: var(--space-4);
+    }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+      margin-top: var(--space-8);
+    }
+    @media (max-width: 600px) {
+      .as-hero h1 { font-size: 1.7rem; }
+      .warmup-input { flex: 0 0 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="addsub.html" class="nav-link active">➕ Add & Subtract</a>
+      <a href="tables.html" class="nav-link">✖️ Tables</a>
+      <a href="exam.html" class="nav-link">📝 Exam</a>
+    </div>
+  </div>
+</nav>
+
+<section class="as-hero">
+  <div class="container">
+    <h1>➕➖ Addition &amp; Subtraction</h1>
+    <p style="opacity:0.95; margin: 0;">Daily warm-up + Speed Maths game</p>
+    <div class="streak-badge" id="streak-badge" style="display:none;"></div>
+  </div>
+</section>
+
+<!-- Daily warm-up -->
+<section class="container" style="padding-top: var(--space-6);">
+  <div class="warmup-card">
+    <h2>🌅 Daily Warm-up — 10 problems</h2>
+    <p style="color: #1E3A8A; margin: 0 0 var(--space-4); font-weight: 600;">A new set every day. Type each answer. The faster you get all 10, the more stars you earn!</p>
+
+    <div id="warmup-stage"></div>
+  </div>
+</section>
+
+<!-- Games -->
+<section class="container" style="padding-top: var(--space-8);">
+  <div id="games-section">
+    <h2 style="font-family: var(--font-heading); color: var(--color-primary-dark); font-size: 1.6rem; margin: 0 0 var(--space-2); text-align: center;">🎮 Speed Maths</h2>
+    <p style="text-align: center; color: var(--color-text-light); margin: 0 0 var(--space-6);">60-second flashcard sprint — pick a mode, beat your best!</p>
+
+    <div class="games-grid" id="game-picker">
+      <button class="game-card game-quickdraw" data-mode="add" type="button">
+        <div class="game-card__emoji">➕</div>
+        <div class="game-card__title">Speed Adding</div>
+        <div class="game-card__sub">60 seconds · combo meter</div>
+        <div class="game-card__desc">Pure addition rapid-fire — boost your number sense and answer speed.</div>
+        <div class="game-card__cta">Play →</div>
+        <div class="game-card__best" id="best-add"></div>
+      </button>
+
+      <button class="game-card game-memory" data-mode="sub" type="button">
+        <div class="game-card__emoji">➖</div>
+        <div class="game-card__title">Speed Subtracting</div>
+        <div class="game-card__sub">60 seconds · combo meter</div>
+        <div class="game-card__desc">Subtraction sprint — practise borrowing and quick mental maths!</div>
+        <div class="game-card__cta">Play →</div>
+        <div class="game-card__best" id="best-sub"></div>
+      </button>
+
+      <button class="game-card game-tower" data-mode="mixed" type="button">
+        <div class="game-card__emoji">🧮</div>
+        <div class="game-card__title">Mixed Maths</div>
+        <div class="game-card__sub">60 seconds · the real challenge</div>
+        <div class="game-card__desc">Add and subtract jumbled together — the way real maths works.</div>
+        <div class="game-card__cta">Play →</div>
+        <div class="game-card__best" id="best-mixed"></div>
+      </button>
+    </div>
+  </div>
+
+  <div id="game-stage" style="display:none;"></div>
+</section>
+
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · <a href="learning.html">Learning</a> · <a href="index.html">Home</a></p>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/addsub-engine.js"></script>
+<script src="js/games/speed-maths.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // Seed today's warm-up deterministically by date so it's the same set if she refreshes.
+  function seededRandom(seed) {
+    return function () {
+      seed = (seed * 9301 + 49297) % 233280;
+      return seed / 233280;
+    };
+  }
+  function todaySeed() {
+    const d = new Date();
+    return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  }
+  function genWarmup() {
+    const rng = seededRandom(todaySeed());
+    function rand(a, b) { return a + Math.floor(rng() * (b - a + 1)); }
+    const set = [];
+    for (let i = 0; i < 10; i++) {
+      const op = rng() < 0.55 ? '+' : '−';
+      let a, b, ans;
+      if (i < 4) {
+        // easy
+        if (op === '+') { a = rand(20, 99); b = rand(10, 99); ans = a + b; }
+        else { a = rand(40, 99); b = rand(10, a - 5); ans = a - b; }
+      } else if (i < 8) {
+        // medium
+        if (op === '+') { a = rand(100, 999); b = rand(100, 999); ans = a + b; }
+        else { a = rand(200, 999); b = rand(50, a - 10); ans = a - b; }
+      } else {
+        // hard
+        if (op === '+') { a = rand(1000, 4999); b = rand(1000, 4999); ans = a + b; }
+        else { a = rand(2000, 9999); b = rand(500, a - 100); ans = a - b; }
+      }
+      set.push({ a, b, op, answer: ans });
+    }
+    return set;
+  }
+
+  function renderWarmup() {
+    const stage = document.getElementById('warmup-stage');
+    const done = AddSubEngine.isWarmupDoneToday();
+
+    const set = genWarmup();
+    let html = set.map((p, i) => `
+      <div class="warmup-problem" data-i="${i}">
+        <span class="warmup-num">Q${i + 1}.</span>
+        <span class="warmup-num">${p.a} ${p.op} ${p.b} =</span>
+        <input type="number" class="warmup-input" id="warmup-${i}" inputmode="numeric" autocomplete="off" ${done ? 'disabled' : ''}>
+      </div>
+    `).join('');
+    if (done) {
+      html += `
+        <div class="warmup-actions">
+          <span style="background:#DCFCE7; color:#166534; padding: 8px 16px; border-radius: 999px; font-weight: 800;">✓ Already done today!</span>
+        </div>`;
+    } else {
+      html += `
+        <div class="warmup-actions">
+          <button class="act-btn act-btn-primary" id="warmup-check" type="button">✓ Check my answers</button>
+        </div>
+        <div class="activity-feedback" id="warmup-feedback"></div>
+      `;
+    }
+    stage.innerHTML = html;
+
+    if (!done) {
+      document.getElementById('warmup-check').addEventListener('click', () => {
+        let correct = 0;
+        set.forEach((p, i) => {
+          const inp = document.getElementById('warmup-' + i);
+          const v = parseInt(inp.value, 10);
+          const row = document.querySelector('.warmup-problem[data-i="' + i + '"]');
+          inp.disabled = true;
+          if (v === p.answer) {
+            correct++;
+            row.classList.add('is-correct');
+          } else {
+            row.classList.add('is-wrong');
+            // append the correct answer
+            const show = document.createElement('span');
+            show.className = 'warmup-correct-show';
+            show.textContent = '→ ' + p.answer;
+            row.appendChild(show);
+          }
+        });
+        const r = AddSubEngine.markWarmupDone(correct, set.length);
+        const fb = document.getElementById('warmup-feedback');
+        fb.className = 'activity-feedback show ok';
+        fb.innerHTML = `🌟 You got <strong>${correct}/10</strong> · +${r.stars} stars · ${r.streak === 1 ? 'streak started!' : r.streak + ' days in a row 🔥'}`;
+        document.getElementById('warmup-check').disabled = true;
+        document.getElementById('warmup-check').textContent = '✓ Done for today';
+      });
+    }
+  }
+
+  function renderBests() {
+    const a = AddSubEngine.getBest('speedmaths_add');
+    const s = AddSubEngine.getBest('speedmaths_sub');
+    const m = AddSubEngine.getBest('speedmaths_mixed');
+    if (a) document.getElementById('best-add').textContent = '🏆 Best: ' + a.value;
+    if (s) document.getElementById('best-sub').textContent = '🏆 Best: ' + s.value;
+    if (m) document.getElementById('best-mixed').textContent = '🏆 Best: ' + m.value;
+  }
+
+  function renderStreak() {
+    const n = AddSubEngine.warmupStreak();
+    if (n > 0) {
+      const el = document.getElementById('streak-badge');
+      el.style.display = 'inline-block';
+      el.textContent = (n === 1) ? '🔥 Started a warm-up streak today!' : `🔥 ${n} days in a row warming up!`;
+    }
+  }
+
+  function wireGames() {
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const mode = card.dataset.mode;
+        startGame(mode);
+      });
+    });
+  }
+  function startGame(mode) {
+    const picker = document.getElementById('game-picker');
+    const stage = document.getElementById('game-stage');
+    picker.style.display = 'none';
+    stage.style.display = 'block';
+    const onExit = () => {
+      stage.style.display = 'none';
+      stage.innerHTML = '';
+      picker.style.display = '';
+      renderBests();
+      window.scrollTo({ top: stage.offsetTop - 80, behavior: 'smooth' });
+    };
+    SpeedMaths.start({ host: stage, onExit, mode, level: 'medium' });
+    window.scrollTo({ top: stage.offsetTop - 80, behavior: 'smooth' });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderWarmup();
+    renderBests();
+    renderStreak();
+    wireGames();
+  });
+})();
+</script>
+
+</body>
+</html>
