@@ -799,6 +799,17 @@ const COMP = [
 // ============================================================
 let speechRate = 0.7; // slow by default
 let allBtns = []; // every speak-btn on the page
+
+// HTML-escape so quoted text is safe inside attribute values like data-text="..."
+// (Hindi dialogue sentences contain double quotes which were silently breaking
+// the attribute and causing some sentences to be unspeakable.)
+function escAttr(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 function clearSpeakingClass() {
   allBtns.forEach(b => b.classList.remove('speaking'));
   document.querySelectorAll('.sentence.current').forEach(s => s.classList.remove('current'));
@@ -907,7 +918,7 @@ function renderVocab() {
       <div class="v-hi">${w.hi}</div>
       <div class="v-roman">${w.roman}</div>
       <div class="v-en">${w.en}</div>
-      <button class="speak-btn" title="Hear it" data-text="${w.hi}">🔊</button>
+      <button class="speak-btn" title="Hear it" data-text="${escAttr(w.hi)}">🔊</button>
     </div>
   `).join('');
 
@@ -947,8 +958,8 @@ function renderStory() {
                 <div class="s-en">${s.en}</div>
               </div>
               <div class="sent-actions">
-                <button class="speak-btn" title="Hear it" data-text="${s.hi}">🔊</button>
-                <button class="practice-btn" title="Listen, then say it back" data-text="${s.hi}">🎤</button>
+                <button class="speak-btn" title="Hear it" data-text="${escAttr(s.hi)}">🔊</button>
+                <button class="practice-btn" title="Listen, then say it back" data-text="${escAttr(s.hi)}">🎤</button>
               </div>
             </div>
           `;
