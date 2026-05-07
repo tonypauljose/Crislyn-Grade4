@@ -121,6 +121,7 @@
     .exam-card .subj-eng   { background: #BFDBFE; color: #1E40AF; }
     .exam-card .subj-evs   { background: #BBF7D0; color: #166534; }
     .exam-card .subj-hindi { background: #FED7AA; color: #9A3412; }
+    .exam-card .subj-cat   { background: #DDD6FE; color: #5B21B6; }
 
     .exam-card .card-title {
       font-family: var(--font-heading); font-size: var(--text-lg);
@@ -263,7 +264,12 @@
     // Hindi
     { id: 'hi01', subj: 'Hindi', subjClass: 'subj-hindi', title: 'संज्ञा (Sangya / Noun)',
       desc: 'व्यक्ति · प्राणी · स्थान · वस्तु — names of people, animals, places and things.',
-      file: 'data/hi01-sangya.js', bank: 'HI01_BANK', emoji: '✍️', back: 'hindi.html' }
+      file: 'data/hi01-sangya.js', bank: 'HI01_BANK', emoji: '✍️', back: 'hindi.html' },
+
+    // Catechism
+    { id: 'cat01', subj: 'Catechism', subjClass: 'subj-cat', title: 'Following Jesus',
+      desc: 'Lessons 15–28: miracles, Easter, Pentecost, Trinity, Sacraments, Mary, Lent, Triduum, prayers.',
+      file: 'data/cat01-following-jesus.js', bank: 'CAT01_BANK', emoji: '✝️', back: 'catechism.html' }
   ];
 
   function renderPicker() {
@@ -274,7 +280,7 @@
       if (!groups[ch.subj]) { groups[ch.subj] = []; order.push(ch.subj); }
       groups[ch.subj].push(ch);
     }
-    const subjEmoji = { Maths: '🔢', English: '📝', EVS: '🌍', Hindi: '✍️' };
+    const subjEmoji = { Maths: '🔢', English: '📝', EVS: '🌍', Hindi: '✍️', Catechism: '✝️' };
     const html = order.map(subj => `
       <section class="subject-block fade-in-up">
         <h2><span>${subjEmoji[subj] || '📚'}</span> ${subj}</h2>

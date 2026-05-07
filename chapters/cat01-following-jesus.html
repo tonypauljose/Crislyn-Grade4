@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catechism Chapter 1: Following Jesus — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <link rel="stylesheet" href="../css/themes.css">
+  <link rel="stylesheet" href="../css/pixie.css">
+
+  <!-- Google Analytics -->
+  <script src="../js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="../js/state.js" defer></script>
+  <script src="../js/pixie3d.js" defer></script>
+
+  <style>
+    :root {
+      --cat-primary: #6B21A8;
+      --cat-primary-light: #A855F7;
+      --cat-gold: #D97706;
+      --cat-gold-light: #FBBF24;
+      --cat-cream: #FEF3C7;
+    }
+
+    .interactive-area {
+      background: var(--color-bg); border-radius: var(--radius-md);
+      padding: var(--space-6); margin: var(--space-4) 0;
+      border: 2px solid var(--color-border-light);
+    }
+
+    .verse-box {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-left: 5px solid #D97706; padding: var(--space-4) var(--space-5);
+      border-radius: var(--radius-md); margin: var(--space-4) 0;
+      font-family: 'Patrick Hand', cursive; font-size: 1.15rem; color: #78350F;
+    }
+    .verse-box .ref { display: block; text-align: right; font-weight: 700;
+      margin-top: var(--space-2); color: #92400E; font-size: 0.95rem; }
+
+    .fact-box {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-radius: var(--radius-md); padding: var(--space-4);
+      border-left: 4px solid #F59E0B; margin: var(--space-4) 0;
+    }
+    .fact-box h4 { color: #92400E; margin-bottom: var(--space-2); }
+
+    .pillar-card {
+      padding: var(--space-5); border-radius: var(--radius-md); text-align: center;
+      transition: all var(--duration-normal) var(--ease-bounce); border: 3px solid transparent;
+    }
+    .pillar-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .pillar-card .big-emoji { font-size: 3.5rem; display: block; margin-bottom: var(--space-2); }
+
+    .trinity-diagram {
+      display: grid; grid-template-columns: 1fr; max-width: 420px; margin: 0 auto;
+      gap: var(--space-3); position: relative;
+    }
+    .trinity-node {
+      padding: var(--space-4); border-radius: var(--radius-lg); text-align: center;
+      border: 3px solid #C4B5FD; background: white; transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .trinity-node:hover { transform: scale(1.05); border-color: #7C3AED; box-shadow: var(--shadow-md); }
+    .trinity-node .label { font-family: var(--font-heading); font-size: 1.2rem; color: #6B21A8; }
+    .trinity-node .role { font-size: 0.95rem; color: #6B7280; margin-top: 4px; }
+    .trinity-node .emoji { font-size: 2.2rem; display: block; margin-bottom: 4px; }
+    .trinity-center {
+      text-align: center; padding: var(--space-3); font-family: 'Patrick Hand', cursive;
+      font-size: 1.4rem; color: #6B21A8;
+    }
+
+    .sacrament-card {
+      padding: var(--space-4); border-radius: var(--radius-md); text-align: center;
+      background: white; border: 2px solid var(--color-border-light);
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .sacrament-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: #A855F7; }
+    .sacrament-card .sac-emoji { font-size: 2.5rem; margin-bottom: var(--space-2); display: block; }
+    .sacrament-card h4 { color: #6B21A8; margin-bottom: 4px; font-size: 1rem; }
+    .sacrament-card p { font-size: 0.85rem; color: var(--color-text-light); margin: 0; }
+
+    .station-list {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: var(--space-3); margin-top: var(--space-3);
+    }
+    .station-item {
+      background: white; border: 2px solid #E9D5FF; border-radius: var(--radius-md);
+      padding: var(--space-3); display: flex; gap: var(--space-3); align-items: center;
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .station-item:hover { border-color: #A855F7; transform: translateX(4px); box-shadow: var(--shadow-sm); }
+    .station-item .station-num {
+      width: 38px; height: 38px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+      background: linear-gradient(135deg, #6B21A8, #A855F7); color: white;
+      font-family: var(--font-heading); font-size: 1.05rem;
+    }
+    .station-item .station-text { font-size: 0.9rem; line-height: 1.3; color: #1F2937; }
+
+    .timeline {
+      position: relative; padding: var(--space-4) 0; margin: var(--space-4) 0;
+    }
+    .timeline::before {
+      content: ''; position: absolute; top: 0; bottom: 0; left: 30px;
+      width: 4px; background: linear-gradient(180deg, #6B21A8, #A855F7, #FBBF24);
+      border-radius: 4px;
+    }
+    .timeline-item {
+      display: flex; gap: var(--space-4); margin-bottom: var(--space-4);
+      align-items: flex-start;
+    }
+    .timeline-dot {
+      width: 60px; height: 60px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+      background: white; border: 4px solid #A855F7; z-index: 1; position: relative;
+    }
+    .timeline-content {
+      flex: 1; background: white; padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md); border-left: 4px solid #A855F7;
+      box-shadow: var(--shadow-sm);
+    }
+    .timeline-content h4 { color: #6B21A8; margin-bottom: 4px; }
+    .timeline-content .day { font-size: 0.85rem; color: #92400E; font-weight: 700; }
+
+    .prayer-card {
+      background: linear-gradient(135deg, #F3E8FF, #FAF5FF);
+      padding: var(--space-5); border-radius: var(--radius-md);
+      border: 2px solid #C4B5FD; margin-bottom: var(--space-4);
+    }
+    .prayer-card h4 {
+      display: flex; align-items: center; gap: var(--space-2);
+      color: #6B21A8; font-size: 1.15rem; margin-bottom: var(--space-3);
+    }
+    .prayer-card .prayer-text {
+      font-family: 'Patrick Hand', cursive; font-size: 1.1rem;
+      color: #1F2937; line-height: 1.7; white-space: pre-wrap;
+    }
+    .speak-btn {
+      background: white; border: 2px solid #A855F7; color: #6B21A8;
+      padding: 4px 12px; border-radius: 99px; font-weight: 700;
+      font-size: 0.85rem; cursor: pointer; transition: all var(--duration-normal);
+      margin-left: auto;
+    }
+    .speak-btn:hover { background: #A855F7; color: white; transform: scale(1.05); }
+
+    .apostle-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-2); margin-top: var(--space-3);
+    }
+    .apostle-chip {
+      background: white; border: 2px solid #C4B5FD; border-radius: var(--radius-md);
+      padding: var(--space-2) var(--space-3); text-align: center;
+      transition: all var(--duration-normal) var(--ease-bounce);
+    }
+    .apostle-chip:hover { background: #FAF5FF; transform: scale(1.05); border-color: #7C3AED; }
+    .apostle-chip .apostle-num {
+      display: inline-block; width: 22px; height: 22px; border-radius: 50%;
+      background: #6B21A8; color: white; font-size: 0.8rem; line-height: 22px;
+      margin-right: 4px;
+    }
+    .apostle-chip .apostle-name { font-weight: 700; color: #1F2937; font-size: 0.9rem; }
+
+    .commandment-list { counter-reset: cmd; }
+    .commandment-item {
+      counter-increment: cmd; display: flex; gap: var(--space-3);
+      padding: var(--space-3); margin-bottom: var(--space-2);
+      background: white; border-radius: var(--radius-md); border-left: 4px solid #D97706;
+    }
+    .commandment-item::before {
+      content: counter(cmd); flex-shrink: 0; width: 36px; height: 36px;
+      border-radius: 50%; background: linear-gradient(135deg, #D97706, #FBBF24);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-heading); font-size: 1.05rem;
+    }
+
+    .exercise-question {
+      padding: var(--space-4); background: var(--color-surface); border-radius: var(--radius-md);
+      margin-bottom: var(--space-3); border: 2px solid var(--color-border-light);
+      transition: border-color var(--duration-normal);
+    }
+    .exercise-question.answered-correct { border-color: var(--color-success); background: var(--color-success-light); }
+    .exercise-question.answered-wrong { border-color: var(--color-error); background: var(--color-error-light); }
+    .exercise-question .q-label { font-weight: 700; color: var(--cat-primary); margin-bottom: var(--space-2); }
+
+    .exercise-input {
+      padding: var(--space-2) var(--space-3); border: 2px solid var(--color-border); border-radius: var(--radius-sm);
+      font-size: var(--text-base); font-weight: 600; outline: none;
+      transition: border-color var(--duration-normal);
+    }
+    .exercise-input:focus { border-color: #A855F7; }
+
+    .exercise-score {
+      display: flex; align-items: center; justify-content: center; gap: var(--space-4); padding: var(--space-4);
+      background: linear-gradient(135deg, #6B21A8, #A855F7); color: white; border-radius: var(--radius-md);
+      margin-top: var(--space-4); font-size: var(--text-lg); font-weight: 700;
+    }
+
+    .gospel-card {
+      padding: var(--space-3); background: white; border: 2px solid #FCD34D;
+      border-radius: var(--radius-md); text-align: center;
+    }
+    .gospel-card .ev-emoji { font-size: 2.4rem; }
+    .gospel-card h4 { color: #92400E; margin: 4px 0; }
+
+    .tier-btn.explorer { border-color: var(--cat-primary-light); color: var(--cat-primary); background: #F3E8FF; }
+    .tier-btn.explorer.active, .tier-btn.explorer:hover { background: var(--cat-primary); color: white; }
+
+    .lesson-card-header { background: linear-gradient(135deg, #6B21A8, #A855F7) !important; }
+
+    .spell-word {
+      background: white; border: 2px solid #FCD34D; border-radius: 10px;
+      padding: 10px 14px; cursor: pointer; font-weight: 700;
+      color: #78350F; transition: all 0.2s ease;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .spell-word::after { content: '🔊'; margin-left: auto; opacity: 0.5; }
+    .spell-word:hover { background: #FEF3C7; border-color: #F59E0B; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245,158,11,0.25); }
+    .spell-word:hover::after { opacity: 1; }
+    .spell-word.speaking { background: #FCD34D; border-color: #B45309; }
+  </style>
+</head>
+<body>
+
+<!-- Page Header -->
+<div class="page-header" style="background: linear-gradient(135deg, #4C1D95, #6B21A8, #A855F7);">
+  <div class="container">
+    <div class="chapter-badge fade-in" style="background: rgba(255,255,255,0.2);">✝️ Catechism · Chapter 1</div>
+    <h1 class="fade-in-up">Following Jesus</h1>
+    <p class="fade-in-up delay-1">Lessons 15–28 · Lent · Stations of the Cross · Triduum · Oral Prayers</p>
+    <a href="../catechism.html" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; margin-top: var(--space-3);">← Back to Catechism</a>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" data-tab="learn">📖 Learn</div>
+    <div class="tab" data-tab="practice">✏️ Practice</div>
+    <div class="tab" data-tab="quiz">🎯 Quiz</div>
+    <div class="tab" data-tab="prayers">🙏 Prayers</div>
+  </div>
+
+  <!-- ==================== LEARN ==================== -->
+  <div class="tab-content active" id="learn">
+    <div class="section-header">
+      <h2>📖 Learn About Jesus</h2>
+      <p>From miracles to Easter to Pentecost — let's walk with Jesus!</p>
+    </div>
+
+    <!-- ===== Lesson 15: Miracles ===== -->
+    <div class="lesson-card open fade-in-up">
+      <div class="lesson-card-header">
+        <span class="lesson-number">15</span>
+        <h3>Jesus Does Wonderful Things ✨</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Jesus did wonderful things that were beyond human power. We call these <strong>miracles</strong>.</p>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-4 text-center" style="background: #FEF3C7;">
+            <div style="font-size: 3rem;">🍞🐟</div>
+            <h4 style="color: #92400E;">Feeding 5000</h4>
+            <p class="text-sm">From a boy's <strong>5 loaves and 2 fishes</strong>, Jesus fed <strong>5000 people</strong> — and <strong>12 baskets</strong> were left over!</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #DBEAFE;">
+            <div style="font-size: 3rem;">⛵🌊</div>
+            <h4 style="color: #1E40AF;">Calming the Storm</h4>
+            <p class="text-sm">A strong wind and waves came on the sea. Jesus spoke — and the storm became quiet!</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #FCE7F3;">
+            <div style="font-size: 3rem;">👧✨</div>
+            <h4 style="color: #BE185D;">Raising the Little Girl</h4>
+            <p class="text-sm">Jesus brought a <strong>little girl back to life</strong> — showing power even over death.</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #D1FAE5;">
+            <div style="font-size: 3rem;">🛌➡️🚶</div>
+            <h4 style="color: #065F46;">Healing the Paralyzed Man</h4>
+            <p class="text-sm">"<em>Your sins are forgiven. Get up and walk!</em>" — and the man stood up and walked.</p>
+          </div>
+        </div>
+
+        <div class="verse-box mt-4">
+          "Jesus took the loaves, gave thanks, and distributed them to those who were seated; so also the fish, as much as they wanted."
+          <span class="ref">— John 6:11</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 16: Faith ===== -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header">
+        <span class="lesson-number">16</span>
+        <h3>We Believe in Jesus 🙏</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Jesus is <strong>God's Son</strong> and the <strong>Saviour of the World</strong>. People came to him with great faith.</p>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-4" style="background: #FEF3C7;">
+            <h4 style="color: #92400E;">👁️‍🗨️ The Blind Man</h4>
+            <p>He cried out: "<strong>Jesus, help me!</strong>"<br>And Jesus opened his eyes.</p>
+          </div>
+          <div class="card p-4" style="background: #DDD6FE;">
+            <h4 style="color: #5B21B6;">⚔️ The Centurion</h4>
+            <p>His servant was very sick. The Centurion said: "<strong>I am not worthy that You should enter my house.</strong>" Jesus was so happy with his <strong>faith</strong> that the servant was healed at once!</p>
+          </div>
+        </div>
+
+        <div class="fact-box">
+          <h4>💡 Did you know?</h4>
+          <p>At every Mass, before Holy Communion, we still say the Centurion's words: <em>"Lord, I am not worthy that you should enter under my roof, but only say the word and my soul shall be healed."</em></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 17: Best Gift ===== -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header">
+        <span class="lesson-number">17</span>
+        <h3>The Best Gift of All — Holy Communion 🍞🍷</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>The <strong>Last Supper</strong> was the special meal Jesus shared with his Apostles. Jesus took bread and wine and changed them into his own <strong>Body and Blood</strong>.</p>
+
+        <div class="interactive-area">
+          <div style="display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 1.1rem; font-weight: 700;">
+            <span style="background: #FEF3C7; padding: 8px 14px; border-radius: 12px; color: #92400E;">🍞 Bread</span>
+            <span>+</span>
+            <span style="background: #FCA5A5; padding: 8px 14px; border-radius: 12px; color: #7F1D1D;">🍷 Wine</span>
+            <span style="font-size: 1.5rem;">→</span>
+            <span style="background: linear-gradient(135deg, #FBBF24, #FCD34D); padding: 8px 14px; border-radius: 12px; color: #78350F;">✨ Body & Blood of Jesus</span>
+          </div>
+          <p class="text-center mt-3 text-sm">This is called the <strong>Holy Eucharist</strong> — Jesus' best gift to us!</p>
+        </div>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-4" style="background: #F3E8FF;">
+            <h4 style="color: #6B21A8;">⛪ Our Bishop</h4>
+            <p>Bishop <strong>Aldo Berardi</strong> is the Bishop of Bahrain.</p>
+          </div>
+          <div class="card p-4" style="background: #FCE7F3;">
+            <h4 style="color: #BE185D;">🧎 Our Parish Priest</h4>
+            <p>Rev. Fr. <strong>Francis Joseph</strong>, at <strong>Sacred Heart Catholic Church</strong>, Bahrain.</p>
+          </div>
+        </div>
+        <p class="text-sm text-center mt-2"><em>Only a priest can change bread and wine into the Body and Blood of Jesus at Mass.</em></p>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 18: Jesus Dies ===== -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header">
+        <span class="lesson-number">18</span>
+        <h3>Jesus Dies for Us ✝️</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot">🍞</div>
+            <div class="timeline-content">
+              <div class="day">HOLY THURSDAY (Maundy Thursday)</div>
+              <h4>The Last Supper</h4>
+              <p class="text-sm">Jesus shared bread and wine with his Apostles. Then he prayed in the <strong>Garden of Gethsemane</strong>. <em>"Maundy"</em> means <strong>Command</strong>.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">✝️</div>
+            <div class="timeline-content">
+              <div class="day">GOOD FRIDAY</div>
+              <h4>Jesus is Crucified</h4>
+              <p class="text-sm">Jesus carried his cross and fell <strong>three times</strong>. <strong>Simon of Cyrene</strong> helped him. He was crucified at <strong>Mount Calvary</strong>. <strong>Mother Mary and Saint John</strong> stood by the Cross until the end.</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot">⚰️</div>
+            <div class="timeline-content">
+              <div class="day">HOLY SATURDAY</div>
+              <h4>Jesus is Buried</h4>
+              <p class="text-sm"><strong>Joseph of Arimathea and Nicodemus</strong> placed Jesus' body in the tomb.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="fact-box">
+          <h4>💛 Why is it called "GOOD" Friday?</h4>
+          <p>Because Jesus died for <strong>us</strong>, and by his death he <strong>opened the gates of Heaven</strong>. That is the very best news of all — so the day is called <em>Good</em> Friday.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 19: Resurrection ===== -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header">
+        <span class="lesson-number">19</span>
+        <h3>Jesus is Raised to a New Life — Easter! 🌅</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <div class="grid-2 gap-4">
+          <div class="card p-4" style="background: #FEF3C7;">
+            <h4 style="color: #92400E;">🌅 Easter Sunday</h4>
+            <p>On the <strong>third day</strong>, Jesus <strong>rose from the dead</strong>! He showed his great power over death.</p>
+          </div>
+          <div class="card p-4" style="background: #FCE7F3;">
+            <h4 style="color: #BE185D;">👩 First to See Him</h4>
+            <p>Jesus first appeared to <strong>Mary Magdalene</strong> at the empty tomb.</p>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #FEE2E2; border-left: 4px solid #DC2626;">
+          <h4 style="color: #991B1B;">😢 Judas — the one who betrayed</h4>
+          <p>Sadly, one of Jesus' Apostles, <strong>Judas Iscariot</strong>, betrayed Jesus for thirty pieces of silver.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 20: The Church ===== -->
+    <div class="lesson-card fade-in-up delay-5">
+      <div class="lesson-card-header">
+        <span class="lesson-number">20</span>
+        <h3>Jesus Begins the Church ⛪</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>The <strong>Church</strong> is not just a building — it is a <strong>community of people who believe in Jesus and are baptised</strong>.</p>
+
+        <div class="grid-3 gap-3 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="card p-4 text-center" style="background: #DBEAFE;">
+            <div style="font-size: 2.5rem;">👴</div>
+            <h4 style="color: #1E40AF;">St. Peter</h4>
+            <p class="text-sm">Our <strong>first Pope</strong>!</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #F3E8FF;">
+            <div style="font-size: 2.5rem;">👑</div>
+            <h4 style="color: #6B21A8;">Pope Leo XIV</h4>
+            <p class="text-sm">Our current Pope — the <strong>leader</strong> of the Catholic Church on earth and a successor of St. Peter.</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #FEF3C7;">
+            <div style="font-size: 2.5rem;">⛪</div>
+            <h4 style="color: #92400E;">Our Parish</h4>
+            <p class="text-sm"><strong>Sacred Heart Catholic Church</strong>, Bahrain</p>
+          </div>
+        </div>
+
+        <div class="fact-box">
+          <h4>👼 Pentecost — when the Church was born!</h4>
+          <p>Mary and the Apostles were praying together. Suddenly a strong wind came, and <strong>tongues of fire</strong> rested on each Apostle. They were filled with the <strong>Holy Spirit</strong> and could speak many languages! "Pentecost" means <strong>50th day</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 21: Ascension ===== -->
+    <div class="lesson-card fade-in-up delay-6">
+      <div class="lesson-card-header">
+        <span class="lesson-number">21</span>
+        <h3>Jesus Goes Back to Heaven — Ascension ☁️</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>For <strong>40 days</strong> after Easter, Jesus stayed with his disciples. Then he ascended to Heaven from the <strong>Mount of Olives</strong>. Eleven Apostles watched him go.</p>
+
+        <div class="verse-box">
+          "Someday, Jesus will come again."
+          <span class="ref">— Angels to the disciples</span>
+        </div>
+
+        <p>Before going, Jesus promised to send the <strong>Holy Spirit</strong> to help his disciples. And he promised: <em>"I will come again at the end of the world."</em></p>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 22: Holy Spirit ===== -->
+    <div class="lesson-card fade-in-up delay-7">
+      <div class="lesson-card-header">
+        <span class="lesson-number">22</span>
+        <h3>The Holy Spirit Comes — Pentecost 🔥</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>On the <strong>10th day after the Ascension</strong> (the 50th day after Easter), the Holy Spirit came in tongues of fire on Mother Mary and the Apostles.</p>
+
+        <div class="card p-5 mt-4" style="background: linear-gradient(135deg, #FEF3C7, #FED7AA); border: 2px solid #F59E0B;">
+          <h4 style="color: #92400E;">🔥 What happened next?</h4>
+          <ul style="list-style: disc; padding-left: var(--space-6); line-height: 2;">
+            <li>The Apostles became brave!</li>
+            <li><strong>Peter</strong> began to preach the Good News to crowds.</li>
+            <li>People believed and were <strong>baptised</strong> — in the name of the <strong>Father, Son, and Holy Spirit</strong>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 23: Trinity ===== -->
+    <div class="lesson-card fade-in-up">
+      <div class="lesson-card-header">
+        <span class="lesson-number">23</span>
+        <h3>The Blessed Trinity 🔺</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">There is only <strong>ONE God</strong> — but in <strong>THREE Persons</strong>. We call this the <strong>Blessed Trinity</strong>. It is a holy <strong>mystery</strong>.</p>
+
+        <div class="trinity-diagram">
+          <div class="trinity-node">
+            <span class="emoji">👑</span>
+            <div class="label">God the Father</div>
+            <div class="role"><em>created</em> us</div>
+          </div>
+          <div class="trinity-center">⬇️ One God ⬇️</div>
+          <div class="trinity-node">
+            <span class="emoji">✝️</span>
+            <div class="label">God the Son · Jesus</div>
+            <div class="role"><em>saved</em> us</div>
+          </div>
+          <div class="trinity-center">⬇️ One God ⬇️</div>
+          <div class="trinity-node">
+            <span class="emoji">🕊️</span>
+            <div class="label">God the Holy Spirit</div>
+            <div class="role">makes us <em>holy</em></div>
+          </div>
+        </div>
+
+        <div class="fact-box mt-4">
+          <h4>✝️ The Sign of the Cross</h4>
+          <p>When you make the sign of the cross, you say: <em>"In the name of the Father, and of the Son, and of the Holy Spirit."</em> — That is a sign of the <strong>Blessed Trinity</strong>!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 24: Baptism ===== -->
+    <div class="lesson-card fade-in-up delay-1">
+      <div class="lesson-card-header">
+        <span class="lesson-number">24</span>
+        <h3>God Gives You His Life — Baptism 💧</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p><strong>Baptism</strong> is the very <strong>first Sacrament</strong>. It washes away <strong>Original Sin</strong> and makes us children of God!</p>
+
+        <h4 class="mt-4 mb-3">The 7 Sacraments</h4>
+        <div class="grid-3 gap-3" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+          <div class="sacrament-card"><span class="sac-emoji">💧</span><h4>1. Baptism</h4><p>Washes away Original Sin</p></div>
+          <div class="sacrament-card"><span class="sac-emoji">🤲</span><h4>2. Reconciliation</h4><p>Forgives our sins</p></div>
+          <div class="sacrament-card"><span class="sac-emoji">🍞</span><h4>3. Eucharist</h4><p>Body & Blood of Jesus</p></div>
+          <div class="sacrament-card"><span class="sac-emoji">🕊️</span><h4>4. Confirmation</h4><p>Holy Spirit strengthens us</p></div>
+          <div class="sacrament-card"><span class="sac-emoji">🩹</span><h4>5. Anointing of the Sick</h4><p>God's healing for the sick</p></div>
+          <div class="sacrament-card"><span class="sac-emoji">💍</span><h4>6. Marriage</h4><p>Husband & wife united in God</p></div>
+          <div class="sacrament-card"><span class="sac-emoji">⛪</span><h4>7. Holy Orders</h4><p>Priests called by God</p></div>
+        </div>
+
+        <h4 class="mt-6 mb-3">Symbols of Baptism</h4>
+        <div class="grid-2 gap-3" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+          <div class="card p-3 text-center" style="background:#FEF3C7;"><div style="font-size:2rem;">🕯️</div><strong>Candle</strong><br><span class="text-sm">Jesus is the Light of the World</span></div>
+          <div class="card p-3 text-center" style="background:#DBEAFE;"><div style="font-size:2rem;">💧</div><strong>Water</strong><br><span class="text-sm">Symbol of Life</span></div>
+          <div class="card p-3 text-center" style="background:#FED7AA;"><div style="font-size:2rem;">🫒</div><strong>Holy Oil</strong><br><span class="text-sm">Symbol of the Holy Spirit</span></div>
+          <div class="card p-3 text-center" style="background:#F3F4F6;"><div style="font-size:2rem;">⬜</div><strong>White Cloth</strong><br><span class="text-sm">Symbol of Purity</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 25: Many Gifts ===== -->
+    <div class="lesson-card fade-in-up delay-2">
+      <div class="lesson-card-header">
+        <span class="lesson-number">25</span>
+        <h3>Many Gifts from God — The Mass 📖🍞</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>God's most precious gift to us is his own Son, <strong>Jesus</strong>. Jesus gives himself to us in the <strong>Holy Eucharist</strong> at every Mass.</p>
+
+        <div class="card p-5 mt-4" style="background: #F3E8FF;">
+          <h4 style="color: #6B21A8;">🙏 The Two Main Parts of the Mass</h4>
+          <div class="grid-2 gap-3 mt-3">
+            <div style="background:white; padding:14px; border-radius:10px; border-left:4px solid #A855F7;">
+              <strong>1. Liturgy of the Word</strong>
+              <p class="text-sm mt-1">We listen to readings from the Bible and the priest's homily.</p>
+            </div>
+            <div style="background:white; padding:14px; border-radius:10px; border-left:4px solid #A855F7;">
+              <strong>2. Liturgy of the Eucharist</strong>
+              <p class="text-sm mt-1">Bread and wine become the Body and Blood of Jesus — and we receive Holy Communion.</p>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="mt-6 mb-3 text-center">The Four Gospels 📜</h4>
+        <div class="grid-3 gap-3" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="gospel-card"><div class="ev-emoji">👨</div><h4>Matthew</h4></div>
+          <div class="gospel-card"><div class="ev-emoji">🦁</div><h4>Mark</h4></div>
+          <div class="gospel-card"><div class="ev-emoji">🐂</div><h4>Luke</h4></div>
+          <div class="gospel-card"><div class="ev-emoji">🦅</div><h4>John</h4></div>
+        </div>
+        <p class="text-center text-sm mt-2"><em>Each Gospel is one of the four ways the story of Jesus is told.</em></p>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 26: Mary ===== -->
+    <div class="lesson-card fade-in-up delay-3">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #BE185D, #EC4899) !important;">
+        <span class="lesson-number">26</span>
+        <h3>Our Mother Mary 👸🌹</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Mary is the Mother of Jesus and our Mother too! She is the <strong>Queen of Heaven</strong> and Queen of all Saints.</p>
+
+        <div class="grid-3 gap-3 mt-4" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+          <div class="card p-4 text-center" style="background: #FCE7F3;">
+            <div style="font-size: 2.5rem;">⭐</div>
+            <h4 style="color: #BE185D;">Immaculate Conception</h4>
+            <p class="text-sm">Mary was conceived <strong>without sin</strong>.</p>
+            <p class="text-sm mt-1"><strong>📅 Dec 8</strong></p>
+          </div>
+          <div class="card p-4 text-center" style="background: #DBEAFE;">
+            <div style="font-size: 2.5rem;">👼</div>
+            <h4 style="color: #1E40AF;">Annunciation</h4>
+            <p class="text-sm">Angel Gabriel told Mary she would be Mother of Jesus.</p>
+            <p class="text-sm mt-1"><strong>📅 Mar 25</strong></p>
+          </div>
+          <div class="card p-4 text-center" style="background: #F3E8FF;">
+            <div style="font-size: 2.5rem;">☁️</div>
+            <h4 style="color: #6B21A8;">Assumption</h4>
+            <p class="text-sm">Mary was taken to Heaven <strong>body and soul</strong>.</p>
+            <p class="text-sm mt-1"><strong>📅 Aug 15</strong></p>
+          </div>
+        </div>
+
+        <div class="fact-box mt-4">
+          <h4>🍷 Jesus' First Miracle</h4>
+          <p>At the wedding at <strong>Cana</strong>, Mary noticed that the wine had run out. She told Jesus, and he turned <strong>water into wine</strong> — his very first miracle!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 27: Following Jesus ===== -->
+    <div class="lesson-card fade-in-up delay-4">
+      <div class="lesson-card-header">
+        <span class="lesson-number">27</span>
+        <h3>Following Jesus — Living Like Him 🚶✨</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>God the Father sent Jesus to help us. We can follow Jesus by being <strong>kind, honest, sharing, and forgiving</strong>.</p>
+
+        <div class="card p-5 mt-4" style="background: #DBEAFE;">
+          <h4 style="color: #1E40AF;">🙏 What is prayer?</h4>
+          <p>Prayer is <strong>talking AND listening</strong> to God.</p>
+          <ul style="list-style: disc; padding-left: var(--space-6); margin-top: 8px; line-height: 2;">
+            <li>🌅 In the <strong>morning</strong>: make the sign of the cross + a prayer</li>
+            <li>🌙 At <strong>night</strong>: say the Guardian Angel prayer + thank God</li>
+            <li>🤝 Pray <strong>for others</strong>: the sick, the poor, friends and family</li>
+          </ul>
+        </div>
+
+        <div class="verse-box">
+          "Love God with all your heart" — this is the most important rule of all.
+          <span class="ref">— The Greatest Commandment</span>
+        </div>
+
+        <p class="text-center mt-3"><strong>Going to Mass</strong> helps us learn more about God and show our love for Him. ⛪</p>
+      </div>
+    </div>
+
+    <!-- ===== Lesson 28: Jesus Will Come Again ===== -->
+    <div class="lesson-card fade-in-up delay-5">
+      <div class="lesson-card-header">
+        <span class="lesson-number">28</span>
+        <h3>Jesus Will Come Again — Heaven 🏠✨</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p style="font-size: var(--text-lg);">Heaven is our <strong>true and eternal home</strong>. When Jesus comes again, he will take us to live with Him forever.</p>
+
+        <div class="card p-5 mt-4" style="background: linear-gradient(135deg, #DBEAFE, #FEF3C7);">
+          <h4 style="color: #1E40AF;">❓ Why did God make me?</h4>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1F2937;">To <span style="color: #BE185D;">know</span> Him, to <span style="color: #BE185D;">love</span> Him, and to <span style="color: #BE185D;">serve</span> Him in this life — and to be happy with Him forever in Heaven!</p>
+        </div>
+
+        <div class="grid-2 gap-4 mt-4">
+          <div class="card p-4" style="background:#F3F4F6;">
+            <h4>⏳ Purgatory</h4>
+            <p class="text-sm">A place of <strong>cleansing</strong> where the soul is purified before it goes to Heaven.</p>
+          </div>
+          <div class="card p-4" style="background:#FEF3C7;">
+            <h4>🛏️ St. Joseph</h4>
+            <p class="text-sm">Many people pray to him for a <strong>happy death</strong> — because he died with Jesus and Mary at his side.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Lent ===== -->
+    <div class="lesson-card fade-in-up delay-6">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #7C2D12, #B45309) !important;">
+        <span class="lesson-number">📿</span>
+        <h3>Lent &amp; Ash Wednesday</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>Lent is a special <strong>40-day</strong> season when we remember Jesus' Life, Death and Resurrection. It begins on <strong>Ash Wednesday</strong> and ends on <strong>Easter Sunday</strong>.</p>
+
+        <div class="fact-box">
+          <h4>🌿 Where do the ashes come from?</h4>
+          <p>The ashes are made by burning the <strong>palm leaves from the previous year's Palm Sunday</strong>! The priest puts them on our forehead in the sign of a cross.</p>
+        </div>
+
+        <h4 class="mt-4 mb-3 text-center">The 3 Pillars of Lent</h4>
+        <div class="grid-3 gap-4">
+          <div class="pillar-card" style="background: #DBEAFE; border-color: #93C5FD;">
+            <span class="big-emoji">🙏</span>
+            <h4 style="color: #1E40AF;">Prayer</h4>
+            <p class="text-sm">Talk to God and listen to Him.</p>
+          </div>
+          <div class="pillar-card" style="background: #FED7AA; border-color: #FB923C;">
+            <span class="big-emoji">🍽️</span>
+            <h4 style="color: #9A3412;">Fasting</h4>
+            <p class="text-sm">Give up something we love (like sweets) for God.</p>
+          </div>
+          <div class="pillar-card" style="background: #D1FAE5; border-color: #6EE7B7;">
+            <span class="big-emoji">🤝</span>
+            <h4 style="color: #065F46;">Almsgiving</h4>
+            <p class="text-sm">Help the poor and share with others.</p>
+          </div>
+        </div>
+
+        <div class="card p-4 mt-4" style="background: #FEF3C7;">
+          <p>📖 Just like Jesus <strong>fasted and prayed</strong> in the desert for 40 days, we do the same during Lent! "Passion" means <strong>suffering</strong> — we remember Jesus' Passion.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Stations of the Cross ===== -->
+    <div class="lesson-card fade-in-up delay-7">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #7C2D12, #B45309) !important;">
+        <span class="lesson-number">✝️</span>
+        <h3>The 14 Stations of the Cross</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <p>The Stations of the Cross are <strong>14 special moments</strong> from Jesus' suffering and death. Many people pray them on Fridays in Lent.</p>
+
+        <div class="station-list">
+          <div class="station-item"><div class="station-num">1</div><div class="station-text">Jesus is condemned to death</div></div>
+          <div class="station-item"><div class="station-num">2</div><div class="station-text">Jesus carries His Cross</div></div>
+          <div class="station-item"><div class="station-num">3</div><div class="station-text">Jesus falls the first time</div></div>
+          <div class="station-item"><div class="station-num">4</div><div class="station-text">Jesus meets His mother Mary</div></div>
+          <div class="station-item"><div class="station-num">5</div><div class="station-text">Simon of Cyrene helps Jesus</div></div>
+          <div class="station-item"><div class="station-num">6</div><div class="station-text">Veronica wipes the face of Jesus</div></div>
+          <div class="station-item"><div class="station-num">7</div><div class="station-text">Jesus falls the second time</div></div>
+          <div class="station-item"><div class="station-num">8</div><div class="station-text">Jesus meets the women of Jerusalem</div></div>
+          <div class="station-item"><div class="station-num">9</div><div class="station-text">Jesus falls the third time</div></div>
+          <div class="station-item"><div class="station-num">10</div><div class="station-text">Jesus is stripped of his clothes</div></div>
+          <div class="station-item"><div class="station-num">11</div><div class="station-text">Jesus is crucified</div></div>
+          <div class="station-item" style="background:#FEE2E2; border-color:#DC2626;"><div class="station-num" style="background: linear-gradient(135deg, #DC2626, #F87171);">12</div><div class="station-text"><strong>Jesus dies on the Cross</strong></div></div>
+          <div class="station-item"><div class="station-num">13</div><div class="station-text">Jesus is taken down from the Cross</div></div>
+          <div class="station-item"><div class="station-num">14</div><div class="station-text">Jesus is laid in the tomb</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Palm Sunday & Triduum ===== -->
+    <div class="lesson-card fade-in-up">
+      <div class="lesson-card-header" style="background: linear-gradient(135deg, #166534, #16A34A) !important;">
+        <span class="lesson-number">🌴</span>
+        <h3>Palm Sunday &amp; the Triduum</h3>
+        <span class="lesson-toggle">▼</span>
+      </div>
+      <div class="lesson-card-body">
+        <div class="card p-4" style="background: #DCFCE7; border: 2px solid #86EFAC;">
+          <h4 style="color: #166534;">🌴 Palm Sunday</h4>
+          <p>Jesus rode triumphantly into <strong>Jerusalem</strong>. People spread their cloaks on the road and waved <strong>palm leaves</strong>, shouting:</p>
+          <p class="text-center mt-2" style="font-size: 1.4rem; font-family: 'Patrick Hand', cursive; color: #166534;">"Hosanna! Hosanna!"</p>
+          <p class="text-center text-sm"><em>Hosanna means "<strong>save us!</strong>"</em></p>
+        </div>
+
+        <h4 class="mt-6 mb-3 text-center">The Triduum — The 3 Holiest Days 🕊️</h4>
+        <p class="text-center text-sm"><em>"Triduum" means three days.</em></p>
+
+        <div class="grid-3 gap-3 mt-3">
+          <div class="card p-4 text-center" style="background: #F3E8FF; border: 2px solid #C4B5FD;">
+            <div style="font-size: 2.5rem;">🍞</div>
+            <h4 style="color: #6B21A8;">Holy Thursday</h4>
+            <p class="text-sm">Last Supper · Jesus washes the disciples' feet</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #FEE2E2; border: 2px solid #FCA5A5;">
+            <div style="font-size: 2.5rem;">✝️</div>
+            <h4 style="color: #991B1B;">Good Friday</h4>
+            <p class="text-sm">Jesus dies on the cross for us</p>
+          </div>
+          <div class="card p-4 text-center" style="background: #DBEAFE; border: 2px solid #93C5FD;">
+            <div style="font-size: 2.5rem;">⏳</div>
+            <h4 style="color: #1E40AF;">Holy Saturday</h4>
+            <p class="text-sm">Jesus rests in the tomb · we wait in silence</p>
+          </div>
+        </div>
+
+        <div class="verse-box mt-4">
+          "Love one another as I have loved you."
+          <span class="ref">— Jesus' new commandment, Holy Thursday</span>
+        </div>
+
+        <div class="fact-box">
+          <h4>📅 The Right Order</h4>
+          <p><strong>Palm Sunday → Holy Thursday → Good Friday → Easter Sunday → Ascension → Pentecost</strong></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== PRACTICE ==================== -->
+  <div class="tab-content" id="practice">
+    <div class="section-header">
+      <h2>✏️ Practice Time</h2>
+      <p>Try these exercises and remember what you've learned!</p>
+    </div>
+
+    <!-- 📋 Exam pattern -->
+    <div class="card fade-in-up" style="background: linear-gradient(135deg, #EDE9FE, #FCE7F3); border: 2px solid #C4B5FD; padding: 20px; margin-bottom: 20px;">
+      <h3 style="color: #6B21A8; margin-bottom: 8px;">📋 Grade 3 Exam Pattern</h3>
+      <p style="color: #374151; margin-bottom: 12px;">Your exam will have <strong>6 sections (40 marks total)</strong>:</p>
+      <div class="grid-3 gap-2" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <div style="background:white; padding:10px 14px; border-radius:8px; border-left:4px solid #A855F7;"><strong>1.</strong> True or False <span style="float:right; color:#6B21A8; font-weight:700;">10 marks</span></div>
+        <div style="background:white; padding:10px 14px; border-radius:8px; border-left:4px solid #A855F7;"><strong>2.</strong> Fill in the Blanks <span style="float:right; color:#6B21A8; font-weight:700;">10 marks</span></div>
+        <div style="background:white; padding:10px 14px; border-radius:8px; border-left:4px solid #A855F7;"><strong>3.</strong> Match the Following <span style="float:right; color:#6B21A8; font-weight:700;">5 marks</span></div>
+        <div style="background:white; padding:10px 14px; border-radius:8px; border-left:4px solid #A855F7;"><strong>4.</strong> Choose from Bracket <span style="float:right; color:#6B21A8; font-weight:700;">5 marks</span></div>
+        <div style="background:white; padding:10px 14px; border-radius:8px; border-left:4px solid #A855F7;"><strong>5.</strong> Write in Correct Order <span style="float:right; color:#6B21A8; font-weight:700;">5 marks</span></div>
+        <div style="background:white; padding:10px 14px; border-radius:8px; border-left:4px solid #A855F7;"><strong>6.</strong> Answer the Questions <span style="float:right; color:#6B21A8; font-weight:700;">5 marks</span></div>
+      </div>
+    </div>
+
+    <!-- 📝 Spelling words to memorise -->
+    <div class="card fade-in-up" style="background: linear-gradient(135deg, #FEF3C7, #FFFBEB); border: 2px solid #F59E0B; padding: 20px; margin-bottom: 20px;">
+      <h3 style="color: #92400E; margin-bottom: 6px;">📝 15 Important Words — Learn the Spelling!</h3>
+      <p style="color: #78350F; margin-bottom: 14px;"><em>Read each word out loud, then close your eyes and try to spell it. Tap any word to hear it.</em></p>
+      <div class="grid-3 gap-2" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+        <div class="spell-word" onclick="speakWord(this)">1. Pentecost</div>
+        <div class="spell-word" onclick="speakWord(this)">2. Mary Magdalene</div>
+        <div class="spell-word" onclick="speakWord(this)">3. Command</div>
+        <div class="spell-word" onclick="speakWord(this)">4. Bishop Aldo Berardi</div>
+        <div class="spell-word" onclick="speakWord(this)">5. Ascension</div>
+        <div class="spell-word" onclick="speakWord(this)">6. Prayer</div>
+        <div class="spell-word" onclick="speakWord(this)">7. Fasting</div>
+        <div class="spell-word" onclick="speakWord(this)">8. Almsgiving</div>
+        <div class="spell-word" onclick="speakWord(this)">9. Rev. Fr. Francis</div>
+        <div class="spell-word" onclick="speakWord(this)">10. Ash Wednesday</div>
+        <div class="spell-word" onclick="speakWord(this)">11. Baptism</div>
+        <div class="spell-word" onclick="speakWord(this)">12. Holy Eucharist</div>
+        <div class="spell-word" onclick="speakWord(this)">13. Wedding of Cana</div>
+        <div class="spell-word" onclick="speakWord(this)">14. Pope Leo XIV</div>
+        <div class="spell-word" onclick="speakWord(this)">15. Easter</div>
+      </div>
+    </div>
+
+    <!-- ⭐ Spelling Drill — exact answers from the exam ⭐ -->
+    <div class="exercise-card fade-in-up" id="ex-spell" style="border: 3px solid #F59E0B; background: linear-gradient(135deg, #FEF3C7, #FFFBEB);">
+      <h3 style="color: #92400E;">⭐ Spelling Drill — Fill in the Blanks</h3>
+      <p style="color: #78350F; font-weight: 600;">
+        🎯 <strong>These exact spellings will appear in your exam.</strong>
+        Type each answer carefully — capital letters, full stops and apostrophes don't matter, but the spelling does!
+      </p>
+      <div id="ex-spell-questions"></div>
+      <button class="btn mt-4" style="background: #D97706; color: white;" onclick="checkExercise('spell')">Check Spelling ✓</button>
+      <button class="btn mt-4" style="background: white; color: #92400E; border: 2px solid #D97706;" onclick="resetSpellingDrill()">Try Again 🔄</button>
+      <div id="ex-spell-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise: Holy Week order -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-order" style="border: 2px solid #A855F7;">
+      <h3 style="color: #6B21A8;">📅 Put These in the Right Order</h3>
+      <p class="text-muted mb-3">Number these events of Jesus' life from <strong>1</strong> (first) to <strong>6</strong> (last).</p>
+      <div id="ex-order-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('order')">Check Order ✓</button>
+      <div id="ex-order-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 1: Match -->
+    <div class="exercise-card fade-in-up" id="ex-match">
+      <h3><span class="exercise-number">1</span> Match the Person to the Story</h3>
+      <p class="text-muted mb-4">Pick the right person for each clue.</p>
+      <div id="ex-match-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('match')">Check Answers ✓</button>
+      <div id="ex-match-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 2: Days -->
+    <div class="exercise-card fade-in-up delay-1" id="ex-days">
+      <h3><span class="exercise-number">2</span> Holy Week — Pick the Right Day</h3>
+      <p class="text-muted mb-4">Each event happened on which day?</p>
+      <div id="ex-days-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('days')">Check Answers ✓</button>
+      <div id="ex-days-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 3: Fill in -->
+    <div class="exercise-card fade-in-up delay-2" id="ex-fill">
+      <h3><span class="exercise-number">3</span> Fill in the Blanks</h3>
+      <p class="text-muted mb-4">Complete each sentence.</p>
+      <div id="ex-fill-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('fill')">Check Answers ✓</button>
+      <div id="ex-fill-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 4: True/False -->
+    <div class="exercise-card fade-in-up delay-3" id="ex-tf">
+      <h3><span class="exercise-number">4</span> True or False</h3>
+      <p class="text-muted mb-4">Decide if each statement is true or false.</p>
+      <div id="ex-tf-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('tf')">Check Answers ✓</button>
+      <div id="ex-tf-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 5: Numbers -->
+    <div class="exercise-card fade-in-up delay-4" id="ex-num">
+      <h3><span class="exercise-number">5</span> The Right Number</h3>
+      <p class="text-muted mb-4">Type the correct number for each fact.</p>
+      <div id="ex-num-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('num')">Check Answers ✓</button>
+      <div id="ex-num-score" class="hidden"></div>
+    </div>
+
+    <!-- Exercise 6: Sacrament symbol -->
+    <div class="exercise-card fade-in-up delay-5" id="ex-symbol">
+      <h3><span class="exercise-number">6</span> Symbols of Baptism</h3>
+      <p class="text-muted mb-4">Match each symbol to what it stands for.</p>
+      <div id="ex-symbol-questions"></div>
+      <button class="btn mt-4" style="background: #6B21A8; color: white;" onclick="checkExercise('symbol')">Check Answers ✓</button>
+      <div id="ex-symbol-score" class="hidden"></div>
+    </div>
+
+    <!-- 📝 Section 4: Choose the correct answer from the bracket -->
+    <div class="exercise-card fade-in-up delay-6" id="ex-bracket" style="border: 2px solid #0EA5E9;">
+      <h3 style="color: #075985;">📝 Exam Section 4 — Choose from the Bracket <span style="font-size:0.8em; color:#475569;">(5 marks)</span></h3>
+      <p class="text-muted mb-4">Pick the correct answer from the words in the bracket.</p>
+      <div id="ex-bracket-questions"></div>
+      <button class="btn mt-4" style="background: #0EA5E9; color: white;" onclick="checkExercise('bracket')">Check Answers ✓</button>
+      <div id="ex-bracket-score" class="hidden"></div>
+    </div>
+
+    <!-- 📝 Section 6: Answer the questions (short answer) -->
+    <div class="exercise-card fade-in-up delay-7" id="ex-shortans" style="border: 2px solid #10B981;">
+      <h3 style="color: #065F46;">📝 Exam Section 6 — Answer the Questions <span style="font-size:0.8em; color:#475569;">(5 marks)</span></h3>
+      <p class="text-muted mb-4">Type a short answer in your own words. Then tap <strong>Show Answer</strong> to compare with the model answer. There can be more than one good way to say it!</p>
+      <div id="ex-shortans-questions"></div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ ==================== -->
+  <div class="tab-content" id="quiz">
+    <div class="section-header">
+      <h2>🎯 Quiz</h2>
+      <p>Choose a level and test what you've learned!</p>
+    </div>
+    <div class="tier-selector">
+      <button class="tier-btn explorer active" onclick="startQuiz('explorer')">🌱 Explorer</button>
+      <button class="tier-btn adventurer" onclick="startQuiz('adventurer')">⚔️ Adventurer</button>
+      <button class="tier-btn champion" onclick="startQuiz('champion')">👑 Champion</button>
+    </div>
+    <div id="quiz-area">
+      <div class="text-center p-8">
+        <p style="font-size: var(--text-xl);">Pick a level and let's begin, Crislyn!</p>
+        <button class="btn btn-lg mt-4" style="background: #6B21A8; color: white;" onclick="startQuiz('explorer')">Start Explorer Quiz 🌱</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRAYERS ==================== -->
+  <div class="tab-content" id="prayers">
+    <div class="section-header">
+      <h2>🙏 Oral Prayers</h2>
+      <p>Tap the speaker on any prayer to hear it read aloud.</p>
+    </div>
+
+    <!-- Sign of the Cross -->
+    <div class="prayer-card fade-in-up">
+      <h4>✝️ The Sign of the Cross
+        <button class="speak-btn" onclick="speakPrayer(this)">🔊 Speak</button>
+      </h4>
+      <div class="prayer-text">In the name of the Father, and of the Son, and of the Holy Spirit. Amen.</div>
+    </div>
+
+    <!-- Our Father -->
+    <div class="prayer-card fade-in-up delay-1">
+      <h4>🌟 Our Father (The Lord's Prayer)
+        <button class="speak-btn" onclick="speakPrayer(this)">🔊 Speak</button>
+      </h4>
+      <div class="prayer-text">Our Father, who art in heaven,
+hallowed be thy name;
+thy kingdom come,
+thy will be done,
+on earth as it is in heaven.
+
+Give us this day our daily bread;
+and forgive us our trespasses,
+as we forgive those who trespass against us;
+and lead us not into temptation,
+but deliver us from evil. Amen.</div>
+    </div>
+
+    <!-- Hail Mary -->
+    <div class="prayer-card fade-in-up delay-2">
+      <h4>🌹 Hail Mary
+        <button class="speak-btn" onclick="speakPrayer(this)">🔊 Speak</button>
+      </h4>
+      <div class="prayer-text">Hail Mary, full of grace,
+the Lord is with thee;
+blessed art thou among women,
+and blessed is the fruit of thy womb, Jesus.
+
+Holy Mary, Mother of God,
+pray for us sinners,
+now and at the hour of our death. Amen.</div>
+    </div>
+
+    <!-- Glory Be -->
+    <div class="prayer-card fade-in-up delay-3">
+      <h4>✨ Glory Be
+        <button class="speak-btn" onclick="speakPrayer(this)">🔊 Speak</button>
+      </h4>
+      <div class="prayer-text">Glory be to the Father,
+and to the Son,
+and to the Holy Spirit.
+
+As it was in the beginning,
+is now, and ever shall be,
+world without end. Amen.</div>
+    </div>
+
+    <!-- Guardian Angel -->
+    <div class="prayer-card fade-in-up delay-4">
+      <h4>👼 Guardian Angel Prayer
+        <button class="speak-btn" onclick="speakPrayer(this)">🔊 Speak</button>
+      </h4>
+      <div class="prayer-text">Angel of God, my guardian dear,
+to whom God's love commits me here,
+ever this day, be at my side,
+to light and guard, to rule and guide. Amen.</div>
+    </div>
+
+    <!-- Grace before meal -->
+    <div class="prayer-card fade-in-up delay-5">
+      <h4>🍽️ Grace Before Meals
+        <button class="speak-btn" onclick="speakPrayer(this)">🔊 Speak</button>
+      </h4>
+      <div class="prayer-text">Bless us, O Lord, and these Thy gifts,
+which we are about to receive
+from Thy bounty,
+through Christ our Lord. Amen.</div>
+    </div>
+
+    <!-- 12 Apostles -->
+    <div class="prayer-card fade-in-up delay-6">
+      <h4>🐟 The 12 Apostles</h4>
+      <div class="apostle-grid">
+        <div class="apostle-chip"><span class="apostle-num">1</span><span class="apostle-name">Peter</span></div>
+        <div class="apostle-chip"><span class="apostle-num">2</span><span class="apostle-name">Andrew</span></div>
+        <div class="apostle-chip"><span class="apostle-num">3</span><span class="apostle-name">James</span></div>
+        <div class="apostle-chip"><span class="apostle-num">4</span><span class="apostle-name">John</span></div>
+        <div class="apostle-chip"><span class="apostle-num">5</span><span class="apostle-name">Philip</span></div>
+        <div class="apostle-chip"><span class="apostle-num">6</span><span class="apostle-name">Bartholomew</span></div>
+        <div class="apostle-chip"><span class="apostle-num">7</span><span class="apostle-name">Thomas</span></div>
+        <div class="apostle-chip"><span class="apostle-num">8</span><span class="apostle-name">Matthew</span></div>
+        <div class="apostle-chip"><span class="apostle-num">9</span><span class="apostle-name">James (son of Alphaeus)</span></div>
+        <div class="apostle-chip"><span class="apostle-num">10</span><span class="apostle-name">Thaddeus</span></div>
+        <div class="apostle-chip"><span class="apostle-num">11</span><span class="apostle-name">Simon the Zealot</span></div>
+        <div class="apostle-chip" style="background:#FEE2E2; border-color:#FCA5A5;"><span class="apostle-num" style="background:#991B1B;">12</span><span class="apostle-name">Judas Iscariot</span></div>
+      </div>
+      <p class="text-sm text-center mt-3" style="color: #6B7280;"><em>James (son of Zebedee), brother of John, is #3. James (son of Alphaeus) is #9.</em></p>
+    </div>
+
+    <!-- 10 Commandments -->
+    <div class="prayer-card fade-in-up delay-7">
+      <h4>📜 The Ten Commandments</h4>
+      <div class="commandment-list">
+        <div class="commandment-item">I am the Lord your God; you shall not have other gods before me.</div>
+        <div class="commandment-item">You shall not take the name of the Lord your God in vain.</div>
+        <div class="commandment-item">Remember to keep holy the Lord's Day.</div>
+        <div class="commandment-item">Honour your father and your mother.</div>
+        <div class="commandment-item">You shall not kill.</div>
+        <div class="commandment-item">You shall not commit adultery.</div>
+        <div class="commandment-item">You shall not steal.</div>
+        <div class="commandment-item">You shall not bear false witness against your neighbour.</div>
+        <div class="commandment-item">You shall not covet your neighbour's wife.</div>
+        <div class="commandment-item">You shall not covet your neighbour's goods.</div>
+      </div>
+    </div>
+
+    <!-- 7 Sacraments quick list -->
+    <div class="prayer-card fade-in-up">
+      <h4>⛪ The 7 Sacraments</h4>
+      <div class="grid-3 gap-3" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+        <div class="sacrament-card"><span class="sac-emoji">💧</span><h4>Baptism</h4></div>
+        <div class="sacrament-card"><span class="sac-emoji">🤲</span><h4>Reconciliation</h4></div>
+        <div class="sacrament-card"><span class="sac-emoji">🍞</span><h4>Eucharist</h4></div>
+        <div class="sacrament-card"><span class="sac-emoji">🕊️</span><h4>Confirmation</h4></div>
+        <div class="sacrament-card"><span class="sac-emoji">🩹</span><h4>Anointing of the Sick</h4></div>
+        <div class="sacrament-card"><span class="sac-emoji">💍</span><h4>Marriage</h4></div>
+        <div class="sacrament-card"><span class="sac-emoji">⛪</span><h4>Holy Orders</h4></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="../js/common.js"></script>
+<script src="../js/quiz-engine.js"></script>
+<script src="../js/progress.js"></script>
+
+<script>
+// ============================================
+// PRAYERS — Speak (English voice)
+// ============================================
+function speakPrayer(btn) {
+  const card = btn.closest('.prayer-card');
+  const text = card.querySelector('.prayer-text').textContent.trim();
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.9;
+  u.pitch = 1.0;
+  speechSynthesis.speak(u);
+  if (typeof AudioManager !== 'undefined') AudioManager.playTone('click');
+}
+
+function speakWord(el) {
+  // Strip leading "n. " numbering
+  const text = el.textContent.replace(/^\d+\.\s*/, '').trim();
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  document.querySelectorAll('.spell-word.speaking').forEach(n => n.classList.remove('speaking'));
+  el.classList.add('speaking');
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = 0.75; u.pitch = 1.05;
+  u.onend = () => el.classList.remove('speaking');
+  speechSynthesis.speak(u);
+}
+
+// ============================================
+// PRACTICE EXERCISES
+// ============================================
+const exerciseData = {};
+
+function shuffle(arr) {
+  const a=[...arr];
+  for (let i=a.length-1; i>0; i--) {
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function generateExercises() {
+  generateSpellingDrill();
+  generateOrderExercise();
+  generateMatchExercise();
+  generateDaysExercise();
+  generateFillExercise();
+  generateTFExercise();
+  generateNumExercise();
+  generateSymbolExercise();
+  generateBracketExercise();
+  generateShortAnswerExercise();
+}
+
+// ⭐ SPELLING DRILL — the school's OFFICIAL 15-word spelling list.
+//   Comparison is case-insensitive and ignores extra spaces / common
+//   punctuation, but every letter of the word must match.
+const SPELLING_QUESTIONS = [
+  { q: '1. The day the Holy Spirit came (50th day after Easter):',
+    answers: ['pentecost'],
+    hint: 'Starts with P…' },
+  { q: '2. The first person to see the risen Jesus:',
+    answers: ['mary magdalene', 'mary magdalena'],
+    hint: 'Mary ___' },
+  { q: '3. The meaning of "Maundy" (as in Maundy Thursday):',
+    answers: ['command', 'commandment', 'commandments'],
+    hint: 'Starts with C…' },
+  { q: '4. The Bishop of Bahrain:',
+    answers: ['bishop aldo berardi', 'aldo berardi'],
+    hint: 'Bishop ___ ___' },
+  { q: '5. Jesus going up to Heaven 40 days after Easter:',
+    answers: ['ascension'],
+    hint: 'Starts with A…' },
+  { q: '6. Talking and listening to God:',
+    answers: ['prayer', 'praying'],
+    hint: 'P-R-A…' },
+  { q: '7. Giving up food (or something we love) for God:',
+    answers: ['fasting'],
+    hint: 'F-A-S…' },
+  { q: '8. Giving help or money to the poor:',
+    answers: ['almsgiving'],
+    hint: 'Starts with A — has 10 letters.' },
+  { q: '9. Our Parish Priest (Rev. Fr. ____):',
+    answers: ['rev fr francis', 'rev. fr. francis', 'fr francis', 'fr. francis', 'father francis', 'francis', 'rev fr francis joseph', 'rev. fr. francis joseph', 'francis joseph'],
+    hint: 'Rev. Fr. ___' },
+  { q: '10. The day Lent begins:',
+    answers: ['ash wednesday'],
+    hint: '___ Wednesday' },
+  { q: '11. The first Sacrament:',
+    answers: ['baptism'],
+    hint: 'Starts with B…' },
+  { q: '12. Christ gives himself to us in the ____ ____ :',
+    answers: ['holy eucharist'],
+    hint: 'Holy ___' },
+  { q: '13. The place of Jesus\' first miracle (turning water into wine):',
+    answers: ['wedding of cana', 'wedding at cana', 'cana'],
+    hint: 'Wedding of ___' },
+  { q: '14. Our current Pope:',
+    answers: ['pope leo xiv', 'leo xiv', 'pope leo 14'],
+    hint: 'Pope ___ XIV' },
+  { q: '15. The day Jesus rose from the dead:',
+    answers: ['easter', 'easter sunday'],
+    hint: 'E-A-S…' },
+];
+
+function generateSpellingDrill() {
+  exerciseData.spell = SPELLING_QUESTIONS;
+  document.getElementById('ex-spell-questions').innerHTML = SPELLING_QUESTIONS.map((item, i) => `
+    <div class="exercise-question" id="spell-q${i}" style="background: white;">
+      <div class="q-label" style="color: #92400E;">Q${i+1}. ${item.q}</div>
+      <input type="text"
+             class="exercise-input"
+             id="spell-a${i}"
+             placeholder="${item.hint}"
+             style="width: 100%; max-width: 460px; border-color: #FCD34D;"
+             autocomplete="off"
+             autocapitalize="words"
+             spellcheck="false">
+    </div>
+  `).join('');
+}
+
+function resetSpellingDrill() {
+  SPELLING_QUESTIONS.forEach((_, i) => {
+    const el = document.getElementById(`spell-q${i}`);
+    const inp = document.getElementById(`spell-a${i}`);
+    if (el) {
+      el.className = 'exercise-question';
+      el.style.background = 'white';
+      el.querySelectorAll('.spell-feedback').forEach(n => n.remove());
+    }
+    if (inp) { inp.value = ''; inp.disabled = false; }
+  });
+  const score = document.getElementById('ex-spell-score');
+  score.classList.add('hidden');
+  score.innerHTML = '';
+}
+
+// 📅 Order exercise: events of Jesus' life
+const ORDER_EVENTS = [
+  { event: 'Palm Sunday',  correct: 1 },
+  { event: 'Holy Thursday', correct: 2 },
+  { event: 'Good Friday',  correct: 3 },
+  { event: 'Easter Sunday', correct: 4 },
+  { event: 'Ascension',    correct: 5 },
+  { event: 'Pentecost',    correct: 6 },
+];
+
+function generateOrderExercise() {
+  const items = shuffle(ORDER_EVENTS);
+  exerciseData.order = items;
+  document.getElementById('ex-order-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="order-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <strong style="min-width: 130px; color: #6B21A8;">${item.event}</strong>
+        →
+        <select class="exercise-input" id="order-a${i}" style="width: 90px;">
+          <option value="">#</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateMatchExercise() {
+  const items = shuffle([
+    { clue: 'Helped Jesus carry His cross', answer: 'Simon of Cyrene' },
+    { clue: 'Wiped the face of Jesus', answer: 'Veronica' },
+    { clue: 'Betrayed Jesus', answer: 'Judas' },
+    { clue: 'First Pope of the Church', answer: 'Peter' },
+    { clue: 'Buried Jesus in the tomb', answer: 'Joseph of Arimathea' },
+    { clue: 'First to see the risen Jesus', answer: 'Mary Magdalene' },
+    { clue: 'Sent the Angel Gabriel to Mary', answer: 'God the Father' },
+    { clue: 'Patron saint of a happy death', answer: 'St. Joseph' },
+  ]).slice(0, 6);
+  exerciseData.match = items;
+
+  const allOptions = ['Simon of Cyrene', 'Veronica', 'Judas', 'Peter',
+                      'Joseph of Arimathea', 'Mary Magdalene', 'God the Father', 'St. Joseph'];
+
+  document.getElementById('ex-match-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="match-q${i}">
+      <div class="q-label">Q${i+1}. ${item.clue}</div>
+      <select class="exercise-input" id="match-a${i}" style="width: 220px;">
+        <option value="">Choose...</option>
+        ${allOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+function generateDaysExercise() {
+  const items = shuffle([
+    { event: 'The Last Supper', answer: 'Holy Thursday' },
+    { event: 'Jesus dies on the cross', answer: 'Good Friday' },
+    { event: 'Jesus rises from the dead', answer: 'Easter Sunday' },
+    { event: 'Jesus enters Jerusalem on a donkey', answer: 'Palm Sunday' },
+    { event: 'Jesus rests in the tomb', answer: 'Holy Saturday' },
+    { event: 'Lent begins', answer: 'Ash Wednesday' },
+    { event: 'Jesus washes the disciples\' feet', answer: 'Holy Thursday' },
+    { event: 'People wave palm branches and shout Hosanna', answer: 'Palm Sunday' },
+  ]).slice(0, 6);
+  exerciseData.days = items;
+
+  document.getElementById('ex-days-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="days-q${i}">
+      <div class="q-label">Q${i+1}. ${item.event}</div>
+      <select class="exercise-input" id="days-a${i}" style="width: 220px;">
+        <option value="">Choose...</option>
+        <option value="Palm Sunday">Palm Sunday</option>
+        <option value="Holy Thursday">Holy Thursday</option>
+        <option value="Good Friday">Good Friday</option>
+        <option value="Holy Saturday">Holy Saturday</option>
+        <option value="Easter Sunday">Easter Sunday</option>
+        <option value="Ash Wednesday">Ash Wednesday</option>
+      </select>
+    </div>
+  `).join('');
+}
+
+function generateFillExercise() {
+  const items = [
+    { s: 'Wonderful things Jesus did beyond human power are called _____.', answer: 'miracles' },
+    { s: 'The first Sacrament is _____.', answer: 'baptism' },
+    { s: 'There are _____ Sacraments in the Catholic Church.', answer: '7' },
+    { s: 'Lent lasts for _____ days.', answer: '40' },
+    { s: 'There are _____ Stations of the Cross.', answer: '14' },
+    { s: 'Pentecost means the _____ day.', answer: '50th' },
+    { s: 'The first Pope was Saint _____.', answer: 'peter' },
+    { s: 'Hosanna means "_____ us!"', answer: 'save' },
+  ];
+  exerciseData.fill = items;
+
+  document.getElementById('ex-fill-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="fill-q${i}">
+      <div class="q-label">Q${i+1}. ${item.s.replace('_____','<input type="text" class="exercise-input" style="width: 150px;" id="fill-a'+i+'" placeholder="..." autocomplete="off">')}</div>
+    </div>
+  `).join('');
+}
+
+function generateTFExercise() {
+  const items = shuffle([
+    { s: 'Jesus rose from the dead on Easter Sunday.', a: true },
+    { s: 'There are 14 Stations of the Cross.', a: true },
+    { s: 'The Pope is the Bishop of Jerusalem.', a: false },
+    { s: 'Mary is the Queen of Heaven.', a: true },
+    { s: 'Pentecost happened 50 days after Easter.', a: true },
+    { s: 'Sunday is the Lord\'s Day.', a: true },
+    { s: 'Jesus had only 4 Apostles.', a: false },
+    { s: 'Bishop Aldo Berardi is the Bishop of Bahrain.', a: true },
+    { s: 'The 3 pillars of Lent are praying, fasting and almsgiving.', a: true },
+    { s: 'Jesus turned wine into water at the wedding of Cana.', a: false },
+  ]).slice(0, 8);
+  exerciseData.tf = items;
+
+  document.getElementById('ex-tf-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="tf-q${i}">
+      <div class="flex gap-3" style="align-items: center; flex-wrap: wrap;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        "${item.s}"
+        <select class="exercise-input" id="tf-a${i}" style="width: 100px;">
+          <option value="">Choose...</option>
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+function generateNumExercise() {
+  const items = shuffle([
+    { q: 'How many Apostles did Jesus choose?', answer: '12' },
+    { q: 'How many Commandments did God give Moses?', answer: '10' },
+    { q: 'How many Sacraments are there?', answer: '7' },
+    { q: 'How many Gospels are there?', answer: '4' },
+    { q: 'How many people did Jesus feed with 5 loaves and 2 fishes?', answer: '5000' },
+    { q: 'How many baskets of bread were left over?', answer: '12' },
+    { q: 'How many days did Jesus fast in the desert?', answer: '40' },
+    { q: 'How many days did Jesus stay with disciples after the Resurrection?', answer: '40' },
+  ]).slice(0, 6);
+  exerciseData.num = items;
+
+  document.getElementById('ex-num-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="num-q${i}">
+      <div class="q-label">Q${i+1}. ${item.q}</div>
+      <input type="text" class="exercise-input" id="num-a${i}" placeholder="number" style="width: 110px;" autocomplete="off">
+    </div>
+  `).join('');
+}
+
+function generateSymbolExercise() {
+  const items = shuffle([
+    { item: 'Candle', answer: 'Light of the World' },
+    { item: 'Water', answer: 'Life' },
+    { item: 'Holy Oil', answer: 'Holy Spirit' },
+    { item: 'White Cloth', answer: 'Purity' },
+  ]);
+  exerciseData.symbol = items;
+
+  document.getElementById('ex-symbol-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="symbol-q${i}">
+      <div class="flex gap-3" style="align-items: center;">
+        <span class="q-label" style="margin-bottom:0;">Q${i+1}.</span>
+        <strong>${item.item}</strong> is a symbol of →
+        <select class="exercise-input" id="symbol-a${i}" style="width: 220px;">
+          <option value="">Choose...</option>
+          <option value="Light of the World">Light of the World</option>
+          <option value="Life">Life</option>
+          <option value="Holy Spirit">Holy Spirit</option>
+          <option value="Purity">Purity</option>
+        </select>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 📝 SECTION 4 — Choose from the Bracket
+const BRACKET_QUESTIONS = [
+  { sentence: 'The first Sacrament is _____ .',
+    bracket: ['Baptism', 'Confirmation', 'Eucharist'],
+    answer: 'Baptism' },
+  { sentence: 'Lent begins on _____ .',
+    bracket: ['Palm Sunday', 'Ash Wednesday', 'Good Friday'],
+    answer: 'Ash Wednesday' },
+  { sentence: 'Lent ends on _____ .',
+    bracket: ['Easter Sunday', 'Good Friday', 'Palm Sunday'],
+    answer: 'Easter Sunday' },
+  { sentence: 'Jesus was crucified on _____ .',
+    bracket: ['Good Friday', 'Easter Sunday', 'Holy Thursday'],
+    answer: 'Good Friday' },
+  { sentence: 'Pentecost means the _____ day.',
+    bracket: ['10th', '40th', '50th'],
+    answer: '50th' },
+  { sentence: 'There are _____ Sacraments.',
+    bracket: ['5', '7', '10'],
+    answer: '7' },
+  { sentence: 'There are _____ Stations of the Cross.',
+    bracket: ['10', '12', '14'],
+    answer: '14' },
+  { sentence: '"Hosanna" means _____ .',
+    bracket: ['Welcome', 'Save us', 'Glory'],
+    answer: 'Save us' },
+  { sentence: 'Jesus ascended into Heaven on the _____ day after the Resurrection.',
+    bracket: ['10th', '40th', '50th'],
+    answer: '40th' },
+  { sentence: 'The first Pope was _____ .',
+    bracket: ['St. Paul', 'St. Peter', 'St. John'],
+    answer: 'St. Peter' },
+];
+
+function generateBracketExercise() {
+  const items = shuffle(BRACKET_QUESTIONS).slice(0, 6);
+  exerciseData.bracket = items;
+
+  document.getElementById('ex-bracket-questions').innerHTML = items.map((item, i) => {
+    const opts = shuffle(item.bracket);
+    return `
+      <div class="exercise-question" id="bracket-q${i}">
+        <div class="q-label">Q${i+1}. ${item.sentence}</div>
+        <div style="margin-top:6px; padding:6px 12px; background:#E0F2FE; border-radius:8px; font-style:italic; color:#075985; display:inline-block;">
+          ( ${opts.join(' &nbsp;/&nbsp; ')} )
+        </div>
+        <div style="margin-top:10px;">
+          Your answer:
+          <select class="exercise-input" id="bracket-a${i}" style="width: 220px; margin-left:8px;">
+            <option value="">Choose...</option>
+            ${opts.map(o => `<option value="${o}">${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 📝 SECTION 6 — Answer the Questions (short answer)
+//   Each question has a model answer plus 2-3 keywords that should appear
+//   in any reasonable answer. The "Show Answer" button reveals the model.
+const SHORT_ANSWER_QUESTIONS = [
+  { q: 'Why did God make you?',
+    model: 'God made me to know Him, to love Him, and to serve Him in this life — and to be happy with Him forever in Heaven.',
+    keywords: ['know', 'love', 'serve'] },
+  { q: 'Why is Good Friday called "Good"?',
+    model: 'Because Jesus died for us on Good Friday and opened the gates of Heaven for us.',
+    keywords: ['jesus', 'died', 'heaven'] },
+  { q: 'What is prayer?',
+    model: 'Prayer is talking and listening to God.',
+    keywords: ['talking', 'listening', 'god'] },
+  { q: 'What are the 3 pillars of Lent?',
+    model: 'The 3 pillars of Lent are praying, fasting and almsgiving.',
+    keywords: ['praying', 'fasting', 'almsgiving'] },
+  { q: 'What did Jesus do in the desert for 40 days?',
+    model: 'Jesus fasted and prayed in the desert for 40 days.',
+    keywords: ['fasted', 'prayed'] },
+  { q: 'What is the Last Supper?',
+    model: 'The Last Supper was the special meal that Jesus shared with his Apostles, where he changed bread and wine into his Body and Blood.',
+    keywords: ['meal', 'jesus', 'apostles'] },
+  { q: 'What is the Church?',
+    model: 'The Church is a community of people who believe in Jesus and are baptised.',
+    keywords: ['community', 'jesus', 'baptised'] },
+  { q: 'How many Persons are there in One God? Name them.',
+    model: 'There are three Persons in One God — God the Father, God the Son (Jesus), and God the Holy Spirit.',
+    keywords: ['father', 'son', 'holy spirit'] },
+];
+
+function generateShortAnswerExercise() {
+  const items = shuffle(SHORT_ANSWER_QUESTIONS).slice(0, 6);
+  exerciseData.shortans = items;
+
+  document.getElementById('ex-shortans-questions').innerHTML = items.map((item, i) => `
+    <div class="exercise-question" id="shortans-q${i}" style="background: white;">
+      <div class="q-label" style="color: #065F46;">Q${i+1}. ${item.q}</div>
+      <textarea class="exercise-input"
+                id="shortans-a${i}"
+                rows="2"
+                placeholder="Type your answer here in your own words..."
+                style="width: 100%; max-width: 600px; resize: vertical; border-color: #6EE7B7;"></textarea>
+      <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn" style="background:#10B981; color:white; padding:6px 14px; font-size:0.9rem;"
+                onclick="checkShortAnswer(${i})">Self-Check 🔍</button>
+        <button type="button" class="btn" style="background:white; color:#065F46; border:2px solid #10B981; padding:6px 14px; font-size:0.9rem;"
+                onclick="revealShortAnswer(${i})">Show Answer 📖</button>
+      </div>
+      <div id="shortans-feedback${i}" style="margin-top:10px;"></div>
+    </div>
+  `).join('');
+}
+
+function checkShortAnswer(i) {
+  const item = exerciseData.shortans[i];
+  const inp = document.getElementById(`shortans-a${i}`);
+  const fb = document.getElementById(`shortans-feedback${i}`);
+  const v = (inp.value || '').toLowerCase();
+  if (!v.trim()) { fb.innerHTML = `<div style="color:#92400E;">Try writing something first!</div>`; return; }
+  const found = item.keywords.filter(k => v.includes(k.toLowerCase()));
+  const missing = item.keywords.filter(k => !v.includes(k.toLowerCase()));
+  if (missing.length === 0) {
+    fb.innerHTML = `<div style="color:#065F46; font-weight:700;">⭐ Great answer! You got all the key ideas: <em>${found.join(', ')}</em>.</div>`;
+    if (typeof AudioManager !== 'undefined') AudioManager.playTone('correct');
+  } else {
+    fb.innerHTML = `
+      <div style="color:#92400E; padding:10px; background:#FEF3C7; border-radius:8px;">
+        <strong>👍 Good try!</strong> Your answer mentioned: ${found.length ? '<em>'+found.join(', ')+'</em>' : '<em>(no key words)</em>'}.<br>
+        Try to also include: <strong>${missing.join(', ')}</strong>.
+      </div>`;
+  }
+}
+
+function revealShortAnswer(i) {
+  const item = exerciseData.shortans[i];
+  const fb = document.getElementById(`shortans-feedback${i}`);
+  fb.innerHTML = `
+    <div style="background:#D1FAE5; border-left:4px solid #10B981; padding:12px; border-radius:8px; color:#065F46;">
+      <strong>📖 Model Answer:</strong><br>
+      ${item.model}
+    </div>`;
+}
+
+// --- Check Exercises ---
+function checkExercise(type) {
+  let correct = 0, total = 0;
+  const data = exerciseData[type];
+  if (!data) return;
+
+  data.forEach((item, i) => {
+    total++;
+    const el = document.getElementById(`${type}-q${i}`);
+    const inp = document.getElementById(`${type}-a${i}`);
+    let val = (inp.value || '').toString().trim();
+    let expected;
+    let ok = false;
+
+    if (type === 'tf') {
+      expected = item.a ? 'True' : 'False';
+      ok = (val === String(item.a));
+    } else if (type === 'fill') {
+      ok = val.toLowerCase() === item.answer.toLowerCase();
+      expected = item.answer;
+    } else if (type === 'num') {
+      ok = val.replace(/,/g,'') === item.answer;
+      expected = item.answer;
+    } else if (type === 'spell') {
+      // Normalise: lowercase, strip punctuation, collapse spaces
+      const norm = s => s.toLowerCase().replace(/[.,!?&]/g,' ').replace(/\s+/g,' ').trim();
+      const v = norm(val);
+      ok = item.answers.some(a => norm(a) === v);
+      expected = item.answers[0];
+    } else if (type === 'order') {
+      ok = parseInt(val, 10) === item.correct;
+      expected = item.correct;
+    } else if (type === 'bracket') {
+      ok = val === item.answer;
+      expected = item.answer;
+    } else {
+      ok = val === item.answer;
+      expected = item.answer;
+    }
+
+    if (ok) {
+      correct++;
+      el.className = 'exercise-question answered-correct';
+    } else {
+      el.className = 'exercise-question answered-wrong';
+      el.innerHTML += `<div class="text-sm mt-2" style="color:var(--color-success);">Answer: ${expected}</div>`;
+    }
+    inp.disabled = true;
+  });
+
+  const pct = total > 0 ? Math.round((correct/total)*100) : 0;
+  const scoreEl = document.getElementById(`ex-${type}-score`);
+  scoreEl.className = 'exercise-score';
+  scoreEl.classList.remove('hidden');
+  scoreEl.innerHTML = `Score: ${correct}/${total} (${pct}%) ${pct>=80?'⭐ Excellent!':pct>=60?'👍 Good job!':'💪 Keep practising!'}`;
+  if (pct >= 80) { if (typeof Confetti !== 'undefined') Confetti.launch(50); if (typeof AudioManager !== 'undefined') AudioManager.playTone('correct'); }
+  else { if (typeof AudioManager !== 'undefined') AudioManager.playTone('click'); }
+  if (typeof Progress !== 'undefined') Progress.trackExerciseComplete(type, correct, total);
+}
+
+// ============================================
+// QUIZ DATA (used by QuizEngine)
+// ============================================
+function generateQuizQuestions() {
+  const q = [];
+
+  // ----------- EXPLORER -----------
+  q.push({tier:'explorer',type:'mcq',points:10,question:'What do we call wonderful things Jesus did beyond human power?',options:['Tricks','Miracles','Magic','Stories'],answer:'Miracles',explanation:'Miracles are God\'s wonderful acts.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'How many people did Jesus feed?',options:['500','5000','10000','100'],answer:'5000',explanation:'Jesus fed 5000 with 5 loaves and 2 fishes.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Who was the first Pope?',options:['St. Paul','St. Peter','St. John','St. Andrew'],answer:'St. Peter',explanation:'Jesus chose Peter as the rock of the Church.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'On which day did Jesus die on the cross?',options:['Holy Thursday','Good Friday','Easter Sunday','Palm Sunday'],answer:'Good Friday',explanation:'Jesus died on Good Friday for us.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'On which day did Jesus rise from the dead?',options:['Holy Thursday','Good Friday','Easter Sunday','Palm Sunday'],answer:'Easter Sunday',explanation:'Easter Sunday — the Resurrection!'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'How many Apostles did Jesus choose?',options:['7','10','12','14'],answer:'12',explanation:'Twelve Apostles to spread the Good News.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'How many Commandments did God give Moses?',options:['5','7','10','12'],answer:'10',explanation:'The Ten Commandments.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'How many days does Lent last?',options:['7','30','40','50'],answer:'40',explanation:'40 days, like Jesus in the desert.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Mary is the Mother of Jesus.',answer:'true',explanation:'True — Mary is Jesus\' mother and our Mother too.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'There are 7 Sacraments.',answer:'true',explanation:'True — 7 Sacraments give us God\'s grace.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Who betrayed Jesus?',options:['Peter','John','Judas','Thomas'],answer:'Judas',explanation:'Judas Iscariot betrayed Jesus.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Where is our true home?',options:['Earth','Heaven','A castle','The Church building'],answer:'Heaven',explanation:'Heaven is our eternal home.'});
+  q.push({tier:'explorer',type:'true-false',points:10,question:'Jesus rose from the dead on the third day.',answer:'true',explanation:'True — on Easter Sunday.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'Who is the leader of the Catholic Church?',options:['The Bishop','The Priest','The Pope','A Cardinal'],answer:'The Pope',explanation:'The Pope is the successor of St. Peter.'});
+  q.push({tier:'explorer',type:'mcq',points:10,question:'How many Stations of the Cross are there?',options:['7','10','14','20'],answer:'14',explanation:'14 Stations remember Jesus\' path to the cross.'});
+
+  // ----------- ADVENTURER -----------
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'In which garden did Jesus pray on Holy Thursday?',options:['Eden','Olives','Gethsemane','Galilee'],answer:'Gethsemane',explanation:'The Garden of Gethsemane.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Who helped Jesus carry the cross?',options:['Peter','Simon of Cyrene','Veronica','John'],answer:'Simon of Cyrene',explanation:'Simon of Cyrene was made to help.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'On which mountain did Jesus ascend to Heaven?',options:['Calvary','Sinai','Mount of Olives','Tabor'],answer:'Mount of Olives',explanation:'From the Mount of Olives.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'How many Persons are there in One God?',options:['One','Two','Three','Seven'],answer:'Three',explanation:'Three Persons in One God — the Holy Trinity.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Pentecost means the:',options:['10th day','40th day','50th day','100th day'],answer:'50th day',explanation:'Pentecost = 50th day after Easter.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Who first saw the risen Jesus?',options:['Peter','Mary Magdalene','John','Mother Mary'],answer:'Mary Magdalene',explanation:'Mary Magdalene was first.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'What does "Hosanna" mean?',options:['Welcome','Glory','Save us','Holy'],answer:'Save us',explanation:'Hosanna = "save us!"'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'What does "Maundy" (Thursday) mean?',options:['Pure','Sad','Command','Holy'],answer:'Command',explanation:'Maundy comes from the Latin word for command.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Who washed the disciples\' feet at the Last Supper?',options:['Peter','John','Jesus','Judas'],answer:'Jesus',explanation:'Jesus washed their feet to show humble love.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'Where was Jesus crucified?',options:['Mount Sinai','Mount Calvary','Mount Tabor','Galilee'],answer:'Mount Calvary',explanation:'Mount Calvary, also called Golgotha.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'In Baptism, water is the symbol of:',options:['Cleanliness','Life','Rain','Tears'],answer:'Life',explanation:'Water = symbol of Life.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'In Baptism, the candle reminds us that:',options:['Jesus is the Light of the World','Light is needed','Candles are pretty','Fire is dangerous'],answer:'Jesus is the Light of the World',explanation:'The candle = Jesus, the Light of the World.'});
+  q.push({tier:'adventurer',type:'true-false',points:15,question:'Mary was conceived without sin (Immaculate Conception).',answer:'true',explanation:'True — celebrated December 8.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'What was the first miracle of Jesus?',options:['Feeding 5000','Walking on water','Water into wine at Cana','Healing the blind man'],answer:'Water into wine at Cana',explanation:'At the wedding at Cana, at His mother\'s request.'});
+  q.push({tier:'adventurer',type:'mcq',points:15,question:'In which Station does Jesus die on the Cross?',options:['10th','11th','12th','13th'],answer:'12th',explanation:'The 12th Station.'});
+
+  // ----------- CHAMPION -----------
+  q.push({tier:'champion',type:'mcq',points:20,question:'Who buried Jesus\' body in the tomb?',options:['Mary alone','Peter and John','Joseph of Arimathea and Nicodemus','Mary Magdalene'],answer:'Joseph of Arimathea and Nicodemus',explanation:'Joseph of Arimathea and Nicodemus.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Who is the Bishop of Bahrain?',options:['Pope Francis','Bishop Aldo Berardi','St. Peter','Fr. Francis Joseph'],answer:'Bishop Aldo Berardi',explanation:'Bishop Aldo Berardi.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'What are the 3 pillars of Lent?',options:['Singing, dancing, eating','Praying, fasting, almsgiving','Sleeping, working, resting','Reading, writing, drawing'],answer:'Praying, fasting, almsgiving',explanation:'Prayer, fasting, almsgiving.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'What are the 2 main parts of the Mass?',options:['Songs and prayers','Liturgy of the Word and Liturgy of the Eucharist','Reading and Communion','Greeting and Goodbye'],answer:'Liturgy of the Word and Liturgy of the Eucharist',explanation:'The two parts of every Mass.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'What does Baptism take away?',options:['Tiredness','Original Sin','Hunger','Sadness'],answer:'Original Sin',explanation:'Baptism washes away Original Sin.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'When is the feast of the Annunciation?',options:['December 8','March 25','August 15','October 7'],answer:'March 25',explanation:'9 months before Christmas — March 25.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'When is the feast of the Assumption?',options:['December 8','March 25','August 15','November 1'],answer:'August 15',explanation:'August 15 — Mary taken to heaven.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Where does a soul go to be purified?',options:['Hell','Limbo','Purgatory','Earth again'],answer:'Purgatory',explanation:'Purgatory — a place of cleansing.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'On what day of the Triduum did Jesus wash the disciples\' feet?',options:['Holy Thursday','Good Friday','Holy Saturday','Easter Sunday'],answer:'Holy Thursday',explanation:'Holy (Maundy) Thursday.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'How many baskets of bread were left over?',options:['7','10','12','14'],answer:'12',explanation:'12 baskets — one for each Apostle.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Who said: "I am not worthy that You should enter my house"?',options:['Peter','The Centurion','John','Mary Magdalene'],answer:'The Centurion',explanation:'We still say his words at every Mass.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Pentecost means:',options:['10th day','30th day','50th day','100th day'],answer:'50th day',explanation:'50th day after Easter.'});
+  q.push({tier:'champion',type:'true-false',points:20,question:'Holy Thursday is also called Maundy Thursday.',answer:'true',explanation:'Yes — Maundy = "command".'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'The Father created us, the Son ____ us, and the Holy Spirit makes us holy.',options:['Loved','Saved','Healed','Taught'],answer:'Saved',explanation:'The Father created · The Son saved · Holy Spirit makes holy.'});
+  q.push({tier:'champion',type:'mcq',points:20,question:'Holy Communion = Body and Blood of Jesus, made present at:',options:['Baptism','Confession','The Mass','A wedding'],answer:'The Mass',explanation:'The Eucharist is celebrated at every Mass.'});
+
+  return q;
+}
+
+let _allQuizQuestions = null;
+function startQuiz(tier) {
+  document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tier-btn.${tier}`)?.classList.add('active');
+
+  if (!_allQuizQuestions) _allQuizQuestions = generateQuizQuestions();
+
+  const q = new QuizEngine({
+    containerId: 'quiz-area',
+    questions: _allQuizQuestions,
+    tier: tier,
+    questionCount: 10,
+    onComplete: (results) => {
+      if (typeof Progress !== 'undefined') {
+        Progress.trackQuizComplete('cat01', tier, results.score, results.totalPoints);
+      }
+    }
+  });
+  q.start();
+}
+
+// ============================================
+// TABS
+// ============================================
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const target = tab.dataset.tab;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(target).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// ============================================
+// LESSON-CARD TOGGLES
+// ============================================
+document.querySelectorAll('.lesson-card-header').forEach(h => {
+  h.addEventListener('click', () => {
+    h.parentElement.classList.toggle('open');
+  });
+});
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  generateExercises();
+});
+</script>
+
+</body>
+</html>

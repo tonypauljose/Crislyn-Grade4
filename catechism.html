@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catechism — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+
+  <!-- Google Analytics -->
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    .navbar {
+      background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100;
+    }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark);
+    }
+    .nav-links { display: flex; gap: var(--space-2); }
+    .nav-link {
+      padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth);
+    }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .page-hero {
+      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 50%, #A855F7 100%);
+      color: white; padding: var(--space-10) 0; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '✝️'; position: absolute; top: 20%; left: 8%;
+      font-size: 4rem; opacity: 0.15; transform: rotate(-15deg);
+    }
+    .page-hero::after {
+      content: '🕊️'; position: absolute; bottom: 20%; right: 8%;
+      font-size: 4rem; opacity: 0.18; transform: rotate(15deg);
+    }
+    .page-hero > .container { position: relative; z-index: 1; }
+    .page-hero h1 { color: white; margin-bottom: var(--space-2); }
+    .page-hero p { opacity: 0.9; font-size: var(--text-lg); margin-bottom: 0; }
+    .page-hero .breadcrumb { font-size: var(--text-sm); opacity: 0.85; margin-bottom: var(--space-3); }
+    .page-hero .breadcrumb a { color: rgba(255,255,255,0.9); }
+
+    .chapters-section { padding: var(--space-10) 0; }
+
+    .chapters-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--space-6);
+    }
+
+    .chapter-card { padding: var(--space-6); text-align: center; position: relative; }
+    .chapter-card .chapter-emoji { font-size: 3rem; margin-bottom: var(--space-3); display: block; }
+    .chapter-card .chapter-title {
+      font-family: var(--font-heading); font-size: var(--text-lg); margin-bottom: var(--space-2);
+    }
+    .chapter-card .chapter-desc {
+      font-size: var(--text-sm); color: var(--color-text-light); margin-bottom: var(--space-4);
+    }
+    .chapter-card.available { border: 2px solid #C4B5FD; }
+    .chapter-card.available:hover { border-color: #7C3AED; box-shadow: 0 0 20px rgba(124,58,237,0.3); }
+    .chapter-card.locked { opacity: 0.55; pointer-events: none; }
+    .chapter-card.locked .chapter-emoji { filter: grayscale(0.8); }
+
+    .chapter-card .chapter-number {
+      position: absolute; top: var(--space-3); right: var(--space-3);
+      width: 36px; height: 36px; border-radius: var(--radius-full);
+      background: #6B21A8; color: white; display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: var(--text-sm);
+    }
+
+    .status-badge {
+      display: inline-flex; align-items: center; gap: var(--space-1);
+      padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+      font-size: var(--text-xs); font-weight: 700;
+    }
+    .status-badge.ready { background: #EDE9FE; color: #5B21B6; }
+    .status-badge.coming { background: #F5F3FF; color: #64748B; }
+
+    .verse-section { padding: var(--space-6) 0 var(--space-10); }
+    .verse-card {
+      background: linear-gradient(135deg, #C4B5FD, #DDD6FE);
+      border-radius: var(--radius-xl); padding: var(--space-6);
+      text-align: center; max-width: 700px; margin: 0 auto; color: #4C1D95;
+    }
+    .verse-card h3 { color: #4C1D95; margin-bottom: var(--space-2); }
+    .verse-card .verse-text { font-size: var(--text-lg); font-weight: 600; line-height: 1.5; }
+    .verse-card .verse-ref { font-size: var(--text-sm); margin-top: var(--space-2); font-style: italic; }
+
+    .footer {
+      text-align: center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top: 1px solid var(--color-border-light);
+    }
+
+    @media (max-width: 768px) { .chapters-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .chapters-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link active">Learning</a>
+      <a href="bible.html" class="nav-link">📖 Bible</a>
+      <a href="exam.html" class="nav-link">📝 Exam</a>
+      <a href="art-studio.html" class="nav-link">🎨 Art</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb fade-in">
+      <a href="index.html">Home</a> → <a href="learning.html">Learning</a> → Catechism
+    </div>
+    <h1 class="fade-in-up">✝️ Catechism</h1>
+    <p class="fade-in-up delay-1">Learning about Jesus, the Church, and our prayers</p>
+  </div>
+</div>
+
+<!-- Chapters -->
+<div class="chapters-section">
+  <div class="container">
+    <div class="section-header mb-8">
+      <h2>Chapters</h2>
+      <p>Click on an available chapter to start exploring!</p>
+    </div>
+    <div class="chapters-grid" id="chapters-grid"></div>
+  </div>
+</div>
+
+<!-- Daily Verse -->
+<div class="verse-section">
+  <div class="container">
+    <div class="verse-card fade-in-up">
+      <h3>📖 Daily Verse</h3>
+      <div class="verse-text" id="daily-verse"></div>
+      <div class="verse-ref" id="daily-verse-ref"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="container">
+    <p>Made with ❤️ for Crislyn · crislyntony.com</p>
+  </div>
+</div>
+
+<script>
+const chapters = [
+  { num: 1, title: 'Following Jesus', emoji: '✝️',
+    desc: 'Lessons 15–28: miracles, Last Supper, Easter, Pentecost, Trinity, Sacraments, Mary, Lent, Triduum, and oral prayers.',
+    status: 'available', link: 'chapters/cat01-following-jesus.html' },
+  { num: 2, title: 'The Sacraments', emoji: '⛪', desc: 'A deeper look at each of the 7 Sacraments.', status: 'coming' },
+  { num: 3, title: 'The Church Year', emoji: '📅', desc: 'Advent, Christmas, Lent, Easter, Ordinary Time — the seasons of our faith.', status: 'coming' },
+  { num: 4, title: 'Saints & Heroes', emoji: '😇', desc: 'Lives of the saints — friends in heaven cheering us on!', status: 'coming' },
+];
+
+function renderChapters() {
+  const grid = document.getElementById('chapters-grid');
+  grid.innerHTML = chapters.map((ch, i) => {
+    const isAvailable = ch.status === 'available';
+    const cardClass = isAvailable ? 'card chapter-card available card-interactive fade-in-up' : 'card chapter-card locked fade-in-up';
+    const delay = `delay-${Math.min(i + 1, 8)}`;
+    const statusBadge = isAvailable
+      ? '<span class="status-badge ready">✅ Ready</span>'
+      : '<span class="status-badge coming">🔒 Coming Soon</span>';
+    const onclick = isAvailable ? `onclick="window.location.href='${ch.link}'"` : '';
+
+    return `
+      <div class="${cardClass} ${delay}" ${onclick}>
+        <div class="chapter-number">${ch.num}</div>
+        <span class="chapter-emoji">${ch.emoji}</span>
+        <div class="chapter-title">${ch.title}</div>
+        <div class="chapter-desc">${ch.desc}</div>
+        ${statusBadge}
+      </div>
+    `;
+  }).join('');
+}
+
+const verses = [
+  { text: '"Let the children come to me; do not stop them."', ref: '— Mark 10:14' },
+  { text: '"Love one another as I have loved you."', ref: '— John 13:34' },
+  { text: '"For God so loved the world that He gave His only Son."', ref: '— John 3:16' },
+  { text: '"Ask, and it will be given to you."', ref: '— Matthew 7:7' },
+  { text: '"Be not afraid; only believe."', ref: '— Mark 5:36' },
+  { text: '"I am the Light of the World."', ref: '— John 8:12' },
+  { text: '"Blessed are the pure in heart, for they shall see God."', ref: '— Matthew 5:8' },
+  { text: '"Hosanna! Blessed is he who comes in the name of the Lord!"', ref: '— Mark 11:9' },
+  { text: '"Your sins are forgiven; go in peace."', ref: '— Luke 7:48,50' },
+  { text: '"He is risen, just as He said!"', ref: '— Matthew 28:6' },
+];
+
+function showDailyVerse() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const v = verses[dayOfYear % verses.length];
+  document.getElementById('daily-verse').textContent = v.text;
+  document.getElementById('daily-verse-ref').textContent = v.ref;
+}
+
+document.addEventListener('DOMContentLoaded', () => { renderChapters(); showDailyVerse(); });
+</script>
+
+</body>
+</html>
