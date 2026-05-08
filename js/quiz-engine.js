@@ -121,9 +121,9 @@ class QuizEngine {
     return `
       <div class="quiz-options">
         ${options.map((opt, i) => `
-          <button class="quiz-option" onclick="window._quizEngine.checkAnswer('${this.escapeHTML(opt)}', this)"
+          <button class="quiz-option" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)"
                   data-answer="${this.escapeHTML(opt)}">
-            ${opt}
+            ${this.escapeHTML(opt)}
           </button>
         `).join('')}
       </div>
@@ -133,11 +133,11 @@ class QuizEngine {
   renderTrueFalse(q) {
     return `
       <div class="quiz-options" style="grid-template-columns: 1fr 1fr; max-width: 400px; margin: 0 auto;">
-        <button class="quiz-option" onclick="window._quizEngine.checkAnswer('true', this)"
+        <button class="quiz-option" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)"
                 data-answer="true" style="font-size: var(--text-xl);">
           ✅ True
         </button>
-        <button class="quiz-option" onclick="window._quizEngine.checkAnswer('false', this)"
+        <button class="quiz-option" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)"
                 data-answer="false" style="font-size: var(--text-xl);">
           ❌ False
         </button>
@@ -166,9 +166,9 @@ class QuizEngine {
           ${Utils.formatIndian(q.leftNum)}
         </div>
         <div class="flex gap-2">
-          <button class="compare-btn" onclick="window._quizEngine.checkAnswer('<', this)" data-answer="<">&lt;</button>
-          <button class="compare-btn" onclick="window._quizEngine.checkAnswer('>', this)" data-answer=">">&gt;</button>
-          <button class="compare-btn" onclick="window._quizEngine.checkAnswer('=', this)" data-answer="=">=</button>
+          <button class="compare-btn" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)" data-answer="&lt;">&lt;</button>
+          <button class="compare-btn" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)" data-answer="&gt;">&gt;</button>
+          <button class="compare-btn" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)" data-answer="=">=</button>
         </div>
         <div class="digit-box" style="width: auto; padding: 8px 20px; font-size: var(--text-2xl);">
           ${Utils.formatIndian(q.rightNum)}
