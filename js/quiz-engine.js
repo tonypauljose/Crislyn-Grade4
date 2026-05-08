@@ -118,16 +118,22 @@ class QuizEngine {
 
   renderMCQ(q) {
     const options = Utils.shuffle(q.options);
+    this._currentOptions = options;
     return `
       <div class="quiz-options">
         ${options.map((opt, i) => `
-          <button class="quiz-option" onclick="window._quizEngine.checkAnswer(this.dataset.answer, this)"
+          <button class="quiz-option" onclick="window._quizEngine.pickOption(${i}, this)"
                   data-answer="${this.escapeHTML(opt)}">
             ${this.escapeHTML(opt)}
           </button>
         `).join('')}
       </div>
     `;
+  }
+
+  pickOption(i, btn) {
+    const opts = this._currentOptions || [];
+    this.checkAnswer(opts[i], btn);
   }
 
   renderTrueFalse(q) {
