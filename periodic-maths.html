@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📘 Periodic Test — Maths · Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+  <link rel="stylesheet" href="css/print.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%98%3C/text%3E%3C/svg%3E">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    .navbar { background: var(--color-surface); box-shadow: var(--shadow-sm);
+      padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: var(--space-2);
+      font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark); }
+    .nav-links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nav-link { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full);
+      font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light);
+      transition: all var(--duration-normal) var(--ease-smooth); }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .page-hero {
+      background: linear-gradient(135deg, #4C1D95 0%, #6B21A8 40%, #A855F7 100%);
+      color: white; padding: var(--space-10) 0; text-align: center; position: relative; overflow: hidden;
+    }
+    .page-hero > .container { position: relative; z-index: 1; }
+    .page-hero h1 { color: white; margin-bottom: var(--space-2); }
+    .page-hero p { opacity: 0.92; font-size: var(--text-lg); margin-bottom: 0; }
+    .page-hero .breadcrumb { font-size: var(--text-sm); opacity: 0.85; margin-bottom: var(--space-3); }
+    .page-hero .breadcrumb a { color: rgba(255,255,255,0.9); }
+    .pill { display:inline-block; margin-top: var(--space-3); background: rgba(255,255,255,0.18);
+      border:1px solid rgba(255,255,255,0.35); padding:6px 16px; border-radius: var(--radius-full); font-weight:800; }
+
+    .section { padding: var(--space-8) 0; }
+    .section h2 { font-family: var(--font-heading); color: var(--color-primary-dark);
+      text-align:center; margin-bottom: var(--space-2); }
+    .section .sub { text-align:center; color: var(--color-text-light); margin: 0 auto var(--space-6); max-width: 640px; }
+
+    /* Action cards */
+    .actions-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--space-5); max-width: 980px; margin: 0 auto; }
+    .action-card { background: var(--color-surface); border:2px solid var(--color-border);
+      border-radius: var(--radius-lg); padding: var(--space-6); text-align:center; cursor:pointer;
+      transition: all var(--duration-normal) var(--ease-bounce); display:flex; flex-direction:column; gap: var(--space-2); }
+    .action-card:hover { transform: translateY(-5px); border-color: var(--color-primary); box-shadow: var(--shadow-glow); }
+    .action-card .emoji { font-size: 2.8rem; }
+    .action-card h3 { font-family: var(--font-heading); color: var(--color-text); margin:0; font-size: 1.15rem; }
+    .action-card p { color: var(--color-text-light); font-size: 0.9rem; margin:0; }
+    .action-card .cta { margin-top:auto; align-self:center; padding:8px 18px; background: var(--color-primary);
+      color:white; font-weight:800; border-radius: var(--radius-full); font-size: 0.9rem; }
+    .action-card:hover .cta { background: var(--color-primary-dark); }
+    .action-card.feature { border-color: var(--color-primary); background: linear-gradient(135deg,#FAF5FF,#F3E8FF); }
+
+    /* Syllabus checklist */
+    .syllabus { max-width: 980px; margin: 0 auto; display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+    .syl-card { background: var(--color-surface); border:2px solid var(--color-border-light);
+      border-radius: var(--radius-lg); padding: var(--space-5); }
+    .syl-card h3 { font-family: var(--font-heading); color: var(--color-primary-dark); margin:0 0 var(--space-3);
+      display:flex; align-items:center; gap:8px; }
+    .syl-card ul { margin:0; padding-left: 1.2em; line-height: 1.9; color: var(--color-text); }
+    .syl-card li::marker { content: '✓ '; color: var(--color-success); font-weight:800; }
+
+    /* Study plan */
+    .plan { max-width: 820px; margin: 0 auto; }
+    .plan-row { display:flex; gap: var(--space-4); align-items:flex-start; padding: var(--space-3) 0;
+      border-bottom: 1px dashed var(--color-border-light); }
+    .plan-day { flex: 0 0 78px; font-weight:800; color: var(--color-primary); font-family: var(--font-heading); }
+    .plan-task { color: var(--color-text); }
+
+    /* Quick practice */
+    #practice-stage, #exam-stage { display:none; }
+    .qp-host { max-width: 720px; margin: 0 auto; background: var(--color-surface);
+      border:2px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-6); }
+    .qp-topics { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom: var(--space-5); }
+    .qp-chip { padding:7px 14px; border:2px solid var(--color-border); border-radius: var(--radius-full);
+      background:white; font-weight:700; font-size:0.85rem; cursor:pointer; color: var(--color-text-light); }
+    .qp-chip.active { background: var(--color-primary); color:white; border-color: var(--color-primary); }
+    .qp-progress { font-weight:800; color: var(--color-primary-dark); margin-bottom: var(--space-2); }
+    .qp-q { font-size: 1.2rem; font-weight:700; color: var(--color-text); margin-bottom: var(--space-4); line-height:1.5; }
+    .qp-opt { display:block; width:100%; text-align:left; padding:12px 16px; margin-bottom:10px;
+      border:2px solid var(--color-border); border-radius: var(--radius-md); background:white; cursor:pointer;
+      font-size:1rem; font-weight:600; transition: all 0.15s; }
+    .qp-opt:hover { border-color: var(--color-primary); }
+    .qp-opt.correct { background:#DCFCE7; border-color:#16A34A; }
+    .qp-opt.wrong { background:#FEE2E2; border-color:#EF4444; }
+    .qp-fill { width:100%; padding:12px 16px; border:2px solid var(--color-border); border-radius: var(--radius-md);
+      font-size:1.1rem; font-weight:700; font-family: var(--font-heading); }
+    .qp-feedback { margin-top: var(--space-3); padding: var(--space-3); border-radius: var(--radius-md); font-weight:600; }
+    .qp-feedback.ok { background:#DCFCE7; color:#166534; }
+    .qp-feedback.no { background:#FEF3C7; color:#92400E; }
+    .qp-actions { margin-top: var(--space-4); display:flex; gap:12px; justify-content:flex-end; }
+
+    .exam-stage-wrap { padding: var(--space-5) 0; }
+    body.exam-running .navbar, body.exam-running .page-hero,
+    body.exam-running .section:not(.exam-stage-wrap), body.exam-running .footer { display:none; }
+
+    .footer { text-align:center; padding: var(--space-6) 0; color: var(--color-text-light);
+      font-size: var(--text-sm); border-top:1px solid var(--color-border-light); }
+
+    @media (max-width: 700px) { .syllabus { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="maths.html" class="nav-link">🔢 Maths</a>
+      <a href="periodic-maths.html" class="nav-link active">📘 Periodic Test</a>
+      <a href="exam.html" class="nav-link">📝 Exam</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb fade-in"><a href="index.html">Home</a> → <a href="maths.html">Maths</a> → Periodic Test</div>
+    <h1 class="fade-in-up">📘 Periodic Test 1 — Maths</h1>
+    <p class="fade-in-up delay-1">Chapter 1 (Numbers beyond 10,000) &amp; Chapter 2 (Addition &amp; Subtraction)</p>
+    <div class="pill fade-in-up delay-2">⭐ 306-question pool · medium &amp; hard · practise a little every day</div>
+  </div>
+</div>
+
+<!-- ACTION CARDS -->
+<section class="section">
+  <div class="container">
+    <h2>Choose how to practise today</h2>
+    <p class="sub">Mix it up each day — a quick warm-up, a printed paper at the table, and a full timed test before the exam.</p>
+    <div class="actions-grid">
+      <div class="action-card feature" id="card-practice">
+        <span class="emoji">⚡</span>
+        <h3>Quick Practice</h3>
+        <p>10 questions, no timer, instant feedback. Pick a topic to focus on. Best for everyday.</p>
+        <span class="cta">Start practice →</span>
+      </div>
+      <div class="action-card" id="card-exam">
+        <span class="emoji">📝</span>
+        <h3>Full Timed Test</h3>
+        <p>30 questions · 45-minute timer · exam-style with review and marks out of 100.</p>
+        <span class="cta">Take the test →</span>
+      </div>
+      <a class="action-card" href="worksheets/pt-maths1-paper.html">
+        <span class="emoji">🖨️</span>
+        <h3>Print Exam Paper</h3>
+        <p>A full printable question paper with answer key. New questions every time you reload.</p>
+        <span class="cta">Open &amp; print →</span>
+      </a>
+      <a class="action-card" href="addsub.html">
+        <span class="emoji">🎮</span>
+        <h3>Speed Maths Games</h3>
+        <p>Daily warm-up + 60-second adding/subtracting sprints to build speed and accuracy.</p>
+        <span class="cta">Play →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK PRACTICE STAGE -->
+<section class="section" id="practice-stage">
+  <div class="container">
+    <h2>⚡ Quick Practice</h2>
+    <p class="sub">Tap a topic to focus, or keep “All topics” for a mixed set of 10.</p>
+    <div class="qp-host" id="qp-host"></div>
+  </div>
+</section>
+
+<!-- EXAM STAGE -->
+<section class="section exam-stage-wrap" id="exam-stage">
+  <div class="container"><div id="exam-host"></div></div>
+</section>
+
+<!-- SYLLABUS -->
+<section class="section" style="background: var(--color-bg-alt);">
+  <div class="container">
+    <h2>📋 What's on the test</h2>
+    <p class="sub">Straight from Crislyn's workbook. Tick these off as she gets confident with each one.</p>
+    <div class="syllabus">
+      <div class="syl-card">
+        <h3>🔢 Chapter 1 — Numbers beyond 10,000</h3>
+        <ul>
+          <li>Number names → figures, and figures → number names (up to 7 digits)</li>
+          <li>Standard form &amp; expanded form</li>
+          <li>Comparing numbers with &lt;, &gt;, =</li>
+          <li>Ascending &amp; descending order</li>
+          <li>Predecessor &amp; successor</li>
+          <li>Greatest &amp; smallest number from given digits</li>
+          <li>Place value &amp; face value</li>
+          <li>Roman numerals (both ways)</li>
+        </ul>
+      </div>
+      <div class="syl-card">
+        <h3>➕ Chapter 2 — Addition &amp; Subtraction</h3>
+        <ul>
+          <li>Adding 5- and 6-digit numbers (with carrying)</li>
+          <li>Adding three numbers together</li>
+          <li>Subtracting with borrowing (including across zeros)</li>
+          <li>Properties of addition &amp; subtraction</li>
+          <li>Checking subtraction by addition</li>
+          <li>Terms: sum, minuend, subtrahend, difference</li>
+          <li>Missing-number sentences</li>
+          <li>Word problems</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STUDY PLAN -->
+<section class="section">
+  <div class="container">
+    <h2>🗓️ A simple 7-day revision plan</h2>
+    <p class="sub">About 20 minutes a day. Repeat the cycle until the exam.</p>
+    <div class="plan">
+      <div class="plan-row"><span class="plan-day">Day 1</span><span class="plan-task">Quick Practice → <strong>Number names &amp; figures</strong>, then <strong>Place &amp; face value</strong>.</span></div>
+      <div class="plan-row"><span class="plan-day">Day 2</span><span class="plan-task">Quick Practice → <strong>Expanded/standard form</strong> and <strong>Compare &amp; order</strong>.</span></div>
+      <div class="plan-row"><span class="plan-day">Day 3</span><span class="plan-task">Quick Practice → <strong>Predecessor/successor</strong>, <strong>Greatest &amp; smallest</strong>, <strong>Roman numerals</strong>.</span></div>
+      <div class="plan-row"><span class="plan-day">Day 4</span><span class="plan-task">Speed Maths games + Quick Practice → <strong>Addition</strong>.</span></div>
+      <div class="plan-row"><span class="plan-day">Day 5</span><span class="plan-task">Quick Practice → <strong>Subtraction</strong> and <strong>Properties &amp; terms</strong>.</span></div>
+      <div class="plan-row"><span class="plan-day">Day 6</span><span class="plan-task">Print the exam paper and do it at the table, then check with the answer key.</span></div>
+      <div class="plan-row"><span class="plan-day">Day 7</span><span class="plan-task">Sit the <strong>Full Timed Test</strong> (30 Q · 45 min) and review every answer.</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="container"><p>Made with ❤️ for Crislyn · crislyntony.com</p></div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/exam-engine.js"></script>
+<script src="data/pt-maths1.js"></script>
+<script>
+(function () {
+  'use strict';
+  const BANK = window.PT_MATHS1_BANK || [];
+
+  /* ---------------- Full timed test (reuses ExamEngine) ---------------- */
+  function startExam() {
+    document.body.classList.add('exam-running');
+    document.getElementById('exam-stage').style.display = 'block';
+    const exam = new ExamEngine({
+      containerId: 'exam-host',
+      subject: 'Maths',
+      chapter: 'pt-maths1',
+      chapterTitle: 'Periodic Test 1 (Ch 1 & 2)',
+      bank: BANK,
+      count: 30,
+      durationSec: 45 * 60,
+      studentName: 'Crislyn',
+      backHref: 'periodic-maths.html'
+    });
+    exam.start();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (window.AudioManager) AudioManager.playTone('levelup');
+  }
+
+  /* ---------------- Quick practice (untimed, instant feedback) --------- */
+  const TOPIC_GROUPS = [
+    { label: 'All topics', topics: null },
+    { label: 'Number names & figures', topics: ['number-name'] },
+    { label: 'Place & face value', topics: ['place-value', 'face-value'] },
+    { label: 'Expanded & standard form', topics: ['expanded-form', 'standard-form'] },
+    { label: 'Compare & order', topics: ['compare', 'ordering'] },
+    { label: 'Predecessor & successor', topics: ['pred-succ'] },
+    { label: 'Greatest & smallest', topics: ['greatest-smallest'] },
+    { label: 'Roman numerals', topics: ['roman'] },
+    { label: 'Addition', topics: ['addition'] },
+    { label: 'Subtraction', topics: ['subtraction'] },
+    { label: 'Properties & terms', topics: ['add-property', 'sub-property', 'check-addition'] },
+    { label: 'Missing numbers & mixed', topics: ['missing-number', 'mixed'] },
+    { label: 'Word problems', topics: ['word-problem'] },
+  ];
+  const QP = { group: 0, set: [], idx: 0, score: 0, locked: false };
+
+  function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  function normalize(s) { return String(s).toLowerCase().trim().replace(/\s+/g, ' ').replace(/,/g, ''); }
+
+  function buildSet() {
+    const g = TOPIC_GROUPS[QP.group];
+    let pool = g.topics ? BANK.filter(q => g.topics.includes(q.topic)) : BANK;
+    QP.set = shuffle(pool).slice(0, Math.min(10, pool.length));
+    QP.idx = 0; QP.score = 0; QP.locked = false;
+  }
+
+  function renderChips() {
+    return '<div class="qp-topics">' + TOPIC_GROUPS.map((g, i) =>
+      `<button class="qp-chip ${i === QP.group ? 'active' : ''}" data-g="${i}">${g.label}</button>`).join('') + '</div>';
+  }
+
+  function renderQuestion() {
+    const host = document.getElementById('qp-host');
+    if (QP.idx >= QP.set.length) return renderResult();
+    const q = QP.set[QP.idx];
+    let body = '';
+    if (q.type === 'mcq') {
+      body = q.options.map((o, j) => `<button class="qp-opt" data-j="${j}">${o}</button>`).join('');
+    } else {
+      body = `<input class="qp-fill" id="qp-fill" placeholder="Type your answer" autocomplete="off">
+              <div class="qp-actions"><button class="btn btn-primary" id="qp-check">Check</button></div>`;
+    }
+    host.innerHTML = renderChips() +
+      `<div class="qp-progress">Question ${QP.idx + 1} of ${QP.set.length} · Score ${QP.score}</div>
+       <div class="qp-q">${q.q}</div>
+       <div id="qp-body">${body}</div>
+       <div id="qp-fb"></div>`;
+    wireChips();
+    QP.locked = false;
+    if (q.type === 'mcq') {
+      host.querySelectorAll('.qp-opt').forEach(b => b.addEventListener('click', () => answerMcq(parseInt(b.dataset.j, 10))));
+    } else {
+      const inp = document.getElementById('qp-fill');
+      inp.focus();
+      const go = () => answerFill(inp.value);
+      document.getElementById('qp-check').addEventListener('click', go);
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    }
+  }
+
+  function showFeedback(ok, q) {
+    const fb = document.getElementById('qp-fb');
+    const correctText = q.type === 'mcq' ? q.options[q.answer] : (Array.isArray(q.answer) ? q.answer[0] : q.answer);
+    fb.className = 'qp-feedback ' + (ok ? 'ok' : 'no');
+    fb.innerHTML = (ok ? '✅ Correct! ' : `❌ Not quite — the answer is <strong>${correctText}</strong>. `) +
+      (q.explain ? `<br><span style="font-weight:500;">💡 ${q.explain}</span>` : '') +
+      `<div class="qp-actions"><button class="btn btn-primary" id="qp-next">${QP.idx + 1 >= QP.set.length ? 'See results →' : 'Next →'}</button></div>`;
+    document.getElementById('qp-next').addEventListener('click', () => { QP.idx++; renderQuestion(); });
+    document.getElementById('qp-next').focus();
+    if (window.AudioManager) AudioManager.playTone(ok ? 'correct' : 'wrong');
+  }
+
+  function answerMcq(j) {
+    if (QP.locked) return; QP.locked = true;
+    const q = QP.set[QP.idx];
+    const ok = j === q.answer;
+    if (ok) QP.score++;
+    document.querySelectorAll('.qp-opt').forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.answer) b.classList.add('correct');
+      else if (k === j) b.classList.add('wrong');
+    });
+    showFeedback(ok, q);
+  }
+  function answerFill(val) {
+    if (QP.locked) return; QP.locked = true;
+    const q = QP.set[QP.idx];
+    const acc = (Array.isArray(q.answer) ? q.answer : [q.answer]).map(normalize);
+    const ok = acc.includes(normalize(val));
+    if (ok) QP.score++;
+    const inp = document.getElementById('qp-fill'); if (inp) inp.disabled = true;
+    const btn = document.getElementById('qp-check'); if (btn) btn.disabled = true;
+    showFeedback(ok, q);
+  }
+
+  function renderResult() {
+    const host = document.getElementById('qp-host');
+    const pct = QP.set.length ? Math.round((QP.score / QP.set.length) * 100) : 0;
+    const msg = pct >= 90 ? 'Brilliant! 🏆' : pct >= 70 ? 'Great work! ⭐' : pct >= 50 ? 'Good effort — keep going!' : "Let's practise this topic again 💪";
+    host.innerHTML = renderChips() +
+      `<div style="text-align:center; padding: var(--space-4) 0;">
+        <div style="font-size:3rem;">${pct >= 70 ? '🌟' : '📚'}</div>
+        <h3 style="font-family:var(--font-heading); color:var(--color-primary-dark);">You scored ${QP.score} / ${QP.set.length}</h3>
+        <p style="color:var(--color-text-light);">${msg}</p>
+        <div class="qp-actions" style="justify-content:center;">
+          <button class="btn btn-primary btn-lg" id="qp-again">↻ Practise 10 more</button>
+        </div>
+      </div>`;
+    wireChips();
+    document.getElementById('qp-again').addEventListener('click', () => { buildSet(); renderQuestion(); });
+    if (window.Confetti && pct >= 80) Confetti.launch(80);
+    if (window.State && State.addStars && QP.set.length) State.addStars(pct >= 80 ? 6 : 3, 'Periodic Maths practice');
+  }
+
+  function wireChips() {
+    document.querySelectorAll('.qp-chip').forEach(c => c.addEventListener('click', () => {
+      QP.group = parseInt(c.dataset.g, 10); buildSet(); renderQuestion();
+    }));
+  }
+
+  function startPractice() {
+    document.getElementById('practice-stage').style.display = 'block';
+    buildSet(); renderQuestion();
+    document.getElementById('practice-stage').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  /* ---------------- Boot ---------------- */
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!BANK.length) { console.error('PT_MATHS1_BANK failed to load'); return; }
+    document.getElementById('card-practice').addEventListener('click', startPractice);
+    document.getElementById('card-exam').addEventListener('click', startExam);
+    // deep link: ?start=exam or ?start=practice
+    const p = new URLSearchParams(location.search).get('start');
+    if (p === 'exam') startExam();
+    else if (p === 'practice') startPractice();
+  });
+})();
+</script>
+
+</body>
+</html>
