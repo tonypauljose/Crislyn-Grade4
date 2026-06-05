@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>📖 Hindi Journey — आम का पेड़ · Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Patrick+Hand&family=Tiro+Devanagari+Hindi&family=Hind:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/pixie.css">
+  <link rel="stylesheet" href="css/hindi-journey.css">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%AD%3C/text%3E%3C/svg%3E">
+
+  <script src="js/analytics.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="js/state.js" defer></script>
+  <script src="js/pixie3d.js" defer></script>
+
+  <style>
+    .navbar { background: var(--color-surface); box-shadow: var(--shadow-sm); padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark); }
+    .nav-links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nav-link { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light); }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+
+    .ph-hero { background: linear-gradient(135deg, #B45309 0%, #D97706 45%, #FBBF24 100%); color: #fff; text-align: center; padding: var(--space-8) var(--space-4); }
+    .ph-hero h1 { color: #fff; font-family: var(--font-heading); font-size: clamp(1.8rem, 6vw, 2.6rem); margin: 0 0 6px; }
+    .ph-hero .hi-title { font-family: 'Tiro Devanagari Hindi', serif; font-size: 1.4rem; opacity: .95; }
+    .ph-hero .pill { display: inline-block; margin-top: 12px; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); padding: 6px 16px; border-radius: 999px; font-weight: 800; }
+
+    .ph-wrap { max-width: 960px; margin: 0 auto; padding: var(--space-8) var(--space-4); }
+    .ph-h2 { font-family: var(--font-heading); color: #92400E; text-align: center; margin: 0 0 6px; }
+    .ph-sub { text-align: center; color: var(--color-text-light); margin: 0 0 var(--space-6); }
+
+    /* Action cards */
+    .ph-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: var(--space-8); }
+    .ph-card { background: #fff; border: 2px solid #FCD9A6; border-radius: 18px; padding: 20px; text-align: center; cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s; display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: inherit; }
+    .ph-card:hover { transform: translateY(-5px); border-color: #D97706; box-shadow: 0 12px 28px rgba(180,83,9,.18); }
+    .ph-card .emoji { font-size: 2.6rem; }
+    .ph-card h3 { font-family: var(--font-heading); margin: 0; font-size: 1.1rem; color: #7c3a06; }
+    .ph-card p { margin: 0; font-size: .9rem; color: var(--color-text-light); }
+    .ph-card.feature { background: linear-gradient(135deg, #FFF7ED, #FEF3C7); border-color: #D97706; }
+    .ph-card .cta { margin-top: auto; align-self: center; background: #B45309; color: #fff; font-weight: 800; padding: 8px 18px; border-radius: 999px; font-size: .9rem; }
+
+    /* Mission path */
+    .ph-path { display: grid; gap: 14px; }
+    .mission-card { display: flex; align-items: center; gap: 16px; background: #fff; border: 2px solid #FCD9A6; border-radius: 18px; padding: 16px 18px; cursor: pointer; transition: transform .12s, border-color .15s; }
+    .mission-card:hover { transform: translateX(4px); border-color: #D97706; }
+    .mission-card .m-num { flex: 0 0 auto; width: 54px; height: 54px; border-radius: 50%; background: #FEF3C7; color: #92400E; font-family: var(--font-heading); font-size: 1.4rem; display: flex; align-items: center; justify-content: center; }
+    .mission-card.is-done .m-num { background: #DCFCE7; color: #14532d; }
+    .mission-card .m-body { flex: 1; }
+    .mission-card .m-title { font-family: var(--font-heading); color: #7c3a06; font-size: 1.1rem; }
+    .mission-card .m-title .hi { font-family: 'Tiro Devanagari Hindi', serif; }
+    .mission-card .m-meta { font-size: .85rem; color: var(--color-text-light); }
+    .mission-card .m-status { flex: 0 0 auto; font-weight: 800; font-size: .9rem; color: #B45309; }
+    .mission-card.is-done .m-status { color: #16A34A; }
+
+    /* Dashboard */
+    #dash { display: none; }
+    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+    .dash-stat { background: #fff; border: 2px solid #FCD9A6; border-radius: 16px; padding: 16px; text-align: center; }
+    .dash-stat .num { font-family: var(--font-heading); font-size: 1.8rem; color: #B45309; }
+    .dash-stat .lbl { font-size: .85rem; color: var(--color-text-light); }
+    .dash-ring { --pct: 0; width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 6px; background: conic-gradient(#16A34A calc(var(--pct) * 1%), #FEF3C7 0); display: flex; align-items: center; justify-content: center; }
+    .dash-ring span { width: 82px; height: 82px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 1.4rem; color: #92400E; }
+    .dash-list { background: #fff; border: 2px solid #FCD9A6; border-radius: 16px; padding: 14px 18px; margin-top: 14px; }
+    .dash-list h4 { margin: 0 0 8px; color: #92400E; }
+    .dash-list .weak { display: inline-block; background: #FEE2E2; color: #b91c1c; border-radius: 999px; padding: 4px 12px; margin: 3px; font-weight: 700; font-size: .85rem; }
+    .dash-list .ok { color: #16A34A; font-weight: 700; }
+    .dash-revise { display: inline-block; margin: 4px; padding: 6px 14px; border-radius: 999px; background: #B45309; color: #fff; font-weight: 700; font-size: .85rem; cursor: pointer; border: none; }
+
+    .footer { text-align: center; padding: var(--space-6) 0; color: var(--color-text-light); font-size: var(--text-sm); border-top: 1px solid var(--color-border-light); }
+    @media (max-width: 520px) { .mission-card .m-meta { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="hindi.html" class="nav-link">📖 Hindi</a>
+      <a href="periodic-hindi.html" class="nav-link active">🥭 Hindi Journey</a>
+    </div>
+  </div>
+</nav>
+
+<main class="hj-hub">
+  <header class="ph-hero">
+    <h1>🥭 Hindi Journey</h1>
+    <div class="hi-title">पाठ ६ · आम का पेड़</div>
+    <p style="opacity:.95; margin:8px 0 0;">A gentle step-by-step adventure for the Periodic Test</p>
+    <div class="pill" id="hero-pill">⭐ Read · Listen · Trace · Win badges</div>
+  </header>
+
+  <div class="ph-wrap">
+    <!-- Action cards -->
+    <div class="ph-actions">
+      <div class="ph-card feature" id="card-start">
+        <span class="emoji">🚀</span>
+        <h3>Start / Continue</h3>
+        <p>Pick up your next mission and learn step by step.</p>
+        <span class="cta">Let's go →</span>
+      </div>
+      <div class="ph-card" id="card-practice">
+        <span class="emoji">⚡</span>
+        <h3>Quick Practice</h3>
+        <p>10 quick questions to warm up. Try every day!</p>
+        <span class="cta">Practise →</span>
+      </div>
+      <a class="ph-card" href="worksheets/pt-hindi1-paper.html">
+        <span class="emoji">🖨️</span>
+        <h3>Practice Sheet</h3>
+        <p>Print it and write the answers by hand.</p>
+        <span class="cta">Open →</span>
+      </a>
+      <a class="ph-card" href="chapters/hi02-aam-ka-ped.html">
+        <span class="emoji">📖</span>
+        <h3>Read the Story</h3>
+        <p>Listen to the full story of the mango tree.</p>
+        <span class="cta">Read →</span>
+      </a>
+    </div>
+
+    <!-- Mission path -->
+    <h2 class="ph-h2">🗺️ Your Mission Map</h2>
+    <p class="ph-sub">Six little missions — about 10–15 minutes each. Finish one, win a badge!</p>
+    <div class="ph-path" id="mission-path"></div>
+
+    <!-- Parent dashboard toggle -->
+    <div style="text-align:center; margin-top: var(--space-8);">
+      <button class="btn btn-outline" id="dash-toggle">👨‍👩‍👧 Parent Dashboard</button>
+    </div>
+
+    <section id="dash" style="margin-top: var(--space-6);">
+      <h2 class="ph-h2">Progress &amp; Test Readiness</h2>
+      <p class="ph-sub">A quick look at how Crislyn is doing.</p>
+      <div id="dash-body"></div>
+      <div style="text-align:center; margin-top: var(--space-5);">
+        <button class="btn btn-outline btn-sm" id="dash-reset">↺ Reset progress</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="footer"><p>Made with ❤️ for Crislyn · crislyntony.com</p></div>
+</main>
+
+<!-- Full-viewport slide stage (engine fills this) -->
+<div id="hj-stage" class="hj-stage"></div>
+
+<script src="js/common.js"></script>
+<script src="data/pt-hindi1.js"></script>
+<script src="js/hindi-journey.js"></script>
+<script>
+(function () {
+  'use strict';
+  const DATA = window.PT_HINDI1;
+  const stage = document.getElementById('hj-stage');
+  const onExit = () => { document.body.classList.remove('hj-running'); renderHub(); window.scrollTo({ top: 0 }); };
+
+  function progress() { return HindiJourney.getProgress(DATA.id); }
+
+  function renderHub() {
+    const p = progress();
+    const path = document.getElementById('mission-path');
+    const nextId = (DATA.missions.find(m => !(p.missions[m.id] && p.missions[m.id].done)) || {}).id;
+    path.innerHTML = DATA.missions.map((m, i) => {
+      const done = !!(p.missions[m.id] && p.missions[m.id].done);
+      const isNext = m.id === nextId;
+      const status = done ? '⭐ Done' : isNext ? '▶ Start' : 'Open';
+      return `<div class="mission-card ${done ? 'is-done' : ''}" data-id="${m.id}">
+        <div class="m-num">${done ? '✓' : i + 1}</div>
+        <div class="m-body">
+          <div class="m-title">${m.emoji} <span class="hi">${m.titleHi}</span> · ${m.title}</div>
+          <div class="m-meta">${m.words ? m.words.length + ' words · ' : ''}about ${m.estMin || 12} min</div>
+        </div>
+        <div class="m-status">${status}</div>
+      </div>`;
+    }).join('');
+    path.querySelectorAll('.mission-card').forEach(c => c.onclick = () => launch(c.dataset.id));
+    // hero pill
+    document.getElementById('hero-pill').textContent =
+      `⭐ ${Object.values(p.missions).filter(m => m.done).length} / ${DATA.missions.length} missions · ${p.readiness || 0}% ready`;
+    if (document.getElementById('dash').style.display === 'block') renderDash();
+  }
+
+  function launch(missionId) { HindiJourney.start({ data: DATA, missionId, host: stage, onExit }); window.scrollTo({ top: 0 }); }
+  function startJourney() { HindiJourney.startNext({ data: DATA, host: stage, onExit }); window.scrollTo({ top: 0 }); }
+  function practice() { HindiJourney.startPractice({ data: DATA, host: stage, onExit }); window.scrollTo({ top: 0 }); }
+
+  function renderDash() {
+    const p = progress();
+    const total = DATA.missions.length;
+    const done = Object.values(p.missions).filter(m => m.done).length;
+    const tests = Object.entries(p.miniTests);
+    const reads = p.wordsReadSelf.length;
+    const reveals = Object.values(p.revealsUsed).reduce((a, b) => a + b, 0);
+    const practised = p.wordsPractised.length;
+    const readConf = practised ? Math.round((reads / practised) * 100) : 0;
+
+    // weak areas: missions with miniTest < 2/3, or many reveals
+    const weakMissions = DATA.missions.filter(m => {
+      const t = p.miniTests[m.id];
+      return t && (t.score / t.total) < 0.67;
+    });
+    const revealWords = Object.entries(p.revealsUsed).filter(([, n]) => n >= 1).map(([w]) => w);
+
+    document.getElementById('dash-body').innerHTML = `
+      <div class="dash-grid">
+        <div class="dash-stat">
+          <div class="dash-ring" style="--pct:${p.readiness || 0}"><span>${p.readiness || 0}%</span></div>
+          <div class="lbl">Test readiness</div>
+        </div>
+        <div class="dash-stat"><div class="num">${done}/${total}</div><div class="lbl">Missions done</div></div>
+        <div class="dash-stat"><div class="num">${practised}</div><div class="lbl">Words practised</div></div>
+        <div class="dash-stat"><div class="num">${readConf}%</div><div class="lbl">Reading on her own</div></div>
+        <div class="dash-stat"><div class="num">${p.answersWritten.length}</div><div class="lbl">Answers written ✍️</div></div>
+      </div>
+
+      <div class="dash-list">
+        <h4>📊 Mini-test scores</h4>
+        ${tests.length ? tests.map(([id, t]) => {
+          const m = DATA.missions.find(x => x.id === id) || { title: id, titleHi: '' };
+          return `<div>${(t.score / t.total) >= 0.67 ? '✅' : '🔁'} <strong>${m.titleHi}</strong> ${m.title} — ${t.score}/${t.total}</div>`;
+        }).join('') : '<span class="lbl">No mini-tests yet — start a mission!</span>'}
+      </div>
+
+      <div class="dash-list">
+        <h4>🎯 Needs revision</h4>
+        ${(weakMissions.length || revealWords.length)
+          ? `${weakMissions.map(m => `<button class="dash-revise" data-id="${m.id}">↻ ${m.titleHi} (${m.title})</button>`).join('')}
+             ${revealWords.length ? `<div style="margin-top:8px;" class="lbl">Words she needed help reading: ${revealWords.map(w => `<span class="weak">${w}</span>`).join('')}</div>` : ''}`
+          : '<span class="ok">Looking strong! Keep practising a little each day. 🌟</span>'}
+      </div>`;
+
+    document.getElementById('dash-body').querySelectorAll('.dash-revise').forEach(b => b.onclick = () => launch(b.dataset.id));
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!DATA) { console.error('PT_HINDI1 failed to load'); return; }
+    document.getElementById('card-start').onclick = startJourney;
+    document.getElementById('card-practice').onclick = practice;
+    document.getElementById('dash-toggle').onclick = () => {
+      const d = document.getElementById('dash');
+      const show = d.style.display !== 'block';
+      d.style.display = show ? 'block' : 'none';
+      if (show) { renderDash(); d.scrollIntoView({ behavior: 'smooth' }); }
+    };
+    document.getElementById('dash-reset').onclick = () => {
+      if (confirm('Reset all Hindi journey progress for this chapter?')) { HindiJourney.resetProgress(DATA.id); renderHub(); renderDash(); }
+    };
+    renderHub();
+    const start = new URLSearchParams(location.search).get('start');
+    if (start === 'practice') practice();
+    else if (start === 'journey') startJourney();
+  });
+})();
+</script>
+
+</body>
+</html>

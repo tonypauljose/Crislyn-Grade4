@@ -1,0 +1,201 @@
+/* ============================================================
+   hindi-journey.css — tablet-first, no-scroll slide stage
+   Scoped under .hj-*. Pairs with js/hindi-journey.js.
+   Theme: warm amber (Hindi). One activity per screen, big touch
+   targets, big spaced Devanagari, finger tracing.
+   ============================================================ */
+
+:root {
+  --hj-primary: #B45309;
+  --hj-primary-dark: #92400E;
+  --hj-light: #FBBF24;
+  --hj-accent: #16A34A;
+  --hj-bg: #FFFBEB;
+  --hj-bg2: #FEF3C7;
+  --hj-ink: #432006;
+}
+
+/* ---- Full-viewport takeover: hide the page chrome ---- */
+body.hj-running { overflow: hidden; }
+body.hj-running .navbar,
+body.hj-running .page-hero,
+body.hj-running .ph-hero,
+body.hj-running .section,
+body.hj-running .footer,
+body.hj-running .hj-hub { display: none !important; }
+
+/* ---- The stage ---- */
+.hj-stage {
+  position: fixed; inset: 0; z-index: 200;
+  display: none;
+  grid-template-rows: auto auto 1fr auto;
+  background: linear-gradient(160deg, var(--hj-bg) 0%, var(--hj-bg2) 100%);
+  font-family: 'Nunito', sans-serif;
+  color: var(--hj-ink);
+  /* fill the real viewport even with mobile browser chrome */
+  height: 100vh; height: 100dvh;
+}
+body.hj-running .hj-stage { display: grid; }
+
+/* ---- Top bar ---- */
+.hj-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(8px + env(safe-area-inset-top)) 16px 4px;
+  gap: 10px;
+}
+.hj-title { font-family: 'Fredoka One', cursive; font-size: clamp(1rem, 3.4vw, 1.4rem); color: var(--hj-primary-dark); text-align: center; flex: 1; }
+.hj-title-en { font-family: 'Nunito', sans-serif; font-weight: 700; opacity: .65; font-size: .8em; }
+.hj-exit, .hj-speed {
+  flex: 0 0 auto; width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid #FCD9A6; background: #fff; cursor: pointer;
+  font-size: 1.2rem; color: var(--hj-primary-dark);
+}
+.hj-exit:active, .hj-speed:active { transform: scale(.92); }
+
+/* ---- Progress strip ---- */
+.hj-progress { display: flex; align-items: center; gap: 10px; padding: 2px 18px 6px; }
+.hj-dots { display: flex; gap: 5px; flex: 1; flex-wrap: wrap; }
+.hj-dot { width: 9px; height: 9px; border-radius: 50%; background: #EAD9B8; }
+.hj-dot.is-done { background: var(--hj-accent); }
+.hj-dot.is-now { background: var(--hj-primary); transform: scale(1.35); }
+.hj-count { font-weight: 800; color: var(--hj-primary-dark); font-size: .9rem; white-space: nowrap; }
+
+/* ---- Slide region (NEVER scrolls) ---- */
+.hj-slide { overflow: hidden; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 8px 18px; }
+.hj-center { width: 100%; max-width: 680px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: clamp(8px, 1.8vh, 20px); }
+.hj-center--wide { max-width: 860px; }
+
+.hj-pill { display: inline-block; background: #fff; border: 2px solid #FCD9A6; color: var(--hj-primary-dark); font-weight: 800; padding: 5px 16px; border-radius: 999px; font-size: .85rem; }
+.hj-emoji-xl { font-size: clamp(3rem, 11vh, 5.5rem); line-height: 1; }
+.hj-headline { font-family: 'Fredoka One', cursive; color: var(--hj-primary-dark); font-size: clamp(1.4rem, 5vw, 2.1rem); margin: 0; line-height: 1.15; }
+.hj-body { font-size: clamp(1rem, 2.6vw, 1.25rem); color: #6b4a23; margin: 0; max-width: 32ch; }
+.hj-instr { font-size: clamp(1.05rem, 3vw, 1.4rem); font-weight: 700; color: var(--hj-primary-dark); margin: 0; }
+.hj-instr-en { font-size: 1rem; color: #8a6a3f; margin: 0; }
+.hj-instr-sm { font-size: 1rem; font-weight: 700; color: var(--hj-primary-dark); margin: 4px 0 0; }
+.hj-note { font-size: 1rem; color: #8a6a3f; margin: 0; max-width: 34ch; }
+.hj-hint-mini { font-size: .95rem; color: #8a6a3f; margin: 0; }
+
+/* ---- Big Hindi ---- */
+.hj-hi { font-family: 'Tiro Devanagari Hindi', 'Hind', serif; font-size: clamp(3rem, 14vw, 7rem); letter-spacing: .03em; line-height: 1.25; color: var(--hj-ink); }
+.hj-hi--ans { font-size: clamp(1.8rem, 6vw, 3rem); line-height: 1.5; }
+.hj-roman { font-size: 1.1rem; color: #9a7233; font-style: italic; }
+.hj-meaning { font-size: clamp(1.1rem, 3vw, 1.5rem); color: #6b4a23; }
+.hj-meaning strong { color: var(--hj-primary-dark); }
+
+/* ---- Listen / reveal ---- */
+.hj-speakrow { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.hj-speak {
+  background: var(--hj-primary); color: #fff; border: none; cursor: pointer;
+  font-weight: 800; font-size: 1.05rem; padding: 12px 20px; border-radius: 999px;
+  box-shadow: 0 4px 0 var(--hj-primary-dark);
+}
+.hj-speak:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--hj-primary-dark); }
+.hj-speak.speaking { animation: hj-pulse .7s ease infinite; }
+@keyframes hj-pulse { 50% { background: var(--hj-light); color: var(--hj-ink); } }
+.hj-reveal { background: #fff; border: 2px dashed #E0A53C; color: var(--hj-primary-dark); font-weight: 800; padding: 10px 16px; border-radius: 999px; cursor: pointer; font-size: .95rem; }
+.hj-reveal--big { padding: 14px 28px; font-size: 1.1rem; border-style: solid; }
+.hj-speak-inline .hj-speak { padding: 6px 12px; font-size: .9rem; box-shadow: 0 3px 0 var(--hj-primary-dark); }
+
+/* ---- Options / choices ---- */
+.hj-options { display: grid; gap: 12px; width: 100%; max-width: 560px; }
+.hj-options--chips, .hj-options--text { grid-template-columns: 1fr; }
+.hj-opt {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #fff; border: 3px solid #FCD9A6; border-radius: 18px;
+  padding: 16px 18px; cursor: pointer; font-weight: 700;
+  font-size: clamp(1.05rem, 2.8vw, 1.3rem); color: var(--hj-ink);
+  min-height: 60px; transition: transform .1s, border-color .15s, background .15s;
+}
+.hj-opt:active { transform: scale(.98); }
+.hj-opt--hi .hj-opt-hi { font-family: 'Tiro Devanagari Hindi', 'Hind', serif; font-size: 1.5em; }
+.hj-opt-en { color: #8a6a3f; font-weight: 700; font-size: .85em; }
+.hj-opt.is-correct { background: #DCFCE7; border-color: var(--hj-accent); color: #14532d; }
+.hj-opt.is-soft { background: #FEF3C7; border-color: #F59E0B; }
+.hj-options--chips { grid-auto-flow: column; grid-template-columns: none; justify-content: center; }
+@media (max-width: 560px) { .hj-options--chips { grid-auto-flow: row; } }
+
+.hj-fb { min-height: 1.4em; font-size: 1.05rem; font-weight: 700; color: var(--hj-primary-dark); margin: 0; }
+
+/* ---- Fill-in sentence ---- */
+.hj-sentence { font-family: 'Tiro Devanagari Hindi', 'Hind', serif; font-size: clamp(1.3rem, 4vw, 2rem); line-height: 1.7; color: var(--hj-ink); }
+.hj-blank { display: inline-block; min-width: 90px; border-bottom: 3px solid var(--hj-primary); color: var(--hj-primary); font-weight: 800; }
+.hj-blank.is-filled { border-bottom-color: var(--hj-accent); color: #14532d; }
+
+/* ---- Tracer ---- */
+.hj-tracer { width: 100%; max-width: 620px; }
+.hj-copy-target { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: clamp(1.6rem,5vw,2.4rem); color: var(--hj-primary-dark); }
+.hj-copy-target .hj-roman { font-size: .6em; }
+.hj-trace-wrap {
+  position: relative; width: 100%;
+  height: clamp(150px, 30vh, 280px);
+  border-radius: 18px; overflow: hidden;
+  border: 3px solid #FCD9A6;
+  background:
+    repeating-linear-gradient(180deg, transparent, transparent calc(50% - 1px), rgba(180,83,9,.18) 50%, transparent calc(50% + 1px)),
+    #fff;
+}
+.hj-trace-guide {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Tiro Devanagari Hindi', 'Hind', serif;
+  font-size: clamp(5rem, 22vh, 12rem); line-height: 1;
+  color: rgba(180, 83, 9, 0.22); user-select: none; pointer-events: none; z-index: 1;
+  white-space: nowrap;
+}
+.hj-trace-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; z-index: 2; }
+.hj-clear { background: #fff; border: 2px solid #FCD9A6; color: var(--hj-primary-dark); font-weight: 800; padding: 10px 16px; border-radius: 999px; cursor: pointer; }
+
+/* ---- Matching ---- */
+.hj-match { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; width: 100%; max-width: 680px; }
+.hj-match-col { display: flex; flex-direction: column; gap: 10px; }
+.hj-chip {
+  background: #fff; border: 3px solid #FCD9A6; border-radius: 16px; cursor: pointer;
+  padding: 12px 10px; font-weight: 700; color: var(--hj-ink); min-height: 54px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;
+}
+.hj-chip-hi { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: 1.5rem; }
+.hj-chip-roman, .hj-chip-en { font-size: .8rem; color: #9a7233; font-weight: 700; }
+.hj-chip.is-sel { border-color: var(--hj-primary); background: #FEF3C7; transform: scale(1.03); }
+.hj-chip.is-matched { background: #DCFCE7; border-color: var(--hj-accent); color: #14532d; opacity: .7; pointer-events: none; }
+.hj-chip.is-shake { animation: hj-shake .4s; }
+@keyframes hj-shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ---- Answer builder ---- */
+.hj-build { min-height: 56px; width: 100%; max-width: 700px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; padding: 10px; border-radius: 14px; border: 2px dashed #E0A53C; background: #fff; }
+.hj-built-word { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: 1.6rem; background: #DCFCE7; border-radius: 10px; padding: 4px 12px; color: #14532d; }
+.hj-tiles { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.hj-tile { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: 1.6rem; background: #fff; border: 3px solid #FCD9A6; border-radius: 14px; padding: 10px 16px; cursor: pointer; color: var(--hj-ink); }
+.hj-tile.is-used { opacity: .35; pointer-events: none; }
+.hj-tile.is-shake { animation: hj-shake .4s; }
+
+/* ---- Dialogue / quote ---- */
+.hj-quote { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: clamp(1.4rem,4.5vw,2.1rem); color: var(--hj-ink); background: #fff; border-left: 6px solid var(--hj-primary); border-radius: 12px; padding: 14px 18px; line-height: 1.5; }
+
+/* ---- Recall (write it) ---- */
+.hj-model { background: #fff; border: 2px solid #FCD9A6; border-radius: 16px; padding: 14px; }
+
+/* ---- Milestone ---- */
+.hj-milestone .hj-sticker-card { background: #fff; border: 3px solid var(--hj-light); border-radius: 16px; padding: 14px 22px; font-size: 1.2rem; color: var(--hj-primary-dark); font-weight: 800; }
+.hj-stars-won { font-family: 'Fredoka One', cursive; font-size: 1.8rem; color: var(--hj-primary); }
+.hj-pop { animation: hj-pop .6s cubic-bezier(.34,1.56,.64,1); }
+@keyframes hj-pop { 0%{transform:scale(.3);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+/* ---- Bottom nav ---- */
+.hj-nav { display: flex; align-items: center; gap: 10px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid #F2E3C4; background: rgba(255,255,255,.5); }
+.hj-nav-mid { flex: 1; display: flex; justify-content: center; }
+.hj-btn { border: none; cursor: pointer; font-family: 'Fredoka One', cursive; font-weight: 400; border-radius: 999px; min-height: 60px; padding: 0 26px; font-size: clamp(1.1rem, 3vw, 1.4rem); transition: transform .1s; }
+.hj-btn:active { transform: translateY(2px); }
+.hj-back { background: #fff; color: var(--hj-primary-dark); border: 2px solid #FCD9A6; min-width: 100px; }
+.hj-back:disabled { opacity: .35; pointer-events: none; }
+.hj-primary { background: var(--hj-primary); color: #fff; min-width: 150px; box-shadow: 0 5px 0 var(--hj-primary-dark); }
+.hj-primary:disabled { background: #E7D3B0; color: #fff; box-shadow: 0 5px 0 #d4bd93; pointer-events: none; }
+.hj-try, .hj-next-m { background: var(--hj-light); color: var(--hj-ink); min-height: 52px; padding: 0 20px; font-size: 1.1rem; }
+
+/* ---- Landscape: tighten vertical space ---- */
+@media (orientation: landscape) and (max-height: 620px) {
+  .hj-hi { font-size: clamp(2.4rem, 9vh, 4.5rem); }
+  .hj-emoji-xl { font-size: clamp(2.2rem, 9vh, 3.6rem); }
+  .hj-trace-wrap { height: clamp(120px, 34vh, 200px); }
+  .hj-center { gap: 6px; }
+  .hj-options { grid-template-columns: 1fr 1fr; max-width: 720px; }
+  .hj-options--text { grid-template-columns: 1fr 1fr; }
+}

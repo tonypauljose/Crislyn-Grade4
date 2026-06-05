@@ -272,6 +272,8 @@ const State = {
     const stickerEmojis = {
       'numbers-ch1': '🔢', 'sentences-ch1': '📝', 'nouns-ch2': '📦',
       'plants-ch1': '🌳', 'sangya-ch1': '📖',
+      'pt-hindi1-m1': '🥭', 'pt-hindi1-m2': '⚖️', 'pt-hindi1-m3': '🌅',
+      'pt-hindi1-m4': '🥕', 'pt-hindi1-m5': '✏️', 'pt-hindi1-champion': '🏆',
     };
 
     overlay.innerHTML = `
