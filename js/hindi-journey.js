@@ -212,14 +212,19 @@
   RENDER.discover = (s) => {
     const w = s.word;
     shell(`<div class="hj-center">
-      <div class="hj-pill">New word</div>
+      <div class="hj-pill">New word — try to read it!</div>
       ${w.emoji ? `<div class="hj-emoji-xl">${w.emoji}</div>` : ''}
       ${bigHi(w.hi)}
-      <div class="hj-roman">${w.roman || ''}</div>
+      <div class="hj-roman" id="hj-roman" hidden>${w.roman || ''}</div>
+      <div class="hj-speakrow">
+        ${speakBtn(w.hi, 'Hear it')}
+        <button class="hj-reveal" id="hj-say">🔤 How to say it</button>
+      </div>
       <div class="hj-meaning">means <strong>${w.en}</strong></div>
       ${s.note ? `<p class="hj-note">${s.note}</p>` : ''}
-      <div class="hj-speakrow">${speakBtn(w.hi, 'Hear it')}</div>
     </div>`);
+    const say = document.getElementById('hj-say');
+    if (say) say.onclick = () => { const r = document.getElementById('hj-roman'); if (r) r.hidden = false; say.style.display = 'none'; };
     recordWordPractised(w.hi);
     setPrimary('Next →', true, advance);
   };
@@ -286,7 +291,7 @@
     shell(`<div class="hj-center">
       <div class="hj-pill">${withGuide ? 'Trace it' : 'Write it yourself'}</div>
       <p class="hj-instr">${s.title || (withGuide ? 'Trace over the faded word ✏️' : 'Write this word on the empty line ✏️')}</p>
-      ${withGuide ? '' : `<div class="hj-copy-target">${w.hi} <span class="hj-roman">${w.roman || ''}</span></div>`}
+      ${withGuide ? '' : `<div class="hj-copy-target">${w.hi}</div>`}
       <div class="hj-tracer" data-glyph="${esc(w.hi)}" data-guide="${withGuide ? '1' : '0'}"></div>
       <div class="hj-speakrow">${speakBtn(w.hi, 'Hear it')}
         <button class="hj-clear" id="hj-clear">🗑️ Clear</button></div>
@@ -305,7 +310,7 @@
     const lefts = s.pairs.map((p, i) => ({ ...p.left, pair: i }));
     const rights = shuffle(s.pairs.map((p, i) => ({ ...p.right, pair: i })));
     const leftHtml = lefts.map((l, i) =>
-      `<button class="hj-chip hj-chip--left" data-pair="${l.pair}" data-side="L">${l.hi ? `<span class="hj-chip-hi">${l.hi}</span>` : l.en}${l.roman ? `<span class="hj-chip-roman">${l.roman}</span>` : ''}</button>`).join('');
+      `<button class="hj-chip hj-chip--left" data-pair="${l.pair}" data-side="L">${l.hi ? `<span class="hj-chip-hi">${l.hi}</span>` : l.en}</button>`).join('');
     const rightHtml = rights.map((r) =>
       `<button class="hj-chip hj-chip--right" data-pair="${r.pair}" data-side="R">${r.hi ? `<span class="hj-chip-hi">${r.hi}</span>` : ''}${r.en ? `<span class="hj-chip-en">${r.en}</span>` : ''}</button>`).join('');
     shell(`<div class="hj-center hj-center--wide">

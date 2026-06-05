@@ -145,15 +145,16 @@ body.hj-running .hj-stage { display: grid; }
 .hj-clear { background: #fff; border: 2px solid #FCD9A6; color: var(--hj-primary-dark); font-weight: 800; padding: 10px 16px; border-radius: 999px; cursor: pointer; }
 
 /* ---- Matching ---- */
-.hj-match { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 18px; width: 100%; max-width: 680px; }
-.hj-match-col { display: flex; flex-direction: column; gap: 10px; }
+.hj-match { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; width: 100%; max-width: 680px; }
+.hj-match-col { display: flex; flex-direction: column; gap: 8px; }
 .hj-chip {
-  background: #fff; border: 3px solid #FCD9A6; border-radius: 16px; cursor: pointer;
-  padding: 12px 10px; font-weight: 700; color: var(--hj-ink); min-height: 54px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;
+  background: #fff; border: 3px solid #FCD9A6; border-radius: 14px; cursor: pointer;
+  padding: 8px 10px; font-weight: 700; color: var(--hj-ink); min-height: 44px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15;
 }
-.hj-chip-hi { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: 1.5rem; }
-.hj-chip-roman, .hj-chip-en { font-size: .8rem; color: #9a7233; font-weight: 700; }
+.hj-chip-hi { font-family: 'Tiro Devanagari Hindi','Hind',serif; font-size: clamp(1.15rem, 4.2vw, 1.5rem); }
+.hj-chip-en { font-size: clamp(.95rem, 3.2vw, 1.1rem); color: #6b4a23; font-weight: 700; }
+.hj-chip-roman { display: none; }
 .hj-chip.is-sel { border-color: var(--hj-primary); background: #FEF3C7; transform: scale(1.03); }
 .hj-chip.is-matched { background: #DCFCE7; border-color: var(--hj-accent); color: #14532d; opacity: .7; pointer-events: none; }
 .hj-chip.is-shake { animation: hj-shake .4s; }
@@ -191,11 +192,17 @@ body.hj-running .hj-stage { display: grid; }
 .hj-try, .hj-next-m { background: var(--hj-light); color: var(--hj-ink); min-height: 52px; padding: 0 20px; font-size: 1.1rem; }
 
 /* ---- Landscape: tighten vertical space ---- */
-@media (orientation: landscape) and (max-height: 620px) {
+@media (orientation: landscape) and (max-height: 680px) {
   .hj-hi { font-size: clamp(2.4rem, 9vh, 4.5rem); }
   .hj-emoji-xl { font-size: clamp(2.2rem, 9vh, 3.6rem); }
   .hj-trace-wrap { height: clamp(120px, 34vh, 200px); }
   .hj-center { gap: 6px; }
   .hj-options { grid-template-columns: 1fr 1fr; max-width: 720px; }
   .hj-options--text { grid-template-columns: 1fr 1fr; }
+  /* keep Match within one screen on short landscape tablets */
+  .hj-match { gap: 6px 12px; }
+  .hj-match-col { gap: 6px; }
+  .hj-chip { min-height: 38px; padding: 6px 8px; border-width: 2px; }
+  .hj-chip-hi { font-size: clamp(1.05rem, 3.4vh, 1.3rem); }
+  .hj-instr { font-size: 1.05rem; }
 }
