@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" data-child="crislyn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Numbers Lab — Crislyn's World ✨</title>
+  <meta name="description" content="Numbers Lab — an interactive maths adventure: place value, right alignment, binary, hexadecimal colours and more. Built for Crislyn (Grade 4)." />
+  <meta name="theme-color" content="#F4A6BD" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/numbers-lab.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%AC%3C/text%3E%3C/svg%3E" />
+</head>
+<body class="nlab-page">
+  <div id="nl-host"></div>
+
+  <!-- Numbers Lab data -->
+  <script src="js/nlab/config.js"></script>
+  <script src="data/numbers-lab-modules.js"></script>
+  <script src="data/numbers-lab-quiz.js"></script>
+
+  <!-- Numbers Lab engine (fully self-contained — no host engines loaded,
+       so opening the Lab never touches Crislyn's site data or chrome) -->
+  <script src="js/nlab/store.js"></script>
+  <script src="js/nlab/guide.js"></script>
+  <script src="js/nlab/widgets.js"></script>
+  <script src="js/nlab/widgets-number.js"></script>
+  <script src="js/nlab/widgets-binary.js"></script>
+  <script src="js/nlab/widgets-color.js"></script>
+  <script src="js/numbers-lab.js"></script>
+
+  <script>NumbersLab.start(document.getElementById('nl-host'));</script>
+</body>
+</html>
