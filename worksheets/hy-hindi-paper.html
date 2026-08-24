@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>अर्धवार्षिक अभ्यास पत्र — हिंदी</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <link rel="stylesheet" href="../css/hy-paper.css">
+  <script src="../js/analytics.js"></script>
+</head>
+<body class="hi-paper">
+
+<div class="screen-controls">
+  <button class="btn btn-primary" onclick="window.print()">🖨️ प्रिंट कीजिए</button>
+  <button class="btn btn-secondary" onclick="location.reload()">🔄 नए प्रश्न</button>
+  <a class="btn btn-secondary" href="../half-yearly.html">← Mission Control</a>
+</div>
+
+<div class="paper">
+  <div class="pt-header">
+    <h1>अर्धवार्षिक परीक्षा — अभ्यास पत्र</h1>
+    <div class="subtitle">हिंदी · कक्षा ४</div>
+    <div class="pt-meta">
+      <span>समय: १ घंटा</span>
+      <span>कुल प्रश्न: <span id="paper-qcount">—</span></span>
+      <span>पूर्णांक: <span id="paper-marks">—</span></span>
+    </div>
+  </div>
+
+  <div class="pt-info">
+    <div class="field"><span>नाम:</span><span class="line"></span></div>
+    <div class="field"><span>दिनांक:</span><span class="line"></span></div>
+    <div class="field"><span>अंक:</span><span class="line" style="min-width:70pt"></span></div>
+  </div>
+
+  <div class="pt-note">
+    पाठ्यक्रम — पाठ ६ बीरबल की खिचड़ी · कविता “सीखो” · व्याकरण: संज्ञा, अनेक शब्दों के लिए एक शब्द, लिंग ·
+    रचना — मेरा देश · अपठित गद्यांश। <b>उत्तर पूरे वाक्य में लिखिए।</b>
+  </div>
+
+  <div id="paper-body"></div>
+
+  <div class="pt-footer">Crislyn's Portal · हर बार पन्ना खोलने पर नए प्रश्न बनते हैं</div>
+
+  <div class="key">
+    <h2>उत्तर-कुंजी</h2>
+    <div class="keynote">बड़ों के लिए। पाठ के उत्तर वही हैं जो कक्षा की कॉपी में लिखे गए थे —
+      अर्थ सही हो तो शब्द थोड़े अलग होने पर भी अंक दीजिए।</div>
+    <div id="key-body"></div>
+  </div>
+</div>
+
+<script src="../data/hy-skills.js"></script>
+<script src="../js/hy-engine.js"></script>
+<script src="../data/hy-hindi.js"></script>
+<script src="../js/hy-paper.js"></script>
+<script>
+HYPaper.build({
+  subject: 'hindi',
+  sections: [
+    { title: 'प्रश्न १. संज्ञा पहचानिए', marks: 5, count: 5, level: 2,
+      skills: ['H10', 'H10', 'H10', 'H10', 'H10'] },
+
+    { title: 'प्रश्न २. अनेक शब्दों के लिए एक शब्द लिखिए', marks: 6, count: 6, level: 2,
+      skills: ['H11', 'H11', 'H11', 'H11', 'H11', 'H11'] },
+
+    { title: 'प्रश्न ३. लिंग बदलिए / उचित लिंग भरिए', marks: 6, count: 6, level: 2,
+      skills: ['H12', 'H12', 'H12', 'H12', 'H12', 'H12'] },
+
+    { title: 'प्रश्न ४. विलोम तथा पर्यायवाची शब्द लिखिए', marks: 6, count: 6, level: 2,
+      skills: ['H3', 'H4', 'H3', 'H4', 'H3', 'H4'] },
+
+    { title: 'प्रश्न ५. शब्दार्थ लिखिए तथा शब्द शुद्ध कीजिए', marks: 5, count: 5, level: 2,
+      skills: ['H2', 'H6', 'H2', 'H6', 'H2'] },
+
+    { title: 'प्रश्न ६. पाठ ६ — बीरबल की खिचड़ी', marks: 6, count: 4, level: 2,
+      skills: ['H1', 'H5', 'H1', 'H5'], notTypes: ['write'] },
+
+    { title: 'प्रश्न ७. कविता “सीखो”', marks: 6, count: 5, level: 2,
+      skills: ['H7', 'H8', 'H9', 'H7', 'H8'] },
+
+    { title: 'प्रश्न ८. अपठित गद्यांश पढ़कर उत्तर दीजिए', marks: 4, count: 1, level: 1,
+      skills: ['H14'], types: ['passage'] },
+
+    { title: 'प्रश्न ९. रचना — मेरा देश (कम से कम ८ वाक्य)', marks: 6, count: 1, level: 3,
+      skills: ['H13'], types: ['write'] }
+  ]
+});
+</script>
+</body>
+</html>

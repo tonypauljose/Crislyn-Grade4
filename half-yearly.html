@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Half-Yearly Mission Control — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Tiro+Devanagari+Hindi&family=Source+Code+Pro:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/half-yearly.css">
+
+  <script src="js/analytics.js"></script>
+  <script src="js/state.js" defer></script>
+
+  <style>
+    .navbar { background: var(--color-surface); box-shadow: var(--shadow-sm); padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .nav-brand { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark); }
+    .nav-links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nav-link { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light); }
+    .nav-link:hover, .nav-link.active { background: var(--color-bg-alt); color: var(--color-primary); }
+    section { padding: var(--space-8) 0; }
+    section h2 { font-size: var(--text-xl); margin-bottom: var(--space-2); }
+    section > .container > p.lede { color: var(--color-text-light); margin-bottom: var(--space-5); max-width: 70ch; }
+    .site-foot { background: var(--color-primary-dark); color: rgba(255,255,255,.75); padding: var(--space-6) 0; text-align: center; font-size: var(--text-sm); }
+  </style>
+</head>
+<body class="hy-page">
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="exam.html" class="nav-link">Exams</a>
+      <a href="half-yearly.html" class="nav-link active">🎯 Half-Yearly</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================ HERO ==== -->
+<header class="hy-hero">
+  <div class="container">
+    <div class="hy-countdown">
+      <b id="hy-days">—</b> <span>days to the Half-Yearly</span>
+    </div>
+    <h1>Half-Yearly Mission Control</h1>
+    <p>Everything in the portion — Maths, English and हिंदी — turned into
+       daily practice that keeps coming back until you get it right every time.</p>
+
+    <div class="hy-hero-stats">
+      <div class="hy-hero-stat"><b id="hy-overall">0%</b><span>Portion ready</span></div>
+      <div class="hy-hero-stat"><b id="hy-mastered">0</b><span>Skills mastered</span></div>
+      <div class="hy-hero-stat"><b id="hy-streak">0</b><span>Day streak</span></div>
+      <div class="hy-hero-stat"><b id="hy-today-n">0</b><span>Done today</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ==================================================== TODAY'S MISSION == -->
+<div class="container">
+  <div class="hy-today">
+    <div class="hy-today-head">
+      <div class="hy-today-ring">
+        <svg class="hy-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle class="hy-ring-bg" cx="50" cy="50" r="42"></circle>
+          <circle class="hy-ring-fg" id="hy-ring-fg" cx="50" cy="50" r="42"
+                  stroke-dasharray="263.9" stroke-dashoffset="263.9"
+                  transform="rotate(-90 50 50)"></circle>
+          <text class="hy-ring-label" id="hy-ring-text" x="50" y="54" text-anchor="middle">0%</text>
+        </svg>
+        <div>
+          <h2>Today's mission</h2>
+          <div class="hy-today-sub" id="hy-today-desc">Loading…</div>
+        </div>
+      </div>
+      <div id="hy-due-note" class="hy-today-sub"></div>
+    </div>
+
+    <div class="hy-cta-row">
+      <button class="hy-btn hy-btn-primary hy-btn-big" id="hy-start">▶ Start today's mission</button>
+      <button class="hy-btn hy-btn-ghost" id="hy-quick">⚡ Quick 10</button>
+      <button class="hy-btn hy-btn-ghost" id="hy-weak">🎯 Trouble spots</button>
+      <button class="hy-btn hy-btn-ghost" id="hy-mock">📝 Mock exam (40)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================= SUBJECTS ==== -->
+<section>
+  <div class="container">
+    <h2>The three subjects</h2>
+    <p class="lede">Each bar shows every skill in the portion for that subject and how
+      solid it is right now. Tap a subject to practise only that one.</p>
+    <div class="hy-subjects" id="hy-subjects"></div>
+  </div>
+</section>
+
+<!-- ======================================================== SKILL MAP ==== -->
+<section style="background: var(--color-bg-alt);">
+  <div class="container">
+    <h2>Every skill in the portion</h2>
+    <p class="lede">
+      ○ not started &nbsp;·&nbsp; ◔ just met &nbsp;·&nbsp; ◑ getting it &nbsp;·&nbsp;
+      ◕ solid &nbsp;·&nbsp; ● mastered.<br>
+      Tap any skill to drill just that one for ten questions.
+    </p>
+
+    <div class="hy-cta-row" style="margin-bottom: var(--space-5);">
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-filter is-on" data-sub="all">All</button>
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-filter" data-sub="maths">🔢 Maths</button>
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-filter" data-sub="english">📖 English</button>
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-filter" data-sub="hindi">🪷 हिंदी</button>
+    </div>
+
+    <div id="hy-map"></div>
+  </div>
+</section>
+
+<!-- ======================================================= PRINTABLES ==== -->
+<section>
+  <div class="container">
+    <h2>Write it out on paper</h2>
+    <p class="lede">Tapping is not the same as writing. Print one of these each weekend and
+      do it at the table, timed, with a pen — that is what the real exam feels like.</p>
+    <div class="hy-plan">
+      <a class="hy-plan-day" href="worksheets/hy-maths-paper.html">
+        <b>🔢 Maths mock paper</b>
+        <p>40 marks · 60 minutes · fresh questions every time you reload. Answer key at the end.</p>
+      </a>
+      <a class="hy-plan-day" href="worksheets/hy-english-paper.html">
+        <b>📖 English mock paper</b>
+        <p>Grammar, both chapters, comprehension and a letter. With the model answers.</p>
+      </a>
+      <a class="hy-plan-day" href="worksheets/hy-hindi-paper.html">
+        <b>🪷 हिंदी अभ्यास पत्र</b>
+        <p>व्याकरण, पाठ ६, कविता, रचना और अपठित गद्यांश — उत्तर सहित।</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= STUDY PLAN ==== -->
+<section style="background: var(--color-bg-alt);">
+  <div class="container">
+    <h2>The three-week plan</h2>
+    <p class="lede">Twenty-five minutes a day beats three hours on the Sunday before. This is
+      the shape of it — the app handles the detail.</p>
+    <div class="hy-plan">
+      <div class="hy-plan-day">
+        <b>Week 1 — meet everything</b>
+        <p>Three new skills a day plus review of what came before. Expect mistakes; that is the
+           point. Nothing is marked "mastered" yet.</p>
+      </div>
+      <div class="hy-plan-day">
+        <b>Week 2 — close the gaps</b>
+        <p>Reviews start returning on their own. Use <b>Trouble spots</b> on the two weakest
+           subjects. First mock paper on paper at the weekend.</p>
+      </div>
+      <div class="hy-plan-day">
+        <b>Week 3 — make it automatic</b>
+        <p>Mostly review now. Tables and Roman numerals daily for speed. Second mock paper,
+           timed. Aim for every skill at ◕ or ●.</p>
+      </div>
+      <div class="hy-plan-day">
+        <b>The last two days</b>
+        <p>No new work. One <b>Trouble spots</b> round per subject, read the written answers
+           aloud, sleep early.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= PARENT DASHBOARD ==== -->
+<section>
+  <div class="container">
+    <div class="hy-parent">
+      <h3>👨‍👩‍👧 Parent dashboard</h3>
+      <p class="hy-sub">What she needs a person for — not more tapping.</p>
+
+      <h4 style="margin-top: var(--space-5); font-size: var(--text-sm); text-transform: uppercase; letter-spacing: .06em; color: var(--color-text-light);">
+        Sit with her on these</h4>
+      <ul class="hy-trouble" id="hy-trouble">
+        <li><span class="hy-trouble-acc">—</span>
+          <div class="hy-trouble-body"><b>Nothing yet</b>
+          <span>Trouble spots appear here once she has practised a few days.</span></div></li>
+      </ul>
+
+      <details style="margin-top: var(--space-5);">
+        <summary style="cursor:pointer; font-weight:800; color: var(--color-primary-dark);">
+          How the app decides what she practises</summary>
+        <div style="margin-top: var(--space-3); line-height: 1.8; font-size: var(--text-sm);">
+          <p><b>1. Retrieval, not re-reading.</b> Every turn asks her to produce the answer.
+             Recalling something is what makes it stick; reading it again mostly makes it feel familiar.</p>
+          <p><b>2. Spaced repetition.</b> Each skill sits in a box. Get it right and it comes back
+             in 1, then 2, 4, 7, then 12 days. Get it wrong and it drops back and returns tomorrow.
+             The intervals are squeezed to fit the weeks left before the exam.</p>
+          <p><b>3. Mastery, not attendance.</b> A skill only turns gold after <b>six</b> correct
+             recalls spread over at least <b>three different days</b>, with three right in a row.
+             One lucky answer proves nothing.</p>
+          <p><b>4. Kept at the right difficulty.</b> Three in a row and the questions get harder;
+             two slips and they ease off. Around 70–80% correct is the sweet spot — a quiz she
+             gets 100% on is not teaching her anything.</p>
+          <p><b>5. Interleaved.</b> The daily mix jumps between subjects and topics on purpose,
+             so she has to work out <em>which</em> method to use, not just repeat one.</p>
+          <p><b>6. Mistakes come back.</b> A missed question re-enters the same session a few
+             questions later with different numbers — not immediately, when she could just copy.</p>
+        </div>
+      </details>
+
+      <details style="margin-top: var(--space-3);">
+        <summary style="cursor:pointer; font-weight:800; color: var(--color-primary-dark);">
+          Reset her progress</summary>
+        <div style="margin-top: var(--space-3);">
+          <p class="hy-sub">This wipes every score and schedule on this device. There is no undo.</p>
+          <button class="hy-btn hy-btn-ghost hy-btn-sm" id="hy-reset" style="margin-top: var(--space-2);">
+            Reset all Half-Yearly progress</button>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="container">
+    Half-Yearly 2026 · built from Crislyn's own notebooks, textbooks and workbooks
+  </div>
+</footer>
+
+<!-- Engine + content -->
+<script src="data/hy-skills.js"></script>
+<script src="js/hy-engine.js"></script>
+<script src="data/hy-maths.js"></script>
+<script src="data/hy-english.js"></script>
+<script src="data/hy-hindi.js"></script>
+<script src="js/hy-ui.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const HY = window.HY, SK = window.HY_SKILLS;
+  HY.init();
+
+  const DOTS = ['○', '◔', '◑', '◕', '●'];
+  const $ = id => document.getElementById(id);
+
+  /* ------------------------------------------------------------- painting */
+
+  function paintHero() {
+    const days = HY.daysToExam();
+    $('hy-days').textContent = days > 0 ? days : (days === 0 ? 'Today' : '—');
+    const pct = HY.overallPct();
+    $('hy-overall').textContent = pct + '%';
+    $('hy-streak').textContent = HY.streakDays();
+    $('hy-today-n').textContent = HY.doneToday();
+
+    let mastered = 0;
+    SK.list.forEach(s => { if (HY.hasContent(s.id) && HY.isMastered(s.id)) mastered++; });
+    const total = SK.list.filter(s => HY.hasContent(s.id)).length;
+    $('hy-mastered').textContent = mastered + ' / ' + total;
+
+    const C = 2 * Math.PI * 42;
+    $('hy-ring-fg').setAttribute('stroke-dashoffset', C - (C * pct / 100));
+    $('hy-ring-text').textContent = pct + '%';
+
+    const due = HY.dueSkills().length;
+    const fresh = HY.newSkills().length;
+    const doneToday = HY.doneToday();
+    $('hy-today-desc').innerHTML = doneToday >= 20
+      ? "Today's practice is done — anything more is a bonus. 🌟"
+      : `${due} skill${due === 1 ? '' : 's'} due for review · ${fresh} still to meet`;
+    const rec = HY.recommendedTarget();
+    $('hy-start').textContent = `▶ Start today's ${rec}`;
+    $('hy-due-note').innerHTML = doneToday
+      ? `<b>${doneToday}</b> done today · today's pace is <b>${rec}</b>`
+      : `<b>${rec}</b> questions &mdash; the pace that finishes the portion in time`;
+  }
+
+  function paintSubjects() {
+    const wrap = $('hy-subjects');
+    wrap.innerHTML = '';
+    ['maths', 'english', 'hindi'].forEach(id => {
+      const meta = SK.subjects[id];
+      const r = HY.subjectReport(id);
+      const card = document.createElement('div');
+      card.className = 'hy-subject';
+      card.style.setProperty('--sub', meta.colour);
+      const seg = n => r.total ? (n / r.total * 100).toFixed(2) + '%' : '0%';
+      card.innerHTML = `
+        <div class="hy-subject-head">
+          <span class="hy-subject-icon">${meta.icon}</span>
+          <h3>${meta.name}</h3>
+          <span style="margin-left:auto; font-family: var(--font-heading); color:${meta.colour};">${r.pct}%</span>
+        </div>
+        <div class="hy-subject-chapters">${meta.chapters}</div>
+        <div class="hy-meter">
+          <i class="m4" style="width:${seg(r.mastered)}"></i>
+          <i class="m3" style="width:${seg(r.solid)}"></i>
+          <i class="m2" style="width:${seg(r.getting)}"></i>
+          <i class="m1" style="width:${seg(r.met)}"></i>
+        </div>
+        <div class="hy-meter-key">
+          <span class="k4">${r.mastered} mastered</span>
+          <span class="k3">${r.solid} solid</span>
+          <span class="k2">${r.getting} getting it</span>
+          <span class="k1">${r.met} just met</span>
+          <span class="k0">${r.untouched} to meet</span>
+        </div>
+        <div class="hy-cta-row">
+          <button class="hy-btn hy-btn-primary hy-btn-sm" data-go="${id}">Practise ${meta.name} →</button>
+          <button class="hy-btn hy-btn-ghost hy-btn-sm" data-weak="${id}">Weak spots</button>
+        </div>`;
+      wrap.appendChild(card);
+    });
+
+    wrap.querySelectorAll('[data-go]').forEach(b => {
+      b.onclick = () => run({ mode: 'subject', subject: b.dataset.go, target: 20 });
+    });
+    wrap.querySelectorAll('[data-weak]').forEach(b => {
+      b.onclick = () => run({ mode: 'weak', subject: b.dataset.weak, target: 15 });
+    });
+  }
+
+  let filter = 'all';
+  function paintMap() {
+    const map = $('hy-map');
+    map.innerHTML = '';
+    SK.topics.forEach(t => {
+      if (filter !== 'all' && t.subject !== filter) return;
+      const skills = t.skills.filter(id => HY.hasContent(id));
+      if (!skills.length) return;
+
+      const box = document.createElement('div');
+      box.className = 'hy-topic';
+      const meta = SK.subjects[t.subject];
+      box.innerHTML = `<h4>${meta.icon} ${meta.name} · ${t.name}</h4>`;
+      const grid = document.createElement('div');
+      grid.className = 'hy-skill-grid';
+
+      skills.forEach(id => {
+        const s = SK.get(id);
+        const lvl = HY.level(id);
+        const b = document.createElement('button');
+        b.className = 'hy-skill lvl-' + lvl + (s.flag === 'weak' ? ' is-weak' : '');
+        b.innerHTML = `<span class="hy-skill-dot">${DOTS[lvl]}</span>
+          <span class="hy-skill-name">${s.name}</span>
+          <span class="hy-skill-pct">${Math.round(HY.progress(id) * 100)}%</span>`;
+        b.title = 'Practise just this skill';
+        b.onclick = () => run({ mode: 'skill', skillId: id, target: 10 });
+        grid.appendChild(b);
+      });
+      box.appendChild(grid);
+      map.appendChild(box);
+    });
+  }
+
+  function paintTrouble() {
+    const list = $('hy-trouble');
+    const spots = HY.troubleSpots(6);
+    if (!spots.length) return;
+    list.innerHTML = '';
+    spots.forEach(s => {
+      const meta = SK.subjects[s.subject];
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span class="hy-trouble-acc">${s.acc === null ? '—' : s.acc + '%'}</span>
+        <div class="hy-trouble-body">
+          <b>${meta.icon} ${s.name}</b>
+          <span>${s.watch || (s.topic + ' · ' + s.wrong + ' missed so far — worth ten minutes together.')}</span>
+        </div>`;
+      list.appendChild(li);
+    });
+  }
+
+  function paintAll() { paintHero(); paintSubjects(); paintMap(); paintTrouble(); }
+
+  /* ---------------------------------------------------------------- wiring */
+
+  function run(opts) {
+    window.HYStage.start(Object.assign({ onClose: paintAll }, opts));
+  }
+
+  $('hy-start').onclick = () => run({ mode: 'daily', target: HY.recommendedTarget() });
+  $('hy-quick').onclick = () => run({ mode: 'daily', target: 10, seed: String(Date.now()) });
+  $('hy-weak').onclick  = () => run({ mode: 'weak', target: 18 });
+  $('hy-mock').onclick  = () => run({ mode: 'daily', target: 40, seed: 'mock' + Date.now() });
+
+  document.querySelectorAll('.hy-filter').forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll('.hy-filter').forEach(x => x.classList.remove('is-on'));
+      b.classList.add('is-on');
+      filter = b.dataset.sub;
+      paintMap();
+    };
+  });
+
+  $('hy-reset').onclick = () => {
+    if (confirm('Erase every Half-Yearly score and schedule on this device?')) {
+      HY.reset(); paintAll();
+    }
+  };
+
+  paintAll();
+})();
+</script>
+
+<style>
+  .hy-filter.is-on { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+</style>
+
+</body>
+</html>

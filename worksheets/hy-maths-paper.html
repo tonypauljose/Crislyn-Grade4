@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Half-Yearly Mock — Maths · Question Paper</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Source+Code+Pro:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <link rel="stylesheet" href="../css/hy-paper.css">
+  <script src="../js/analytics.js"></script>
+</head>
+<body>
+
+<div class="screen-controls">
+  <button class="btn btn-primary" onclick="window.print()">🖨️ Print this paper</button>
+  <button class="btn btn-secondary" onclick="location.reload()">🔄 New set of questions</button>
+  <a class="btn btn-secondary" href="../half-yearly.html">← Mission Control</a>
+</div>
+
+<div class="paper">
+  <div class="pt-header">
+    <h1>Half-Yearly Examination — Practice Paper</h1>
+    <div class="subtitle">Mathematics · Grade 4</div>
+    <div class="pt-meta">
+      <span>Time: 1 hour</span>
+      <span><span id="paper-qcount">—</span> questions</span>
+      <span>Maximum marks: <span id="paper-marks">—</span></span>
+    </div>
+  </div>
+
+  <div class="pt-info">
+    <div class="field"><span>Name:</span><span class="line"></span></div>
+    <div class="field"><span>Date:</span><span class="line"></span></div>
+    <div class="field"><span>Score:</span><span class="line" style="min-width:70pt"></span></div>
+  </div>
+
+  <div class="pt-note">
+    Portion — Ch 1 Numbers · Ch 2 Addition &amp; Subtraction · Ch 3 Multiplication (tables 2–12,
+    up to multiplying by a 1-digit number) · Geometry · Perimeter &amp; Area.
+    Show your working for the word problems. Write the unit in every answer.
+  </div>
+
+  <div id="paper-body"></div>
+
+  <div class="pt-footer">Crislyn's Portal · questions are generated fresh each time this page is opened</div>
+
+  <div class="key">
+    <h2>Answer Key</h2>
+    <div class="keynote">For the grown-up. Marking is on method as well as the final number.</div>
+    <div id="key-body"></div>
+  </div>
+</div>
+
+<script src="../data/hy-skills.js"></script>
+<script src="../js/hy-engine.js"></script>
+<script src="../data/hy-maths.js"></script>
+<script src="../js/hy-paper.js"></script>
+<script>
+HYPaper.build({
+  subject: 'maths',
+  sections: [
+    { title: 'I. Number sense — write the answer', marks: 8, count: 8, level: 2,
+      skills: ['M1', 'M2', 'M3', 'M4', 'M6', 'M7', 'M3', 'M1'] },
+
+    { title: 'II. Compare, order and Roman numerals', marks: 7, count: 7, level: 2,
+      skills: ['M5', 'M8', 'M5', 'M8', 'M8', 'M5', 'M8'] },
+
+    { title: 'III. Addition and subtraction', marks: 8, count: 6, level: 2,
+      skills: ['M9', 'M10', 'M9', 'M10', 'M11', 'M12'], notTypes: ['write'] },
+
+    { title: 'IV. Multiplication', marks: 6, count: 6, level: 2,
+      skills: ['M15', 'M16', 'M17', 'M18', 'M18', 'M15'] },
+
+    { title: 'V. Word problems — show your working', marks: 8, count: 4, level: 2,
+      skills: ['M14', 'M19', 'M14', 'M19'] },
+
+    { title: 'VI. Geometry', marks: 7, count: 7, level: 2,
+      skills: ['M20', 'M21', 'M22', 'M23', 'M21', 'M23', 'M22'] },
+
+    { title: 'VII. Perimeter and area', marks: 8, count: 6, level: 2,
+      skills: ['M25', 'M26', 'M24', 'M27', 'M28', 'M25'] }
+  ]
+});
+</script>
+</body>
+</html>

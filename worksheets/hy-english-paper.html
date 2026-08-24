@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Half-Yearly Mock — English · Question Paper</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/common.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/print.css">
+  <link rel="stylesheet" href="../css/hy-paper.css">
+  <script src="../js/analytics.js"></script>
+</head>
+<body>
+
+<div class="screen-controls">
+  <button class="btn btn-primary" onclick="window.print()">🖨️ Print this paper</button>
+  <button class="btn btn-secondary" onclick="location.reload()">🔄 New set of questions</button>
+  <a class="btn btn-secondary" href="../half-yearly.html">← Mission Control</a>
+</div>
+
+<div class="paper">
+  <div class="pt-header">
+    <h1>Half-Yearly Examination — Practice Paper</h1>
+    <div class="subtitle">English · Grade 4</div>
+    <div class="pt-meta">
+      <span>Time: 1 hour</span>
+      <span><span id="paper-qcount">—</span> questions</span>
+      <span>Maximum marks: <span id="paper-marks">—</span></span>
+    </div>
+  </div>
+
+  <div class="pt-info">
+    <div class="field"><span>Name:</span><span class="line"></span></div>
+    <div class="field"><span>Date:</span><span class="line"></span></div>
+    <div class="field"><span>Score:</span><span class="line" style="min-width:70pt"></span></div>
+  </div>
+
+  <div class="pt-note">
+    Portion — Unit 1 “Together We Can” · Lesson 3 “Be Smart, Be Safe” ·
+    Grammar: kinds of sentences, nouns, adjectives, conjunctions ·
+    Composition: comprehension and an informal letter.
+    Answer the chapter questions in <b>full sentences</b>.
+  </div>
+
+  <div id="paper-body"></div>
+
+  <div class="pt-footer">Crislyn's Portal · questions are generated fresh each time this page is opened</div>
+
+  <div class="key">
+    <h2>Answer Key</h2>
+    <div class="keynote">For the grown-up. Chapter answers are the ones from her class notebook —
+      accept any answer with the same meaning, written as a full sentence.</div>
+    <div id="key-body"></div>
+  </div>
+</div>
+
+<script src="../data/hy-skills.js"></script>
+<script src="../js/hy-engine.js"></script>
+<script src="../data/hy-english.js"></script>
+<script src="../js/hy-paper.js"></script>
+<script>
+HYPaper.build({
+  subject: 'english',
+  sections: [
+    { title: 'I. Name the kind of sentence, and punctuate it', marks: 4, count: 4, level: 2,
+      skills: ['E1', 'E1', 'E1', 'E1'] },
+
+    { title: 'II. Nouns — kind, number and gender', marks: 8, count: 8, level: 2,
+      skills: ['E2', 'E3', 'E4', 'E5', 'E2', 'E4', 'E2', 'E5'] },
+
+    { title: 'III. Adjectives and degrees of comparison', marks: 7, count: 7, level: 2,
+      skills: ['E6', 'E6', 'E7', 'E6', 'E7', 'E6', 'E7'] },
+
+    { title: 'IV. Fill in the correct conjunction', marks: 4, count: 4, level: 2,
+      skills: ['E8', 'E8', 'E8', 'E8'] },
+
+    { title: 'V. Word work — meanings, opposites and one-word answers', marks: 6, count: 6, level: 2,
+      skills: ['E11', 'E11', 'E11', 'E11', 'E11', 'E11'] },
+
+    { title: 'VI. “Together We Can”', marks: 5, count: 4, level: 2,
+      skills: ['E9', 'E9', 'E9', 'E9'], notTypes: ['write'] },
+
+    { title: 'VII. “Be Smart, Be Safe”', marks: 5, count: 4, level: 2,
+      skills: ['E10', 'E10', 'E10', 'E10'], notTypes: ['write'] },
+
+    { title: 'VIII. Read the passage and answer in full sentences', marks: 4, count: 1, level: 2,
+      skills: ['E12'], types: ['passage'] },
+
+    { title: 'IX. Composition — write an informal letter', marks: 6, count: 1, level: 3,
+      skills: ['E13'], types: ['write'] }
+  ]
+});
+</script>
+</body>
+</html>
