@@ -28,7 +28,9 @@ Object.defineProperty(w, 'localStorage', { value: {
 let errors = [];
 w.addEventListener('error', e => errors.push('window error: ' + e.message));
 
-['data/hy-skills.js','js/hy-engine.js','data/hy-maths.js','data/hy-english.js','data/hy-hindi.js','js/hy-ui.js']
+['data/hy-skills.js','js/hy-engine.js','data/hy-maths.js','data/hy-english.js','data/hy-hindi.js',
+ 'data/hy-lessons.js','data/hy-lessons-maths.js','data/hy-lessons-english.js','data/hy-lessons-hindi.js',
+ 'js/hy-ui.js','js/hy-learn.js']
   .forEach(f => w.eval(fs.readFileSync(path.join(ROOT,f),'utf8')));
 
 const HY = w.HY, Stage = w.HYStage;
@@ -49,10 +51,10 @@ function solve(item, forceWrong) {
     click(opts[forceWrong ? 1 - want : want]);
   } else if (t === 'fill') {
     $('.hy-input').value = forceWrong ? '@@nope@@' : String(item.answer);
-    click(all('.hy-foot .hy-btn').pop());
+    click(all('.hy-stage .hy-foot .hy-btn').pop());
   } else if (t === 'steps') {
     all('.hy-input').forEach((inp,i) => { inp.value = forceWrong ? '@@' : String(item.steps[i].answer); });
-    click(all('.hy-foot .hy-btn').pop());
+    click(all('.hy-stage .hy-foot .hy-btn').pop());
   } else if (t === 'order' || t === 'build') {
     const tiles = all('.hy-tiles .hy-tile');
     const order = forceWrong ? item.answer.slice().reverse() : item.answer;
@@ -61,7 +63,7 @@ function solve(item, forceWrong) {
       if (!b) throw new Error('order: no tile for "' + v + '" in [' + tiles.map(x=>x.textContent) + ']');
       click(b);
     });
-    click(all('.hy-foot .hy-btn').pop());
+    click(all('.hy-stage .hy-foot .hy-btn').pop());
   } else if (t === 'match') {
     const L = all('.hy-match-col:first-child .hy-match-item');
     const Rr = all('.hy-match-right');
@@ -70,7 +72,7 @@ function solve(item, forceWrong) {
       const wantRight = forceWrong ? item.pairs[(i+1) % item.pairs.length][1] : p[1];
       click(Rr.find(x => x.dataset.v === wantRight && !x.disabled) || Rr.find(x => !x.disabled));
     });
-    click(all('.hy-foot .hy-btn').pop());
+    click(all('.hy-stage .hy-foot .hy-btn').pop());
   } else if (t === 'sort') {
     const home = {};
     item.buckets.forEach(b => b.items.forEach(i => { home[i] = b.name; }));
@@ -83,17 +85,30 @@ function solve(item, forceWrong) {
       const want = forceWrong ? names.find(n => n !== home[v]) || home[v] : home[v];
       click(all('.hy-bucket-head').find(h => h.textContent === want));
     }
-    click(all('.hy-foot .hy-btn').pop());
+    click(all('.hy-stage .hy-foot .hy-btn').pop());
   } else if (t === 'passage') {
     const q = item.questions[item._qi || 0];
     $('.hy-passage-q .hy-input').value = forceWrong ? '@@' : String(q.answer);
-    click(all('.hy-foot .hy-btn').pop());
+    click(all('.hy-stage .hy-foot .hy-btn').pop());
   } else if (t === 'write') {
-    click(all('.hy-foot .hy-btn').pop());              // reveal model
-    const btns = all('.hy-foot .hy-btn');
+    click(all('.hy-stage .hy-foot .hy-btn').pop());              // reveal model
+    const btns = all('.hy-stage .hy-foot .hy-btn');
     click(forceWrong ? btns[1] : btns[0]);
   } else {
     throw new Error('no solver for type ' + t);
+  }
+}
+
+/* --- the drill teaches an untaught skill before asking about it: click through --- */
+let lessonsSeen = 0;
+function clearLesson() {
+  let guard = 0;
+  while (d.querySelector('.hy-learn') && d.querySelector('.hy-learn').style.display === 'flex') {
+    if (guard++ > 80) { errors.push('lesson did not finish after 80 taps'); break; }
+    const b = all('.hy-learn .hy-foot .hy-btn').pop();
+    if (!b) { errors.push('lesson screen with no button'); break; }
+    if (guard === 1) lessonsSeen++;
+    click(b);
   }
 }
 
@@ -101,9 +116,11 @@ function solve(item, forceWrong) {
 const seenTypes = {};
 function runSession(opts, wrongEvery) {
   Stage.start(opts);
-  click(all('.hy-foot .hy-btn').pop());               // Start →
+  click(all('.hy-stage .hy-foot .hy-btn').pop());     // Start →
+  clearLesson();
   let guard = 0;
   while (guard++ < 900) {
+    clearLesson();
     if (Stage.idx >= Stage.queue.length) break;
     const item = Stage.queue[Stage.idx];
     seenTypes[item.type] = (seenTypes[item.type] || 0) + 1;
@@ -114,7 +131,7 @@ function runSession(opts, wrongEvery) {
     if (wrong && item.type !== 'passage' && Stage.queue.length !== before + 1)
       errors.push(`[${item.skill}/${item.type}] wrong answer did not re-inject`);
     // advance: click Next / Continue in the footer
-    const next = all('.hy-foot .hy-btn').pop();
+    const next = all('.hy-stage .hy-foot .hy-btn').pop();
     if (!next) { errors.push('no next button after ' + item.type); break; }
     if (/Done for now|One more round/.test(next.textContent)) break;
     click(next);
@@ -142,6 +159,11 @@ skills.forEach(s => {
   if (!res.done) errors.push('skill ' + s.id + ' did not reach summary');
 });
 console.log('  drilled ' + skills.length + ' skills');
+console.log('  lessons taught along the way: ' + lessonsSeen);
+if (!lessonsSeen) errors.push('no lesson was ever shown before a new skill');
+const untaught = w.HY_SKILLS.list.filter(s => HY.hasContent(s.id) && !HY.isTaught(s.id));
+if (untaught.length) errors.push(untaught.length + ' skills were drilled without ever being taught: ' +
+  untaught.slice(0, 6).map(s => s.id).join(' '));
 
 console.log('\ntypes exercised: ' + JSON.stringify(seenTypes));
 if (errors.length) {

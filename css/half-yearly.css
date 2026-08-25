@@ -470,6 +470,143 @@ body.hy-running { overflow: hidden; }
 }
 .hy-tag-more { background: transparent; color: var(--color-text-light); }
 
+/* ======================================================= LESSON STAGE ==== */
+/* "Learn it" — same chrome as the drill, stacked above it so a lesson can be
+   opened from inside a practice session and hand straight back. */
+
+.hy-learn {
+  position: fixed; inset: 0; z-index: 10003;
+  display: none; flex-direction: column;
+  background: linear-gradient(160deg, #FFFBEB 0%, #FEF3C7 100%);
+  font-family: var(--font-body);
+}
+.hy-learn .hy-top { border-bottom-color: var(--sub, var(--color-primary)); }
+.hy-learn-card { max-width: 780px; }
+.hy-learn-title { font-size: var(--text-lg); color: var(--color-primary-dark); margin-bottom: var(--space-4); }
+.hy-learn-body { font-size: 1.05rem; }
+.hy-learn-body p { margin-bottom: var(--space-3); }
+
+.hy-learn-goal {
+  background: var(--color-bg-alt); border-radius: var(--radius-md);
+  padding: var(--space-4); margin: var(--space-4) 0; text-align: left;
+}
+.hy-learn-goal-tag {
+  display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em;
+  font-weight: 800; color: var(--color-text-light); margin-bottom: 4px;
+}
+.hy-learn-goal p { margin: 0; font-weight: 700; line-height: 1.6; }
+
+.hy-learn-map { display: flex; justify-content: center; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-4); }
+.hy-learn-map-step {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--color-surface); border: 2px solid var(--color-border-light);
+  border-radius: var(--radius-full); padding: 8px 16px;
+  font-size: var(--text-sm); font-weight: 700; color: var(--color-text-light);
+}
+.hy-learn-map-step b { font-size: 1.1rem; }
+
+/* --- the worked example --- */
+.hy-learn-q {
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem); font-weight: 700; line-height: 1.5;
+  background: var(--color-primary-lighter); border-radius: var(--radius-md);
+  padding: var(--space-4); margin: var(--space-2) 0 var(--space-5);
+}
+.hy-work { display: flex; flex-direction: column; gap: var(--space-3); }
+.hy-work-step {
+  display: flex; gap: var(--space-3); align-items: flex-start;
+  animation: hyStepIn .32s var(--ease-bounce);
+}
+@keyframes hyStepIn { from { opacity: 0; transform: translateY(10px); } }
+.hy-work-n {
+  flex: none; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  font-family: var(--font-heading); font-size: .85rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.hy-work-body { flex: 1; min-width: 0; line-height: 1.7; }
+.hy-work-body > b { display: block; color: var(--color-primary-dark); margin-bottom: 4px; }
+.hy-work-body p { margin: 0 0 6px; }
+.hy-work-body p:last-child { margin-bottom: 0; }
+.hy-work-answer {
+  display: flex; gap: var(--space-3); align-items: center;
+  background: var(--color-success-light); border-radius: var(--radius-md);
+  padding: var(--space-4); margin-top: var(--space-2);
+  font-weight: 800; font-size: 1.1rem; color: #15803D;
+  animation: hyStepIn .32s var(--ease-bounce);
+}
+.hy-work-answer span { font-size: 1.3rem; }
+
+/* --- the trap and the take-away --- */
+.hy-watch-big { font-size: 1.02rem; line-height: 1.8; margin-top: 0; }
+.hy-own-note {
+  background: var(--color-bg-alt); border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4); margin-top: var(--space-3);
+  font-size: var(--text-sm); line-height: 1.7; color: var(--color-text-light);
+}
+.hy-own-note span {
+  display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .08em;
+  font-weight: 800; color: var(--color-primary); margin-bottom: 4px;
+}
+.hy-recall {
+  background: var(--color-accent-light); border-radius: var(--radius-md);
+  padding: var(--space-4); margin: var(--space-4) 0; position: relative;
+}
+.hy-recall-tag {
+  display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em;
+  font-weight: 800; color: var(--color-accent-dark, #B45309); margin-bottom: 4px;
+}
+.hy-recall p { margin: 0; font-weight: 800; font-size: 1.08rem; line-height: 1.6; }
+.hy-speak-sm { width: 36px; height: 36px; font-size: 1rem; margin-left: var(--space-2); }
+
+/* --- pieces the lesson bodies use --- */
+.hy-key {
+  background: var(--color-primary-lighter); border-left: 5px solid var(--color-primary);
+  border-radius: var(--radius-sm); padding: var(--space-3) var(--space-4);
+  font-weight: 800; color: var(--color-primary-dark); margin: var(--space-3) 0;
+}
+.hy-l-steps { margin: var(--space-2) 0 var(--space-3) 1.4em; }
+.hy-l-steps li { margin-bottom: var(--space-2); line-height: 1.65; }
+.hy-vs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin: var(--space-3) 0; }
+.hy-vs > div {
+  background: var(--color-bg-alt); border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+.hy-vs > div > b { display: block; color: var(--color-primary-dark); margin-bottom: 4px; }
+.hy-vs p { margin: 0; font-size: var(--text-sm); line-height: 1.6; }
+.hy-pv {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px;
+  margin: var(--space-3) 0; text-align: center;
+}
+.hy-pv span {
+  background: var(--color-primary); color: #fff; font-weight: 800;
+  padding: 6px 2px; font-size: .85rem;
+}
+.hy-pv i {
+  background: var(--color-bg-alt); color: var(--color-text-light);
+  padding: 6px 2px; font-size: .68rem; font-style: normal; line-height: 1.3;
+}
+
+/* ================================================ LEARN SHELF (hub) ==== */
+.hy-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-2); }
+.hy-lesson-btn {
+  display: flex; align-items: center; gap: var(--space-3); text-align: left;
+  font-family: inherit; font-size: var(--text-sm); font-weight: 700;
+  background: var(--color-surface); border: 3px solid var(--color-border-light);
+  border-radius: var(--radius-md); padding: var(--space-3) var(--space-4);
+  cursor: pointer; color: var(--color-text); min-height: 58px;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+.hy-lesson-btn:hover { border-color: var(--color-primary-light); transform: translateX(3px); }
+.hy-lesson-btn .hy-lesson-mark { font-size: 1.1rem; flex: none; }
+.hy-lesson-btn .hy-lesson-name { flex: 1; }
+.hy-lesson-btn .hy-lesson-tag {
+  font-size: .68rem; text-transform: uppercase; letter-spacing: .06em;
+  font-weight: 800; color: var(--color-primary); flex: none;
+}
+.hy-lesson-btn.is-taught { background: var(--color-bg-alt); color: var(--color-text-light); }
+.hy-lesson-btn.is-taught .hy-lesson-mark { color: #22C55E; }
+.hy-lesson-btn.is-taught .hy-lesson-tag { color: var(--color-text-light); }
+
 /* ==================================================== TABLET / LANDSCAPE FIT */
 /* The Honor tablet in landscape has roughly 620–700 px of usable height once
    browser chrome is showing. Everything below trims the stage to fit. */
@@ -493,9 +630,19 @@ body.hy-running { overflow: hidden; }
   .hy-hero-icon { font-size: 2.4rem; }
   .hy-passage { padding: var(--space-3); font-size: .95rem; line-height: 1.6; }
   .hy-stats { margin: var(--space-3) 0; gap: var(--space-5); }
+  .hy-learn-q { font-size: 1.05rem; padding: var(--space-3); margin-bottom: var(--space-3); }
+  .hy-learn-body { font-size: .98rem; }
+  .hy-work { gap: var(--space-2); }
+  .hy-work-n { width: 26px; height: 26px; font-size: .75rem; }
+  .hy-work-answer { padding: var(--space-3); font-size: 1rem; }
+  .hy-learn-map { display: none; }
+  .hy-recall { padding: var(--space-3); }
 }
 
 @media (max-width: 640px) {
+  .hy-vs { grid-template-columns: 1fr; }
+  .hy-pv span { font-size: .72rem; padding: 5px 1px; }
+  .hy-pv i { font-size: .58rem; padding: 5px 1px; }
   .hy-opts { grid-template-columns: 1fr; }
   .hy-match { grid-template-columns: 1fr; }
   .hy-match-col:first-child { margin-bottom: var(--space-2); }
@@ -513,5 +660,5 @@ body.hy-running { overflow: hidden; }
 }
 
 @media print {
-  .hy-stage { display: none !important; }
+  .hy-stage, .hy-learn { display: none !important; }
 }

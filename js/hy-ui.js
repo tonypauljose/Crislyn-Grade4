@@ -96,6 +96,7 @@
     started: 0,
     hintUsed: false,
     touched: {},     // skills seen this session → for the summary
+    lessonSeen: {},  // skills whose lesson has been offered this session
     locked: false,
 
     /* ------------------------------------------------------------- lifecycle */
@@ -107,6 +108,7 @@
       if (!this.queue.length) { alert('Nothing to practise here yet.'); return; }
       this.idx = 0; this.answered = 0; this.right = 0;
       this.touched = {};
+      this.lessonSeen = {};
       this.started = Date.now();
 
       if (!this.root) {
@@ -203,6 +205,14 @@
       names.slice(0, 8).forEach(n => list.appendChild(el('span', 'hy-tag', n)));
       if (names.length > 8) list.appendChild(el('span', 'hy-tag hy-tag-more', '+' + (names.length - 8) + ' more'));
       card.appendChild(list);
+      /* Say up front how much of this is teaching, so a session that stops to
+         explain three new skills does not feel like an interruption. */
+      const toTeach = Object.keys(skills).filter(id => !HY.isTaught(id) && window.HYLearn).length;
+      if (toTeach) {
+        card.appendChild(el('p', 'hy-note',
+          '<b>' + toTeach + ' new skill' + (toTeach === 1 ? '' : 's') + '</b> in here. ' +
+          'Each one gets taught first — the method, an example, then your turn.'));
+      }
       card.appendChild(el('p', 'hy-note',
         'Take your time. If something is new, tap <b>Show me</b> — that is not cheating, that is learning.'));
 
@@ -218,6 +228,12 @@
       this.hintUsed = false;
       if (this.idx >= this.queue.length) { this.finish(); return; }
       const item = this.queue[this.idx];
+
+      /* TEACH FIRST. A skill she has never been taught does not get sprung on
+         her as a question — the lesson runs first, right here, and the three
+         goes the scheduler has queued for it become the "now you try". */
+      if (this.needsLesson(item.skill)) { this.teachThen(item.skill); return; }
+
       this.touched[item.skill] = true;
 
       const card = el('div', 'hy-card');
@@ -260,6 +276,28 @@
       card.appendChild(helpRow);
 
       this.shell(card, foot);
+    },
+
+    /**
+     * Only in the ordinary practice modes, only for a skill with no lesson on
+     * record, and only once per skill per session — so closing a lesson early
+     * cannot put the drill into a loop.
+     */
+    needsLesson(skillId) {
+      if (this.opts && this.opts.noLessons) return false;
+      if (!window.HYLearn || !window.HY_LESSONS) return false;
+      if (this.lessonSeen[skillId]) return false;
+      if (HY.isTaught(skillId)) return false;
+      /* A safety valve, not a policy. The scheduler only ever introduces
+         floor(target * 0.55 / 3) new skills — 4 in a normal mission, 7 in the
+         40-question mock — so this never actually bites; it just guarantees a
+         session can never turn into nothing but lessons. */
+      return Object.keys(this.lessonSeen).length < 8;
+    },
+
+    teachThen(skillId) {
+      this.lessonSeen[skillId] = true;
+      window.HYLearn.open(skillId, { compact: true, onDone: () => this.render() });
     },
 
     showTeach(item) {

@@ -18,7 +18,8 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 vm.createContext(sandbox);
 
-['data/hy-skills.js', 'js/hy-engine.js', 'data/hy-maths.js', 'data/hy-english.js', 'data/hy-hindi.js']
+['data/hy-skills.js', 'js/hy-engine.js', 'data/hy-maths.js', 'data/hy-english.js', 'data/hy-hindi.js',
+ 'data/hy-lessons.js', 'data/hy-lessons-maths.js', 'data/hy-lessons-english.js', 'data/hy-lessons-hindi.js']
   .forEach(f => vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), sandbox, { filename: f }));
 
 const HY = sandbox.HY, SK = sandbox.HY_SKILLS;
@@ -106,11 +107,38 @@ SK.list.filter(s => HY.hasContent(s.id)).forEach(s => {
 });
 console.log('  item types produced: ' + JSON.stringify(TYPES));
 
-module.exports = { HY, SK, fail, sandbox };
-if (require.main === module) {
-  console.log(fail ? '\n✗ ' + fail + ' problems' : '\n✓ all item checks passed');
-  process.exit(fail ? 1 : 0);
-}
+// --- every skill must have a lesson, and every lesson must be teachable ----
+(function () {
+  const LS = sandbox.HY_LESSONS;
+  if (!LS) { bad('HY_LESSONS did not load'); return; }
+  let cards = 0, steps = 0, written = 0;
+  SK.list.filter(s => HY.hasContent(s.id)).forEach(s => {
+    const l = LS.get(s.id);
+    if (!l) { bad(s.id + ' has no lesson at all'); return; }
+    if (LS.has(s.id)) written++; else bad(s.id + ' has only the fallback "Show me" lesson');
+    if (!l.goal) bad(s.id + ' lesson has no goal line');
+    if (!l.cards.length) bad(s.id + ' lesson has no teaching cards');
+    l.cards.forEach((c, i) => {
+      if (!c.t) bad(s.id + ' card ' + i + ' has no title');
+      if (!c.h || c.h.replace(/<[^>]*>/g, '').trim().length < 10) bad(s.id + ' card ' + i + ' has no real content');
+      cards++;
+    });
+    if (!l.worked) bad(s.id + ' lesson has no worked example');
+    else {
+      if (!l.worked.q) bad(s.id + ' worked example has no question');
+      if (!l.worked.ans) bad(s.id + ' worked example has no answer');
+      if (!l.worked.steps || l.worked.steps.length < 2) bad(s.id + ' worked example needs at least 2 steps');
+      else l.worked.steps.forEach((st, i) => {
+        if (!st.t || !st.h) bad(s.id + ' worked step ' + i + ' is incomplete');
+        steps++;
+      });
+    }
+    if (!l.recall) bad(s.id + ' lesson has no recall line');
+    /* Her real mistake, mined from the photos, must survive into the lesson. */
+    if (s.watch && !l.trap) bad(s.id + ' has a watch note that the lesson drops');
+  });
+  console.log('\nLESSONS: ' + written + ' written · ' + cards + ' teaching cards · ' + steps + ' worked steps');
+})();
 
 // --- extra: every generated triangle must be constructible -----------------
 (function(){
@@ -129,3 +157,9 @@ if (require.main === module) {
   console.log('triangles checked: '+tri+(bad2?'  ✗ '+bad2+' impossible':'  ✓ all constructible'));
   if(bad2)process.exitCode=1;
 })();
+
+module.exports = { HY, SK, fail, sandbox };
+if (require.main === module) {
+  console.log(fail ? '\n\u2717 ' + fail + ' problems' : '\n\u2713 all item and lesson checks passed');
+  process.exit(fail ? 1 : 0);
+}

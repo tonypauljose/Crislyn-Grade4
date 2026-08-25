@@ -22,13 +22,17 @@ const $=id=>d.getElementById(id);
 console.log('days to exam: '+$('hy-days').textContent);
 console.log('portion ready: '+$('hy-overall').textContent+' · mastered '+$('hy-mastered').textContent);
 console.log('start button: "'+$('hy-start').textContent+'"');
+console.log('lessons learnt: '+$('hy-taught').textContent+' · shelf says: '+$('hy-learn-count').textContent.trim());
 console.log('subject cards: '+d.querySelectorAll('.hy-subject').length);
 console.log('skill buttons: '+d.querySelectorAll('.hy-skill').length);
-console.log('topics: '+d.querySelectorAll('.hy-topic').length);
+console.log('lesson buttons: '+d.querySelectorAll('.hy-lesson-btn').length);
+console.log('topics on the map: '+d.querySelectorAll('#hy-map .hy-topic').length);
 
 if(d.querySelectorAll('.hy-subject').length!==3) errors.push('expected 3 subject cards');
 if(d.querySelectorAll('.hy-skill').length!==55) errors.push('expected 55 skill buttons, got '+d.querySelectorAll('.hy-skill').length);
+if(d.querySelectorAll('.hy-lesson-btn').length!==55) errors.push('expected 55 lesson buttons, got '+d.querySelectorAll('.hy-lesson-btn').length);
 if($('hy-days').textContent==='—') errors.push('countdown did not compute');
+if(!/lesson/i.test($('hy-start').textContent)) errors.push('start button should announce the lessons: '+$('hy-start').textContent);
 
 // filters
 ['maths','english','hindi','all'].forEach(sub=>{
@@ -36,6 +40,13 @@ if($('hy-days').textContent==='—') errors.push('countdown did not compute');
   const n=d.querySelectorAll('.hy-skill').length;
   const want=sub==='all'?55:w.HY_SKILLS.forSubject(sub).length;
   if(n!==want) errors.push('filter '+sub+': '+n+' skills, expected '+want);
+});
+// lesson shelf filters
+['maths','english','hindi','all'].forEach(sub=>{
+  const b=d.querySelector('.hy-lfilter[data-lsub="'+sub+'"]'); b.click();
+  const n=d.querySelectorAll('.hy-lesson-btn').length;
+  const want=sub==='all'?55:w.HY_SKILLS.forSubject(sub).length;
+  if(n!==want) errors.push('lesson filter '+sub+': '+n+' lessons, expected '+want);
 });
 console.log('filters ok');
 
@@ -49,10 +60,35 @@ console.log('filters ok');
   if(name==='daily') console.log('daily queue: '+n+' items across '+new Set(w.HYStage.queue.map(i=>i.subject)).size+' subjects');
   w.HYStage.close();
 });
-// drilling a single skill from the map
+// an UNTAUGHT skill on the map must open the lesson, never a cold quiz
+const firstSkill=d.querySelector('.hy-skill');
+const firstId=w.HY_SKILLS.list.filter(s=>w.HY.hasContent(s.id))[0].id;
+if(w.HY.isTaught(firstId)) errors.push('fixture problem: '+firstId+' should start untaught');
+firstSkill.click();
+const learnRoot=d.querySelector('.hy-learn');
+if(!learnRoot||learnRoot.style.display!=='flex') errors.push('an untaught skill did not open its lesson');
+if(w.HYStage.root&&w.HYStage.root.style.display==='flex') errors.push('an untaught skill opened the drill');
+
+// click all the way through that lesson: it must end marked as taught
+let guard=0;
+while(learnRoot.style.display==='flex'){
+  if(guard++>80){errors.push('lesson never finished');break;}
+  const btns=Array.from(d.querySelectorAll('.hy-learn .hy-foot .hy-btn'));
+  const later=btns.find(b=>/Not just now|अभी नहीं/.test(b.textContent));
+  (later||btns[btns.length-1]).click();
+}
+if(!w.HY.isTaught(firstId)) errors.push('finishing a lesson did not mark '+firstId+' as taught');
+console.log('lesson for '+firstId+' completed in '+guard+' taps · taught: '+w.HY.isTaught(firstId));
+
+// now that it IS taught, the same button drills it
 d.querySelector('.hy-skill').click();
 if(w.HYStage.queue.length!==10) errors.push('skill drill should be 10 items, got '+w.HYStage.queue.length);
 w.HYStage.close();
+
+// the shelf's own CTA opens a lesson too
+$('hy-learn-next').click();
+if(d.querySelector('.hy-learn').style.display!=='flex') errors.push('next-lesson CTA did not open a lesson');
+w.HYLearn.close(false);
 console.log('all CTAs open the stage');
 
 if(errors.length){console.log('\n✗ '+errors.length+' problems:');[...new Set(errors)].forEach(e=>console.log('   '+e));process.exit(1);}

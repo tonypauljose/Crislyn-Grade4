@@ -52,11 +52,13 @@
       <b id="hy-days">—</b> <span>days to the Half-Yearly</span>
     </div>
     <h1>Half-Yearly Mission Control</h1>
-    <p>Everything in the portion — Maths, English and हिंदी — turned into
-       daily practice that keeps coming back until you get it right every time.</p>
+    <p>Everything in the portion — Maths, English and हिंदी. Each skill is
+       <b>taught</b> first, then <b>tested</b>, then brought back day after day
+       until you get it right every time.</p>
 
     <div class="hy-hero-stats">
       <div class="hy-hero-stat"><b id="hy-overall">0%</b><span>Portion ready</span></div>
+      <div class="hy-hero-stat"><b id="hy-taught">0</b><span>Lessons learnt</span></div>
       <div class="hy-hero-stat"><b id="hy-mastered">0</b><span>Skills mastered</span></div>
       <div class="hy-hero-stat"><b id="hy-streak">0</b><span>Day streak</span></div>
       <div class="hy-hero-stat"><b id="hy-today-n">0</b><span>Done today</span></div>
@@ -103,6 +105,41 @@
   </div>
 </section>
 
+<!-- ============================================================ LEARN ==== -->
+<section>
+  <div class="container">
+    <h2>Learn it first</h2>
+    <p class="lede">Nothing is ever asked before it has been taught. Every skill has a
+      short lesson — the method, one example worked out step by step, and the mistake to
+      watch for. Today's mission opens the lesson for you the first time a new skill comes
+      up; you can also come and read any of them here, whenever you like.</p>
+
+    <div class="hy-today" style="margin-bottom: var(--space-5);">
+      <div class="hy-today-head">
+        <div>
+          <h2 style="font-size: var(--text-lg);">Lessons</h2>
+          <div class="hy-today-sub" id="hy-learn-count">—</div>
+        </div>
+        <div class="hy-cta-row" style="margin-top:0;">
+          <button class="hy-btn hy-btn-primary" id="hy-learn-next">💡 Next lesson →</button>
+        </div>
+      </div>
+      <div class="hy-meter" style="margin-top: var(--space-4);">
+        <i class="m3" id="hy-learn-bar" style="width:0%"></i>
+      </div>
+    </div>
+
+    <div class="hy-cta-row" style="margin-bottom: var(--space-5);">
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-lfilter is-on" data-lsub="all">All</button>
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-lfilter" data-lsub="maths">🔢 Maths</button>
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-lfilter" data-lsub="english">📖 English</button>
+      <button class="hy-btn hy-btn-ghost hy-btn-sm hy-lfilter" data-lsub="hindi">🪷 हिंदी</button>
+    </div>
+
+    <div id="hy-shelf"></div>
+  </div>
+</section>
+
 <!-- ======================================================== SKILL MAP ==== -->
 <section style="background: var(--color-bg-alt);">
   <div class="container">
@@ -110,7 +147,8 @@
     <p class="lede">
       ○ not started &nbsp;·&nbsp; ◔ just met &nbsp;·&nbsp; ◑ getting it &nbsp;·&nbsp;
       ◕ solid &nbsp;·&nbsp; ● mastered.<br>
-      Tap any skill to drill just that one for ten questions.
+      Tap a skill you have been taught to drill just that one for ten questions. Tap one
+      you have not, and it opens the lesson instead.
     </p>
 
     <div class="hy-cta-row" style="margin-bottom: var(--space-5);">
@@ -156,8 +194,9 @@
     <div class="hy-plan">
       <div class="hy-plan-day">
         <b>Week 1 — meet everything</b>
-        <p>Three new skills a day plus review of what came before. Expect mistakes; that is the
-           point. Nothing is marked "mastered" yet.</p>
+        <p>Three or four <b>lessons</b> a day, each one straight into practice, plus review of
+           what came before. Expect mistakes; that is the point. Nothing is marked "mastered"
+           yet.</p>
       </div>
       <div class="hy-plan-day">
         <b>Week 2 — close the gaps</b>
@@ -197,20 +236,25 @@
         <summary style="cursor:pointer; font-weight:800; color: var(--color-primary-dark);">
           How the app decides what she practises</summary>
         <div style="margin-top: var(--space-3); line-height: 1.8; font-size: var(--text-sm);">
-          <p><b>1. Retrieval, not re-reading.</b> Every turn asks her to produce the answer.
+          <p><b>1. Taught before tested.</b> A skill she has never been shown is never sprung
+             on her as a question. The first time one comes up, the lesson runs — the method,
+             one example worked out a step at a time, and the mistake to watch for — and only
+             then does the drill ask her anything. Lessons are paced the same way the questions
+             are, so the whole portion is taught with about five days spare.</p>
+          <p><b>2. Retrieval, not re-reading.</b> Every turn asks her to produce the answer.
              Recalling something is what makes it stick; reading it again mostly makes it feel familiar.</p>
-          <p><b>2. Spaced repetition.</b> Each skill sits in a box. Get it right and it comes back
+          <p><b>3. Spaced repetition.</b> Each skill sits in a box. Get it right and it comes back
              in 1, then 2, 4, 7, then 12 days. Get it wrong and it drops back and returns tomorrow.
              The intervals are squeezed to fit the weeks left before the exam.</p>
-          <p><b>3. Mastery, not attendance.</b> A skill only turns gold after <b>six</b> correct
+          <p><b>4. Mastery, not attendance.</b> A skill only turns gold after <b>six</b> correct
              recalls spread over at least <b>three different days</b>, with three right in a row.
              One lucky answer proves nothing.</p>
-          <p><b>4. Kept at the right difficulty.</b> Three in a row and the questions get harder;
+          <p><b>5. Kept at the right difficulty.</b> Three in a row and the questions get harder;
              two slips and they ease off. Around 70–80% correct is the sweet spot — a quiz she
              gets 100% on is not teaching her anything.</p>
-          <p><b>5. Interleaved.</b> The daily mix jumps between subjects and topics on purpose,
+          <p><b>6. Interleaved.</b> The daily mix jumps between subjects and topics on purpose,
              so she has to work out <em>which</em> method to use, not just repeat one.</p>
-          <p><b>6. Mistakes come back.</b> A missed question re-enters the same session a few
+          <p><b>7. Mistakes come back.</b> A missed question re-enters the same session a few
              questions later with different numbers — not immediately, when she could just copy.</p>
         </div>
       </details>
@@ -240,7 +284,12 @@
 <script src="data/hy-maths.js"></script>
 <script src="data/hy-english.js"></script>
 <script src="data/hy-hindi.js"></script>
+<script src="data/hy-lessons.js"></script>
+<script src="data/hy-lessons-maths.js"></script>
+<script src="data/hy-lessons-english.js"></script>
+<script src="data/hy-lessons-hindi.js"></script>
 <script src="js/hy-ui.js"></script>
+<script src="js/hy-learn.js"></script>
 
 <script>
 (function () {
@@ -265,6 +314,7 @@
     SK.list.forEach(s => { if (HY.hasContent(s.id) && HY.isMastered(s.id)) mastered++; });
     const total = SK.list.filter(s => HY.hasContent(s.id)).length;
     $('hy-mastered').textContent = mastered + ' / ' + total;
+    $('hy-taught').textContent = HY.taughtCount() + ' / ' + total;
 
     const C = 2 * Math.PI * 42;
     $('hy-ring-fg').setAttribute('stroke-dashoffset', C - (C * pct / 100));
@@ -273,11 +323,18 @@
     const due = HY.dueSkills().length;
     const fresh = HY.newSkills().length;
     const doneToday = HY.doneToday();
+    const rec = HY.recommendedTarget();
+    const plan = HY.lessonPlan(rec);
+
     $('hy-today-desc').innerHTML = doneToday >= 20
       ? "Today's practice is done — anything more is a bonus. 🌟"
-      : `${due} skill${due === 1 ? '' : 's'} due for review · ${fresh} still to meet`;
-    const rec = HY.recommendedTarget();
-    $('hy-start').textContent = `▶ Start today's ${rec}`;
+      : (plan.length
+        ? `${plan.length} new skill${plan.length === 1 ? '' : 's'} to be taught · ${due} due for review`
+        : `${due} skill${due === 1 ? '' : 's'} due for review · ${fresh} still to meet`);
+
+    $('hy-start').textContent = plan.length
+      ? `▶ ${plan.length} lesson${plan.length === 1 ? '' : 's'} + ${rec} questions`
+      : `▶ Start today's ${rec}`;
     $('hy-due-note').innerHTML = doneToday
       ? `<b>${doneToday}</b> done today · today's pace is <b>${rec}</b>`
       : `<b>${rec}</b> questions &mdash; the pace that finishes the portion in time`;
@@ -352,12 +409,74 @@
         b.innerHTML = `<span class="hy-skill-dot">${DOTS[lvl]}</span>
           <span class="hy-skill-name">${s.name}</span>
           <span class="hy-skill-pct">${Math.round(HY.progress(id) * 100)}%</span>`;
-        b.title = 'Practise just this skill';
-        b.onclick = () => run({ mode: 'skill', skillId: id, target: 10 });
+        if (!HY.isTaught(id)) {
+          b.classList.add('is-untaught');
+          b.querySelector('.hy-skill-pct').textContent = 'learn';
+          b.title = 'Not taught yet — this opens the lesson';
+          b.onclick = () => learn(id);
+        } else {
+          b.title = 'Practise just this skill';
+          b.onclick = () => run({ mode: 'skill', skillId: id, target: 10 });
+        }
         grid.appendChild(b);
       });
       box.appendChild(grid);
       map.appendChild(box);
+    });
+  }
+
+  let lfilter = 'all';
+  function paintShelf() {
+    const shelf = $('hy-shelf');
+    shelf.innerHTML = '';
+
+    const withContent = SK.list.filter(s => HY.hasContent(s.id));
+    const taught = HY.taughtCount();
+    const total = withContent.length;
+    const pct = total ? Math.round((taught / total) * 100) : 0;
+    $('hy-learn-count').innerHTML = taught === total
+      ? `All <b>${total}</b> lessons read. Come back to any of them whenever you like.`
+      : `<b>${taught}</b> of <b>${total}</b> lessons read &mdash; ${total - taught} still to come.`;
+    $('hy-learn-bar').style.width = pct + '%';
+
+    const next = HY.untaughtSkills()[0];
+    const btn = $('hy-learn-next');
+    if (next) {
+      btn.textContent = '💡 Learn: ' + next.name + ' →';
+      btn.disabled = false;
+      btn.onclick = () => learn(next.id);
+    } else {
+      btn.textContent = '💡 Re-read a lesson';
+      btn.disabled = false;
+      btn.onclick = () => learn(withContent[0].id);
+    }
+
+    SK.topics.forEach(t => {
+      if (lfilter !== 'all' && t.subject !== lfilter) return;
+      const skills = t.skills.filter(id => HY.hasContent(id));
+      if (!skills.length) return;
+
+      const box = document.createElement('div');
+      box.className = 'hy-topic';
+      const meta = SK.subjects[t.subject];
+      box.innerHTML = `<h4>${meta.icon} ${meta.name} · ${t.name}</h4>`;
+      const grid = document.createElement('div');
+      grid.className = 'hy-shelf';
+
+      skills.forEach(id => {
+        const sk = SK.get(id);
+        const done = HY.isTaught(id);
+        const b = document.createElement('button');
+        b.className = 'hy-lesson-btn' + (done ? ' is-taught' : '');
+        b.innerHTML = `<span class="hy-lesson-mark">${done ? '✓' : '💡'}</span>
+          <span class="hy-lesson-name">${sk.name}</span>
+          <span class="hy-lesson-tag">${done ? 'read again' : 'learn'}</span>`;
+        b.title = done ? 'Read this lesson again' : 'Learn this skill';
+        b.onclick = () => learn(id);
+        grid.appendChild(b);
+      });
+      box.appendChild(grid);
+      shelf.appendChild(box);
     });
   }
 
@@ -379,7 +498,7 @@
     });
   }
 
-  function paintAll() { paintHero(); paintSubjects(); paintMap(); paintTrouble(); }
+  function paintAll() { paintHero(); paintSubjects(); paintShelf(); paintMap(); paintTrouble(); }
 
   /* ---------------------------------------------------------------- wiring */
 
@@ -387,10 +506,24 @@
     window.HYStage.start(Object.assign({ onClose: paintAll }, opts));
   }
 
+  /** Open a lesson. It offers a short test of its own at the end. */
+  function learn(skillId) {
+    window.HYLearn.open(skillId, { onDone: paintAll, onClose: paintAll });
+  }
+
   $('hy-start').onclick = () => run({ mode: 'daily', target: HY.recommendedTarget() });
   $('hy-quick').onclick = () => run({ mode: 'daily', target: 10, seed: String(Date.now()) });
   $('hy-weak').onclick  = () => run({ mode: 'weak', target: 18 });
   $('hy-mock').onclick  = () => run({ mode: 'daily', target: 40, seed: 'mock' + Date.now() });
+
+  document.querySelectorAll('.hy-lfilter').forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll('.hy-lfilter').forEach(x => x.classList.remove('is-on'));
+      b.classList.add('is-on');
+      lfilter = b.dataset.lsub;
+      paintShelf();
+    };
+  });
 
   document.querySelectorAll('.hy-filter').forEach(b => {
     b.onclick = () => {
@@ -412,7 +545,8 @@
 </script>
 
 <style>
-  .hy-filter.is-on { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+  .hy-filter.is-on, .hy-lfilter.is-on { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+  .hy-skill.is-untaught .hy-skill-pct { color: var(--color-primary); font-weight: 800; text-transform: uppercase; font-size: .68rem; letter-spacing: .06em; }
 </style>
 
 </body>

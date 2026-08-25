@@ -3,7 +3,7 @@
   "private": true,
   "description": "Verification suite for the Half-Yearly module. Run `npm install` here once, then `npm test`.",
   "scripts": {
-    "test": "node run.js && node ui2.js && node ui.js && node paper.js && node hub.js",
+    "test": "node run.js && node ui2.js && node learn.js && node ui.js && node paper.js && node hub.js",
     "sim": "node sim.js",
     "sample": "node sample.js"
   },

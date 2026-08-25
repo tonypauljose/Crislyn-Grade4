@@ -155,7 +155,9 @@
     days: [],      // distinct day-keys on which she answered correctly
     due: null,     // day-number when this is next due
     first: null,   // day-key first attempted
-    last: null     // day-key last attempted
+    last: null,    // day-key last attempted
+    taught: null,  // day-key the LESSON for this skill was first sat through
+    lessons: 0     // how many times the lesson has been opened
   });
 
   const HY = {
@@ -173,6 +175,19 @@
       }
       raw.skills = raw.skills || {};
       raw.log = raw.log || [];
+
+      /* One-time migration for saves made before lessons existed. A skill she
+         has already practised is treated as taught, otherwise the day lessons
+         shipped she would have been handed a backlog of twenty of them. She can
+         still open any lesson by hand from the Learn shelf. */
+      if (!raw.lessonsMigrated) {
+        Object.keys(raw.skills).forEach(id => {
+          const sk = raw.skills[id];
+          if (!sk.taught && (sk.right || sk.wrong)) sk.taught = sk.first || todayKey();
+        });
+        raw.lessonsMigrated = true;
+      }
+
       this.state = raw;
       return raw;
     },
@@ -182,7 +197,8 @@
     },
 
     reset() {
-      this.state = { schema: SCHEMA, skills: {}, log: [], sessions: 0, totalItems: 0, created: todayKey() };
+      this.state = { schema: SCHEMA, skills: {}, log: [], sessions: 0, totalItems: 0,
+        created: todayKey(), lessonsMigrated: true };
       this.save();
     },
 
@@ -241,6 +257,52 @@
       const s = this.skill(id);
       const n = s.right + s.wrong;
       return n ? Math.round((s.right / n) * 100) : null;
+    },
+
+    /* ---------------------------------------------------------- teach first */
+    /* A skill is TAUGHT once she has sat through its lesson. Nothing is asked
+       of her before that: the drill gates on it, and the hub sends an untaught
+       skill to the lesson rather than to a cold quiz. Being taught is separate
+       from being practised — it is not progress, it is permission. */
+
+    isTaught(id) { return !!this.skill(id).taught; },
+
+    markTaught(id) {
+      this.init();
+      const s = this.skill(id);
+      if (!s.taught) s.taught = todayKey();
+      s.lessons = (s.lessons || 0) + 1;
+      this.save();
+    },
+
+    /** Skills whose lesson she has never sat through, subjects round-robined. */
+    untaughtSkills() {
+      this.init();
+      return roundRobin(window.HY_SKILLS.list.filter(
+        sk => hasContent(sk.id) && !this.isTaught(sk.id)));
+    },
+
+    taughtCount() {
+      this.init();
+      return window.HY_SKILLS.list.filter(sk => hasContent(sk.id) && this.isTaught(sk.id)).length;
+    },
+
+    /** Lessons she has already sat through today — used to pace the hub copy. */
+    lessonsToday() {
+      this.init();
+      const t = todayKey();
+      return window.HY_SKILLS.list.filter(sk => this.skill(sk.id).taught === t).length;
+    },
+
+    /**
+     * The skills today's mission will teach before it quizzes them — the same
+     * skills buildSession is about to introduce, minus any already taught.
+     */
+    lessonPlan(target) {
+      this.init();
+      const fresh = this.newSkills();
+      const n = this.newCountToday(target || DEFAULT_TARGET, fresh.length);
+      return fresh.slice(0, n).filter(sk => !this.isTaught(sk.id)).map(sk => sk.id);
     },
 
     /* ------------------------------------------------------------ recording */
@@ -323,22 +385,11 @@
      */
     newSkills() {
       this.init();
-      const bySub = { maths: [], english: [], hindi: [] };
-      window.HY_SKILLS.list.forEach(sk => {
-        if (!hasContent(sk.id)) return;
+      return roundRobin(window.HY_SKILLS.list.filter(sk => {
+        if (!hasContent(sk.id)) return false;
         const s = this.state.skills[sk.id];
-        if (!s || (!s.right && !s.wrong)) (bySub[sk.subject] || bySub.maths).push(sk);
-      });
-      const order = ['maths', 'english', 'hindi'];
-      const total = order.reduce((n, k) => n + bySub[k].length, 0);
-      const out = [];
-      let i = 0;
-      while (out.length < total && i < total * 4 + 12) {
-        const sub = order[i % order.length];
-        if (bySub[sub].length) out.push(bySub[sub].shift());
-        i++;
-      }
-      return out;
+        return !s || (!s.right && !s.wrong);
+      }));
     },
 
     /**
@@ -362,6 +413,19 @@
         attempts * 1.15 / days,
         visits * 1.6 / days
       ))));
+    },
+
+    /**
+     * How many brand-new skills to introduce today. New material is a RESERVED
+     * budget, never leftovers: the rate is paced so the whole portion has been
+     * met with ~5 days spare, and it can never take more than 55% of a session.
+     */
+    newCountToday(target, freshLen) {
+      if (!freshLen) return 0;
+      const runway = Math.max(1, this.daysToExam() - 5);
+      const paced = Math.ceil(freshLen / runway);
+      return Math.min(Math.max(NEW_PER_DAY, paced), freshLen,
+        Math.floor(((target || DEFAULT_TARGET) * 0.55) / NEW_REPS));
     },
 
     /** Attempted, not mastered, not due yet — good filler. */
@@ -410,10 +474,14 @@
 
         if (mode === 'weak') {
           // Everything that is not mastered, shakiest first, ignore the schedule.
+          // A skill she has never been taught is not a weak spot — it is simply
+          // unmet, and belongs in the daily mission where it gets its lesson.
           const weak = window.HY_SKILLS.list
             .filter(sk => hasContent(sk.id) && inSubject(sk) && !this.isMastered(sk.id))
             .sort((a, b) => this.progress(a.id) - this.progress(b.id));
-          due = weak; fresh = []; warm = [];
+          const known = weak.filter(sk => this.isTaught(sk.id));
+          due = known.length ? known : weak;   // nothing taught yet? teach as we go
+          fresh = []; warm = [];
         }
 
         /* --- budget the session --------------------------------------
@@ -427,13 +495,7 @@
            never less than 45% of the session.                              */
 
         let newCount = 0;
-        if (mode !== 'weak' && fresh.length) {
-          const runway = Math.max(1, this.daysToExam() - 5);
-          const paced = Math.ceil(fresh.length / runway);
-          newCount = Math.max(NEW_PER_DAY, paced);
-          newCount = Math.min(newCount, fresh.length,
-            Math.floor((target * 0.55) / NEW_REPS));   // never crowd out review
-        }
+        if (mode !== 'weak' && fresh.length) newCount = this.newCountToday(target, fresh.length);
         const newSlots = newCount * NEW_REPS;
         const reviewBudget = Math.max(0, target - newSlots);
 
@@ -468,9 +530,13 @@
           if (wi > target * 3) break;
         }
 
-        // Still short (e.g. everything mastered)? Recycle by weight.
+        // Still short (e.g. everything mastered)? Recycle by weight — but only
+        // over what she has actually been taught, so padding a session never
+        // smuggles in an unmet skill behind the lesson budget.
         if (plan.length < target) {
-          const pool = window.HY_SKILLS.list.filter(sk => hasContent(sk.id) && inSubject(sk));
+          const all = window.HY_SKILLS.list.filter(sk => hasContent(sk.id) && inSubject(sk));
+          const known = all.filter(sk => this.isTaught(sk.id));
+          const pool = known.length ? known : all;
           let gi = 0;
           while (plan.length < target && pool.length) {
             plan.push(pool[gi % pool.length].id); gi++;
@@ -595,6 +661,26 @@
     MASTER_RIGHT,
     DEFAULT_TARGET
   };
+
+  /**
+   * Deal a list of skills out subject by subject, keeping syllabus order inside
+   * each subject. Without this, English and हिंदी queue behind the whole of
+   * Maths and are still untouched three weeks in.
+   */
+  function roundRobin(skills) {
+    const bySub = { maths: [], english: [], hindi: [] };
+    skills.forEach(sk => { (bySub[sk.subject] || bySub.maths).push(sk); });
+    const order = ['maths', 'english', 'hindi'];
+    const total = skills.length;
+    const out = [];
+    let i = 0;
+    while (out.length < total && i < total * 4 + 12) {
+      const sub = order[i % order.length];
+      if (bySub[sub].length) out.push(bySub[sub].shift());
+      i++;
+    }
+    return out;
+  }
 
   /**
    * Spread the plan so the same skill rarely appears twice in a row.
