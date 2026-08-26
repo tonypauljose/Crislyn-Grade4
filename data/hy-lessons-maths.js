@@ -660,9 +660,9 @@
       q: 'The radius of a circle is <b>7 cm</b>. Find its diameter. Then a second circle has a diameter of <b>18 cm</b> — find its radius.',
       steps: [
         { t: 'First one: radius given, diameter wanted', h: '<p>Going from radius to diameter, you <b>double</b>.</p>' },
-        { t: 'Work it out', h: '<p class="hy-eg">d = 2 × 7 = <b>14 cm</b></p>' },
+        { t: 'Double the 7', h: '<p class="hy-eg">d = 2 × 7 = <b>14 cm</b></p>' },
         { t: 'Second one: diameter given, radius wanted', h: '<p>Going the other way, you <b>halve</b>.</p>' },
-        { t: 'Work it out', h: '<p class="hy-eg">r = 18 ÷ 2 = <b>9 cm</b></p>' }
+        { t: 'Halve the 18', h: '<p class="hy-eg">r = 18 ÷ 2 = <b>9 cm</b></p>' }
       ],
       ans: 'Diameter 14 cm · Radius 9 cm'
     },

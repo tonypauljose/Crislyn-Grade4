@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>✖️ Tables Dojo — Crislyn's Portal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Source+Code+Pro:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/tables-dojo.css">
+
+  <script src="js/analytics.js"></script>
+  <script src="js/state.js" defer></script>
+
+  <style>
+    .navbar { background: var(--color-surface); box-shadow: var(--shadow-sm); padding: var(--space-3) 0; position: sticky; top: 0; z-index: 100; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; }
+    .nav-brand { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-heading); font-size: var(--text-lg); color: var(--color-primary-dark); }
+    .nav-links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .nav-link { padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); font-weight: 700; font-size: var(--text-sm); color: var(--color-text-light); }
+    .nav-link:hover, .nav-link.active { background: #EEF2FF; color: #4F46E5; }
+    section { padding: var(--space-8) 0; }
+    section h2 { font-size: var(--text-xl); margin-bottom: var(--space-2); }
+    section > .container > p.lede { color: var(--color-text-light); margin-bottom: var(--space-5); max-width: 70ch; }
+    .site-foot { background: #312E81; color: rgba(255,255,255,.75); padding: var(--space-6) 0; text-align: center; font-size: var(--text-sm); }
+    .td-cta-row { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+    .td-panel { background: var(--color-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: var(--space-6); }
+    .td-trouble { list-style: none; margin-top: var(--space-4); }
+    .td-trouble li { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-light); }
+    .td-trouble li:last-child { border-bottom: 0; }
+    .td-trouble-fact { font-family: var(--font-mono), monospace; font-weight: 800; font-size: 1.15rem; color: #4F46E5; min-width: 92px; }
+    .td-trouble-body span { font-size: var(--text-xs); color: var(--color-text-light); display: block; }
+    .wall-big .td-wall { max-width: 560px; }
+    .wall-big .td-wall-cell { cursor: pointer; }
+    .wall-big .td-wall-cell:hover { outline: 3px solid #4F46E5; }
+    .wall-big .td-wall-head, .wall-big .td-wall-corner { font-size: .8rem; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <a href="index.html" class="nav-brand"><span>✨</span> Crislyn's Portal</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="learning.html" class="nav-link">Learning</a>
+      <a href="tables-dojo.html" class="nav-link active">✖️ Tables Dojo</a>
+      <a href="tables.html" class="nav-link">🎮 Tables Games</a>
+      <a href="half-yearly.html" class="nav-link">🎯 Half-Yearly</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================= HERO ==== -->
+<header class="td-hero-band">
+  <div class="container">
+    <h1>✖️ Tables Dojo</h1>
+    <p>Sixty-six facts, one belt at a time. Every belt teaches you a way to
+       <b>work the answer out</b> before it asks you to remember it — and the wall
+       below shows exactly which facts are solid and which still need you.</p>
+
+    <div class="td-hero-stats">
+      <div class="td-hero-stat"><b id="td-fast">0</b><span>Facts fast</span></div>
+      <div class="td-hero-stat"><b id="td-known">0</b><span>Facts known</span></div>
+      <div class="td-hero-stat"><b id="td-belt">—</b><span>Current belt</span></div>
+      <div class="td-hero-stat"><b id="td-best">—</b><span>Speed record</span></div>
+      <div class="td-hero-stat"><b id="td-streak">0</b><span>Day streak</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================== TODAY ======== -->
+<div class="container">
+  <div class="td-panel" style="margin-top: calc(-1 * var(--space-6)); position: relative; z-index: 2;">
+    <h2 style="margin:0;">Today's session</h2>
+    <div class="td-lead" id="td-today">Loading…</div>
+    <div class="td-cta-row">
+      <button class="td-btn td-btn-go" id="td-start">▶ Start today's dojo</button>
+      <button class="td-btn td-btn-ghost" id="td-speed">⏱️ 60-second speed check</button>
+      <button class="td-btn td-btn-ghost" id="td-weak">🎯 My shaky facts</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================== BELTS ====== -->
+<section>
+  <div class="container">
+    <h2>The belts</h2>
+    <p class="lede">They open in order, because each one is built out of the ones before it.
+      By the time you reach the sevens, almost every seven fact is already known from
+      the other belts — only a handful will be new.</p>
+    <div class="td-belts" id="td-belts"></div>
+  </div>
+</section>
+
+<!-- ====================================================== FACT WALL ====== -->
+<section style="background: var(--color-bg-alt);">
+  <div class="container">
+    <h2>Your fact wall</h2>
+    <p class="lede">All 66 facts. Grey means not met yet, red is shaky, amber means you know it
+      but have to think, and green means it comes straight out in under three seconds.
+      <b>Tap any square to practise that one fact.</b></p>
+    <div class="td-panel wall-big" id="td-wall-host"></div>
+  </div>
+</section>
+
+<!-- ======================================================== PARENT ======= -->
+<section>
+  <div class="container">
+    <div class="td-panel">
+      <h3>👨‍👩‍👧 For a grown-up</h3>
+      <p class="td-lead">The facts she is actually getting wrong — worth five minutes together.</p>
+      <ul class="td-trouble" id="td-trouble">
+        <li><span class="td-trouble-fact">—</span>
+          <div class="td-trouble-body"><b>Nothing yet</b>
+          <span>These appear once she has done a session or two.</span></div></li>
+      </ul>
+
+      <details style="margin-top: var(--space-5);">
+        <summary style="cursor:pointer; font-weight:800; color:#4F46E5;">Why this is different from the tables games</summary>
+        <div style="margin-top: var(--space-3); line-height: 1.8; font-size: var(--text-sm);">
+          <p><b>It remembers each fact separately.</b> The games pick questions at random and
+             keep only a high score, so a child can play them for weeks and still not know
+             6 × 7. The dojo keeps a record for all 66 facts — right, wrong, and how
+             <em>fast</em> — so practice goes where the gaps actually are.</p>
+          <p><b>Speed is part of the test.</b> Anything slower than three seconds is counted as
+             worked out, not known. That is the difference between a child who can find the
+             answer and one who has it.</p>
+          <p><b>It teaches a method before it drills.</b> Each belt gives a way to derive the
+             fact from an easier one — five lots and one more, double-double, ten take one
+             away. She builds the array, counts it, and works it out before anything is timed.</p>
+          <p><b>New facts are folded in among known ones.</b> A new fact is rehearsed against a
+             growing run of facts she already has, roughly one unknown to nine known. That
+             ratio retains better than straight drill and keeps her mostly succeeding.</p>
+          <p><b>The order is built, not alphabetical.</b> ×2, ×10, ×5, ×4, ×3, ×9, ×11, ×6, ×8,
+             ×7, ×12. Each belt only introduces facts whose other factor is already known, so
+             the first belt adds one fact and the last adds eleven.</p>
+        </div>
+      </details>
+
+      <details style="margin-top: var(--space-3);">
+        <summary style="cursor:pointer; font-weight:800; color:#4F46E5;">Reset the dojo</summary>
+        <div style="margin-top: var(--space-3);">
+          <p class="td-lead">This wipes every fact record on this device. There is no undo.</p>
+          <button class="td-btn td-btn-ghost" id="td-reset" style="margin-top: var(--space-2);">Reset all dojo progress</button>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="container">
+    Tables Dojo · 66 facts · built for Crislyn ·
+    <a href="tables.html" style="color:#C7D2FE;">Tables games</a> ·
+    <a href="half-yearly.html" style="color:#C7D2FE;">Half-Yearly</a>
+  </div>
+</footer>
+
+<script src="js/common.js"></script>
+<script src="js/tables-dojo.js"></script>
+<script src="js/tables-dojo-ui.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  const T = window.TDojo, S = window.TDojoStage;
+  T.init();
+  const $ = id => document.getElementById(id);
+
+  function paintHero() {
+    const r = T.report();
+    $('td-fast').textContent = r.fluent + ' / ' + r.total;
+    $('td-known').textContent = (r.known + r.fluent) + ' / ' + r.total;
+    const cur = T.currentRung();
+    $('td-belt').textContent = '×' + cur.factor;
+    const best = T.getBest('speed60');
+    $('td-best').textContent = best === undefined ? '—' : best;
+    $('td-streak').textContent = T.streakDays();
+
+    const targets = T.targetsIn(cur);
+    const doneToday = T.doneToday();
+    $('td-today').innerHTML = targets.length
+      ? 'Belt <b>×' + cur.factor + '</b> — <b>' + cur.strategy.name + '</b>. ' +
+        targets.length + ' fact' + (targets.length === 1 ? '' : 's') + ' still to lock in' +
+        (doneToday ? ' · <b>' + doneToday + '</b> answered today.' : '.')
+      : 'Belt <b>×' + cur.factor + '</b> is met — today is about making it fast.' +
+        (doneToday ? ' <b>' + doneToday + '</b> answered today.' : '');
+  }
+
+  function paintBelts() {
+    const wrap = $('td-belts');
+    wrap.innerHTML = '';
+    T.RUNGS.forEach(r => {
+      const rep = T.rungReport(r);
+      const open = T.isUnlocked(r);
+      const b = document.createElement('button');
+      b.className = 'td-belt' + (rep.done ? ' is-done' : '');
+      b.disabled = !open;
+      b.innerHTML = `
+        <span class="td-belt-x">${rep.done ? '🎖️' : '×' + r.factor}</span>
+        <span class="td-belt-body">
+          <span class="td-belt-name">${r.title}</span>
+          <span class="td-belt-strat">${open ? r.strategy.name : 'opens after ×' + T.RUNGS[r.index - 1].factor}</span>
+          <span class="td-belt-meter"><i style="width:${rep.pct}%"></i></span>
+        </span>
+        <span class="td-belt-tag">${rep.fluent}/${rep.total}</span>`;
+      if (open) b.onclick = () => run({ mode: 'rung', rungId: r.id });
+      wrap.appendChild(b);
+    });
+  }
+
+  function paintWall() {
+    const host = $('td-wall-host');
+    host.innerHTML = '';
+    const node = S.wallNode();
+    host.appendChild(node);
+    node.querySelectorAll('.td-wall-cell').forEach(cell => {
+      cell.onclick = () => {
+        const t = cell.title.split(' ');            // "6 × 7 = 42"
+        run({ mode: 'fact', fact: T.key(Number(t[0]), Number(t[2])) });
+      };
+    });
+  }
+
+  function paintTrouble() {
+    const list = $('td-trouble');
+    const spots = T.trouble(8);
+    if (!spots.length) return;
+    list.innerHTML = '';
+    spots.forEach(s => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <span class="td-trouble-fact">${s.a} × ${s.b} = ${s.product}</span>
+        <div class="td-trouble-body">
+          <b>${s.wrong} wrong${s.right ? ', ' + s.right + ' right' : ''}</b>
+          <span>${s.status === 0 ? 'Not met yet.' :
+                  s.status === 1 ? 'Still shaky — say it together, then let her type it.' :
+                  'She gets it, but has to work it out. Needs speed, not teaching.'}</span>
+        </div>`;
+      list.appendChild(li);
+    });
+  }
+
+  function paintAll() { paintHero(); paintBelts(); paintWall(); paintTrouble(); }
+
+  function run(opts) { S.start(Object.assign({ onClose: paintAll }, opts)); }
+
+  $('td-start').onclick = () => run({ mode: 'daily' });
+  $('td-speed').onclick = () => run({ mode: 'speed', secs: 60 });
+  $('td-weak').onclick  = () => {
+    const shaky = T.trouble(1)[0];
+    if (shaky) run({ mode: 'fact', fact: shaky.k });
+    else run({ mode: 'speed', secs: 60 });
+  };
+  $('td-reset').onclick = () => {
+    if (confirm('Erase every tables fact record on this device?')) { T.reset(); paintAll(); }
+  };
+
+  paintAll();
+})();
+</script>
+
+</body>
+</html>

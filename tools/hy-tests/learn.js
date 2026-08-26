@@ -46,7 +46,7 @@ const noLesson = skills.filter(s => !LS.has(s.id));
 if (noLesson.length) bad(noLesson.length + ' skills fall back to their "Show me" card: ' + noLesson.map(s => s.id).join(' '));
 
 /* ---- 2. tap through every one of them ---------------------------------- */
-let screens = 0, workedSteps = 0, traps = 0, hindi = 0;
+let screens = 0, workedSteps = 0, traps = 0, hindi = 0, orderScreens = 0, guesses = 0, rightGuesses = 0;
 
 skills.forEach(sk => {
   const lesson = LS.get(sk.id);
@@ -60,10 +60,43 @@ skills.forEach(sk => {
     hindi++;
   }
 
-  let guard = 0, sawWorked = false, sawTrap = false, sawAnswer = false;
+  let guard = 0, sawWorked = false, sawTrap = false, sawAnswer = false, sawOrder = false;
   while (root.style.display === 'flex') {
     if (guard++ > 80) { bad(sk.id + ': lesson never finished (80 taps)'); break; }
     screens++;
+
+    /* WE DO — put the shuffled method back in order, properly, by tapping the
+       right step each time. A wrong tap must be refused, not accepted. */
+    if (d.querySelector('.hy-learn .hy-order-bank')) {
+      sawOrder = true; orderScreens++;
+      const steps = lesson.worked.steps.map(st => st.t);
+      const btnFor = t => all('.hy-learn .hy-order-step').find(b => b.textContent === t);
+      /* first, prove a wrong one is rejected */
+      if (steps.length > 1) {
+        const wrong = btnFor(steps[1]);
+        if (wrong) {
+          wrong.click();
+          if (wrong.disabled) bad(sk.id + ': the ordering accepted a step out of order');
+          if (!d.querySelector('.hy-learn .hy-order-msg.is-no'))
+            bad(sk.id + ': a wrong step was not called out');
+        }
+      }
+      steps.forEach(t => { const b = btnFor(t); if (b && !b.disabled) b.click(); });
+      const placed = all('.hy-learn .hy-order-placed').length;
+      if (placed !== steps.length)
+        bad(sk.id + ': ordering placed ' + placed + ' of ' + steps.length + ' steps');
+      const go = all('.hy-learn .hy-foot .hy-btn').pop();
+      if (!go) { bad(sk.id + ': ordering had no way forward'); break; }
+      go.click();
+      continue;
+    }
+
+    /* the worked example now asks for her answer before it gives one */
+    const guessBox = d.querySelector('.hy-learn .hy-guess .hy-input');
+    if (guessBox) {
+      guesses++;
+      guessBox.value = lesson.worked.ans;      // answer it right, to prove the match path
+    }
 
     const body = d.querySelector('.hy-learn .hy-body');
     if (!body || body.textContent.trim().length < 8) bad(sk.id + ': a lesson screen is empty');
@@ -73,6 +106,7 @@ skills.forEach(sk => {
       sawWorked = true;
       workedSteps = Math.max(workedSteps, all('.hy-learn .hy-work-step').length);
       if (d.querySelector('.hy-learn .hy-work-answer')) sawAnswer = true;
+    if (d.querySelector('.hy-learn .hy-guess-mine.is-right')) { rightGuesses++; }
     }
     if (d.querySelector('.hy-learn .hy-watch-big')) sawTrap = true;
 
@@ -84,6 +118,8 @@ skills.forEach(sk => {
   }
 
   if (lesson.worked && !sawWorked) bad(sk.id + ': the worked example never appeared');
+  if (lesson.worked && lesson.worked.steps.length >= 3 && !sawOrder)
+    bad(sk.id + ': a ' + lesson.worked.steps.length + '-step method never asked her to order it');
   if (lesson.worked && !sawAnswer) bad(sk.id + ': the worked example never reached its answer');
   if (lesson.trap) { if (!sawTrap) bad(sk.id + ': the trap card never appeared'); else traps++; }
   if (!HY.isTaught(sk.id)) bad(sk.id + ': finishing the lesson did not mark it taught');
@@ -93,6 +129,10 @@ skills.forEach(sk => {
 console.log('lessons opened: ' + skills.length + ' (' + hindi + ' in हिंदी)');
 console.log('screens tapped through: ' + screens + ' · trap cards shown: ' + traps +
   ' · longest worked example: ' + workedSteps + ' steps');
+console.log('interactive: ' + orderScreens + ' methods re-ordered by hand · ' +
+  guesses + ' answers committed before the reveal · ' + rightGuesses + ' matched');
+if (orderScreens < 40) bad('only ' + orderScreens + ' lessons made her rebuild the method');
+if (guesses < 50) bad('only ' + guesses + ' lessons asked for her answer first');
 
 /* ---- 3. every worked step is revealed one at a time -------------------- */
 HY.reset();
@@ -100,7 +140,11 @@ Learn.open('M8', { onDone(){} });
 let counts = [];
 let g = 0;
 while (d.querySelector('.hy-learn').style.display === 'flex' && g++ < 80) {
-  if (d.querySelector('.hy-learn .hy-work')) counts.push(all('.hy-learn .hy-work-step').length);
+  if (d.querySelector('.hy-learn .hy-work')) {
+    /* the last count repeats once: the guess prompt, then the reveal */
+    const n = all('.hy-learn .hy-work-step').length;
+    if (counts[counts.length - 1] !== n) counts.push(n);
+  }
   const btns = all('.hy-learn .hy-foot .hy-btn');
   const later = btns.find(b => /Not just now/.test(b.textContent));
   (later || btns[btns.length - 1]).click();

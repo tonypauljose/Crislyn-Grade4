@@ -128,10 +128,17 @@ console.log('  item types produced: ' + JSON.stringify(TYPES));
       if (!l.worked.q) bad(s.id + ' worked example has no question');
       if (!l.worked.ans) bad(s.id + ' worked example has no answer');
       if (!l.worked.steps || l.worked.steps.length < 2) bad(s.id + ' worked example needs at least 2 steps');
-      else l.worked.steps.forEach((st, i) => {
-        if (!st.t || !st.h) bad(s.id + ' worked step ' + i + ' is incomplete');
-        steps++;
-      });
+      else {
+        l.worked.steps.forEach((st, i) => {
+          if (!st.t || !st.h) bad(s.id + ' worked step ' + i + ' is incomplete');
+          steps++;
+        });
+        /* Step titles are also the tiles she puts back in order, so two the
+           same would make that activity unanswerable. */
+        const titles = l.worked.steps.map(st => st.t);
+        const dup = titles.filter((t, i) => titles.indexOf(t) !== i);
+        if (dup.length) bad(s.id + ' has duplicate worked-step titles: "' + dup[0] + '"');
+      }
     }
     if (!l.recall) bad(s.id + ' lesson has no recall line');
     /* Her real mistake, mined from the photos, must survive into the lesson. */

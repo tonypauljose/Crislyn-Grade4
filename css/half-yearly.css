@@ -586,7 +586,81 @@ body.hy-running { overflow: hidden; }
   padding: 6px 2px; font-size: .68rem; font-style: normal; line-height: 1.3;
 }
 
+/* --- guess before the reveal --- */
+.hy-guess {
+  background: var(--color-accent-light); border-radius: var(--radius-md);
+  padding: var(--space-4); margin-top: var(--space-2);
+  animation: hyStepIn .3s var(--ease-bounce);
+}
+.hy-guess-tag { font-weight: 800; margin-bottom: var(--space-2); display: block; }
+.hy-guess .hy-input { width: 100%; max-width: 100%; }
+.hy-guess-mine {
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-sm);
+  background: var(--color-bg-alt); font-size: var(--text-sm); margin-top: var(--space-2);
+}
+.hy-guess-mine.is-right { background: var(--color-success-light); color: #15803D; font-weight: 700; }
+
+/* --- put the method back in order --- */
+.hy-order-slot {
+  min-height: 60px; border: 3px dashed var(--color-border); border-radius: var(--radius-md);
+  padding: var(--space-2); margin: var(--space-4) 0; display: flex;
+  flex-direction: column; gap: 6px; background: var(--color-bg-alt);
+}
+.hy-order-placed {
+  display: flex; align-items: center; gap: var(--space-3);
+  background: var(--color-surface); border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3); font-weight: 700; font-size: .95rem;
+  animation: hyStepIn .25s var(--ease-bounce);
+}
+.hy-order-n {
+  flex: none; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  font-family: var(--font-heading); font-size: .72rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.hy-order-bank { display: flex; flex-direction: column; gap: 8px; }
+.hy-order-step {
+  font-family: inherit; font-size: .98rem; font-weight: 700; text-align: left;
+  padding: var(--space-3) var(--space-4); border-radius: var(--radius-md);
+  border: 3px solid var(--color-border); background: var(--color-surface);
+  color: var(--color-text); cursor: pointer; min-height: 52px;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+.hy-order-step:hover:not(:disabled) { border-color: var(--color-primary-light); }
+.hy-order-step.is-used { opacity: .25; }
+.hy-order-step.is-wrong { border-color: var(--color-error); background: var(--color-error-light); animation: hyShake .4s; }
+@keyframes hyShake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.hy-order-msg { min-height: 1.6em; margin-top: var(--space-3); font-weight: 700; text-align: center; }
+.hy-order-msg.is-ok { color: #15803D; }
+.hy-order-msg.is-no { color: #B45309; }
 /* ================================================ LEARN SHELF (hub) ==== */
+/* --- the sequenced unit path --- */
+.hy-unit {
+  background: var(--color-surface); border-radius: var(--radius-lg);
+  border: 3px solid var(--color-border-light);
+  padding: var(--space-4); margin-bottom: var(--space-4);
+}
+.hy-unit.is-done { border-color: #BBF7D0; background: #F0FDF4; }
+.hy-unit.is-locked { opacity: .55; }
+.hy-unit-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); }
+.hy-unit-no {
+  flex: none; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  font-family: var(--font-heading); font-size: 1.05rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.hy-unit.is-done .hy-unit-no { background: var(--color-success); }
+.hy-unit.is-locked .hy-unit-no { background: var(--color-border); }
+.hy-unit-title { flex: 1; min-width: 0; }
+.hy-unit-title b { display: block; font-size: var(--text-base); color: var(--color-primary-dark); }
+.hy-unit-title span { font-size: var(--text-xs); color: var(--color-text-light); }
+.hy-unit-meter {
+  flex: none; width: 90px; height: 8px; border-radius: var(--radius-full);
+  background: var(--color-border-light); overflow: hidden;
+}
+.hy-unit-meter i { display: block; height: 100%; background: var(--color-success); }
+.hy-lesson-btn:disabled { opacity: .5; cursor: not-allowed; }
+.hy-lesson-btn:disabled:hover { transform: none; border-color: var(--color-border-light); }
 .hy-shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-2); }
 .hy-lesson-btn {
   display: flex; align-items: center; gap: var(--space-3); text-align: left;
@@ -636,6 +710,10 @@ body.hy-running { overflow: hidden; }
   .hy-work-n { width: 26px; height: 26px; font-size: .75rem; }
   .hy-work-answer { padding: var(--space-3); font-size: 1rem; }
   .hy-learn-map { display: none; }
+  .hy-order-step { min-height: 44px; padding: var(--space-2) var(--space-3); font-size: .9rem; }
+  .hy-order-placed { padding: 4px var(--space-2); font-size: .88rem; }
+  .hy-order-slot { margin: var(--space-2) 0; }
+  .hy-guess { padding: var(--space-3); }
   .hy-recall { padding: var(--space-3); }
 }
 

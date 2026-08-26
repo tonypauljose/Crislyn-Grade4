@@ -40,6 +40,7 @@
       <a href="index.html" class="nav-link">Home</a>
       <a href="learning.html" class="nav-link">Learning</a>
       <a href="exam.html" class="nav-link">Exams</a>
+      <a href="tables-dojo.html" class="nav-link">🥋 Dojo</a>
       <a href="half-yearly.html" class="nav-link active">🎯 Half-Yearly</a>
     </div>
   </div>
@@ -409,7 +410,12 @@
         b.innerHTML = `<span class="hy-skill-dot">${DOTS[lvl]}</span>
           <span class="hy-skill-name">${s.name}</span>
           <span class="hy-skill-pct">${Math.round(HY.progress(id) * 100)}%</span>`;
-        if (!HY.isTaught(id)) {
+        if (id === 'M15') {
+          b.title = 'Times tables have their own module';
+          b.querySelector('.hy-skill-pct').textContent = 'dojo';
+          b.classList.add('is-untaught');
+          b.onclick = () => { window.location.href = 'tables-dojo.html'; };
+        } else if (!HY.isTaught(id)) {
           b.classList.add('is-untaught');
           b.querySelector('.hy-skill-pct').textContent = 'learn';
           b.title = 'Not taught yet — this opens the lesson';
@@ -451,28 +457,64 @@
       btn.onclick = () => learn(withContent[0].id);
     }
 
+    /* The units run in teaching order WITHIN each subject, and a unit opens
+       once the one before it has been read. Three parallel tracks, so she can
+       pick a subject freely but never skip ahead inside one. */
+    const unitNo = {};
+    let prevOpenBySubject = {};
     SK.topics.forEach(t => {
-      if (lfilter !== 'all' && t.subject !== lfilter) return;
+      unitNo[t.subject] = (unitNo[t.subject] || 0) + 1;
+      t._unit = unitNo[t.subject];
+    });
+
+    SK.topics.forEach(t => {
       const skills = t.skills.filter(id => HY.hasContent(id));
       if (!skills.length) return;
 
-      const box = document.createElement('div');
-      box.className = 'hy-topic';
+      const taught = skills.filter(id => HY.isTaught(id)).length;
+      const unitDone = taught === skills.length;
+      /* open if it is the subject's first unit, or the previous one is read */
+      const open = prevOpenBySubject[t.subject] === undefined
+        ? true : prevOpenBySubject[t.subject];
+      prevOpenBySubject[t.subject] = unitDone;
+
+      if (lfilter !== 'all' && t.subject !== lfilter) return;
+
       const meta = SK.subjects[t.subject];
-      box.innerHTML = `<h4>${meta.icon} ${meta.name} · ${t.name}</h4>`;
+      const box = document.createElement('div');
+      box.className = 'hy-unit' + (unitDone ? ' is-done' : '') + (open ? '' : ' is-locked');
+      box.innerHTML = `
+        <div class="hy-unit-head">
+          <span class="hy-unit-no">${unitDone ? '✓' : (open ? t._unit : '🔒')}</span>
+          <div class="hy-unit-title">
+            <b>${meta.icon} ${meta.name} · ${t.name}</b>
+            <span>${open
+              ? taught + ' of ' + skills.length + ' lessons read'
+              : 'opens when the unit above is read'}</span>
+          </div>
+          <span class="hy-unit-meter"><i style="width:${Math.round(taught / skills.length * 100)}%"></i></span>
+        </div>`;
+
       const grid = document.createElement('div');
       grid.className = 'hy-shelf';
-
       skills.forEach(id => {
         const sk = SK.get(id);
         const done = HY.isTaught(id);
         const b = document.createElement('button');
         b.className = 'hy-lesson-btn' + (done ? ' is-taught' : '');
-        b.innerHTML = `<span class="hy-lesson-mark">${done ? '✓' : '💡'}</span>
+        /* Tables are not a reading lesson — they are their own module. */
+        const isTables = id === 'M15';
+        b.innerHTML = `<span class="hy-lesson-mark">${isTables ? '🥋' : (done ? '✓' : '💡')}</span>
           <span class="hy-lesson-name">${sk.name}</span>
-          <span class="hy-lesson-tag">${done ? 'read again' : 'learn'}</span>`;
-        b.title = done ? 'Read this lesson again' : 'Learn this skill';
-        b.onclick = () => learn(id);
+          <span class="hy-lesson-tag">${isTables ? 'dojo' : (done ? 'read again' : 'learn')}</span>`;
+        if (!open) { b.disabled = true; b.title = 'Finish the unit above first'; }
+        else if (isTables) {
+          b.title = 'Times tables have their own module';
+          b.onclick = () => { window.location.href = 'tables-dojo.html'; };
+        } else {
+          b.title = done ? 'Read this lesson again' : 'Learn this skill';
+          b.onclick = () => learn(id);
+        }
         grid.appendChild(b);
       });
       box.appendChild(grid);

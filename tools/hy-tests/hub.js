@@ -41,6 +41,26 @@ if(!/lesson/i.test($('hy-start').textContent)) errors.push('start button should 
   const want=sub==='all'?55:w.HY_SKILLS.forSubject(sub).length;
   if(n!==want) errors.push('filter '+sub+': '+n+' skills, expected '+want);
 });
+// the lesson shelf is a sequenced path, not a flat list
+const units = d.querySelectorAll('.hy-unit').length;
+const locked = d.querySelectorAll('.hy-unit.is-locked').length;
+const lockedBtns = Array.from(d.querySelectorAll('.hy-unit.is-locked .hy-lesson-btn')).filter(b => b.disabled).length;
+console.log('units: ' + units + ' · locked on a fresh start: ' + locked);
+if (units !== 12) errors.push('expected 12 units, got ' + units);
+if (locked < 6) errors.push('a fresh start should have most units locked, only ' + locked + ' were');
+if (locked && !lockedBtns) errors.push('a locked unit still let its lessons be opened');
+// the first unit of every subject must be open, or she can never start
+['maths','english','hindi'].forEach(sub => {
+  const first = Array.from(d.querySelectorAll('.hy-unit')).find(u =>
+    u.querySelector('.hy-unit-title b').textContent.includes(w.HY_SKILLS.subjects[sub].name));
+  if (first && first.classList.contains('is-locked')) errors.push(sub + ' has no open unit to start from');
+});
+// times tables are their own module, not a reading lesson
+const tablesBtn = Array.from(d.querySelectorAll('.hy-lesson-btn')).find(b =>
+  b.textContent.includes('Tables 2 to 12'));
+if (!tablesBtn) errors.push('the tables skill is missing from the shelf');
+else if (!/dojo/.test(tablesBtn.textContent)) errors.push('the tables skill should point at the dojo');
+
 // lesson shelf filters
 ['maths','english','hindi','all'].forEach(sub=>{
   const b=d.querySelector('.hy-lfilter[data-lsub="'+sub+'"]'); b.click();
