@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MeasureQuest — Around or Inside? | Crislyn's Portal</title>
+  <meta name="description" content="Perimeter and area for Class 4 — taught by doing, not by memorising formulas.">
+  <meta name="theme-color" content="#FCFAF7">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/measurequest.css">
+
+  <script src="js/analytics.js"></script>
+
+  <style>
+    /* Page chrome only — everything inside the app is in measurequest.css */
+    body { background: #FCFAF7; margin: 0; }
+    .mq-nav {
+      background: #fff; border-bottom: 1px solid #E7E2DA; padding: 10px 0;
+      position: sticky; top: 0; z-index: 40;
+    }
+    .mq-nav .mq-nav-in {
+      max-width: 960px; margin: 0 auto; padding: 0 16px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    }
+    .mq-brand {
+      font-family: 'Jost', sans-serif; font-weight: 600; font-size: 1.05rem;
+      color: #23222A; text-decoration: none; display: flex; align-items: center; gap: 8px;
+      min-height: 44px;
+    }
+    .mq-brand i {
+      width: 18px; height: 18px; border-radius: 5px; display: block;
+      background: linear-gradient(135deg, #E4572E 50%, #0E8C7F 50%);
+    }
+    .mq-navlinks { display: flex; gap: 4px; flex-wrap: wrap; }
+    .mq-navlinks a {
+      font-family: 'Jost', sans-serif; font-size: .92rem; color: #5D5B69; text-decoration: none;
+      padding: 10px 14px; border-radius: 999px; min-height: 44px; display: inline-flex; align-items: center;
+    }
+    .mq-navlinks a:hover { background: #F6F2EC; color: #23222A; }
+    .mq-navlinks a.is-here { background: #23222A; color: #fff; }
+    .mq-foot-site {
+      max-width: 960px; margin: 0 auto; padding: 28px 16px 40px; text-align: center;
+      font-family: 'Jost', sans-serif; color: #8A8694; font-size: .88rem;
+    }
+    .mq-noscript {
+      max-width: 620px; margin: 60px auto; padding: 24px; border: 2px dashed #E4572E;
+      border-radius: 16px; font-family: 'Jost', sans-serif; text-align: center;
+    }
+    @media print { .mq-nav, .mq-foot-site { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav class="mq-nav">
+  <div class="mq-nav-in">
+    <a class="mq-brand" href="index.html"><i aria-hidden="true"></i> Crislyn&rsquo;s Portal</a>
+    <div class="mq-navlinks">
+      <a href="index.html">Home</a>
+      <a href="learning.html">Learning</a>
+      <a href="maths.html">Maths</a>
+      <a href="half-yearly.html">Half-Yearly</a>
+      <a href="tables-dojo.html">Dojo</a>
+      <a href="measurequest.html" class="is-here">MeasureQuest</a>
+    </div>
+  </div>
+</nav>
+
+<main id="mq-app" class="mq-app">
+  <noscript>
+    <div class="mq-noscript">
+      <h1>MeasureQuest needs JavaScript</h1>
+      <p>This is an interactive maths app — tracing borders, laying tiles and building shapes.
+         Please turn JavaScript on and reload the page.</p>
+    </div>
+  </noscript>
+</main>
+
+<footer class="mq-foot-site">
+  MeasureQuest &middot; Perimeter and area, taught by doing &middot; Crislyn&rsquo;s Portal
+</footer>
+
+<script src="data/mq-content.js"></script>
+<script src="js/mq-engine.js"></script>
+<script src="data/mq-bank.js"></script>
+<script src="js/mq-speak.js"></script>
+<script src="js/mq-activities.js"></script>
+<script src="js/mq-ui.js"></script>
+<script>
+  (function () {
+    'use strict';
+    if (window.MQUI) window.MQUI.boot('mq-app');
+
+    /* Offline support. The worker is NETWORK-FIRST on purpose: this site is
+       updated by hand and viewed on a tablet that caches hard, so a
+       cache-first worker would be a way to serve her yesterday's lesson. It
+       only ever answers from the cache when the network has actually failed,
+       and it ignores every request that is not part of MeasureQuest. */
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('mq-sw.js').catch(function () { /* offline is a bonus, not a requirement */ });
+      });
+    }
+  })();
+</script>
+</body>
+</html>

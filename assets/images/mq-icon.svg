@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MeasureQuest">
+  <rect width="512" height="512" rx="112" fill="#FCFAF7"/>
+  <!-- the area: a tiled surface -->
+  <g fill="#D9F2EE" stroke="#0E8C7F" stroke-width="6">
+    <rect x="140" y="176" width="76" height="76"/>
+    <rect x="216" y="176" width="76" height="76"/>
+    <rect x="292" y="176" width="76" height="76"/>
+    <rect x="140" y="252" width="76" height="76"/>
+    <rect x="216" y="252" width="76" height="76"/>
+    <rect x="292" y="252" width="76" height="76"/>
+  </g>
+  <!-- the perimeter: the border going around it -->
+  <rect x="140" y="176" width="228" height="152" fill="none" stroke="#E4572E"
+        stroke-width="20" stroke-linejoin="round"/>
+  <circle cx="140" cy="176" r="17" fill="#E4572E"/>
+</svg>

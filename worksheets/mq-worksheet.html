@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeasureQuest worksheet</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/measurequest.css">
+
+  <style>
+    /* ------------------------------------------------------------------
+       A4 by construction. The sheet is laid out at 210mm wide with 14mm
+       margins so what appears on screen is what comes out of the printer,
+       and the answer key is forced onto its own page.
+       ------------------------------------------------------------------ */
+    @page { size: A4 portrait; margin: 14mm; }
+
+    body {
+      margin: 0; background: #EEEAE4;
+      font-family: 'Jost', system-ui, sans-serif; color: #23222A;
+    }
+    .ws-bar {
+      position: sticky; top: 0; z-index: 10; background: #fff; border-bottom: 1px solid #E7E2DA;
+      padding: 12px 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    }
+    .ws-bar h1 { font-size: 1rem; margin: 0; flex: 1; font-weight: 600; }
+    .ws-btn {
+      min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1.5px solid #E7E2DA;
+      background: #fff; font-family: inherit; font-weight: 500; cursor: pointer; font-size: .95rem;
+    }
+    .ws-btn-primary { background: #23222A; color: #fff; border-color: #23222A; }
+    .ws-select { min-height: 44px; border-radius: 999px; border: 1.5px solid #E7E2DA; padding: 0 14px;
+      font-family: inherit; background: #fff; }
+
+    .sheet {
+      width: 210mm; min-height: 297mm; margin: 18px auto; background: #fff; padding: 14mm;
+      box-shadow: 0 6px 30px rgba(0,0,0,.12);
+    }
+    .ws-head { border-bottom: 2.5px solid #23222A; padding-bottom: 8px; margin-bottom: 6mm; }
+    .ws-head h2 { margin: 0; font-size: 17pt; font-weight: 600; }
+    .ws-head .ws-sub { display: flex; justify-content: space-between; gap: 12px; font-size: 9.5pt;
+      color: #5D5B69; margin-top: 4px; flex-wrap: wrap; }
+    .ws-name { margin: 4mm 0 6mm; display: flex; gap: 10mm; font-size: 10pt; }
+    .ws-name span { border-bottom: 1px solid #B9B2A6; flex: 1; padding-bottom: 2px; }
+    .ws-cue { background: #F6F2EC; border-radius: 8px; padding: 6px 12px; font-size: 10pt;
+      margin-bottom: 6mm; font-weight: 500; }
+
+    .ws-items { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+    .ws-item { border: 1px solid #D9D3C9; border-radius: 8px; padding: 4mm; break-inside: avoid;
+      page-break-inside: avoid; display: flex; flex-direction: column; gap: 2mm; }
+    .ws-q { display: flex; gap: 3mm; font-size: 10pt; line-height: 1.4; }
+    .ws-n { flex: 0 0 auto; width: 6mm; height: 6mm; border-radius: 50%; background: #23222A;
+      color: #fff; display: grid; place-items: center; font-size: 8pt; font-weight: 600; }
+    .ws-art { display: flex; justify-content: center; padding: 1mm 0; }
+    .ws-art svg { max-width: 58mm; height: auto; }
+    .ws-work { border-bottom: 1px dotted #B9B2A6; height: 7mm; margin-top: auto; }
+    .ws-ans { display: flex; align-items: center; gap: 3mm; font-size: 9.5pt; color: #5D5B69; }
+    .ws-box { border: 1px solid #23222A; border-radius: 4px; height: 8mm; flex: 1; }
+    .ws-opts { display: flex; flex-wrap: wrap; gap: 2mm; font-size: 9.5pt; }
+    .ws-opt { border: 1px solid #D9D3C9; border-radius: 5px; padding: 1mm 3mm; }
+    .ws-choicebox { width: 4mm; height: 4mm; border: 1px solid #23222A; display: inline-block;
+      margin-right: 1.5mm; vertical-align: -.5mm; }
+
+    .key { page-break-before: always; }
+    .key .ws-head h2 { color: #A5320F; }
+    .ws-keylist { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; font-size: 10pt; }
+    .ws-keyrow { display: flex; gap: 3mm; padding: 2mm 3mm; background: #F6F2EC; border-radius: 6px;
+      break-inside: avoid; }
+    .ws-keyrow b { flex: 0 0 7mm; }
+    .ws-keyrow span { flex: 1; }
+    .ws-keyrow i { display: block; font-style: normal; color: #5D5B69; font-size: 9pt; margin-top: 1mm; }
+
+    @media print {
+      body { background: #fff; }
+      .ws-bar { display: none; }
+      .sheet { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+      .key { page-break-before: always; }
+    }
+    @media (max-width: 840px) {
+      .sheet { width: auto; min-height: 0; padding: 16px; margin: 12px; }
+      .ws-items, .ws-keylist { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="ws-bar">
+  <h1>MeasureQuest worksheet</h1>
+  <label for="ws-kind" class="sr-only" style="font-size:.9rem;color:#5D5B69">Kind</label>
+  <select id="ws-kind" class="ws-select" aria-label="Worksheet kind"></select>
+  <button class="ws-btn" id="ws-new" type="button">Different questions</button>
+  <button class="ws-btn ws-btn-primary" id="ws-print" type="button">Print</button>
+</div>
+
+<div id="ws-out"></div>
+
+<script src="../data/mq-content.js"></script>
+<script src="../js/mq-engine.js"></script>
+<script src="../data/mq-bank.js"></script>
+<script src="../js/mq-speak.js"></script>
+<script src="../js/mq-activities.js"></script>
+<script>
+(function () {
+  'use strict';
+  const MQ = window.MQ, CT = window.MQ_CONTENT, AC = window.MQActivities;
+  MQ.init();
+
+  const params = new URLSearchParams(location.search);
+  let kind = params.get('kind') || 'mixed';
+  let seed = parseInt(params.get('seed'), 10) || 4213;
+  const skillsParam = (params.get('skills') || '').split(',').filter(Boolean);
+  const N = 12;
+
+  const sel = document.getElementById('ws-kind');
+  Object.keys(MQ.sheetKinds).forEach(k => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = MQ.sheetKinds[k].name;
+    if (k === kind) o.selected = true;
+    sel.appendChild(o);
+  });
+  sel.onchange = () => { kind = sel.value; build(); };
+  document.getElementById('ws-new').onclick = () => { seed = Math.floor(Math.random() * 900000) + 1000; build(); };
+  document.getElementById('ws-print').onclick = () => window.print();
+
+  const el = (t, c, html) => {
+    const n = document.createElement(t);
+    if (c) n.className = c;
+    if (html != null) n.innerHTML = html;
+    return n;
+  };
+
+  /* One question, printed. Diagrams are the same SVG the app draws, so a
+     printed shape can never disagree with the on-screen one. */
+  function renderItem(q, i) {
+    const box = el('div', 'ws-item');
+    const line = el('div', 'ws-q');
+    line.appendChild(el('span', 'ws-n', String(i + 1)));
+    line.appendChild(el('span', null, q.prompt + (q.workingShown
+      ? '<br><b>Working shown:</b> ' + q.workingShown : '')));
+    box.appendChild(line);
+
+    if (q.shape) {
+      const d = AC.drawShape(q.shape, { cell: 20 });
+      if (d && d.svg) {
+        const art = el('div', 'ws-art');
+        art.appendChild(d.svg);
+        box.appendChild(art);
+      }
+    }
+    if (q.choices) {
+      const opts = el('div', 'ws-opts');
+      q.choices.forEach(c => opts.appendChild(el('span', 'ws-opt',
+        '<span class="ws-choicebox"></span>' + c.label)));
+      box.appendChild(opts);
+    } else if (q.type === 'mission') {
+      const steps = el('div', 'ws-opts');
+      steps.appendChild(el('span', 'ws-opt', '<span class="ws-choicebox"></span>Perimeter'));
+      steps.appendChild(el('span', 'ws-opt', '<span class="ws-choicebox"></span>Area'));
+      box.appendChild(steps);
+      box.appendChild(el('div', 'ws-work'));
+    } else {
+      box.appendChild(el('div', 'ws-work'));
+    }
+    if (q.answer != null && !q.choices) {
+      const a = el('div', 'ws-ans');
+      a.appendChild(el('span', null, 'Answer'));
+      a.appendChild(el('span', 'ws-box'));
+      if (q.unit) a.appendChild(el('span', null, MQ.fmtUnit(q.unit)));
+      box.appendChild(a);
+    }
+    return box;
+  }
+
+  function answerOf(q) {
+    if (q.choices) {
+      const c = q.choices.find(x => x.correct);
+      return c ? c.label : '—';
+    }
+    if (q.answer != null) return q.answer + (q.unit ? ' ' + MQ.fmtUnit(q.unit) : '');
+    if (q.model) return q.model;
+    if (q.left) return q.left.map((l, i) => (i + 1) + '→' + l.text.slice(0, 18)).join('; ');
+    return '—';
+  }
+
+  function build() {
+    const out = document.getElementById('ws-out');
+    out.innerHTML = '';
+    const gens = skillsParam.length && kind === 'weak'
+      ? MQ.gensForSkills(skillsParam)
+      : null;
+    const qs = gens ? MQ.worksheetFrom(gens, seed, N) : MQ.worksheet(kind, seed, N);
+
+    /* ---- the sheet ---- */
+    const sheet = el('div', 'sheet');
+    const head = el('div', 'ws-head');
+    head.appendChild(el('h2', null, 'MeasureQuest &mdash; ' + MQ.sheetKinds[kind].name));
+    head.appendChild(el('div', 'ws-sub',
+      '<span>Perimeter and area &middot; Class 4</span><span>Sheet ' + seed + '</span>'));
+    sheet.appendChild(head);
+    const nm = el('div', 'ws-name');
+    nm.innerHTML = 'Name <span></span> Date <span></span>';
+    sheet.appendChild(nm);
+    sheet.appendChild(el('div', 'ws-cue', CT.CUE_LONG + ' &nbsp;&mdash;&nbsp; ask yourself: ' + CT.CUE_SHORT));
+
+    const items = el('div', 'ws-items');
+    qs.forEach((q, i) => items.appendChild(renderItem(q, i)));
+    sheet.appendChild(items);
+    out.appendChild(sheet);
+
+    /* ---- the answer key, on its own page ---- */
+    const key = el('div', 'sheet key');
+    const kh = el('div', 'ws-head');
+    kh.appendChild(el('h2', null, 'Answer key &mdash; ' + MQ.sheetKinds[kind].name));
+    kh.appendChild(el('div', 'ws-sub',
+      '<span>For the grown-up</span><span>Sheet ' + seed + ' &middot; keep this page back</span>'));
+    key.appendChild(kh);
+    const kl = el('div', 'ws-keylist');
+    qs.forEach((q, i) => {
+      const row = el('div', 'ws-keyrow');
+      row.appendChild(el('b', null, String(i + 1)));
+      const s = el('span', null, '<b>' + answerOf(q) + '</b>');
+      s.appendChild(el('i', null, q.explain || ''));
+      row.appendChild(s);
+      kl.appendChild(row);
+    });
+    key.appendChild(kl);
+    out.appendChild(key);
+    document.title = 'MeasureQuest — ' + MQ.sheetKinds[kind].name + ' (sheet ' + seed + ')';
+  }
+
+  build();
+  window.MQ_WORKSHEET = { build, count: () => N, seed: () => seed };
+})();
+</script>
+</body>
+</html>

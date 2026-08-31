@@ -1,0 +1,20 @@
+{
+  "name": "MeasureQuest — Around or Inside?",
+  "short_name": "MeasureQuest",
+  "description": "Perimeter and area for Class 4, taught by doing: trace the border, cover the ground.",
+  "start_url": "measurequest.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FCFAF7",
+  "theme_color": "#FCFAF7",
+  "lang": "en-GB",
+  "icons": [
+    {
+      "src": "assets/images/mq-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

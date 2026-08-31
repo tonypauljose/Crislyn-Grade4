@@ -740,3 +740,34 @@ body.hy-running { overflow: hidden; }
 @media print {
   .hy-stage, .hy-learn { display: none !important; }
 }
+
+/* ---- the rest of the printed portion (no lessons here yet) ---- */
+.hy-rest {
+  margin-top: var(--space-6); padding: var(--space-5);
+  background: var(--color-surface); border-radius: var(--radius-lg);
+  border: 2px dashed var(--color-border, #d8d8e0); box-shadow: none;
+}
+.hy-rest h3 { font-size: var(--text-lg); margin: 0 0 var(--space-2); }
+.hy-rest > p { color: var(--color-text-light); margin: 0 0 var(--space-4); font-size: var(--text-sm); }
+.hy-rest-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-3); }
+.hy-rest-item {
+  display: flex; gap: var(--space-3); align-items: flex-start;
+  padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-bg-alt);
+}
+.hy-rest-item .ic { font-size: 1.4rem; line-height: 1.2; }
+.hy-rest-item b { display: block; font-size: var(--text-sm); }
+.hy-rest-item span { font-size: 0.78rem; color: var(--color-text-light); line-height: 1.45; }
+
+/* ---- topics that have a module of their own ---- */
+.hy-deep { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-3); margin-bottom: var(--space-5); }
+.hy-deep-card {
+  display: block; padding: var(--space-4); border-radius: var(--radius-md);
+  background: #EEF2FF; border: 2px solid #A5B4FC; text-decoration: none;
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+.hy-deep-card:hover { transform: translateY(-2px); }
+.hy-deep-card b { display: block; color: #3730A3; font-size: var(--text-base); }
+.hy-deep-card span { display: block; font-size: var(--text-xs); color: var(--color-text-light); margin-top: 2px; }
+.hy-deep-mq { background: #FBE6DE; border-color: #E4572E; }
+.hy-deep-mq b { color: #A5320F; }

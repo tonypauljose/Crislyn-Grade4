@@ -41,6 +41,7 @@
       <a href="learning.html" class="nav-link">Learning</a>
       <a href="exam.html" class="nav-link">Exams</a>
       <a href="tables-dojo.html" class="nav-link">🥋 Dojo</a>
+      <a href="measurequest.html" class="nav-link">&#128207; MeasureQuest</a>
       <a href="half-yearly.html" class="nav-link active">🎯 Half-Yearly</a>
     </div>
   </div>
@@ -53,12 +54,12 @@
       <b id="hy-days">—</b> <span>days to the Half-Yearly</span>
     </div>
     <h1>Half-Yearly Mission Control</h1>
-    <p>Everything in the portion — Maths, English and हिंदी. Each skill is
+    <p>The three written papers — Maths, English and हिंदी. Each skill is
        <b>taught</b> first, then <b>tested</b>, then brought back day after day
        until you get it right every time.</p>
 
     <div class="hy-hero-stats">
-      <div class="hy-hero-stat"><b id="hy-overall">0%</b><span>Portion ready</span></div>
+      <div class="hy-hero-stat"><b id="hy-overall">0%</b><span>Maths · Eng · हिंदी ready</span></div>
       <div class="hy-hero-stat"><b id="hy-taught">0</b><span>Lessons learnt</span></div>
       <div class="hy-hero-stat"><b id="hy-mastered">0</b><span>Skills mastered</span></div>
       <div class="hy-hero-stat"><b id="hy-streak">0</b><span>Day streak</span></div>
@@ -103,6 +104,8 @@
     <p class="lede">Each bar shows every skill in the portion for that subject and how
       solid it is right now. Tap a subject to practise only that one.</p>
     <div class="hy-subjects" id="hy-subjects"></div>
+
+    <div class="hy-rest" id="hy-rest"></div>
   </div>
 </section>
 
@@ -151,6 +154,20 @@
       Tap a skill you have been taught to drill just that one for ten questions. Tap one
       you have not, and it opens the lesson instead.
     </p>
+
+    <!-- Two topics have a whole module of their own, the way M15 sends her to
+         the dojo. These are the deep versions, not replacements: the skills
+         below still drill and still count towards the portion. -->
+    <div class="hy-deep">
+      <a class="hy-deep-card" href="tables-dojo.html">
+        <b>Multiplication tables</b>
+        <span>The Dojo tracks all 66 facts one at a time, including speed.</span>
+      </a>
+      <a class="hy-deep-card hy-deep-mq" href="measurequest.html">
+        <b>Perimeter &amp; Area</b>
+        <span>MeasureQuest teaches the difference by tracing borders and covering floors.</span>
+      </a>
+    </div>
 
     <div class="hy-cta-row" style="margin-bottom: var(--space-5);">
       <button class="hy-btn hy-btn-ghost hy-btn-sm hy-filter is-on" data-sub="all">All</button>
@@ -339,6 +356,25 @@
     $('hy-due-note').innerHTML = doneToday
       ? `<b>${doneToday}</b> done today · today's pace is <b>${rec}</b>`
       : `<b>${rec}</b> questions &mdash; the pace that finishes the portion in time`;
+  }
+
+  /* The printed portion is bigger than this module. Say so plainly rather than
+     letting a 100% on three papers read as ready for the whole exam. */
+  function paintRest() {
+    const rest = SK.uncovered || [];
+    const box = $('hy-rest');
+    if (!box) return;
+    if (!rest.length) { box.innerHTML = ''; box.style.display = 'none'; return; }
+    box.style.display = '';
+    box.innerHTML =
+      '<h3>Also in the exam — not on this page yet</h3>' +
+      '<p>The percentage above covers the three written papers only. These ' +
+      rest.length + ' are in the printed portion too, and still need the books.</p>' +
+      '<div class="hy-rest-grid">' +
+      rest.map(r =>
+        '<div class="hy-rest-item"><div class="ic">' + r.icon + '</div><div>' +
+        '<b>' + r.name + '</b><span>' + r.portion + '</span></div></div>').join('') +
+      '</div>';
   }
 
   function paintSubjects() {
@@ -540,7 +576,7 @@
     });
   }
 
-  function paintAll() { paintHero(); paintSubjects(); paintShelf(); paintMap(); paintTrouble(); }
+  function paintAll() { paintHero(); paintSubjects(); paintRest(); paintShelf(); paintMap(); paintTrouble(); }
 
   /* ---------------------------------------------------------------- wiring */
 

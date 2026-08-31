@@ -455,6 +455,27 @@
     topics: TOPICS,
     /** Exam date — Half-Yearly, mid September 2026 */
     examDate: '2026-09-14',
+    /**
+     * Subjects that are in the printed portion but have NO lessons and NO questions
+     * here, because no photos of those books were supplied. Listed so the hub can
+     * never imply she is ready for the whole exam when it only covers three papers.
+     * Straight off `HY portionGR 4.pdf`. When one gets built, DELETE its entry here
+     * and add its skills to the arrays above — the hub reads this list, nothing is
+     * hard-coded in the page.
+     */
+    uncovered: [
+      { name: 'EVS', icon: '🌿',
+        portion: 'Ch.4 Roots, Flowers and Trees · Ch.5 Animal Behaviour · Ch.19 Water — Water Everywhere' },
+      { name: 'Bahrain Geography', icon: '🇧🇭',
+        portion: 'Bahrain Flag · Bahrain in the Gulf States · Bahrain in the Arab World and the World' },
+      { name: 'GK', icon: '🌍', portion: 'Lessons 1, 7 and 9' },
+      { name: 'Islamic', icon: '🕌',
+        portion: 'Surah al-Ikhlas (meaning) · Ls-1 Allah is our Creator · Ls-6 & 7 Prophet Ibrahim (AS)' },
+      { name: 'Computer', icon: '💻',
+        portion: 'Ch-1 Data Storage & Memory Devices · Ch-2 More on Windows 10 · Practical: Word 2016' },
+      { name: 'Art, Craft & Music', icon: '🎨',
+        portion: 'Drawing and craft pieces, two songs and the school prayer — practised in class, not on a screen' }
+    ],
     get(id) { return BY_ID[id] || null; },
     forSubject(sub) { return ALL.filter(s => s.subject === sub); }
   };

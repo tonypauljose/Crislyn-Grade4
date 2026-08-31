@@ -1,0 +1,15 @@
+{
+  "name": "mq-tests",
+  "private": true,
+  "description": "Verification suite for MeasureQuest. jsdom is shared with ../hy-tests, so `npm install` there is usually enough.",
+  "scripts": {
+    "test": "node engine.js && node content.js && node activities.js && node journey.js && node worksheet.js",
+    "engine": "node engine.js",
+    "content": "node content.js",
+    "activities": "node activities.js",
+    "journey": "node journey.js",
+    "worksheet": "node worksheet.js",
+    "sample": "node sample.js"
+  },
+  "devDependencies": { "jsdom": "^24.0.0" }
+}

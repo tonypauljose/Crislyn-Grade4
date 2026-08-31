@@ -34,6 +34,27 @@ if(d.querySelectorAll('.hy-lesson-btn').length!==55) errors.push('expected 55 le
 if($('hy-days').textContent==='—') errors.push('countdown did not compute');
 if(!/lesson/i.test($('hy-start').textContent)) errors.push('start button should announce the lessons: '+$('hy-start').textContent);
 
+// --- the hub must not imply the whole portion is covered ---------------------
+// Six subjects are in the printed portion with no content here. If that ever
+// goes unsaid, a 100% on three papers reads as ready for the exam.
+const uncovered = w.HY_SKILLS.uncovered || [];
+const restItems = d.querySelectorAll('#hy-rest .hy-rest-item');
+console.log('uncovered subjects declared: '+uncovered.length+' · shown on the hub: '+restItems.length);
+if(uncovered.length !== restItems.length)
+  errors.push('hub shows '+restItems.length+' uncovered subjects but the data declares '+uncovered.length);
+uncovered.forEach(u=>{
+  if(!u.name || !u.portion) errors.push('uncovered entry missing name/portion: '+JSON.stringify(u));
+  if(!$('hy-rest').textContent.includes(u.name)) errors.push('uncovered subject not named on the hub: '+u.name);
+  // anything listed as uncovered must genuinely have no skills behind it
+  if(w.HY_SKILLS.list.some(sk=>sk.subject===u.name.toLowerCase()))
+    errors.push(u.name+' is listed as uncovered but has skills registered');
+});
+// the headline stat must not claim the whole portion
+const heroLabel = $('hy-overall').parentNode.textContent;
+if(/portion ready/i.test(heroLabel))
+  errors.push('hero stat still says "Portion ready" over three subjects only: '+heroLabel.trim());
+console.log('headline stat is scoped honestly: "'+heroLabel.replace(/\s+/g,' ').trim()+'"');
+
 // filters
 ['maths','english','hindi','all'].forEach(sub=>{
   const b=d.querySelector('.hy-filter[data-sub="'+sub+'"]'); b.click();
